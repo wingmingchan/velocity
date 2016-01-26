@@ -1,0 +1,115 @@
+#*
+This format provides constants used in other library formats.
+*#
+## special characters
+#define( $chanwDOUBLE_HASH )$_EscapeTool.getH()$_EscapeTool.getH()#end
+#define( $chanwNEWLINE )$_EscapeTool.n#end
+#define( $DOUBLE_HASH )$_EscapeTool.getH()$_EscapeTool.getH()#end
+#define( $NEWLINE )$_EscapeTool.n#end
+
+## HTML tags
+#define( $S_DIV )<div>#end
+#define( $E_DIV )</div>#end
+#define( $S_H2 )<h2>#end
+#define( $E_H2 )</h2>#end
+#define( $S_H3 )<h3>#end
+#define( $E_H3 )</h3>#end
+#define( $S_LI )<li>#end
+#define( $E_LI )</li>#end
+#define( $S_P )<p>#end
+#define( $E_P )</p>#end
+#define( $S_UL )<ul>#end
+#define( $E_UL )</ul>#end
+#define( $BR )<br />#end
+#define( $HR )<hr class="lightgray" />#end
+
+## java class names used for comparison
+#set( $COM_CASCADE_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
+#set( $COM_CASCADE_PAGE_API_CLASS_NAME          = "com.hannonhill.cascade.api.adapters.PageAPIAdapter" )
+#set( $JAVA_LANG_STRING_CLASS_NAME              = 'java.lang.String' )
+#set( $JAVA_UTIL_ARRAY_LIST_CLASS_NAME          = 'java.util.ArrayList' )
+#set( $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME       = 'java.util.LinkedHashMap' )
+#set( $ORG_JDOM_DOCUMENT_CLASS_NAME             = 'org.jdom.Document' )
+#set( $ORG_JDOM_ELEMENT_CLASS_NAME              = 'org.jdom.Element' )
+
+## cascade element names
+#set( $cascadeXML_ELEMENT_CREATED_BY            = 'created-by' )
+#set( $cascadeXML_ELEMENT_CREATED_ON            = 'created-on' )
+#set( $cascadeXML_ELEMENT_DISPLAY_NAME          = 'display-name' )
+#set( $cascadeXML_ELEMENT_DYNAMIC_METADATA      = 'dynamic-metadata' )
+#set( $cascadeXML_ELEMENT_FILE_SIZE             = 'file-size' )
+#set( $cascadeXML_ELEMENT_IS_PUBLISHED          = 'is-published' )
+#set( $cascadeXML_ELEMENT_LAST_MODIFIED_BY      = 'last-modified-by' )
+#set( $cascadeXML_ELEMENT_LAST_MODIFIED         = 'last-modified' )
+#set( $cascadeXML_ELEMENT_LAST_PUBLISHED_BY     = 'last-published-by' )
+#set( $cascadeXML_ELEMENT_LAST_PUBLISHED_ON     = 'last-published-on' )
+#set( $cascadeXML_ELEMENT_LINK                  = 'link' )
+#set( $cascadeXML_ELEMENT_NAME                  = 'name' )
+#set( $cascadeXML_ELEMENT_PATH                  = 'path' )
+#set( $cascadeXML_ELEMENT_PAGE_XHTML            = 'page-xhtml' )
+#set( $cascadeXML_ELEMENT_SITE                  = 'site' )
+#set( $cascadeXML_ELEMENT_START_DATE            = 'start-date' )
+#set( $cascadeXML_ELEMENT_SUMMARY               = 'summary' )
+#set( $cascadeXML_ELEMENT_SYSTEM_BLOCK          = 'system-block' )
+#set( $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE = 'system-data-structure' )
+#set( $cascadeXML_ELEMENT_SYSTEM_FILE           = 'system-file' )
+#set( $cascadeXML_ELEMENT_SYSTEM_FOLDER         = 'system-folder' )
+#set( $cascadeXML_ELEMENT_SYSTEM_PAGE           = 'system-page' )
+#set( $cascadeXML_ELEMENT_SYSTEM_SYMLINK        = 'system-symlink' )
+#set( $cascadeXML_ELEMENT_TITLE                 = 'title' )
+#set( $chanwFolderContainedAssets = [ $cascadeXML_ELEMENT_SYSTEM_BLOCK, 
+    $cascadeXML_ELEMENT_SYSTEM_FILE, $cascadeXML_ELEMENT_SYSTEM_FOLDER,
+    $cascadeXML_ELEMENT_SYSTEM_PAGE, $cascadeXML_ELEMENT_SYSTEM_SYMLINK ] )
+
+## RSS
+#set( $rssXML_ELEMENT_CHANNEL                   = 'channel' )
+#set( $rssXML_ELEMENT_DESCRIPTION               = 'description' )
+#set( $rssXML_ELEMENT_GUID                      = 'guid' )
+#set( $rssXML_ELEMENT_ITEM                      = 'item' )
+#set( $rssXML_ELEMENT_LINK                      = 'link' )
+#set( $rssXML_ELEMENT_PUB_DATE                  = 'pubDate' )
+#set( $rssXML_ELEMENT_TITLE                     = 'title' )
+
+## HTML element names, used in processing data definition blocks
+#* 'link', 'summary', 'title are omitted from this list because they are used in Cascade *#
+#set( $chanwHTMLElements = [
+    'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 
+    'b', 'base', 'bdi', 'bdo', 'blockquote', 'body', 'br', 'button', 
+    'canvas', 'caption', 'cite', 'code', 'col', 'colgroup',
+    'datalist', 'dd', 'del', 'details', 'dfn', 'dialog',  'div','dl', 'dt',
+    'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hr', 'html',
+    'i', 'iframe', 'img', 'input', 'ins', 'kdb', 'keygen',
+    'label', 'legend', 'li',
+    'main', 'map', 'mark', 'menu',  'menuitem', 'meta','meter', 'nav', 'noscript', 
+    'object', 'ol', 'optgroup', 'option', 'output',
+    'p', 'param', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 
+    's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strong',
+    'style', 'sub', 'sup', 
+    'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time',
+    'tr','track', 'u', 'ul', 'var', 'video', 'wbr'
+] )
+
+## date and calendar
+#set( $chanwYearField     = $_FieldTool.in( 'java.util.Calendar' ).YEAR )
+#set( $chanwMonthField    = $_FieldTool.in( 'java.util.Calendar' ).MONTH )
+#set( $chanwDayField      = $_FieldTool.in( 'java.util.Calendar' ).DATE )
+#set( $chanwHourField     = $_FieldTool.in( 'java.util.Calendar' ).HOUR )
+#set( $chanwMinuteField   = $_FieldTool.in( 'java.util.Calendar' ).MINUTE )
+#set( $chanwSecondField   = $_FieldTool.in( 'java.util.Calendar' ).SECOND )
+#set( $chanwAmPmField     = $_FieldTool.in( 'java.util.Calendar' ).AM_PM )
+
+#set( $chanwTodayDateObject          = $_DateTool.getSystemDate() )
+#set( $chanwCalendarObject           = $_DateTool.getCalendar() )
+#set( $chanwCurrentTimestampLong     = $_DateTool.getSystemTime() )
+#set( $chanwCurrentTimestampString   = "" + $_DateTool.getSystemTime() )
+#set( $chanwCurrentYearInt           = $_DateTool.getYear() )
+#set( $chanwCurrentMonthInt          = $_DateTool.getMonth() )
+#set( $chanwCurrentDayInt            = $_DateTool.getDay() )
+#set( $chanwCurrentHourInt           = $_DateTool.getValue( $chanwHourField, $chanwTodayDateObject ) )
+#set( $chanwCurrentMinuteInt         = $_DateTool.getValue( $chanwMinuteField, $chanwTodayDateObject ) )
+#set( $chanwCurrentSecondInt         = $_DateTool.getValue( $chanwSecondField, $chanwTodayDateObject ) )
+#set( $chanwCurrentAmPmString        = $_DateTool.getValue( $chanwAmPmField, $chanwTodayDateObject ) )
+
+#set( $chanwCurrentMonthLongString   = $_DateTool.format( "MMMMM", $_DateTool.getSystemDate() ) )
+#set( $chanwCurrentMonthMediumString = $_DateTool.format( "MMM", $_DateTool.getSystemDate() ) )
