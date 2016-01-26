@@ -71,7 +71,10 @@ This format provides constants used in other library formats.
 #set( $rssXML_ELEMENT_TITLE                     = 'title' )
 
 ## HTML element names, used in processing data definition blocks
-#* 'link', 'summary', 'title' are omitted from this list because they are used in Cascade *#
+#* 'link', 'summary', 'title' are omitted from this list because they are used in Cascade.
+Otherwise, when an element is encountered, it is assumed to be in a wysiwyg and the element
+is part of the HTML markups.
+*#
 #set( $chanwHTMLElements = [
     'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 
     'b', 'base', 'bdi', 'bdo', 'blockquote', 'body', 'br', 'button', 
