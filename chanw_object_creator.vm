@@ -1,0 +1,62 @@
+#*
+This format provides macros to retrieve constructors and create Java objects.
+*#
+
+#*
+Returns an object of the class, calling the default constructor.
+*#
+#macro( chanwGetObjectByClassName $chanwClassName )
+    #set( $chanwGetObjectByClassName = "" ) ## reinitialize the global variable
+    #chanwGetConstructorByClassNameParamSize( $chanwClassName 0 )
+    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
+    #set( $chanwGetObjectByClassName = $chanwConstructor.newInstance() )
+#end
+
+#*
+Returns the first constructor that accepts the specified number of parameters.
+*#
+#macro( chanwGetConstructorByClassNameParamSize $chanwClassName $chanwParamSize )
+    #set( $chanwGetConstructorByClassNameParamSize = "" )
+    #set( $chanwClassObj = $_PropertyTool.class.forName( $chanwClassName ) )
+    #set( $constructors  = $chanwClassObj.getConstructors() )
+  
+    #foreach( $constructor in $constructors )
+        #if( $constructor.getParameterTypes().size() == $chanwParamSize )
+            #set( $chanwGetConstructorByClassNameParamSize = $constructor )
+            #break
+        #end
+    #end
+    #if( !$chanwGetConstructorByClassNameParamSize || 
+        $chanwGetConstructorByClassNameParamSize == "" )
+    Constructor not found<br />
+    #end
+#end
+
+#*
+Returns the constructor by matching the parameter list.
+*#
+#macro( chanwGetConstructorByClassNameParamTypeArray $chanwClassName $chanwTypeArray )
+    #set( $chanwGetConstructorByClassNameParamTypeArray = "" )
+    #set( $chanwClassObj = $_PropertyTool.class.forName( $chanwClassName ) )
+    #set( $constructors  = $chanwClassObj.getConstructors() )
+  
+    #foreach( $constructor in $constructors )
+        #set( $params_matched = true )
+        #set( $param_types    = $constructor.getParameterTypes() )
+
+        ## match the size
+        #if( $param_types.size() == $chanwTypeArray.size() )
+            ## match the types
+            #foreach( $type in $param_types )
+                #if( !$type.getName().equals( $chanwTypeArray[ $foreach.index ] ) )
+                    #set( $params_matched = false )
+                #end
+            #end
+            
+            #if( $params_matched )
+                #set( $chanwGetConstructorByClassNameParamTypeArray = $constructor )
+                #break
+            #end
+        #end
+    #end
+#end
