@@ -1,5 +1,18 @@
 #*
 This format provides macros to retrieve constructors and create Java objects.
+
+Examples:
+
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.LinkTool' )
+#set( $globalApacheLinkTool = $chanwGetObjectByClassName )
+
+#chanwGetConstructorByClassNameParamSize( 'org.jdom.Text' 1 )
+#set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
+#set( $globalJDOMText   = $chanwConstructor.newInstance( "" ) )
+
+#chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuffer' [ 'int' ] )
+#set( $chanwConstructor   = $chanwGetConstructorByClassNameParamTypeArray )
+#set( $globalStringBuffer = $chanwConstructor.newInstance( 10000 ) )
 *#
 
 #*
