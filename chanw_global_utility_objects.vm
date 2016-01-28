@@ -1,0 +1,24 @@
+#*
+This format defines global utility objects.
+*#
+#import( '/formats/library/velocity/chanw_object_creator' )
+
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.LinkTool' )
+#set( $globalApacheLinkTool = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ComparisonDateTool' )
+#set( $globalApacheComparisonDateTool = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.commons.lang.WordUtils' )
+#set( $globalApacheWordUtils = $chanwGetObjectByClassName )
+
+#chanwGetConstructorByClassNameParamSize( 'org.jdom.Text' 1 )
+#set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
+#set( $globalJDOMText   = $chanwConstructor.newInstance( "" ) )
+
+#chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuffer' [ 'int' ] )
+#set( $chanwConstructor   = $chanwGetConstructorByClassNameParamTypeArray )
+#set( $globalStringBuffer = $chanwConstructor.newInstance( 10000 ) )
+
+#chanwGetObjectByClassName( 'org.jdom.input.SAXBuilder' )
+#set( $globalSAXBuilder = $chanwGetObjectByClassName )
