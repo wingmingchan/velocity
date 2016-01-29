@@ -1,0 +1,17 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+#set( $string = "once upon a time" )
+
+$S_PRE
+
+$globalApacheWordUtils.capitalize( $string )
+$globalApacheWordUtils.capitalize( $globalApacheWordUtils.initials( $string ) )
+$globalApacheWordUtils.initials( $globalApacheWordUtils.capitalize( $string ) )
+$E_PRE
+
+#* Output:
+Once Upon A Time
+Ouat
+OUAT
+*#
