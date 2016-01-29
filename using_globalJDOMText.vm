@@ -1,0 +1,16 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+#set( $string      = "   a   String      with" + $_EscapeTool.N + "   many     spaces     " )
+
+$S_PRE
+
+$string
+$globalJDOMText.normalizeString( $string )
+$E_PRE
+
+#* Output:
+   a   String      with
+   many     spaces     
+a String with many spaces
+*#
