@@ -1,0 +1,18 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+#set( $now = $globalApacheComparisonDateTool.getDate() )
+
+$S_PRE
+
+Year: $globalApacheComparisonDateTool.format( 'yyyy', $now )
+Month: $globalApacheComparisonDateTool.format( 'MMMMM', $now )
+#set( $d = $globalApacheComparisonDateTool.toHours( 1342083689323 ) )
+$d
+$E_PRE
+
+#* Output:
+Year: 2016
+Month: January
+372801
+*#
