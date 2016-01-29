@@ -1,0 +1,17 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+#set( $path = $globalApacheLinkTool.path( 'cascade-admin/projects/index.php' ) )
+
+$S_PRE
+
+$path.class.name
+$path.getPath()
+$path.getFile()
+$E_PRE
+
+#* Output:
+org.apache.velocity.tools.generic.LinkTool
+/cascade-admin/projects/index.php
+index.php
+*#
