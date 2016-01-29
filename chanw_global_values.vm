@@ -18,6 +18,8 @@ This format provides constants used in other library formats.
 #define( $E_LI )</li>#end
 #define( $S_P )<p>#end
 #define( $E_P )</p>#end
+#define( $S_PRE )<pre>#end
+#define( $E_PRE )</pre>#end
 #define( $S_UL )<ul>#end
 #define( $E_UL )</ul>#end
 #define( $BR )<br />#end
