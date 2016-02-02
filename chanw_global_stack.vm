@@ -1,0 +1,71 @@
+#*
+This format defines a global stack.
+
+Example:
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_stack' )
+
+#foreach( $num in [ 1..10 ] )
+    #chanwPushGlobalStack( $chanwGlobalStack $num )
+#end
+
+#foreach( $num in [ 1..100 ] )
+    #chanwEmptyGlobalStack( $chanwGlobalStack )
+    
+    #if( $chanwEmptyGlobalStack )
+        #break
+    #end
+    
+    #chanwPopGlobalStack( $chanwGlobalStack )
+    $chanwPopGlobalStack$BR
+#end
+*#
+
+#import( '/formats/library/velocity/chanw_object_creator' )
+
+#set( $chanwSTACK_DATA  = "data" )
+#set( $chanwGlobalStack = {} )
+
+#macro( chanwInitializeGlobalStack $chanwGlobalStack )
+    #chanwGetObjectByClassName( "java.util.Stack" )
+    #set( $dummy = $chanwGlobalStack.put( $chanwSTACK_DATA, $chanwGetObjectByClassName ) )
+#end
+
+#macro( chanwClearGlobalStack $chanwGlobalStack )
+    $chanwGlobalStack.get( $chanwSTACK_DATA ).clear()
+#end
+
+#macro( chanwPeekGlobalStack $chanwGlobalStack )
+    #if( $chanwGlobalStack.get( $chanwSTACK_DATA ).empty() )
+Stack is empty
+    #else
+        #set( $chanwPeekGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).peek() )
+    #end
+#end
+
+#macro( chanwPushGlobalStack $chanwGlobalStack $value )
+    #if( $_PropertyTool.isNull( $value ) )
+Null not allow
+        #stop
+    #end
+    
+    #set( $chanwPushGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).push( $value ) )
+#end
+
+#macro( chanwPopGlobalStack $chanwGlobalStack )
+    #if( $chanwGlobalStack.get( $chanwSTACK_DATA ).empty() )
+Stack is empty
+    #else
+        #set( $chanwPopGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).pop() )
+    #end
+#end
+
+#macro( chanwEmptyGlobalStack $chanwGlobalStack )
+    #set( $chanwEmptyGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).empty() )
+#end
+
+#macro( chanwSizeGlobalStack $chanwGlobalStack )
+    #set( $chanwSizeGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).size() )
+#end
+
+#chanwInitializeGlobalStack( $chanwGlobalStack )
