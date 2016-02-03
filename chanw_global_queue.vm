@@ -98,7 +98,6 @@ The queue is empty
 
 #macro( chanwSizeGlobalQueue $chanwGlobalQueue )
     #set( $chanwSizeGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() )
-    $chanwSizeGlobalQueue<br />
 #end
 
 #macro( chanwRemainingCapacityGlobalQueue $chanwGlobalQueue )
