@@ -1,0 +1,114 @@
+#*
+This format defines a global queue.
+
+Example:
+
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_queue' )
+
+#set( $queue = $chanwGlobalQueue )
+#chanwEnqueueGlobalQueue( $queue $_ )
+#chanwEnqueueGlobalQueue( $queue $_PropertyTool )
+#chanwEnqueueGlobalQueue( $queue $_XPathTool )
+##chanwEnqueueGlobalQueue( $queue $blah )
+
+<pre>
+
+Current size: #chanwSizeGlobalQueue( $queue )
+#foreach( $num in [1..10] )
+#chanwSizeGlobalQueue( $queue )
+#set( $size = $chanwSizeGlobalQueue )
+#if( $size > 0 )
+#chanwDequeueGlobalQueue( $queue )
+#set( $item = $chanwDequeueGlobalQueue )
+$item.Class.Name
+#else#break#end
+#end
+</pre>
+
+#chanwClearGlobalQueue( $queue )
+
+<pre>
+
+Current size: #chanwSizeGlobalQueue( $queue )
+</pre>
+
+#foreach( $num in [1..1000] )
+    #chanwRemainingCapacityGlobalQueue( $queue )
+    #set( $remainingCapacity = $chanwRemainingCapacityGlobalQueue )
+    
+    #set( $item = $_ )
+    
+    #if( $remainingCapacity > 0 && !$_PropertyTool.isNull( $item ) )
+        #chanwEnqueueGlobalQueue( $queue $item )
+    #else
+        #break
+    #end
+#end
+
+<pre>
+
+Current size: #chanwSizeGlobalQueue( $queue )
+</pre>
+*#
+#import( '/formats/library/velocity/chanw_object_creator' )
+
+#set( $chanwQUEUE_DATA  = "data" )
+#set( $chanwQUEUE_SIZE  = 500 )
+#set( $chanwGlobalQueue = {} )
+
+#macro( chanwInitializeGlobalQueue $chanwGlobalQueue )
+    #chanwGetConstructorByClassNameParamSize( "java.util.concurrent.ArrayBlockingQueue", 1 )
+    #set( $constructor = $chanwGetConstructorByClassNameParamSize )
+    #set( $data = $constructor.newInstance( $chanwQUEUE_SIZE ) )
+    #set( $dummy = $chanwGlobalQueue.put( $chanwQUEUE_DATA, $data ) )
+#end
+
+#macro( chanwEnqueueGlobalQueue $chanwGlobalQueue $value )
+    #if( $_PropertyTool.isNull( $value ) )
+Null not allow
+        #stop
+    #end
+    
+    #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() >= $chanwQUEUE_SIZE )
+Queue is full
+        #stop
+    #end
+    
+    #set( $enqueueResult = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).add( $value ) )
+    
+    #if( !$enqueueResult )
+Failed to enqueue
+        #stop
+    #end
+#end
+
+#macro( chanwDequeueGlobalQueue $chanwGlobalQueue )
+    #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() > 0 )
+        #set( $chanwDequeueGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).take() )
+    #else
+The queue is empty
+    #end
+#end
+
+#macro( chanwSizeGlobalQueue $chanwGlobalQueue )
+    #set( $chanwSizeGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() )
+    $chanwSizeGlobalQueue<br />
+#end
+
+#macro( chanwRemainingCapacityGlobalQueue $chanwGlobalQueue )
+    #set( $chanwRemainingCapacityGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).remainingCapacity() )
+#end
+
+#macro( chanwClearGlobalQueue $chanwGlobalQueue )
+    $chanwGlobalQueue.get( $chanwQUEUE_DATA ).clear()
+#end
+
+#macro( chanwPeekGlobalQueue $chanwGlobalQueue )
+    #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() > 0 )
+        #set( $chanwPeekGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).peek() )
+    #else
+The queue is empty
+    #end
+#end
+
+#chanwInitializeGlobalQueue( $chanwGlobalQueue )
