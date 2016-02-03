@@ -1,0 +1,161 @@
+#*
+This format defines a global deque.
+
+Example:
+
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_deque' )
+
+#set( $deque = $chanwGlobalDeque )
+#chanwAddLastGlobalDeque( $deque "1" )
+#chanwAddLastGlobalDeque( $deque "2" )
+#chanwAddLastGlobalDeque( $deque "3" ) ## 1,2,3 in that order
+
+#chanwSizeGlobalDeque( $deque )
+#set( $size = $chanwSizeGlobalDeque ) 
+<pre>
+
+Current size: $size<br />
+#foreach( $num in [1..10] )
+#chanwEmptyGlobalDeque( $deque )
+#set( $empty = $chanwEmptyGlobalDeque )
+#if( !$empty )
+#chanwTakeFirstGlobalDeque( $deque )
+#set( $item = $chanwTakeFirstGlobalDeque )
+$item.Class.Name $item
+#else#break#end
+#end
+</pre>
+
+Use deque as a stack
+#foreach( $num in [1..10] )
+#chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
+#end
+
+<pre>
+#foreach( $num in [1..10] )
+#chanwEmptyGlobalDeque( $deque )
+#set( $empty = $chanwEmptyGlobalDeque )
+#if( !$empty )
+#chanwTakeFirstGlobalDeque( $deque )
+#set( $item = $chanwTakeFirstGlobalDeque )
+$item.Class.Name $item
+#else#break#end
+#end
+</pre>
+
+Use deque as a queue
+#foreach( $num in [1..10] )
+#chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
+#end
+
+<pre>
+#foreach( $num in [1..10] )
+#chanwEmptyGlobalDeque( $deque )
+#set( $empty = $chanwEmptyGlobalDeque )
+#if( !$empty )
+#chanwTakeLastGlobalDeque( $deque )
+#set( $item = $chanwTakeLastGlobalDeque )
+$item.Class.Name $item
+#else#break#end
+#end
+</pre>
+
+Use deque as a deque
+#foreach( $num in [1..10] )
+#chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
+#end
+
+<pre>
+#foreach( $num in [1..10] )
+#set( $empty = $chanwEmptyGlobalDeque )
+#if( !$empty )
+#if( $num % 2 == 1 )
+#chanwTakeLastGlobalDeque( $deque )
+#set( $item = $chanwTakeLastGlobalDeque )
+$item.Class.Name $item
+#else
+#chanwTakeFirstGlobalDeque( $deque )
+#set( $item = $chanwTakeFirstGlobalDeque )
+$item.Class.Name $item
+#end        
+#else#break#end
+#end
+</pre>
+*#
+#import( '/formats/library/velocity/chanw_object_creator' )
+
+#set( $chanwDEQUE_DATA  = "data" )
+#set( $chanwDEQUE_SIZE  = 500 )
+#set( $chanwGlobalDeque = {} )
+
+#macro( chanwInitializeGlobalDeque $chanwGlobalDeque )
+    #chanwGetConstructorByClassNameParamTypeArray( "java.util.concurrent.LinkedBlockingDeque", ["int"] )
+    #set( $constructor = $chanwGetConstructorByClassNameParamTypeArray )
+    #set( $data  = $constructor.newInstance( $chanwDEQUE_SIZE ) )
+    
+    #set( $dummy = $chanwGlobalDeque.put( $chanwDEQUE_DATA, $data ) )
+#end
+
+#macro( chanwAddFirstGlobalDeque $chanwGlobalDeque $value )
+    #if( $_PropertyTool.isNull( $value ) )
+Null not allow
+        #stop
+    #end
+    
+    #set( $chanwAddFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addFirst( $value ) )
+#end
+
+#macro( chanwAddLastGlobalDeque $chanwGlobalDeque $value )
+    #if( $_PropertyTool.isNull( $value ) )
+Null not allow
+        #stop
+    #end
+    
+    #set( $chanwAddLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addLast( $value ) )
+#end
+
+#macro( chanwClearGlobalDeque $chanwGlobalDeque )
+    $chanwGlobalDeque.get( $chanwDEQUE_DATA ).clear()
+#end
+
+#macro( chanwPeekFirstGlobalDeque $chanwGlobalDeque )
+    #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
+Deque is empty
+    #else
+        #set( $chanwPeekFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).peekFirst() )
+    #end
+#end
+
+#macro( chanwPeekLastGlobalDeque $chanwGlobalDeque )
+    #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
+Deque is empty
+    #else
+        #set( $chanwPeekLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).peekLast() )
+    #end
+#end
+
+#macro( chanwSizeGlobalDeque $chanwGlobalDeque )
+    #set( $chanwSizeGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).size() )
+#end
+
+#macro( chanwTakeFirstGlobalDeque $chanwGlobalDeque )
+    #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
+Deque is empty
+    #else
+        #set( $chanwTakeFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).takeFirst() )
+    #end
+#end
+
+#macro( chanwTakeLastGlobalDeque $chanwGlobalDeque $value )
+    #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
+Deque is empty
+    #else
+        #set( $chanwTakeLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).takeLast() )
+    #end
+#end
+
+#macro( chanwEmptyGlobalDeque $chanwGlobalDeque )
+    #set( $chanwEmptyGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).size() == 0 )
+#end
+
+#chanwInitializeGlobalDeque( $chanwGlobalDeque )
