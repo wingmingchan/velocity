@@ -1,0 +1,113 @@
+#*
+This format defines an html builder using the global deque. 
+The builder ensures that all tags are closed and nested properly.
+It will also avoid unneccessary whitespace characters.
+When using these macros, do it inside out, layer by layer.
+
+Example code:
+#import( 'site://_common_assets/formats/library/velocity/chanw_html_builder_with_deque' )
+
+## create an img element
+#chanwCreateEmptyElement( { 'name':'img', 'src':'/images/photo.jpg', 'class':'img-responsive', 'alt':'Photo' } )
+#set( $imgelement = $chanwCreateEmptyElement )
+
+## wrap the img element by two div elements
+#chanwCreateElementWithText( { 'name':'div', 'class':'slide' }, $imgelement )
+#set( $subelement = $chanwCreateElementWithText )
+#chanwCreateElementWithText( { 'name':'div', 'id':'slideshow', 'class':'col-xs-12' }, $subelement )
+
+This will produce:
+<div id='slideshow' class='col-xs-12'><div class='slide'><img src='/images/photo.jpg' class='img-responsive' alt='Photo' /></div></div> 
+*#
+#import( '/formats/library/velocity/chanw_global_values' )
+#import( '/formats/library/velocity/chanw_global_deque' )
+
+#*
+Returns an HTML element with text.
+*#
+#macro( chanwCreateElementWithText $chanwMap $chanwText )
+    #if( $chanwMap.class.name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+        A map is required.
+        #stop
+    #end
+
+    #set( $chanwElementName = $chanwMap[ 'name' ] )
+    
+    #if( $_PropertyTool.isNull( $chanwElementName ) )
+        The name cannot be null.
+        #stop
+    #end
+    
+    #set( $deque = $chanwGlobalDeque )
+    #chanwAddLastGlobalDeque( $deque $chanwText ) ## put the text in first
+    #chanwAddElementToGlobalDeque( $chanwMap )    ## add start and end tags
+    #chanwEmptyDequeGetElement()                  ## get the string out
+    #set( $chanwCreateElementWithText = $chanwEmptyDequeGetElement )
+#end
+
+#*
+Returns an empty HTML element.
+*#
+#macro( chanwCreateEmptyElement $chanwMap )
+    #if( $chanwMap.class.name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+        A map is required.
+        #stop
+    #end
+
+    #set( $chanwElementName = $chanwMap[ 'name' ] )
+    
+    #if( $_PropertyTool.isNull( $chanwElementName ) )
+        The name cannot be null.
+        #stop
+    #end
+    
+    #set( $chanwAttrs = $chanwMap.keySet() )
+    #set( $chanwStartTag = "<" + $chanwMap[ 'name' ] )
+    
+    #foreach( $chanwAttr in $chanwAttrs )
+        #if( $chanwAttrs.size() > 1 && $chanwAttr != 'name' )
+            #set( $chanwStartTag = $chanwStartTag + " " + $chanwAttr + "='" + $chanwMap[ $chanwAttr ] + "'" )
+        #end
+    #end
+    
+    #set( $chanwCreateEmptyElement = $chanwStartTag + " />" )
+#end
+
+#*
+Creates the start tag and end tag.
+*#
+#macro( chanwAddElementToGlobalDeque $chanwMap )
+    #set( $chanwAttrs = $chanwMap.keySet() )
+    #set( $chanwStartTag = "<" + $chanwMap[ 'name' ] )
+    
+    #foreach( $chanwAttr in $chanwAttrs )
+        #if( $chanwAttrs.size() > 1 && $chanwAttr != 'name' )
+            #set( $chanwStartTag = $chanwStartTag + " " + $chanwAttr + "='" + $chanwMap[ $chanwAttr ] + "'" )
+        #end
+    #end
+    
+    #set( $chanwStartTag = $chanwStartTag + ">" )
+    #chanwAddFirstGlobalDeque( $deque $chanwStartTag )
+    #set( $chanwEndTag = "</" + $chanwMap[ 'name' ] + ">" )
+    #chanwAddLastGlobalDeque( $deque $chanwEndTag )
+#end
+
+#*
+Empties the deque and returns the concatenated string.
+*#
+#macro( chanwEmptyDequeGetElement )
+    #set( $chanwElement = "" )
+    
+    #foreach( $num in [1..10] ) ## assuming there are no more than ten strings
+        #chanwEmptyGlobalDeque( $deque )
+        #set( $chanwEmpty = $chanwEmptyGlobalDeque )
+        
+        #if( !$chanwEmpty )
+            #chanwTakeFirstGlobalDeque( $deque )
+            #set( $chanwElement = $chanwElement + $chanwTakeFirstGlobalDeque )
+        #else
+            #break
+        #end
+    #end
+    #set( $chanwEmptyDequeGetElement = $chanwElement )
+#end
