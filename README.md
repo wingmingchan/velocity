@@ -1,2 +1,2 @@
 # velocity
-A reusable library in Velocity for Cascade.
+A reusable library in Velocity for Cascade with examples.
