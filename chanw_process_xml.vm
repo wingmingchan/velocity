@@ -1,0 +1,221 @@
+#*
+This format defines macros to process XML.
+Use this format to process any system-data-structure or
+any node without a fixed structure.
+Use chanw_process_index_block to process a page/folder created
+by an index block.
+*#
+##import( '/formats/library/velocity/chanw_global_values' )
+#import( '/formats/library/velocity/chanw_global_utility_objects' )
+
+## clean up the data structures
+#chanwCleanUpMaps
+
+## entry point of system-data-structure
+#macro( chanwProcessSystemDataStructure $element )
+    #if( $element.Name != $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
+        Not a $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE!!!<br />
+        #stop
+    #end
+    
+    ## store empty string for text value
+    #if( !$chanwXmlXPathTextMap.containsKey( $element.Name ) )
+        #set( $void = $chanwXmlXPathTextMap.put( $element.Name, '' ) )
+    #end
+    ## store the current node path
+    #if( !$chanwNodeInfoMap.containsKey( $element ) )
+        #set( $void = $chanwNodeInfoMap.put( $element, $element.Name ) )
+    #end
+    #chanwProcessJdomElement( $element )
+#end
+
+#macro( chanwProcessJdomElement $node )
+    #if( $node.class.name != $ORG_JDOM_ELEMENT_CLASS_NAME )
+        Not an element!!!<br />
+        #stop
+    #end
+    
+    #if( $node.Children && $node.Children.size() > 0 )
+        ##store the group path
+        #set( $chanwParentNode = $node.getParent() )
+        
+		#if( $chanwParentNode && $chanwParentNode.class.name != $ORG_JDOM_DOCUMENT_CLASS_NAME  )
+			#set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) + '/' )
+		#else
+			#set( $chanwParentPath = "" )
+		#end
+		
+		#set( $chanwCurrentNodePath = $chanwParentPath + $node.Name )
+		
+		#if( !$chanwNodeInfoMap.containsKey( $node ) )
+			#set( $void = $chanwNodeInfoMap.put( $node ) )
+		#end
+    
+        #foreach( $child in $node.Children )
+        	## test for WYSIWYG
+        	#set( $chanwIsWYSIWYG = false )
+        
+        	#if( $child.Children && $child.Children.size() > 0 )
+				#foreach( $grandchild in $child.Children )
+					## ignore text by checking the name
+					#if( $grandchild.Name && $chanwHTMLElements.contains( $grandchild.Name ) )
+						#set( $chanwParentPath = $chanwNodeInfoMap.get( $child.getParent() ) )
+						#set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
+						
+						#if( !$chanwNodeInfoMap.containsKey( $child ) )
+                    		#set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
+                    	#end
+                    	
+						#set( $chanwIsWYSIWYG = true )
+						#break
+					#end
+				#end
+			#end
+        
+			#if( $chanwIsWYSIWYG == false )
+				## get the parent path
+				#set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
+				## create the path for current child
+				#set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
+				## select all children bearing the same name
+				#set( $nodes = $_XPathTool.selectNodes( $child.getParent(), $child.Name ) )
+			
+				## multiple nodes
+				#if( $nodes.size() > 1 )
+					#set( $chanwSize = 0 )
+					
+					#foreach( $n in $nodes )
+						#if( $chanwNodeInfoMap.containsKey( $n ) ) ## already processed
+							#break
+						#end
+				
+						## create the correct XPath
+						#set( $tempChildKey = $chanwChildKey + "[$foreach.count]" )
+						## store node-path pair
+						#if( !$chanwNodeInfoMap.containsKey( $n ) )
+							#set( $void = $chanwNodeInfoMap.put( $n, $tempChildKey ) )
+						#end
+						#set( $chanwSize = $foreach.count )
+						
+					#end
+					
+					#if( !$chanwNodeInfoMap.containsKey( $chanwChildKey ) )
+						#set( $void = $chanwNodeInfoMap.put( $chanwChildKey, { 'size':$chanwSize } ) )
+					#end
+				## single node
+				#else
+					#set( $chanwParentNode = $child.getParent() )
+					#set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) )
+					#set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
+                    
+					#if( !$chanwNodeInfoMap.containsKey( $child ) )
+						#set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
+					#end
+				#end
+			
+				## group
+				#if( $child.Children && $child.Children.size() > 0 )
+					#set( $void = $chanwXmlXPathTextMap.put( $chanwNodeInfoMap.get( $child ), '' ) )
+					##set( $tempChildKey = $chanwNodeInfoMap.get( $child ) )
+                    ## recursive call
+					#chanwProcessJdomElement( $child )
+					##set( $tempChildKey = "" )
+				## text field
+				#elseif( $child.Value )
+					## get the parent path
+					#set( $chanwParentPath = $chanwNodeInfoMap.get( $child.getParent() ) )
+					#set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
+				
+					#if( !$chanwNodeInfoMap.containsKey( $child ) )
+						#set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
+					#end
+				
+					#processTextNode( $child  )
+				#end
+            #else
+				#set( $chanwWYSIWYGPath  = $chanwNodeInfoMap.get( $child ) )
+				#set( $chanwWYSIWYGValue = $_SerializerTool.serialize( $child, true ) )
+				#set( $void = $chanwXmlXPathTextMap.put( $chanwWYSIWYGPath, $chanwWYSIWYGValue ) )
+            #end
+        #end
+    #else
+        $node.Name<br />
+        Nothing to process.<br />
+    #end
+#end
+
+#macro( processTextNode $node  )
+    #set( $chanwTextNodePath  = $chanwNodeInfoMap.get( $node ) )
+    #set( $chanwTextNodeValue = $node.Value )
+    
+    ## asset chooser
+    #if( $chanwTextNodeValue == '/' )
+        #set( $chanwTextNodeValue = '' )
+    #end
+
+    #set( $void = $chanwXmlXPathTextMap.put( 
+        $chanwTextNodePath, $_EscapeTool.xml( $chanwTextNodeValue ) ) )
+#end
+
+#macro( chanwCleanUpMaps )
+    #set( $chanwXmlXPathTextMap = {} ) ## storing data
+    #set( $chanwNodeInfoMap     = {} ) ## storing node information
+#end
+
+#macro( chanwDisplayMapKeys $map $trimRoot )
+    #if( $map.class.name == $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+        #foreach( $key in $map.keySet() )
+            #if( $trimRoot && $key.class.name == $JAVA_LANG_STRING_CLASS_NAME )
+                #set( $chanwFirstSlashPos = $key.indexOf( '/' ) + 1 )
+                
+                #if( $chanwFirstSlashPos < 1 )
+                    ## nothing to do
+                #else
+                    #set( $tempKey = $key.substring( $chanwFirstSlashPos ) )
+                    $tempKey<br />
+                #end
+            #elseif( $key.class.name == $JAVA_LANG_STRING_CLASS_NAME )
+                $key<br />
+            #end
+        #end
+    #else
+        Not a map!!!<br />
+    #end
+#end
+
+#macro( chanwDisplayMapKeyValuePairs $map $trimRoot )
+    #if( $map.class.name == $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+        #foreach( $key in $map.keySet() )
+            #if( $trimRoot && $key.class.name == $JAVA_LANG_STRING_CLASS_NAME )
+                #set( $chanwFirstSlashPos = $key.indexOf( '/' ) + 1 )
+                
+                #if( $chanwFirstSlashPos < 1 )
+                    ## nothing to do
+                #else
+                    #set( $tempKey = $key.substring( $chanwFirstSlashPos ) )
+                    $tempKey: $map.get( $key )<br />
+                #end
+            #else
+                $key: $map.get( $key )<br />
+            #end
+        #end
+    #else
+        Not a map!!!<br />
+    #end
+#end
+
+#*
+Creates the root element out of an XML string.
+Example:
+
+#set( $feed_block = $_.locateBlock( "_cascade/blocks/feed/hannonhill-sandbox-wing-asset" ) )
+#chanwBuildXMLContentRoot( $feed_block.Feed )
+#set( $contentRoot = $chanwBuildXMLContentRoot )
+$contentRoot.getAttribute( "id" ).Value
+*#
+#macro( chanwBuildXMLContentRoot $xml_string )
+    #chanwGetConstructorByClassNameParamSize( 'java.io.StringReader' 1 )
+    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
+    #set( $stringReader     = $chanwConstructor.newInstance( $xml_string ) )
+    #set( $chanwBuildXMLContentRoot = $globalSAXBuilder.build( $stringReader ).rootElement )
+#end
