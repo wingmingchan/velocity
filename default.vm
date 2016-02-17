@@ -1,0 +1,380 @@
+## this is the format attached to DEFAULT for RWD2
+#import( 'formats/library/velocity/chanw_process_index_block' )
+#import( 'formats/library/velocity/chanw_process_xml' )
+#import( 'formats/library/velocity/chanw_global_utility_objects' )
+#import( 'formats/library/velocity/chanw_structured_data_worker' )
+#import( 'formats/process-block' )
+#*
+There are two system-page elements with the current attribute. However, the one that is NOT
+a child of calling-page is needed to generate the breadcrumb. It can have system-folder elements
+as ancestors.
+*#
+## for a root-level page, there is no current folder
+#set( $page = $_XPathTool.selectSingleNode( $contentRoot, "//system-folder[@current]/system-page[@current]" ) )
+## root-level pages
+#if( $_PropertyTool.isNull( $page ) )
+    #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "//system-page[@current]" ) )
+#end
+
+#processBreadcrumbPageInfoLastModified
+#processPageSystemDataStructure
+
+#macro( processBreadcrumbPageInfoLastModified )
+    #chanwProcessSystemPage( $page )
+    #set( $trail       = $_XPathTool.selectNodes( $contentRoot, "//system-folder" ) )
+    #set( $baseFolder  = "Base Folder" )
+    #set( $defaultPage = "index" )
+    #set( $separator   = "&#160;&gt;&#160;" )
+
+<div id="hide-breadcrumb">
+<nav id="breadcrumb" class="col-sm-9">
+    ## root-level pages, generate Home, possibly a link
+    #if( $page.getParent().name == "system-index-block" )
+        #if( $currentPage.name == $defaultPage )
+            Home
+        #else
+            <a href="${defaultPage}">Home</a>
+        #end
+    ## pages in folders
+    #else
+        ## non-indexable page
+        #if( $page.getParent().name == "calling-page" )
+            <a href="${defaultPage}">Home</a>
+        ## generate Home link first
+        #else
+        <a href="${defaultPage}">Home</a> $separator
+        #end
+        
+        ## each folder
+        #foreach ( $folder in $trail )
+            #if( $folder.isAncestor( $page ) )
+                #chanwProcessSystemFolder( $folder )
+                #set( $theFolderTitle = "" )
+                ## get the folder display name
+                #set( $theFolderTitle = $systemFolderDisplayName )
+    
+                #if( $folder.getAttribute( "current" ) )
+                    #if( $systemPageName == $defaultPage )$theFolderTitle
+                    #else
+                    <a href="$systemFolderLink/$defaultPage">$theFolderTitle</a>
+                        #if( $page.getParent() != $folder ) $separator #end 
+                    #end
+                #else
+                <a href="$systemFolderLink/$defaultPage">$theFolderTitle</a> $separator 
+                #end
+            #end
+        #end
+    #end
+</nav>
+</div>
+<div id="hide-page-info">
+    #set( $rootFolder = "" )
+    #set( $tempPagePath = $systemPagePath.substring( 1 ) )
+    
+    ## find the root folder name
+    #if( $tempPagePath != "index" )
+        #set( $indexOfSlash = $tempPagePath.indexOf( '/' ) )
+        
+        #if( $indexOfSlash != -1 )
+            #set( $root       = $tempPagePath.substring( 0, $indexOfSlash ) )
+            #set( $rootFolder = $root + "-folder" )
+        #end
+    #end
+    
+    ## find the site title
+    #set( $site_info_block = $_.locateBlock( '_site-info', $systemPageSite ) )
+    #chanwGetPageBlockStructuredDataNodeByIdArray( $site_info_block [ "title" ] )
+    #set( $node = $chanwGetPageBlockStructuredDataNodeByIdArray )
+    #set( $siteTitle = $node.TextValue )
+<div id="page-name">$systemPageName</div>
+<div id="page-link">$systemPageLink</div>
+<div id="page-path">$tempPagePath</div>
+<div id="root-folder">$rootFolder</div>
+<div id="site-name">$systemPageSite</div>
+<div id="site-title">$siteTitle</div>
+</div>
+<div id="hide-last-modified">
+All contents copyright &#169; 1988-<!--#passthrough<?php
+$date = getdate(); $thisyear = $date['year']; echo "$thisyear, "; ?>#passthrough-->
+<a class="footer" href="http://www.upstate.edu/">SUNY Upstate Medical University</a>, Syracuse, NY<br/><!--#passthrough<?php createPolicyLinks(); ?>#passthrough-->
+Last Modified: #set( $lastModifiedDayObj = $_DateTool.getDate( $systemPageLastModified ) )$_DateTool.format( "MMMMM dd, yyyy", $lastModifiedDayObj ).</div>
+#set( $site_storage_content = $_XPathTool.selectSingleNode( $page, 'system-data-structure/site-storage/content' ) )
+          
+    ## this is the block chooser for site-storage
+    #if( !$_PropertyTool.isNull( $site_storage_content ) )
+        #processBlockChooser( $site_storage_content )
+    #end
+#end
+
+#macro( processPageSystemDataStructure )
+    #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "//system-page[@current and system-data-structure]" ) )
+    #set( $pageSystemDataStructure  = $page.getChild( 'system-data-structure' ) )
+    #set( $thereShouldBeLeftColumn  = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'left-column' ).value )
+    #set( $thereShouldBeRightColumn = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'right-column' ).value )
+    #set( $leftColumnSetup  = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'left-column-group/left-setup' ).value )
+    #set( $rightColumnSetup = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'right-column-group/right-setup' ).value )
+    
+    #if( $thereShouldBeLeftColumn == 'yes' && $thereShouldBeRightColumn == 'yes' )
+        #set( $centerid = 'center-content-div' )
+    #elseif( $thereShouldBeLeftColumn == 'yes' && $thereShouldBeRightColumn == 'no' )
+        #set( $centerid = 'center-right-content-div' )
+    #elseif( $thereShouldBeLeftColumn == 'no' && $thereShouldBeRightColumn == 'yes' )
+        #set( $centerid = 'left-center-content-div' )
+    #else
+        #set( $centerid = 'left-center-right-content-div' )
+    #end
+
+    #if( $thereShouldBeLeftColumn == 'yes' )
+        #set( $centerclass = "col-sm-9 col-xs-12" )
+    #else
+        #set( $centerclass = "col-sm-12" )
+    #end
+    
+    #if( $thereShouldBeLeftColumn == 'yes' && $thereShouldBeRightColumn == 'yes' )
+        #set( $centercenterid = 'center-only' )
+    #elseif( $thereShouldBeLeftColumn == 'yes' && $thereShouldBeRightColumn == 'no' )
+        #set( $centercenterid = 'center-right' )
+    #elseif( $thereShouldBeLeftColumn == 'no' && $thereShouldBeRightColumn == 'yes' )
+        #set( $centercenterid = 'left-center' )
+    #else
+        #set( $centercenterid = 'full-width' )
+    #end
+
+    #if( $thereShouldBeLeftColumn == 'yes' && $thereShouldBeRightColumn == 'yes' )
+        #set( $centercenterclass = 'col-sm-8' )
+    #elseif( $thereShouldBeLeftColumn == 'yes' && $thereShouldBeRightColumn == 'no' )
+        #set( $centercenterclass = 'col-sm-12' )
+    #elseif( $thereShouldBeLeftColumn == 'no' && $thereShouldBeRightColumn == 'yes' )
+        #set( $centercenterclass = 'col-sm-9' )
+    #else
+        #set( $centercenterclass = 'col-sm-12' )
+    #end
+
+    #set( $posttitlechoosersize = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'size' ).value )
+    
+    #if( $thereShouldBeLeftColumn == 'yes' && $thereShouldBeRightColumn == 'yes' )
+        #set( $asideclass = 'col-sm-4' )
+    #elseif( $thereShouldBeLeftColumn == 'no' && $thereShouldBeRightColumn == 'yes' )
+        #set( $asideclass = 'col-sm-3' )
+    #else
+        #set( $asideclass = '' )
+    #end
+    
+    #set( $rows = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'rows' ).value )
+
+    #if( $thereShouldBeLeftColumn == 'yes' )
+    <div id="show-left-column"></div>
+    #end
+
+    <div class="$centerclass" id="center-div">
+        <div id="$centerid">
+            
+    ## pre-H1 chooser
+    #set( $centerBannerContent = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'center-banner/content' ) )
+    
+    #if( $centerBannerContent )
+        #processBlockChooser( $centerBannerContent )
+    #end
+            <div class="$centercenterclass" id="$centercenterid">
+         
+    ## process h1 and default WYSIWYG
+    #set( $mainContentTitle = $chanwXmlXPathTextMap.get( 'system-data-structure/main-content-title' ) )
+    #set( $mainContentTitle = $_EscapeTool.xml( $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'main-content-title' ).value ) )
+                
+    #if( $mainContentTitle != '' && $mainContentTitle != '**Faculty Listing' && $mainContentTitle != '**Skip' )
+                <a id="h1"></a><h1>$mainContentTitle</h1>
+    #end
+                
+    ## post-H1 chooser
+    #set( $postTitleChooserContent = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'post-title-chooser/content' ) )
+    
+    #if( $postTitleChooserContent )
+        #set( $postTitleChooserSize = $pageSystemDataStructure.getChild( 'size' ).value )
+        #if( $postTitleChooserSize == 'left' )
+                <div class="width50 leftobject">#processBlockChooser( $postTitleChooserContent )</div>
+        #elseif( $postTitleChooserSize == 'right' )
+                <div class="width50 rightobject">#processBlockChooser( $postTitleChooserContent )</div>
+        #else
+            #processBlockChooser( $postTitleChooserContent )
+        #end
+    #end
+                 
+    ## WYSIWYG
+    $_SerializerTool.serialize( $pageSystemDataStructure.getChild( 'main-content-content' ), true )
+                
+    #set( $contentGroups = $_XPathTool.selectNodes( $pageSystemDataStructure, "content-group" ) )
+                
+    #foreach( $contentGroup in $contentGroups )
+        
+        #set( $contentGroupChooserContent = "" )
+        #set( $contentGroupChooserContent = $_XPathTool.selectSingleNode( $contentGroup, 'content-group-chooser/content' ) )
+        
+        #if( $contentGroupChooserContent != '' )
+            #set( $contentGroupSize = $contentGroup.getChild( 'content-group-size' ).value.toLowerCase() )
+                    
+            #if( $contentGroupSize == 'full' )
+                #set( $sizeFloat = "" )
+            #else
+                #set( $contentGroupFloat = $contentGroup.getChild( 'content-group-block-floating' ).value.toLowerCase() + 'object' )
+                #set( $sizeFloat = " class='col-2xs-6 col-4xs-12 $contentGroupFloat'" )
+            #end
+                <div${sizeFloat}>
+                    #processBlockChooser( $contentGroupChooserContent )
+                </div>
+        #end
+                
+        ## WYSIWYG
+        #set( $contentGroupContent = $contentGroup.getChild( "content-group-content" ) )
+        #if( $contentGroupContent.value != "" || $contentGroupContent.getChildren().size > 0 )
+            $_SerializerTool.serialize( $contentGroup.getChild( "content-group-content" ), true )
+        #end
+    #end
+                
+    #if( $rows == 'yes' )
+        #set( $rowsGroups = $_XPathTool.selectNodes( $pageSystemDataStructure, "rows-group" ) )
+        
+        #if( $rowsGroups.size() > 0 )
+            #foreach( $rowsGroup in $rowsGroups )
+                #set( $columnsGroups     = $_XPathTool.selectNodes( $rowsGroup, "columns-group" ) )
+        		#set( $firstColumnsGroup = $_XPathTool.selectSingleNode( $rowsGroup, "columns-group" ) )
+        		
+        		#if( $columnsGroups.size() > 0 )
+        			## check the first columns group
+        			#if( $firstColumnsGroup.getChild( "column-block").getChild( "content" ) )
+        				#set( $group_size = $columnsGroups.size() )
+        				#set( $md_width   = 12 / $group_size )
+        				
+        				#if( $md_width < 6 )
+        					#set( $sm_width = 6 )
+        				#else
+        					#set( $sm_width = 12 )
+        				#end
+        				
+        				<div class="row">
+        				#foreach( $columnsGroup in $columnsGroups )
+        					<div class="col-md-${md_width} col-sm-${sm_width} col-xs-12">
+        					#if( $columnsGroup.getChild( "column-header" ).value != "" )
+        					<h2>$_EscapeTool.xml( $columnsGroup.getChild( "column-header" ).value )</h2>
+        					#end
+        					
+        					#set( $columns_group_content = $columnsGroup.getChild( "column-block" ).getChild( "content" ) )
+        					#processBlockChooser( $columns_group_content )
+        					</div>
+        				#end
+        				</div>
+        			#end
+        		#end
+        	#end
+        #end
+    #end
+                <div id="show-bottom"></div>
+            </div>
+            
+    #if( $thereShouldBeRightColumn == 'yes' )
+            <aside class="${asideclass}" id="right">
+        #if( $rightColumnSetup == 'default' )
+                <div id="show-right-column"></div>
+        #else
+            ## processCustomRightColumnGroup
+            #set( $customGroups = $_XPathTool.selectNodes( $page, 'system-data-structure/right-column-group/customized-right-group' ) )
+            
+            #if( $customGroups.size() > 0 )
+                <div id="show-custom-right-column"></div>
+                <div id="hide-custom-right-column">
+                #foreach( $customGroup in $customGroups )
+                    #set( $block = "" )
+                    #set( $block = $_XPathTool.selectSingleNode( $customGroup, 'customized-right-block-chooser/content' ) )
+                    
+                    #if( $block != "" )
+                        #processBlockChooser( $block )
+                    #end
+                #end
+                </div>
+            #end
+        #end
+            </aside>
+    #end
+    
+    #if( $thereShouldBeLeftColumn == 'yes' )
+        #if( $leftColumnSetup == 'default' )
+                <div id="hide-left-column"><div class="col-sm-3 col-xs-12" id="left-menu-div"><div id="left-column">#processLeftMenu</div></div></div>
+        #else
+            ## processCustomLeftColumnGroup
+            #set( $customGroups = $_XPathTool.selectNodes( $page, 'system-data-structure/left-column-group/customized-left-group' ) )
+            
+            #if( $customGroups.size() > 0 )
+                <div id="hide-left-column">
+                    <div class="col-sm-3 col-xs-12" id="left-menu-div"><div id="left-column">
+                #foreach( $customGroup in $customGroups )
+                    #set( $block = "" )
+                    #set( $block = $_XPathTool.selectSingleNode( $customGroup, 'customized-left-block-chooser/content' ) )
+                    
+                    #if( $block != "" )
+                        #processBlockChooser( $block )
+                    #end
+                #end
+                </div></div></div>
+            #end
+        #end
+    #end
+        </div>
+    </div>
+#end
+
+#macro( processLeftMenu )
+    $globalStringBuffer.setLength( 0 ) ## clear the string buffer
+	#set( $extIcon = "[system-asset:id=40da11a88b7f085600ebf23e05daf386]site://Upstate-Globals/assets/images/icons/external-icon.gif[/system-asset]" )
+    #set( $keyIcon = "[system-asset:id=40da12348b7f085600ebf23e54241ad6]site://Upstate-Globals/assets/images/icons/key-icon.gif[/system-asset]" )
+    #set( $pdfIcon = "[system-asset:id=40da132f8b7f085600ebf23e45539f84]site://Upstate-Globals/assets/images/icons/pdf-icon.gif[/system-asset]" )
+	
+    #set( $cur_folder = $_XPathTool.selectSingleNode( $contentRoot, "//system-folder[@current]" ) )
+    #set( $cur_folder_display_name = $_EscapeTool.xml( $cur_folder.getChild( 'display-name' ).value ) )
+    
+    ## root pages, etc.
+    #if( $_PropertyTool.isNull( $cur_folder ) )
+        #set( $cur_folder = $contentRoot )
+        ## work out the site title
+        #set( $cur_folder_display_name = $siteTitle )
+    #end
+
+    #set( $cur_folder_children = $cur_folder.getChildren() )
+    
+    #if( $cur_folder_children.size() > 0 )
+    	#set( $void = $globalStringBuffer.append( "<nav id='left-menu'><ul>" ) )
+    	
+        #foreach( $child in $cur_folder_children )
+        	#set( $exclude = "" )
+            #set( $exclude = $_XPathTool.selectSingleNode( $child, "dynamic-metadata[name='exclude-from-left']/value" ) )
+            
+            #if( $exclude == "" )
+            	#set( $child_link = $child.getChild( 'link' ).value )
+            	#set( $child_display_name = $_EscapeTool.xml( $child.getChild( 'display-name' ).value ) )
+            	#set( $is_current_page    = ( $child.getAttribute( 'current' ).value == 'true' ) )
+            
+            	#if( $child.name == 'system-page' )
+            		#if( $is_current_page )
+                        #set( $linkClass = " class='lcurrent'" )
+                    #else
+                        #set( $linkClass = "" )
+                    #end
+            	
+                	#if( $child.getChild( 'name' ).value == 'index' )
+                		#set( $void = $globalStringBuffer.append( "<li id='menu-label'><a href='${child_link}'>$cur_folder_display_name</a></li>" ) )
+                	#elseif( $child.getAttribute( 'current' ).value == 'true' )
+                		#set( $void = $globalStringBuffer.append( "<li class='lcurrent'><a href='${child_link}'>$child_display_name</a></li>" ) )
+                	#else
+                		#set( $void = $globalStringBuffer.append( "<li><a href='${child_link}'>$child_display_name</a></li>" ) )
+                	#end
+            	#elseif( $child.name == 'system-folder' )
+                	#set( $void = $globalStringBuffer.append( "<li><a href='${child_link}/index'>$child_display_name</a></li>" ) )
+            	#elseif( $child.name == 'system-symlink' )
+                	#set( $void = $globalStringBuffer.append( "<li><a href='${child_link}'>$child_display_name</a></li>" ) )
+            	#end
+            #end
+        #end
+        
+        #set( $void = $globalStringBuffer.append( "</ul></nav>" ) )
+        
+    #end
+    $globalJDOMText.normalizeString( $globalStringBuffer.toString() )
+#end
