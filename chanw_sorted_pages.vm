@@ -1,0 +1,32 @@
+#macro( chanwGetSortedPages $systemIndexBlock $elementToUse $dataType $sortOrder $numOfPages )
+    #set( $chanwPages = $_XPathTool.selectNodes( $systemIndexBlock, "//system-page[name!='index']" ) )
+    #set( $chanwSize  = $chanwPages.size() )
+    
+    #if( $chanwSize > 0 )
+        $_SortTool.addSortCriterion( $elementToUse, "", $dataType, $sortOrder, "" )
+        $_SortTool.sort( $chanwPages )
+    
+        ## note the short-circuiting
+        #if( $numOfPages == 0 || $chanwSize <= $numOfPages )
+            #set( $chanwGetSortedPages = $chanwPages )
+        #else
+            #set( $chanwGetSortedPages = [] )
+            #set( $chanwSize = $numOfPages - 1 )
+            
+            #foreach( $index in [ 0..$chanwSize ] )
+                #set( $dummy = $chanwGetSortedPages.add( $chanwPages.get( $index ) ) )
+            #end
+        #end
+    #end
+#end
+
+#macro( chanwGetSortedCategoriedPages $systemIndexBlock $sortOrder $category )
+    #set( $chanwPages = $_XPathTool.selectNodes( $systemIndexBlock, "//system-page[name!='index'][contains(teaser,'$category')]" ) )
+    #set( $chanwSize  = $chanwPages.size() )
+    
+    #if( $chanwSize > 0 )
+        $_SortTool.addSortCriterion( "start-date", "", "number", $sortOrder, "" )
+        $_SortTool.sort( $chanwPages )
+        #set( $chanwGetSortedCategoriedPages = $chanwPages )
+    #end
+#end
