@@ -1,0 +1,367 @@
+#import( 'formats/library/velocity/chanw_process_xml' )
+#import( 'formats/library/velocity/chanw_global_utility_objects' )
+#import( 'formats/process-block' )
+
+## retrieve the config blocks
+## _site-info: one per site
+## _right-column, _footer-contact could have mulitple instances
+
+#set( $siteInfo = $_XPathTool.selectSingleNode( $contentRoot, 'system-block[name="_site-info"]' ) )
+
+#if( $_PropertyTool.isNull( $siteInfo ) && !$_PropertyTool.isNull( $block_system_index_block ) )
+    #set( $siteInfo = $_XPathTool.selectSingleNode( $block_system_index_block, 'system-block[name="_site-info"]' ) )
+#end
+
+<div id="storage">
+#processSiteInfoBlock
+#processLeftColumnBlock
+#processRightColumnBlock
+#processFooterContactBlock
+</div>
+
+#*
+Everything in storage will be removed; no need to worry about whitespace
+$globalStringBuffer is not used here
+Also note that $globalStringBuffer does not work properly when there is PHP code involved.
+*#
+#macro( processSiteInfoBlock )
+#*
+#set( $html_ng_app = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/html-ng-app" ) )
+#if( $html_ng_app )
+<div id="hide-html-ng-app">$html_ng_app.value</div>
+<div id="hide-body-ng-controller">$_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/body-ng-controller" ).value</div>
+#end
+*#
+
+<div id="hide-global-menu">
+    $_SerializerTool.serialize( $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/global-menu/content" ), true )
+</div>
+<div id="hide-global-footer">
+    $_SerializerTool.serialize( $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/global-footer/content" ), true )
+</div>
+
+<div id="hide-logo">
+    #set( $url = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/logo-url" ).value )
+    #set( $src = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/logo/link" ).value )
+    <a href="${url}"><img src="${src}" alt="Upstate Logo" /></a>
+</div>
+<div id="hide-site-title">
+    #set( $siteLink  = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/url/link" ).value )
+    #set( $siteTitle = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/title" ).value )
+    <div id="site-title-div"><a href="${siteLink}">$siteTitle</a></div>
+</div>
+
+<div id="hide-site-title-without-link">$siteTitle</div>
+##<div id="site-title-for-title-element">$siteTitle</div>
+<div id="hide-menubar">
+    #set( $contentNav = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/menubar/content/nav" ) )
+    #if( $contentNav )
+        $_SerializerTool.serialize( $contentNav, false )
+    #else
+        #set( $indexBlock = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/menubar/content/system-index-block" ) )
+        #processMenuBar( $indexBlock )
+    #end
+</div>
+<div id="hide-javascript">
+    #processJavaScript( $indexBlock )
+</div>
+    #set( $theme_link = $_XPathTool.selectSingleNode( $siteInfo, 'system-data-structure/theme/content/link' ) )
+    #if( $theme_link )
+<div id="hide-theme">
+    $_SerializerTool.serialize( $theme_link, false )
+</div>
+    #end
+    #set( $stylesheet_link = $_XPathTool.selectSingleNode( $siteInfo, 'system-data-structure/stylesheet/content/system-data-structure/local-stylesheet-chooser/link' ) )
+    #if( $stylesheet_link )
+        #set( $link_value = $stylesheet_link.value )
+<div id="hide-style">
+    <link href='${link_value}' media='all' rel='stylesheet' type='text/css'/>
+</div>  
+    #end    
+    #set( $site_search = $_XPathTool.selectSingleNode( $siteInfo, 'system-data-structure/site-search/content/system-data-structure' ) )
+    #if( $site_search )
+        #set( $display_value = $site_search.getChild( 'display' ).value )
+        #if( $display_value == 'Yes' )
+        $_SerializerTool.serialize( $site_search.getChild( 'wysiwyg-content' ), true )
+        #end
+    #end
+#end
+
+#macro( processJavaScript $block )
+    $globalStringBuffer.setLength( 0 ) ## clear the string buffer
+    #set( $js  = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/javascript/content/system-data-structure" ) )
+    
+    #if( $js.getChild( 'ui' ).getChild( 'value' ) )
+        #set( $void = $globalStringBuffer.append( "<link href='site://Upstate-Globals/assets/css/jquery.ui.tabs.css' media='all' rel='stylesheet' type='text/css'/><script src='site://Upstate-Globals/assets/js/jquery.ui-1.8.11.js' type='text/javascript'></script>" ) )
+    #end
+
+    #if( $js.getChild( 'accordion' ).getChild( 'value' ) )
+        #set( $void = $globalStringBuffer.append( "<script src='http://www.upstate.edu/assets/js/accordion.js'></script>" ) )
+    #end
+
+    #if( $js.getChild( 'visuallightbox' ).getChild( 'value' ) )
+        #set( $void = $globalStringBuffer.append( "<link href='site://Upstate-Globals/assets/css/vlightbox1.css' rel='stylesheet' type='text/css'/><link href='site://Upstate-Globals/assets/css/visuallightbox.css' media='screen' rel='stylesheet' type='text/css'/><script src='site://Upstate-Globals/assets/js/jquery.visuallightbox-5.1.23j.js' type='text/javascript'></script>" ) )
+    #end
+    
+    #if( $js.getChild( 'flexslider' ).getChild( 'value' ) )
+        #set( $void = $globalStringBuffer.append( "<link href='http://www.upstate.edu/assets/css/flexslider.css' media='all' rel='stylesheet' /><script src='http://www.upstate.edu/assets/js/jquery.flexslider.js' type='text/javascript'></script>" ) )
+    #end
+
+    #if( $js.getChild( 'local-js-chooser' ).getChild( 'link' ) )
+        #set( $local_js_chooser_link = $js.getChild( 'local-js-chooser' ).getChild( 'link' ).value )
+        #set( $void = $globalStringBuffer.append( "<script src='${local_js_chooser_link}' type='text/javascript'></script>" ) )
+    #end
+    
+    $globalJDOMText.normalizeString( $globalStringBuffer.toString() )
+#end
+
+#macro( processMenuBar $block )
+    $globalStringBuffer.setLength( 0 ) ## clear the string buffer
+    #set( $separatorLi = "<li class='separator'><div></div></li>" )
+    
+    #if( $block.getAttribute( 'name' ).value == 'top-site-menu' )
+        #set( $indexPage = $_XPathTool.selectSingleNode( $block, 'system-page[name="index"]' ) )
+        #set( $children  = $_XPathTool.selectNodes( $block, 'system-page[name!="index"]|system-folder|system-symlink' ) )
+        #set( $void = $globalStringBuffer.append( '<nav id="site-menu"><ul>' ) )
+    
+        ## index page
+        #if( $indexPage )
+            #set( $link = $_XPathTool.selectSingleNode( $indexPage, 'link' ).value )
+            #set( $void = $globalStringBuffer.append( "<li id='home-page'><a href='${link}'>Home</a></li>$separatorLi" ) )
+        #end
+        
+        #if( $children.size() > 0 )
+            #foreach( $child in $children )
+                #if( $child.name == 'system-page' )
+                    #set( $include = $_XPathTool.selectSingleNode( $child, "dynamic-metadata[name='include-in-menubar']/value" ) )
+                    
+                    #if( $include )
+                        #set( $pageId = $child.getChild( 'name' ).value + '-folder' )
+                        #set( $link   = $child.getChild( 'link' ).value )
+                        #set( $void = $globalStringBuffer.append( "<li id='${pageId}'><a href='${link}'>" ) )
+                        #set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $child.getChild( 'display-name' ).value ) ) )
+                        #set( $void = $globalStringBuffer.append( "</a></li>$separatorLi" ) )
+                    #end
+
+                #elseif( $child.name == 'system-folder' )
+                    #set( $exclude = "" )
+                    #set( $exclude = $_XPathTool.selectSingleNode( $child, "dynamic-metadata[name='exclude-from-menu']/value" ) )
+                    
+                    #if( $exclude == "" )
+                        #set( $folderId = $child.getChild( 'name' ).value + '-folder' )
+                        #set( $link     = $child.getChild( 'link' ).value )
+                        #set( $void = $globalStringBuffer.append( "<li id='${folderId}'><a href='${link}/index'>" ) )
+                        #set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $child.getChild( 'display-name' ).value ) ) )
+                        #set( $void = $globalStringBuffer.append( "</a>" ) )
+                        
+                        #set( $grandChildren = $_XPathTool.selectNodes( $child, "system-page[name!='index']|system-folder|system-symlink" ) )
+
+                        #if( $grandChildren.size() > 0 )
+
+                            #set( $void = $globalStringBuffer.append( "<ul>" ) )
+                            
+                            #foreach( $grandChild in $grandChildren )
+                           
+                                #set( $excludeGrandChild = "" )
+                                #set( $excludeGrandChild = $_XPathTool.selectSingleNode( $grandChild, "dynamic-metadata[name='exclude-from-menu']/value" ) )
+                                    
+                                #if( $excludeGrandChild == "" )
+                         
+                                    #set( $link = $grandChild.getChild( 'link' ).value )
+                                    
+                                    #if( $grandChild.name == 'system-folder' )
+                                        #set( $link = $link + '/index' )
+                                    #end
+                                    #set( $void = $globalStringBuffer.append( "<li><a href='${link}'>" ) )
+                                    #set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $grandChild.getChild( 'display-name' ).value ) ) )
+                                    #set( $void = $globalStringBuffer.append( "</a></li>" ) )
+                                #end
+                            #end
+                            
+                            #set( $void = $globalStringBuffer.append( "</ul>" ) )
+                        #end
+                       
+                        #set( $void = $globalStringBuffer.append( "</li>$separatorLi" ) )
+                    #end
+
+                #elseif( $child.name == 'system-symlink' )
+                    #set( $exclude = "" )
+                    #set( $exclude = $_XPathTool.selectSingleNode( $child, "dynamic-metadata[name='exclude-from-menu']/value" ) )
+                    
+                    #if( $exclude == "" )
+                        #set( $link = $child.getChild( 'link' ).value )
+                        #set( $void = $globalStringBuffer.append( "<li><a href='${link}'>" ) )
+                        #set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $child.getChild( 'display-name' ).value ) ) )
+                        #set( $void = $globalStringBuffer.append( "</a></li>$separatorLi" ) )
+                    #end
+                #end
+            #end ## end foreach
+        #end ## end if
+
+        #set( $void = $globalStringBuffer.append( "</ul></nav>" ) )
+        $globalJDOMText.normalizeString( $globalStringBuffer.toString() )
+    #end
+#end
+
+## footer contact
+#macro( processFooterContactBlock )
+    #set( $footerContacts = $_XPathTool.selectNodes( $contentRoot, '//system-block[name="_footer-contact"]' ) )
+    #sortBlocks( $footerContacts )
+    #set( $footerContactList = $sortBlocks )
+
+    #if( $footerContactList.size() > 0 )
+        #set( $footerContact = $footerContactList[ 0 ].get( 'node' ) )
+        #set( $contactName   = $_EscapeTool.xml( $footerContact.getChild( 'system-data-structure' ).getChild( 'name' ).value ) )
+        #set( $contactEmail  = $footerContact.getChild( 'system-data-structure' ).getChild( 'email' ).value + '@upstate.edu' )
+
+<div id="hide-footer-contact">
+[system-view:external]<!--#passthrough<?php
+echo " Contact <a href='http://www.upstate.edu/email_form.php?name=" . urlencode('${contactName}') . 
+"&to=" . base64_encode('${contactEmail}') . 
+"' class='footer'>$contactName" . "</a> with questions about the content of this page.";
+if($intraflag) { echo "<br /><br />This Intranet page is to be used for official purposes of SUNY Upstate,<br />and should not be made accessible to non-SUNY Upstate users."; }
+?>#passthrough-->[/system-view:external]
+</div>
+    #end
+#end
+
+#macro( processLeftColumnBlock )
+    #set( $leftColumns    = $_XPathTool.selectNodes( $contentRoot, '//system-block[name="_left-column"]' ) )
+    #sortBlocks( $leftColumns )
+    #set( $leftColumnList = $sortBlocks )
+    
+    #if( $leftColumnList.size() > 0 )
+        #set( $leftColumnBlock = $leftColumnList[ 0 ].get( 'node' ) )
+        #set( $leftMenuIndexBlock = $_XPathTool.selectSingleNode( $leftColumnBlock, 'system-data-structure/left-menu/block/content/system-index-block' ) )
+        
+        #*
+        #if( $leftMenuIndexBlock )
+<div id="hide-left-column">
+    <div class="col-sm-3 col-xs-12" id="left-menu-div">
+        <div id="left-column">
+            #processLeftMenuIndexBlock( $leftMenuIndexBlock )
+        </div>
+    </div>
+</div>
+        #end
+        *#
+    #end
+#end
+
+#macro( processRightColumnBlock )
+    #set( $rightColumns = $_XPathTool.selectNodes( $contentRoot, '//system-block[name="_right-column"]' ) )
+    #sortBlocks( $rightColumns )
+    #set( $rightColumnList = $sortBlocks )
+    
+    #if( $rightColumnList.size() > 0 )
+        #set( $rightColumnBlock        = $rightColumnList[ 0 ].get( 'node' ) )
+        #set( $rightDDBlock            = $rightColumnBlock.getChild( 'system-data-structure' ) )
+        #set( $withBackground          = $rightDDBlock.getChild( 'with-background' ) )
+        #set( $withBackgroundBlocks    = $withBackground.getChildren() )
+        #set( $withoutBackground       = $rightDDBlock.getChild( 'without-background' ) )
+        #set( $withoutBackgroundBlocks = $withoutBackground.getChildren() )
+            
+<div id="hide-right-column">
+    <div id="right-column">
+        ## at least 1, no need to check size
+        #foreach( $withBackgroundBlock in $withBackgroundBlocks )
+            #if( $withBackgroundBlock.getChild( 'content' ) )
+            <div class="shortbg">
+                #processBlockChooser( $withBackgroundBlock.getChild( 'content' ) )
+            </div>
+            #end
+        #end
+    
+        ## at least 1, no need to check size
+        #foreach( $withoutBackgroundBlock in $withoutBackgroundBlocks )
+            #if( $withoutBackgroundBlock.getChild( 'content' ) )
+                #processBlockChooser( $withoutBackgroundBlock.getChild( 'content' ) )
+            #end
+        #end
+    </div>
+</div>
+    #end
+#end
+
+#macro( processLeftMenuIndexBlock $indexBlock )
+    $globalStringBuffer.setLength( 0 ) ## clear the string buffer
+    #set( $extIcon = "[system-asset:id=40da11a88b7f085600ebf23e05daf386]site://Upstate-Globals/assets/images/icons/external-icon.gif[/system-asset]" )
+    #set( $keyIcon = "[system-asset:id=40da12348b7f085600ebf23e54241ad6]site://Upstate-Globals/assets/images/icons/key-icon.gif[/system-asset]" )
+    #set( $pdfIcon = "[system-asset:id=40da132f8b7f085600ebf23e45539f84]site://Upstate-Globals/assets/images/icons/pdf-icon.gif[/system-asset]" )
+
+    ## the current page can be cached and is not reliable, though @current.getParent is OK
+    ## root pages
+    #if( $currentPage.path.indexOf( '/' ) == -1 )
+        #set( $parentFolder = "" )
+        #set( $parentLink = $siteLink )
+        #set( $parentDisplayName = $siteTitle )
+    #else ## non-root pages
+        #set( $parentFolder = $_XPathTool.selectSingleNode( $indexBlock, '//system-folder[@current][ancestor::system-data-structure]' ) )
+        #set( $parentLink   = $parentFolder.getChild( 'link' ).value + '/index' )
+        #set( $parentDisplayName = $_EscapeTool.xml( $parentFolder.getChild( 'display-name' ).value ) )
+    #end
+    
+    #if( $parentFolder != "" )
+        #set( $siblings = $_XPathTool.selectNodes( $parentFolder, 'system-page[name!="index"]|system-folder|system-symlink' ) )
+    #else
+        #set( $siblings = $_XPathTool.selectNodes( $indexBlock, 'system-page[name!="index"]|system-folder|system-symlink' ) )
+    #end
+    
+    #set( $void = $globalStringBuffer.append( "<nav id='left-menu'><ul>" ) )
+    #set( $void = $globalStringBuffer.append( "<li id='menu-label'><a href='${parentLink}'>$parentDisplayName</a></li>" ) )
+    
+    #if( $siblings.size() > 0 )
+        #foreach( $sibling in $siblings )
+            #set( $exclude = "" )
+            #set( $exclude = $_XPathTool.selectSingleNode( $sibling, "dynamic-metadata[name='exclude-from-left']/value" ) )
+
+            #if( $exclude == "" )
+                #set( $siblingDisplayName = $_EscapeTool.xml( $sibling.getChild( 'display-name' ).value ) )
+                #set( $isCurrentPage = ( $currentPage.name == $sibling.getChild( 'name' ).value ) )
+        
+                #if( $sibling.name == 'system-page' && $sibling.getChild( 'name' ).value != 'index' )
+                    #set( $pageLink = $sibling.getChild( 'link' ).value )
+            
+                    #if( $isCurrentPage )
+                        #set( $linkClass = " class='lcurrent'" )
+                    #else
+                        #set( $linkClass = "" )
+                    #end
+                    #set( $void = $globalStringBuffer.append( "<li${linkClass}><a href='${pageLink}'>$siblingDisplayName</a></li>" ) )
+                #elseif( $sibling.name == 'system-folder' )
+                    #set( $pageLink = $sibling.getChild( 'link' ).value + '/index' )
+                    #set( $void = $globalStringBuffer.append( "<li><a href='${pageLink}'>$siblingDisplayName</a></li>" ) )
+                #elseif( $sibling.name == 'system-symlink' )
+                    #set( $pageLink = $sibling.getChild( 'link' ).value )
+                    #set( $void = $globalStringBuffer.append( "<li><a href='${pageLink}'>$siblingDisplayName</a></li>" ) )
+                #end
+            #end
+        #end
+    #end
+    
+    #set( $void = $globalStringBuffer.append( "</ul></nav>" ) )
+    $globalJDOMText.normalizeString( $globalStringBuffer.toString() )
+#end
+
+#*
+Sort the blocks using number of ancestors as criterion.
+This macro is required because count does not work: https://hannonhill.jira.com/browse/CSI-743
+*#
+#macro( sortBlocks $blocks )
+    #set( $sortBlocks = [] )
+    
+    #foreach( $block in $blocks )
+        #set( $parent = $block.getParent() )
+    
+        #foreach( $num in [1..10] )
+            #if( $parent.name == 'system-index-block' )
+                #set( $void = $sortBlocks.add( {'node':$block, 'ancestor':$foreach.count } ) )
+                #break
+            #else
+                #set( $parent = $parent.getParent() )
+            #end
+        #end
+    #end
+
+    #set( $sortBlocks = $_SortTool.sort( $sortBlocks, "ancestor:desc" ) )
+#end
