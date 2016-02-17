@@ -1,0 +1,237 @@
+#*
+This format provides methods to work with structured data and metadata,
+when using the locator tool.
+
+Example code:
+
+#import( 'site://_common_assets/formats/library/velocity/chanw_structured_data_worker' )
+
+#set( $b  = $_.locateBlock( "_cascade/blocks/data/test-groups-texts" ) )
+#set( $sd = $b.getStructuredData() )
+
+#chanwRecurseNodes( $sd )
+
+#chanwGetPageBlockStructuredDataNodeByIdArray( $b [ "single-group-single-text", "st" ] )
+
+## get the third "multiple-group-multiple-text", second "mt"
+#chanwGetPageBlockStructuredDataNodeByIdArray( $b [ "multiple-group-multiple-text", 2, "mt", 1 ] )
+
+#chanwShowMetadata( $currentPage.Metadata )
+*#
+
+#import( '/formats/library/velocity/chanw_global_values' )
+
+#set( $chanwStructuredDataKeyList = [] )
+#set( $chanwStructuredDataMap     = {} )
+
+#* 
+Displays node information recursively.
+*#
+#macro( chanwRecurseNodes $nodes )
+    #if( $nodes.isGroup() )
+        #recurseGroup( $nodes )
+    #elseif( $nodes.class.name != $COM_CASCADE_STRUCTURED_DATA_LIST_CLASS_NAME )
+        Not a list of nodes.
+        #stop
+    #end
+    
+    #foreach( $child in $nodes )
+        #if( $child.isText() )
+            Text identifier: $child.Identifier$BR 
+            
+            #if( $child.TextValues )
+                Text values size: $child.TextValues.size()$BR 
+                #foreach( $string in $child.TextValues )
+                    #if( $string != '' )Text value: $string$BR #end
+                #end
+            #end
+
+        #elseif( $child.isGroup() )
+            #recurseGroup( $child )
+        #elseif( $child.isAsset() )
+            Asset identifier: $child.Identifier$BR 
+            #set( $asset = $child.Asset )
+            Asset path: $asset.Identifier.Path.PathAsString, asset type: $asset.Identifer.Type$BR 
+        #end
+        $BR
+    #end
+#end
+
+#macro( recurseGroup $group_node )
+    Group identifier: $group_node.Identifier$BR 
+            
+    #set( $children = $group_node.Children )
+      
+    #if( $children.size() > 0 )      
+        #chanwRecurseNodes( $children )
+    #end
+#end
+
+#* 
+Populates the map.
+*#
+#macro( chanwPopulateStructuredDataListMap $chanw_bp )
+    #if( $chanw_bp.class.Name != $COM_CASCADE_BLOCK_API_CLASS_NAME &&
+        $chanw_bp.class.Name != $COM_CASCADE_PAGE_API_CLASS_NAME
+    )
+        Not a data definition block nor a page
+    #else
+        #set( $chanw_structured_data = $chanw_bp.getStructuredData() )
+        
+        #if( $_PropertyTool.isNull( $chanw_structured_data ) )
+            No structured data available
+        #else
+            #set( $chanw_sd_size = $chanw_structured_data.size() )
+            
+            #if( $chanw_structured_data.size() == 0 )
+                No structured data available
+            #else
+                ##Size: $chanw_structured_data.size()$BR 
+                #set( $size = $chanw_structured_data.size() )
+                #foreach( $item in [ 1..$size ] ) ## a for loop
+                    #set( $prev_index = $foreach.index - 1 )
+                    ## previous node
+                    #if( $prev_index >= 0 )
+                        #set( $prev_node = $chanw_structured_data.get( $prev_index ) )
+                    #else
+                        #set( $prev_node = "" )
+                    #end
+                    ## current node
+                    #set( $curr_node = $chanw_structured_data.get( $foreach.index ) )
+                    ## next node
+                    #set( $next_index = $foreach.index + 1 )                    
+                    #if( $next_index < $size )
+                        #set( $next_node = $chanw_structured_data.get( $next_index ) )
+                    #else
+                        #set( $next_node = "" )
+                    #end
+                    
+                    #if( $prev_node.class.name != $JAVA_LANG_STRING_CLASS_NAME )
+                        #if( $prev_node.Identifier == $curr_node.Identifier )
+                            #set( $multiple_node = true )
+                        #else
+                            #set( $multiple_node = false )
+                        #end
+                    #end
+                    
+                    #if( !$multiple_node && $next_node.class.name != $JAVA_LANG_STRING_CLASS_NAME )
+                        #if( $next_node.Identifier == $curr_node.Identifier )
+                            #set( $multiple_node = true )
+                        #else
+                            #set( $multiple_node = false )
+                        #end
+                    #end
+                    
+                    $curr_node.Identifier Multiple: $multiple_node$BR 
+                #end
+            #end
+        #end
+    #end
+#end
+
+#* 
+Retrieves the structured data node by using the supplied identifier.
+*#
+#macro( chanwGetPageBlockStructuredDataNodeByIdArray $chanw_bp $chanw_array )
+    #if( $chanw_array.class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME || $chanw_array.size() == 0 )
+        No valid path passed in
+    #elseif( $chanw_bp.class.Name == $COM_CASCADE_BLOCK_API_CLASS_NAME ||
+        $chanw_bp.class.Name == $COM_CASCADE_PAGE_API_CLASS_NAME
+    )        
+        #foreach( $chanw_item in $chanw_array )
+            #set( $chanw_sdns = "" )
+            #set( $chanw_next = $foreach.index + 1 )
+            
+            #if( !$_PropertyTool.isNull( $_MathTool.toInteger( $chanw_array[ $foreach.index ] ) ) )
+                #set( $chanw_value = $_MathTool.toInteger( $chanw_array[ $foreach.index ] ) )
+            #else
+                #set( $chanw_value = "" )
+            #end
+        
+            ## an identifier
+            #if( $chanw_value == "" )
+                #if( $chanw_next < $chanw_array.size() )
+                    #set( $chanw_next_int = $_MathTool.toInteger( $chanw_array[ $chanw_next ] ) )
+                #end
+                
+                ## multiple nodes
+                #if( $chanw_next < $chanw_array.size() && !$_PropertyTool.isNull( $chanw_next_int ) )
+                    #if( $foreach.index == 0 ) ## first node
+                        #set( $chanw_sdns    = $chanw_bp.getStructuredDataNodes( $chanw_array[ $foreach.index ] ) )
+                    #else
+                        #set( $chanw_sdns    = $chanw_current.getChildren( $chanw_array[ $foreach.index ] ) )                       
+                    #end
+                    
+                    #set( $chanw_current = $chanw_sdns.get( $chanw_next_int ) )
+                ## single node
+                #else
+                    #if( $foreach.index == 0 ) ## first node
+                        #set( $chanw_current  = $chanw_bp.getStructuredDataNode( $chanw_array[ $foreach.index ] ) )
+                    #else
+                        #set( $chanw_current  = $chanw_current.getChild( $chanw_array[ $foreach.index ] ) )
+                        
+                    #end
+                #end     
+            ## an int
+            #else
+                ## do nothing
+            #end
+            
+            #set( $chanwGetPageBlockStructuredDataNodeByIdArray = $chanw_current )
+        #end        
+    #else
+        Neither a block nor a page
+    #end
+#end
+
+#* 
+Shows information in metadata.
+*#
+#macro( chanwShowMetadata $chanwMetadata )
+    #if( $chanwMetadata.class.name != $COM_CASCADE_METADATA_CLASS_NAME )
+        Not a metadata
+        #stop
+    #end
+
+    #if( $chanwMetadata.DisplayName )Display name: $chanwMetadata.DisplayName$BR #end
+    #if( $chanwMetadata.Description )Description: $chanwMetadata.Description$BR #end
+    #if( $chanwMetadata.Title )Title: $chanwMetadata.Title$BR #end
+    #if( $chanwMetadata.Summary )Summary: $chanwMetadata.Summary$BR #end
+    #if( $chanwMetadata.Teaser )Teaser: $chanwMetadata.Teaser$BR #end
+    #if( $chanwMetadata.Keywords )Keywords: $chanwMetadata.Keywords$BR #end
+    #if( $chanwMetadata.Author )Author: $chanwMetadata.Author$BR #end
+    #if( $chanwMetadata.ReviewDate )ReviewDate: $chanwMetadata.ReviewDate$BR #end
+    #if( $chanwMetadata.StartDate )StartDate: $chanwMetadata.StartDate$BR #end
+    #if( $chanwMetadata.EndDate )EndDate: $chanwMetadata.EndDate$BR #end
+    
+    #set( $chanwDFS = $chanwMetadata.DynamicFields )
+    
+    #if( $chanwDFS.size() > 0 )
+    *****$BR
+        #foreach( $chanwDF in $chanwDFS )
+            Name: $chanwDF.Name$BR
+            #if( $chanwDF.isCheckbox() )
+            Type: Checkbox$BR
+            #elseif( $chanwDF.isDropdown() )
+            Type: Dropdown$BR
+            #elseif( $chanwDF.isMultiselect() )
+            Type: Multiselect$BR
+            #elseif( $chanwDF.isRadio() )
+            Type: Radio$BR
+            #end
+            
+            #set( $chanwTextSize = $chanwDF.Values.size() )
+            #if( $chanwTextSize > 0 )
+                Size: $chanwTextSize$BR
+                #foreach( $value in $chanwDF.Values )
+                    #if( $value != "" )
+                    Text value: $value$BR
+                    #end
+                #end
+            #else
+            No text value$BR
+            #end
+            $BR
+        #end
+    #end
+#end
