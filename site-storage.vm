@@ -14,7 +14,6 @@
 
 <div id="storage">
 #processSiteInfoBlock
-#processLeftColumnBlock
 #processRightColumnBlock
 #processFooterContactBlock
 </div>
@@ -25,14 +24,6 @@ $globalStringBuffer is not used here
 Also note that $globalStringBuffer does not work properly when there is PHP code involved.
 *#
 #macro( processSiteInfoBlock )
-#*
-#set( $html_ng_app = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/html-ng-app" ) )
-#if( $html_ng_app )
-<div id="hide-html-ng-app">$html_ng_app.value</div>
-<div id="hide-body-ng-controller">$_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/body-ng-controller" ).value</div>
-#end
-*#
-
 <div id="hide-global-menu">
     $_SerializerTool.serialize( $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/global-menu/content" ), true )
 </div>
@@ -52,7 +43,6 @@ Also note that $globalStringBuffer does not work properly when there is PHP code
 </div>
 
 <div id="hide-site-title-without-link">$siteTitle</div>
-##<div id="site-title-for-title-element">$siteTitle</div>
 <div id="hide-menubar">
     #set( $contentNav = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/menubar/content/nav" ) )
     #if( $contentNav )
@@ -225,29 +215,6 @@ if($intraflag) { echo "<br /><br />This Intranet page is to be used for official
     #end
 #end
 
-#macro( processLeftColumnBlock )
-    #set( $leftColumns    = $_XPathTool.selectNodes( $contentRoot, '//system-block[name="_left-column"]' ) )
-    #sortBlocks( $leftColumns )
-    #set( $leftColumnList = $sortBlocks )
-    
-    #if( $leftColumnList.size() > 0 )
-        #set( $leftColumnBlock = $leftColumnList[ 0 ].get( 'node' ) )
-        #set( $leftMenuIndexBlock = $_XPathTool.selectSingleNode( $leftColumnBlock, 'system-data-structure/left-menu/block/content/system-index-block' ) )
-        
-        #*
-        #if( $leftMenuIndexBlock )
-<div id="hide-left-column">
-    <div class="col-sm-3 col-xs-12" id="left-menu-div">
-        <div id="left-column">
-            #processLeftMenuIndexBlock( $leftMenuIndexBlock )
-        </div>
-    </div>
-</div>
-        #end
-        *#
-    #end
-#end
-
 #macro( processRightColumnBlock )
     #set( $rightColumns = $_XPathTool.selectNodes( $contentRoot, '//system-block[name="_right-column"]' ) )
     #sortBlocks( $rightColumns )
@@ -281,66 +248,6 @@ if($intraflag) { echo "<br /><br />This Intranet page is to be used for official
     </div>
 </div>
     #end
-#end
-
-#macro( processLeftMenuIndexBlock $indexBlock )
-    $globalStringBuffer.setLength( 0 ) ## clear the string buffer
-    #set( $extIcon = "[system-asset:id=40da11a88b7f085600ebf23e05daf386]site://Upstate-Globals/assets/images/icons/external-icon.gif[/system-asset]" )
-    #set( $keyIcon = "[system-asset:id=40da12348b7f085600ebf23e54241ad6]site://Upstate-Globals/assets/images/icons/key-icon.gif[/system-asset]" )
-    #set( $pdfIcon = "[system-asset:id=40da132f8b7f085600ebf23e45539f84]site://Upstate-Globals/assets/images/icons/pdf-icon.gif[/system-asset]" )
-
-    ## the current page can be cached and is not reliable, though @current.getParent is OK
-    ## root pages
-    #if( $currentPage.path.indexOf( '/' ) == -1 )
-        #set( $parentFolder = "" )
-        #set( $parentLink = $siteLink )
-        #set( $parentDisplayName = $siteTitle )
-    #else ## non-root pages
-        #set( $parentFolder = $_XPathTool.selectSingleNode( $indexBlock, '//system-folder[@current][ancestor::system-data-structure]' ) )
-        #set( $parentLink   = $parentFolder.getChild( 'link' ).value + '/index' )
-        #set( $parentDisplayName = $_EscapeTool.xml( $parentFolder.getChild( 'display-name' ).value ) )
-    #end
-    
-    #if( $parentFolder != "" )
-        #set( $siblings = $_XPathTool.selectNodes( $parentFolder, 'system-page[name!="index"]|system-folder|system-symlink' ) )
-    #else
-        #set( $siblings = $_XPathTool.selectNodes( $indexBlock, 'system-page[name!="index"]|system-folder|system-symlink' ) )
-    #end
-    
-    #set( $void = $globalStringBuffer.append( "<nav id='left-menu'><ul>" ) )
-    #set( $void = $globalStringBuffer.append( "<li id='menu-label'><a href='${parentLink}'>$parentDisplayName</a></li>" ) )
-    
-    #if( $siblings.size() > 0 )
-        #foreach( $sibling in $siblings )
-            #set( $exclude = "" )
-            #set( $exclude = $_XPathTool.selectSingleNode( $sibling, "dynamic-metadata[name='exclude-from-left']/value" ) )
-
-            #if( $exclude == "" )
-                #set( $siblingDisplayName = $_EscapeTool.xml( $sibling.getChild( 'display-name' ).value ) )
-                #set( $isCurrentPage = ( $currentPage.name == $sibling.getChild( 'name' ).value ) )
-        
-                #if( $sibling.name == 'system-page' && $sibling.getChild( 'name' ).value != 'index' )
-                    #set( $pageLink = $sibling.getChild( 'link' ).value )
-            
-                    #if( $isCurrentPage )
-                        #set( $linkClass = " class='lcurrent'" )
-                    #else
-                        #set( $linkClass = "" )
-                    #end
-                    #set( $void = $globalStringBuffer.append( "<li${linkClass}><a href='${pageLink}'>$siblingDisplayName</a></li>" ) )
-                #elseif( $sibling.name == 'system-folder' )
-                    #set( $pageLink = $sibling.getChild( 'link' ).value + '/index' )
-                    #set( $void = $globalStringBuffer.append( "<li><a href='${pageLink}'>$siblingDisplayName</a></li>" ) )
-                #elseif( $sibling.name == 'system-symlink' )
-                    #set( $pageLink = $sibling.getChild( 'link' ).value )
-                    #set( $void = $globalStringBuffer.append( "<li><a href='${pageLink}'>$siblingDisplayName</a></li>" ) )
-                #end
-            #end
-        #end
-    #end
-    
-    #set( $void = $globalStringBuffer.append( "</ul></nav>" ) )
-    $globalJDOMText.normalizeString( $globalStringBuffer.toString() )
 #end
 
 #*
