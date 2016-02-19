@@ -23,8 +23,8 @@ For variables inside code, use camelCase.
 
 #foreach( $single_group_name in $single_group_names )
     #chanwConvertToPascalCase( $single_group_name "-" )
-	#set( $dispatch_macro_name = $MACRO_PREFIX + $chanwConvertToPascalCase )
-	#set( $single_group_name   = $single_group_name + "-group" )
+    #set( $dispatch_macro_name = $MACRO_PREFIX + $chanwConvertToPascalCase )
+    #set( $single_group_name   = $single_group_name + "-group" )
     #set( $chanw_statement     = $single_group_code.replaceAll( 
         "dispatch_macro_name", $dispatch_macro_name ).replaceAll( "single_group_name", $single_group_name ) )
     #evaluate( $chanw_statement )
