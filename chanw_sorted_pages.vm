@@ -20,13 +20,13 @@
     #end
 #end
 
-#macro( chanwGetSortedCategoriedPages $systemIndexBlock $sortOrder $category )
+#macro( chanwGetSortedCategorizedPages $systemIndexBlock $sortOrder $category )
     #set( $chanwPages = $_XPathTool.selectNodes( $systemIndexBlock, "//system-page[name!='index'][contains(teaser,'$category')]" ) )
     #set( $chanwSize  = $chanwPages.size() )
     
     #if( $chanwSize > 0 )
         $_SortTool.addSortCriterion( "start-date", "", "number", $sortOrder, "" )
         $_SortTool.sort( $chanwPages )
-        #set( $chanwGetSortedCategoriedPages = $chanwPages )
+        #set( $chanwGetSortedCategorizedPages = $chanwPages )
     #end
 #end
