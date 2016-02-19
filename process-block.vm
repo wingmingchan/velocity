@@ -15,27 +15,23 @@ For variables inside code, use camelCase.
 ## These are multi-group blocks, and put the required dispatch macro names here.
 #set( $macro_names = [ "processMegablock", "processMultimedia", "processDesignerProBlock" ] )
 
+## read the block and grab the code
+#set( $global_velocity_code = $_.locateBlock( 
+    "blocks/code/global-velocity-code" ).getXMLAsXMLElement().getChild( "global-velocity-code" ) )
+#set( $single_group_code    = $global_velocity_code.getChild( "single-group" ).value )
+#set( $multi_group_code     = $global_velocity_code.getChild( "multi-group" ).value )
+
 #foreach( $single_group_name in $single_group_names )
     #chanwConvertToPascalCase( $single_group_name "-" )
 	#set( $dispatch_macro_name = $MACRO_PREFIX + $chanwConvertToPascalCase )
-	#set( $single_group_name = $single_group_name + "-group" )
-	#set( $chanw_statement = "#" + "macro(" + $dispatch_macro_name + " $" +"systemDataStructure)" +
-        "#" + "set($" + "groupToBeProcessed=$" + "systemDataStructure.getChild(" +"'$single_group_name'))" +
-        "#" + "chanwConvertToPascalCase(" + "'$single_group_name' '-')" +
-        "#" + "set($" + "macroName=$" + "MACRO_PREFIX+$" + "chanwConvertToPascalCase)" +
-        "#" + "chanwInvokeMacro($" + "macroName ['groupToBeProcessed'])" +
-        "#" + "end" )
+	#set( $single_group_name   = $single_group_name + "-group" )
+    #set( $chanw_statement     = $single_group_code.replaceAll( 
+        "dispatch_macro_name", $dispatch_macro_name ).replaceAll( "single_group_name", $single_group_name ) )
     #evaluate( $chanw_statement )
 #end
 
 #foreach( $macro_name in $macro_names )
-    #set( $chanw_statement = "#" + "macro(" + $macro_name + " $" +"systemDataStructure)" +
-        "#" + "set($" + "groupType=$" + "systemDataStructure.getChild('choose-type').value )" +
-        "#" + "set($" + "groupToBeProcessed=$" + "systemDataStructure.getChild(" + '"$' +'{groupType}-group"))' +
-        "#" + "chanwConvertToPascalCase($" + "groupType '-')" +
-        "#" + "set($" + "macroName=$" + "MACRO_PREFIX+$" + "chanwConvertToPascalCase+'Group')" +
-        "#" + "chanwInvokeMacro($" + "macroName ['groupToBeProcessed'])" +
-        "#" + "end" )
+    #set( $chanw_statement = $multi_group_code.replaceAll( "macro_name", $macro_name ) )
     #evaluate( $chanw_statement )
 #end
 
