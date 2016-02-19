@@ -4,41 +4,39 @@
 
 #*
 Generates the required macros.
+For meta-variables (variables to store macro names, group names, etc., use underscores for word boundaries.
+For variables inside code, use camelCase.
 *#
 
 ## These are single-group blocks, put block type info here, and do not use '-group' in type info.
-## The group identifier should be type-info-group.
+## The group identifier should be {type-info}-group.
 #set( $single_group_names = [ "wysiwyg", "instruction-block" ] )
 
 ## These are multi-group blocks, and put the required dispatch macro names here.
 #set( $macro_names = [ "processMegablock", "processMultimedia", "processDesignerProBlock" ] )
-    
+
 #foreach( $single_group_name in $single_group_names )
     #chanwConvertToPascalCase( $single_group_name "-" )
 	#set( $dispatch_macro_name = $MACRO_PREFIX + $chanwConvertToPascalCase )
-    ##$dispatch_macro_name
 	#set( $single_group_name = $single_group_name + "-group" )
-    
-	#set( $chanwStatement = "#" + "macro(" + $dispatch_macro_name + " $" +"systemDataStructure)" +
+	#set( $chanw_statement = "#" + "macro(" + $dispatch_macro_name + " $" +"systemDataStructure)" +
         "#" + "set($" + "groupToBeProcessed=$" + "systemDataStructure.getChild(" +"'$single_group_name'))" +
         "#" + "chanwConvertToPascalCase(" + "'$single_group_name' '-')" +
         "#" + "set($" + "macroName=$" + "MACRO_PREFIX+$" + "chanwConvertToPascalCase)" +
         "#" + "chanwInvokeMacro($" + "macroName ['groupToBeProcessed'])" +
         "#" + "end" )
-    #evaluate( $chanwStatement )
-    
+    #evaluate( $chanw_statement )
 #end
 
 #foreach( $macro_name in $macro_names )
-    #set( $chanwStatement = "#" + "macro(" + $macro_name + " $" +"systemDataStructure)" +
+    #set( $chanw_statement = "#" + "macro(" + $macro_name + " $" +"systemDataStructure)" +
         "#" + "set($" + "groupType=$" + "systemDataStructure.getChild('choose-type').value )" +
         "#" + "set($" + "groupToBeProcessed=$" + "systemDataStructure.getChild(" + '"$' +'{groupType}-group"))' +
         "#" + "chanwConvertToPascalCase($" + "groupType '-')" +
         "#" + "set($" + "macroName=$" + "MACRO_PREFIX+$" + "chanwConvertToPascalCase+'Group')" +
         "#" + "chanwInvokeMacro($" + "macroName ['groupToBeProcessed'])" +
         "#" + "end" )
-    ##$chanwStatement
-    #evaluate( $chanwStatement )
+    #evaluate( $chanw_statement )
 #end
 
 #*
@@ -67,8 +65,6 @@ The name of the block is turned into a macro name.
     #chanwInvokeMacro( $macroName [ "firstChild" ] )
 #end
 
-
-
 #* === process legacy blocks == *#
 #macro( processPhpStaticInclude $systemDataStructure )
     #set( $groupToBeProcessed = $systemDataStructure.getChild( "block-group" ) )
@@ -78,10 +74,6 @@ The name of the block is turned into a macro name.
 #end
 
 #* === individual macro to process index blocks of various names == *#
-#macro( processArticlesIndex $systemIndexBlock )
-    $systemIndexBlock.name
-#end
-
 #macro( processWsMapIndex $systemIndexBlock )
     #chanwCreateSiteMap( $systemIndexBlock )
 #end
