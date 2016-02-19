@@ -4,8 +4,6 @@
 
 #*
 Generates the required macros.
-For meta-variables (variables to store macro names, group names, etc., use underscores for word boundaries.
-For variables inside code, use camelCase.
 *#
 
 ## These are single-group blocks, put block type info here, and do not use '-group' in type info.
@@ -23,8 +21,8 @@ For variables inside code, use camelCase.
 
 #foreach( $single_group_name in $single_group_names )
     #chanwConvertToPascalCase( $single_group_name "-" )
-	#set( $dispatch_macro_name = $MACRO_PREFIX + $chanwConvertToPascalCase )
-	#set( $single_group_name   = $single_group_name + "-group" )
+    #set( $dispatch_macro_name = $MACRO_PREFIX + $chanwConvertToPascalCase )
+    #set( $single_group_name   = $single_group_name + "-group" )
     #set( $chanw_statement     = $single_group_code.replaceAll( 
         "-dispatch_macro_name-", $dispatch_macro_name ).replaceAll( "-single_group_name-", $single_group_name ) )
     #evaluate( $chanw_statement )
