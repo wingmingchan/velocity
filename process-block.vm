@@ -85,7 +85,7 @@ When it is a region, what is passed in is a Document object.
 Otherwise, it is an Element whose name is content.
 *#
 #macro( processBlockChooser $content )
-    #if( $content.class.name == "org.jdom.Document" )
+    #if( $content.class.name == $ORG_JDOM_DOCUMENT_CLASS_NAME )
         #set( $contentChildren = $content.getContent() )
     #else
         #set( $contentChildren = $content.getChildren() )
@@ -98,9 +98,9 @@ Otherwise, it is an Element whose name is content.
         #set( $childName  = $firstChild.name )
         #set( $childPath  = $content.getParent().getChild( 'path' ).value )
     
-        #if( $childName == 'system-data-structure' )
+        #if( $childName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
             #processDataDefinitionBlock( $firstChild )
-        #elseif( $childName == 'system-index-block' )
+        #elseif( $childName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK )
             #processIndexBlock( $firstChild )
         #else
             #set( $blockName = $childPath )
