@@ -1,3 +1,0 @@
-## attach this format to a region to process any data definition block
-#import( 'formats/process-block' )
-#processDataDefinitionBlock( $contentRoot )
