@@ -1,0 +1,4 @@
+## attach this format to a region to process any block
+#import( 'formats/process-block' )
+#set( $parent = $contentRoot.getParent() )
+#processBlockChooser( $parent )
