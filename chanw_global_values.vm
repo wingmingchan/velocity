@@ -59,8 +59,10 @@ This format provides constants used in other library formats.
 #set( $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE = 'system-data-structure' )
 #set( $cascadeXML_ELEMENT_SYSTEM_FILE           = 'system-file' )
 #set( $cascadeXML_ELEMENT_SYSTEM_FOLDER         = 'system-folder' )
+#set( $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK    = 'system-index-block' )
 #set( $cascadeXML_ELEMENT_SYSTEM_PAGE           = 'system-page' )
 #set( $cascadeXML_ELEMENT_SYSTEM_SYMLINK        = 'system-symlink' )
+#set( $cascadeXML_ELEMENT_SYSTEM_XML            = 'system-xml' )
 #set( $cascadeXML_ELEMENT_TITLE                 = 'title' )
 #set( $chanwFolderContainedAssets = [ $cascadeXML_ELEMENT_SYSTEM_BLOCK, 
     $cascadeXML_ELEMENT_SYSTEM_FILE, $cascadeXML_ELEMENT_SYSTEM_FOLDER,
