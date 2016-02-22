@@ -13,11 +13,28 @@ Generates the required macros.
 ## These are multi-group blocks, and put the required dispatch macro names here.
 #set( $macro_names = [ "processMegablock", "processMultimedia", "processDesignerProBlock" ] )
 
+## These are various names of macros invoking the same macro to generate site maps.
+#set( $site_map_macro_names = [ "processWsMapIndex", "processSiteMapIndex" ] )
+
+## These are map-code pairs used to generate macros to generate macros.
+#set( $map_code_pairs = { "macro_names"          : "multi_group_code", 
+                          "site_map_macro_names" : "site_map_code" } )
+
 ## read the block and grab the code
 #set( $global_velocity_code = $_.locateBlock( 
     "blocks/code/global-velocity-code" ).getXMLAsXMLElement().getChild( "global-velocity-code" ) )
 #set( $single_group_code    = $global_velocity_code.getChild( "single-group" ).value )
 #set( $multi_group_code     = $global_velocity_code.getChild( "multi-group" ).value )
+#set( $site_map_code        = $global_velocity_code.getChild( "site-map" ).value )
+#set( $macro_foreach__code  = $global_velocity_code.getChild( "generate-macro-foreach" ).value )
+
+## generate macros that generate macros
+#set( $chanw_map_code_keys = $map_code_pairs.keySet() )
+
+#foreach( $key in $chanw_map_code_keys )
+    #set( $chanw_map_statement = $macro_foreach__code.replaceAll( "-map_name-", $key ).replaceAll( "-code_name-", $map_code_pairs[$key] ) )
+    #evaluate( $chanw_map_statement )
+#end
 
 #foreach( $single_group_name in $single_group_names )
     #chanwConvertToPascalCase( $single_group_name "-" )
@@ -25,11 +42,6 @@ Generates the required macros.
     #set( $single_group_name   = $single_group_name + "-group" )
     #set( $chanw_statement     = $single_group_code.replaceAll( 
         "-dispatch_macro_name-", $dispatch_macro_name ).replaceAll( "-single_group_name-", $single_group_name ) )
-    #evaluate( $chanw_statement )
-#end
-
-#foreach( $macro_name in $macro_names )
-    #set( $chanw_statement = $multi_group_code.replaceAll( "-macro_name-", $macro_name ) )
     #evaluate( $chanw_statement )
 #end
 
@@ -67,25 +79,22 @@ The name of the block is turned into a macro name.
     #chanwInvokeMacro( $macroName [ "groupToBeProcessed" ] )
 #end
 
-#* === individual macro to process index blocks of various names == *#
-#macro( processWsMapIndex $systemIndexBlock )
-    #chanwCreateSiteMap( $systemIndexBlock )
-#end
-
-#macro( processSiteMapIndex $systemIndexBlock )
-    #chanwCreateSiteMap( $systemIndexBlock )
-#end
-
 #*
-Processes a block chooser.
+Processes a block chooser or a region.
+When it is a region, what is passed in is a Document object.
+Otherwise, it is an Element whose name is content.
 *#
 #macro( processBlockChooser $content )
-    #set( $contentChildren = $content.getChildren() )
+    #if( $content.class.name == "org.jdom.Document" )
+        #set( $contentChildren = $content.getContent() )
+    #else
+        #set( $contentChildren = $content.getChildren() )
+    #end
     
     #if( $contentChildren.size() == 0 )
         $_SerializerTool.serialize( $content, true )  ## plain text or code
     #elseif( $contentChildren.size() > 0 )
-        #set( $firstChild = $content.getChildren().get( 0 ) )
+        #set( $firstChild = $contentChildren.get( 0 ) )
         #set( $childName  = $firstChild.name )
         #set( $childPath  = $content.getParent().getChild( 'path' ).value )
     
