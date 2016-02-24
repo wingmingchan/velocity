@@ -11,7 +11,7 @@ Generates the required macros.
 #set( $single_group_names = [ "wysiwyg", "instruction-block" ] )
 
 ## These are multi-group blocks, and put the required dispatch macro names here.
-#set( $macro_names = [ "processMegablock", "processMultimedia", "processDesignerProBlock" ] )
+#set( $macro_names = [ "processMegablock", "processMultimedia", "processDesignerProBlock", "processNewsBlock" ] )
 
 ## These are various names of macros invoking the same macro to generate site maps.
 #set( $site_map_macro_names = [ "processWsMapIndex", "processSiteMapIndex" ] )
@@ -26,13 +26,13 @@ Generates the required macros.
 #set( $single_group_code    = $global_velocity_code.getChild( "single-group" ).value )
 #set( $multi_group_code     = $global_velocity_code.getChild( "multi-group" ).value )
 #set( $site_map_code        = $global_velocity_code.getChild( "site-map" ).value )
-#set( $macro_foreach__code  = $global_velocity_code.getChild( "generate-macro-foreach" ).value )
+#set( $macro_foreach_code   = $global_velocity_code.getChild( "generate-macro-foreach" ).value )
 
 ## generate macros that generate macros
 #set( $chanw_map_code_keys = $map_code_pairs.keySet() )
 
 #foreach( $key in $chanw_map_code_keys )
-    #set( $chanw_map_statement = $macro_foreach__code.replaceAll( "-map_name-", $key ).replaceAll( "-code_name-", $map_code_pairs[$key] ) )
+    #set( $chanw_map_statement = $macro_foreach_code.replaceAll( "-map_name-", $key ).replaceAll( "-code_name-", $map_code_pairs[ $key ] ) )
     #evaluate( $chanw_map_statement )
 #end
 
