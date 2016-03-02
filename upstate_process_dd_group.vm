@@ -1,237 +1,703 @@
+#import( 'formats/library/velocity/chanw_process_xml' )
+#import( 'formats/library/velocity/chanw_global_utility_objects' )
+
+#macro( processAccordionGroup $groupToBeProcessed )
+    #if( $groupToBeProcessed.name != 'accordion-group' )
+        Not an Accordion group
+		#stop
+	#end
+	
+    $globalStringBuffer.setLength( 0 )
+    #set( $accordionGroups = $groupToBeProcessed.getChildren() )
+    
+    #if( $accordionGroups.size() > 0 )
+        #set( $void = $globalStringBuffer.append( "<p><a href='#' id='expand_all'>Expand all</a></p><div class='accordion'>" ) )
+
+        #foreach( $accordionGroup in $accordionGroups )
+			#set( $void = $globalStringBuffer.append( "<h2>" ) )
+			#set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $accordionGroup.getChild( 'accordion-h2' ).value ) ) )
+			#set( $void = $globalStringBuffer.append( "</h2><div>" ) )
+            #set( $void = $globalStringBuffer.append( $_SerializerTool.serialize( $accordionGroup.getChild( 'accordion-wysiwyg' ), false ) ) )
+            #set( $void = $globalStringBuffer.append( "</div>" ) )
+		#end
+		#set( $void = $globalStringBuffer.append( "</div>" ) )
+		$globalJDOMText.normalizeString( $globalStringBuffer.toString() )
+    #end
+#end
+
 #*
-This format provides methods to work with structured data and metadata,
-when using the locator tool.
-
-Example code:
-
-#import( 'site://_common_assets/formats/library/velocity/chanw_structured_data_worker' )
-
-#set( $b  = $_.locateBlock( "_cascade/blocks/data/test-groups-texts" ) )
-#set( $sd = $b.getStructuredData() )
-
-#chanwRecurseNodes( $sd )
-
-#chanwGetPageBlockStructuredDataNodeByIdArray( $b [ "single-group-single-text", "st" ] )
-
-## get the third "multiple-group-multiple-text", second "mt"
-#chanwGetPageBlockStructuredDataNodeByIdArray( $b [ "multiple-group-multiple-text", 2, "mt", 1 ] )
-
-#chanwShowMetadata( $currentPage.Metadata )
+This macro is needed to process bluepage entries.
 *#
+#macro( processBlockGroup $groupToBeProcessed )
+    #set( $feed_block = $groupToBeProcessed.getChild( "feed-block" ) )
+    #set( $code_block = $groupToBeProcessed.getChild( "code-block" ) )
+    
+    $globalStringBuffer.setLength( 0 )
+    #set( $void = $globalStringBuffer.append( "[system-view:internal]" ) )
+    #set( $void = $globalStringBuffer.append( $_SerializerTool.serialize( $feed_block.getChild( "content" ), true ) ) )
+    #set( $void = $globalStringBuffer.append( "[/system-view:internal][system-view:external]" ) )
+    #set( $void = $globalStringBuffer.append( $_SerializerTool.serialize( $code_block.getChild( "content" ), true ) ) )
+    #set( $void = $globalStringBuffer.append( "[/system-view:external]" ) )
+    $globalJDOMText.normalizeString( $globalStringBuffer.toString() )
+#end
 
-#import( '/formats/library/velocity/chanw_global_values' )
+#macro( processContactGroup $groupToBeProcessed )
+	#if( $groupToBeProcessed.name != 'contact-group' )
+		Not a Contact group
+		#stop
+	#end
+	
+    $globalStringBuffer.setLength( 0 )
+    #set( $void = $globalStringBuffer.append( "<div class='contactbox'>" ) )
+    
+    #if( $groupToBeProcessed.getChild( 'contact-intro-text' ).value != "" )
+    	#set( $void = $globalStringBuffer.append( "<span class='label'>" ) )
+    	#set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $groupToBeProcessed.getChild( 'contact-intro-text' ).value ) ) )
+    	#set( $void = $globalStringBuffer.append( "</span><br />" ) )
+    #end
+    
+    #if( $groupToBeProcessed.getChild( 'contact-name' ).value != "" )
+    	#if( $groupToBeProcessed.getChild( 'contact-keep-contact-label' ).value == 'Yes' )
+    		#set( $void = $globalStringBuffer.append( "<span class='label'>Contact:</span> " ) )
+    	#end
+    	#set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $groupToBeProcessed.getChild( 'contact-name' ).value ) ) )
+    	#if( $groupToBeProcessed.getChild( 'contact-title' ).value != "" )
+    		#set( $void = $globalStringBuffer.append( ", <em>" ) )
+    		#set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $groupToBeProcessed.getChild( 'contact-title' ).value ) ) )
+    		#set( $void = $globalStringBuffer.append( "</em><br />" ) )
+        #else
+            #set( $void = $globalStringBuffer.append( "<br />" ) )
+    	#end
+    #end
+    
+    #if( $groupToBeProcessed.getChild( 'contact-location' ).value != "" )
+        #set( $void = $globalStringBuffer.append( "<span class='label'>Location:</span> " ) )
+    	#set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $groupToBeProcessed.getChild( 'contact-location' ).value ) ) )
+    	#set( $void = $globalStringBuffer.append( "<br />" ) )
+    #end
+    
+    #set( $contactGroups = $groupToBeProcessed.getChildren( 'contact-group' ) )
+    
+    #if( $contactGroups.size() > 0 )
+        #foreach( $contactGroup in $contactGroups )
+    		#if( $contactGroup.getChild( 'contact-group-content' ).value != "" )
+    			#if( $contactGroup.getChild( 'contact-group-label' ).value != "" )
+    				#set( $void = $globalStringBuffer.append( "<br />" ) )
+    			#end
+                #set( $void = $globalStringBuffer.append( "<br />" ) )
+    		#end
+    	#end
+    #end
+    
+    #if( $groupToBeProcessed.getChild( 'contact-phone' ).value != "" )
+    	#set( $void = $globalStringBuffer.append( "<span class='label'>Phone:</span> " ) )
+    	#set( $void = $globalStringBuffer.append( $groupToBeProcessed.getChild( 'contact-phone' ).value ) )
+    	#set( $void = $globalStringBuffer.append( "<br />" ) )
+    #end
+    
+    #if( $groupToBeProcessed.getChild( 'contact-fax' ).value != "" )
+    	#set( $void = $globalStringBuffer.append( "<span class='label'>Fax:</span> " ) )
+    	#set( $void = $globalStringBuffer.append( $groupToBeProcessed.getChild( 'contact-fax' ).value ) )
+    	#set( $void = $globalStringBuffer.append( "<br />" ) )
+    #end
+    
+    #if( $groupToBeProcessed.getChild( 'contact-email' ).value != "" )
+    	#set( $email = $groupToBeProcessed.getChild( 'contact-email' ).value )
+    	#set( $void = $globalStringBuffer.append( "<span class='label'>Email:</span> " ) )
+    	#set( $void = $globalStringBuffer.append( "<a href='mailto:$email'>$email</a>" ) )
+    #end
+    
+    #set( $void = $globalStringBuffer.append( "</div>" ) )
+    $globalJDOMText.normalizeString( $globalStringBuffer.toString() )
+#end
 
-#set( $chanwStructuredDataKeyList = [] )
-#set( $chanwStructuredDataMap     = {} )
-
-#* 
-Displays node information recursively.
-*#
-#macro( chanwRecurseNodes $nodes )
-    #if( $nodes.isGroup() )
-        #recurseGroup( $nodes )
-    #elseif( $nodes.class.name != $COM_CASCADE_STRUCTURED_DATA_LIST_CLASS_NAME )
-        Not a list of nodes.
+#macro( processGalleryGroup $groupToBeProcessed )
+    #if( $groupToBeProcessed.name != 'gallery-group' )
+        Not a Gallery group
         #stop
     #end
     
-    #foreach( $child in $nodes )
-        #if( $child.isText() )
-            Text identifier: $child.Identifier$BR 
-            
-            #if( $child.TextValues )
-                Text values size: $child.TextValues.size()$BR 
-                #foreach( $string in $child.TextValues )
-                    #if( $string != '' )Text value: $string$BR #end
-                #end
+    <div id="vlightbox1">
+        #set( $selectImage              = $_XPathTool.selectNodes($groupToBeProcessed, 'gallery-image-group'))
+        
+        #foreach ($selectedImage in $selectImage)
+            #set( $galleryImage            = $selectedImage.getChild( "gallery-image-chooser" ).getChild( "link" ).value )
+            #set( $galleryCaption          = $selectedImage.getChild( "gallery-image-caption" ).value )
+            #if( $srcSetYes != "" )
+                #set( $galleryImage400     = $galleryImage.replace( ".", "-400x200." ) )
+            #else
+                #set( $galleryImage400    = $galleryImage )
+            #end
+            <a class="vlightbox1" href="$galleryImage" title="$galleryCaption">
+                <img src="$galleryImage400" width="150" height="75" alt="$galleryCaption" class="pad5 imagerollover" />
+            </a>   
+        #end
+
+    </div>
+    <script src="/assets/js/vlbdata1.js" type="text/javascript"></script>
+    <style type="text/css">.a2a_svg, .a2a_count { border-radius: 0 !important; }</style>
+#end
+
+#macro( processHomepageSlideshowGroup $groupToBeProcessed )
+     #if( $groupToBeProcessed.name != 'homepage-slideshow-group' )
+        Not a Slideshow group
+        #stop
+    #end
+    
+    $globalStringBuffer.setLength( 0 )
+    
+    #if( !$_PropertyTool.isNull( $groupRegion ) )
+        #set( $slideshow_div = "<div id='hide-" + $groupRegion + "'>" )
+        #set( $void          = $globalStringBuffer.append( $slideshow_div ) )
+    #end
+
+    #set( $void           = $globalStringBuffer.append( '<div class="flexslider"><ul class="slides">' ) )
+    #set( $captionClass   = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'caption-class' ).value )
+    #set( $srcSetYes      = "")
+    #set( $srcSetYes      = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'srcSetYes/value' ).value )
+    #set( $largeSuffix    = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'large-suffix' ).value )
+    #set( $mediumSuffix   = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'medium-suffix' ).value )
+    #set( $smallSuffix    = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'small-suffix' ).value )
+    #set( $subheadlineYes = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'subheadlineYes/value' ).value )
+    #set( $selectImages   = $_XPathTool.selectNodes( $groupToBeProcessed, 'image' ) )
+
+    #foreach($selectedImage in $selectImages )
+        #set( $captionYes               = $selectedImage.getChild( "caption-yes" ).value )
+        #set( $altText                  = $selectedImage.getChild( "altText" ).value )
+        #set( $captionSub               = $selectedImage.getChild( "subheadline" ).value )
+        #set( $imageHPLink              = "" )
+        #if ( $selectedImage.getChild("image-link").getAttribute("type").value == "symlink" )
+            #set( $imageHPLink          = $selectedImage.getChild("image-link").getChild("content").value )        
+        #else
+            #set( $imageHPLink          = $_XPathTool.selectSingleNode($selectedImage,'image-link/link').value )
+        #end
+        #set( $singleImage              = $selectedImage.getChild( "selectimage" ).getChild( "link" ).value )
+
+        #if( $srcSetYes != "" )
+            #set( $singleImageBase      = " [system-asset:local]${singleImage}[/system-asset:local]" )
+            #set( $singleImage1000      = $singleImageBase.replace( ".", "${largeSuffix}." ) )
+            #set( $singleImage700       = $singleImageBase.replace( ".", "${mediumSuffix}." ) )
+            #set( $singleImage400       = $singleImageBase.replace( ".", "${smallSuffix}." ) )
+            #set( $singleImageSrcSet    = "srcset='$singleImage1000 940w, $singleImage700 730w, $singleImage400 430w'")
+        #else
+            #set( $singleImageSrcSet    = "" )
+        #end
+
+        #set( $void = $globalStringBuffer.append( '<li>' ) )
+
+        #if( $imageHPLink != "" )
+            #set( $void = $globalStringBuffer.append( "<a href='$imageHPLink' class='hide-link-icon'>" ) )
+        #end
+
+        #set( $void = $globalStringBuffer.append( '<div class="slide">' ) )
+        #set( $void = $globalStringBuffer.append( "<img alt='${_EscapeTool.xml($altText)}' src='${singleImage}' $singleImageSrcSet />" ) )
+        #set( $void = $globalStringBuffer.append( '</div>' ) )
+
+        #if( $captionYes != "" )
+            #set( $void = $globalStringBuffer.append( "<div class='${captionClass}'>" ) )
+
+            #if($subheadlineYes != "")
+                #set( $void = $globalStringBuffer.append( '<h2>' ) )
+                #set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $altText ) ) )
+                #set( $void = $globalStringBuffer.append( '</h2>' ) )
+                #set( $void = $globalStringBuffer.append( "<p>$captionSub</p>" ) )
+            #else
+                #set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $altText ) ) )
             #end
 
-        #elseif( $child.isGroup() )
-            #recurseGroup( $child )
-        #elseif( $child.isAsset() )
-            Asset identifier: $child.Identifier$BR 
-            #set( $asset = $child.Asset )
-            Asset path: $asset.Identifier.Path.PathAsString, asset type: $asset.Identifer.Type$BR 
+            #set( $void = $globalStringBuffer.append( '</div>' ) )
+        #end
+
+        #if( $imageHPLink != "")
+            #set( $void = $globalStringBuffer.append( '</a>' ) )
+        #end
+
+        #set( $void = $globalStringBuffer.append( '</li>' ) )
+    #end
+
+    #set( $void = $globalStringBuffer.append( '</ul></div>' ) )
+    #set( $script_str = '<script type="text/javascript">' +
+        "$(window).load(function(){ $('.flexslider').flexslider({ animation: 'slide', });});" + "</script>" )
+    #set( $void = $globalStringBuffer.append( $script_str ) )
+    
+    
+    #if( !$_PropertyTool.isNull( $groupRegion ) )
+        #set( $void = $globalStringBuffer.append( "</div>" ) )
+    #end
+    $globalJDOMText.normalizeString( $globalStringBuffer.toString() ) 
+#end
+
+#macro( processInstructionBlockGroup $groupToBeProcessed )
+    #set( $block_to_be_processed = $_XPathTool.selectSingleNode( $groupToBeProcessed, "block/content" ).getChildren().get( 0 ) )
+    ## try dd block first
+    #if( $block_to_be_processed.name == "system-data-structure" )
+        #set( $block_system_data_structure = $block_to_be_processed )
+    #elseif( $block_to_be_processed.name == "system-index-block" )
+        #set( $block_system_index_block = $block_to_be_processed )
+    #end
+
+    #set( $instruction_scripts = $_XPathTool.selectSingleNode( $groupToBeProcessed, "instruction/content/scripts" ) )
+    #processScript( $instruction_scripts )
+#end
+
+#macro( processQuickLinksGroup $groupToBeProcessed )
+	#if( $groupToBeProcessed.name != 'quick-links-group' )
+		Not a Quick links group
+		#stop
+	#end
+	
+	$globalStringBuffer.setLength( 0 )
+    #set( $quickLinksClass = $groupToBeProcessed.getChild( 'quick-links-class' ).value )
+    #set( $quickLinksTitle = $groupToBeProcessed.getChild( 'quick-links-title' ).value )
+    #set( $quickLinksListGroups = $groupToBeProcessed.getChildren( 'quick-links-list-group' ) )
+    
+    #if( $quickLinksListGroups.size() > 0 )
+    	#set( $void = $globalStringBuffer.append( "<div class='${quickLinksClass}'>" ) )
+    
+        #if( $quickLinksTitle != "" )
+        	#set( $void = $globalStringBuffer.append( "<div class='links-header'>$quickLinksTitle</div>" ) )
+        #end
+        
+        #if( $quickLinksClass != 'quick-links-no-bullets' )
+        	#set( $startTags = '<div class="links-content"><ul>' )
+        	#set( $startTag  = '<li>' )
+        	#set( $endTags = '</ul></div>' )
+        	#set( $endTag  = '</li>' )
+        #else
+        	#set( $startTags = '<div class="links-content">' )
+        	#set( $startTag  = '<div class="quick-links-item">' )
+        	#set( $endTags = '</div>' )
+        	#set( $endTag  = '</div>' )
+        #end
+        
+        #set( $void = $globalStringBuffer.append( $startTags ) )
+        
+		#foreach( $quickLinksListGroup in $quickLinksListGroups )
+			#set( $linkIcon = "" )
+			
+			#if( $quickLinksListGroup.getChild( 'quick-links-icon' ).value != 'None' )
+				#set( $linkIcon = $quickLinksListGroup.getChild( 'quick-links-icon' ).value.toLowerCase() )
+				#if( $linkIcon == 'intra' )#set( $linkIcon = 'key' )#end
+				#set( $iconSrc = "http://www.upstate.edu/assets/images/icons/${linkIcon}-icon.gif" )
+				#set( $imgElement = " <img src='$iconSrc' alt='$linkIcon' title='$linkIcon' />" )
+			#else
+				#set( $iconSrc = "" )
+				#set( $imgElement = "" )
+			#end
+				
+			#if( $quickLinksListGroup.getChild( 'quick-links-linkable' ).getAttribute( 'type' ).value == 'page' ||
+				$quickLinksListGroup.getChild( 'quick-links-linkable' ).getAttribute( 'type' ).value == 'file'
+			)
+				#set( $linkHref = $quickLinksListGroup.getChild( 'quick-links-linkable' ).getChild( 'link' ).value )
+			#else ## symlink
+				#set( $linkHref = $quickLinksListGroup.getChild( 'quick-links-linkable' ).getChild( 'content' ).getChild( 'system-symlink' ).value )
+			#end
+			
+			#set( $void = $globalStringBuffer.append( "$startTag<a href='${linkHref}'>" ) )
+			#set( $void = $globalStringBuffer.append( $_EscapeTool.xml( $quickLinksListGroup.getChild( 'quick-links-text' ).value ) ) )
+			#set( $void = $globalStringBuffer.append( "$imgElement</a>$endTag" ) )
+		#end
+        #set( $void = $globalStringBuffer.append( "$endTags</div>" ) )
+        $globalJDOMText.normalizeString( $globalStringBuffer.toString() )
+    #end
+#end
+
+#macro( processRandomImageGroup $groupToBeProcessed )
+    #chanwReinitializeListOfVariables ( [ "captionYes", "srcSetYes" ] )
+    #set( $images           = $groupToBeProcessed.getChildren( "image" ) )
+    #set( $captionYes       = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'caption-yes' ).value )
+    #set( $srcSetYes        = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'srcSetYes/value' ).value )     
+    #set( $numberOfImages   = $images.size() )
+    #set( $randImage        = $_MathTool.random(0,$numberOfImages) )    
+
+    <!--#passthrough<?php $imagearray = array(); ?>#passthrough-->
+    #foreach( $image in $images )
+        #chanwReinitializeListOfVariables ( [ "imageLink", "singleImageSrcSet" ] )
+        #set( $singleImage  = $image.getChild( "selectimage" ).getChild( "link" ).value )
+        #set( $altText      = $image.getChild( "altText" ).value )
+        #if ( $image.getChild("image-link").getAttribute("type").value == "symlink" )
+            #set( $imageLink          = $image.getChild("image-link").getChild("content").value )        
+        #else
+            #set( $imageLink          = $_XPathTool.selectSingleNode($image,'image-link/link').value )
+        #end
+
+        #if( $srcSetYes != "" )
+                #set( $singleImageBase      = " [system-asset:local]${singleImage}[/system-asset:local]" )
+                #set( $singleImage1000      = $singleImageBase.replace( ".", "." ) )
+                #set( $singleImage700       = $singleImageBase.replace( ".", "-700x350." ) )
+                #set( $singleImage400       = $singleImageBase.replace( ".", "-400x200." ) )
+                #set( $singleImageSrcSet    = "srcset='$singleImage1000 1030w, $singleImage700 730w, $singleImage400 430w'")
+        #end
+
+        #if($imageLink != "")    
+            #set( $int_img      = "<a href='${imageLink}' class='hide-link-icon'><div class='slide'>" )   
+        #else
+            #set( $int_img      = "<div class='slide'>" )
+        #end
+        #set( $int_img      = $int_img + "<img src='${singleImage}' alt='${_EscapeTool.xml($altText)}' class='img-responsive' $singleImageSrcSet />" )
+        #set( $int_img      = $int_img + "</div>" )
+        #if ($captionYes != "")
+            #set( $int_img      = $int_img + "<div class='flexslider-caption'>${altText} </div>" )
+        #end
+        #if($imageLink != "")  
+            #set( $int_img      = $int_img + "</a>" )
+        #end
+        #set( $ext_img          = $_EscapeTool.Q + $int_img + $_EscapeTool.Q )
+        #set( $ext_img          = $ext_img.replaceAll( "site:/", "" ) )
+        #set( $ext_img          = $ext_img.replaceAll( "-dev", "" ) )
+        #set( $ext_img          = $ext_img.replaceAll( "\[system-asset:local\]", "" ).replaceAll( "\[/system-asset:local\]", "" ) )
+        #if( $foreach.index == $randImage )
+            [system-view:internal]${int_img}[/system-view:internal]
+        #end
+        <!--#passthrough<?php array_push( $imagearray, $ext_img ); ?>#passthrough-->
+    #end
+    <!--#passthrough<?php loadRandomImage($imagearray); ?>#passthrough-->
+#end
+
+#macro( processSingleimageGroup $groupToBeProcessed )
+
+    #if( $groupToBeProcessed.name != 'singleimage-group' )
+        Not a Single Image group
+        #stop
+	#end
+
+    #chanwReinitializeListOfVariables ( [ "imageRollover", "srcSetYes", "imageSingleLink", "singleImageSrcSet", "captionYes" ] )
+    
+    #set( $singleImage              = $groupToBeProcessed.getChild( "selectimage" ).getChild( "link" ).value )
+    #set( $altText                  = $groupToBeProcessed.getChild( "altText" ).value )
+    #set( $captionYes               = $groupToBeProcessed.getChild( "caption-yes" ).value )
+    
+    #if ( $groupToBeProcessed.getChild("image-link").getAttribute("type").value == "symlink" )
+        #set( $imageSingleLink          = $groupToBeProcessed.getChild("image-link").getChild("content").value )        
+    #else
+        #set( $imageSingleLink          = $_XPathTool.selectSingleNode($groupToBeProcessed,'image-link/link').value )
+    #end
+    
+    #set( $srcSetYes                = $_XPathTool.selectSingleNode($groupToBeProcessed, 'srcSetYes/value').value)
+        #if($srcSetYes != "")
+            #set( $singleImageBase      = "[system-asset:local]${singleImage}[/system-asset:local]" )
+            #set( $singleImage1000      = $singleImageBase.replace(".",".") )
+            #set( $singleImage700       = $singleImageBase.replace(".","-700x350.") )
+            #set( $singleImage400       = $singleImageBase.replace(".","-400x200.") )
+            #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 700w, $singleImage400 400w'")
+        #end
+    #if($imageSingleLink != "")
+        <a href="$imageSingleLink" class="flexslider-link hide-link-icon">
+        #set( $imageRollover            = "imagerollover")
+    #end
+            <div class="slide">
+                <img alt="${_EscapeTool.xml($altText)}" class="img-responsive ${imageRollover}" src="$singleImage" $singleImageSrcSet />
+            </div>
+        #if ($captionYes != "")
+            <div class="flexslider-caption">${_EscapeTool.xml($altText)}</div>
+        #end
+    #if($imageSingleLink != "")
+        </a>
+    #end
+
+#end
+
+#macro( processSingleImageGroup $groupToBeProcessed )
+    #set( $link   = $groupToBeProcessed.getChild( "single-image-select-image" ).getChild( "link" ).value )
+    #set( $alt    = $_EscapeTool.xml( $groupToBeProcessed.getChild( "single-image-alt-text" ).value ) )
+    #set( $hasCap = $groupToBeProcessed.getChild( "single-image-caption" ).value )
+    #set( $endIndex = $link.lastIndexOf( ".jpg" ) - 7 )
+    #set( $link700 = $link.substring( 7 ) )
+    #set( $link400 = $link700.substring( 0, $endIndex ) + "-400x200.jpg" )
+    
+    <div class=""><img class="img-responsive" src="${link}" alt="${alt}" srcset="http://www.upstate.edu/${link700} 500w, http://www.upstate.edu/${link400} 400w"/></div>
+#end
+
+#macro( processSlideShowGroup $groupToBeProcessed $blockRegion )
+    #if( $groupToBeProcessed.name != 'slide-show-group' )
+        Not a Slide Show group
+        #stop
+    #end
+    
+    #if( !$_PropertyTool.isNull( $blockRegion ) && $blockRegion.trim() != "" )
+        #set( $region_div = "<div id='hide-" + $blockRegion + "'>" )
+        $region_div
+    #end
+    
+    <div class="flexslider">
+        <ul class="slides">
+        #chanwReinitializeListOfVariables ( [ "srcSetYes", "imageSlideLink", "singleImageSrcSet", "captionYes" ] )
+        #set( $srcSetYes                = $_XPathTool.selectSingleNode($groupToBeProcessed, 'srcSetYes/value').value)
+        #set( $selectImage              = $_XPathTool.selectNodes($groupToBeProcessed, 'image'))
+        #set( $captionYes               = $groupToBeProcessed.getChild( "caption-yes" ).value )
+        #foreach ($selectedImage in $selectImage)
+        
+            #chanwReinitializeListOfVariables ( [ "imageSlideLink" ] ) 
+            #set( $altText                  = $selectedImage.getChild( "altText" ).value )
+            #if ( $selectedImage.getChild("image-link").getAttribute("type").value == "symlink" )
+                #set( $imageSlideLink          = $selectedImage.getChild("image-link").getChild("content").value )        
+            #else
+                #set( $imageSlideLink          = $_XPathTool.selectSingleNode($selectedImage,'image-link/link').value )
+            #end
+            
+            #set( $singleImage              = $selectedImage.getChild( "selectimage" ).getChild( "link" ).value )
+                #if($srcSetYes != "")
+                    #set( $singleImageBase      = "[system-asset:local]${singleImage}[/system-asset:local]" )
+                    #set( $singleImage1000      = $singleImageBase.replace(".",".") )
+                    #set( $singleImage700       = $singleImageBase.replace(".","-700x350.") )
+                    #set( $singleImage400       = $singleImageBase.replace(".","-400x200.") )
+                    #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 700w, $singleImage400 400w'")
+                #end
+    
+            <li>
+            #if($imageSlideLink != "")
+                <a href="$imageSlideLink" class="flexslider-link hide-link-icon">
+            #end
+                    <div class="slide">
+                        <img alt="${_EscapeTool.xml($altText)}" src="$singleImage" $singleImageSrcSet />
+                    </div>
+                #if ($captionYes != "")
+                    <div class="flexslider-caption">
+                        ${_EscapeTool.xml($altText)}
+                    </div>
+                #end
+            #if($imageSlideLink != "")
+                </a>
+            #end
+            </li>
+        #end
+        </ul>
+    </div>
+    
+    #set( $script_str = '<script type="text/javascript">' + 
+        "$(window).load(function(){ $('.flexslider').flexslider({ animation: 'slide', });});" + "</script>" )
+    $script_str
+    
+    #if( !$_PropertyTool.isNull( $blockRegion ) && $blockRegion.trim() != "" )
+        </div>
+    #end
+#end
+
+#macro( processWysiwygGroup $groupToBeProcessed )
+    #if( $groupToBeProcessed.name != 'wysiwyg-group' )
+		Not a WYSIWYG group
+		#stop
+	#end
+    $_SerializerTool.serialize( $groupToBeProcessed.getChild( 'wysiwyg-content' ), true )
+#end
+
+#macro( processYoutubeVideoGroup $groupToBeProcessed )
+
+    #if( $groupToBeProcessed.name != 'youtube-video-group' )
+        Not a Youtube Video group
+        #stop
+    #end
+    
+    #chanwReinitializeListOfVariables ( [ "youtubeVideoCaption", "youtubeVideoWidth", "youtubeVideoHeight" ] )
+    #set( $youtubeVideoID           = $groupToBeProcessed.getChild( "video-id" ).value )
+    #set( $youtubeVideoCaption      = $groupToBeProcessed.getChild( "video-caption" ).value )
+    #set( $youtubeVideoWidth        = $groupToBeProcessed.getChild( "video-width" ).value )
+    #set( $youtubeVideoHeight       = $groupToBeProcessed.getChild( "video-height" ).value )
+
+<script src="/render/file.act?path=site://Upstate-Globals/assets/js/jquery.fitvids.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+        $("#video-div").fitVids();
+});
+</script>
+<div id="video-div"><iframe title="${youtubeVideoCaption}" width="${youtubeVideoWidth}" height="${youtubeVideoHeight}" allowfullscreen="true" frameborder="0" 
+src="http://www.youtube.com/embed/${youtubeVideoID}?rel=0&amp;wmode=transparent"></iframe><div class="caption">$youtubeVideoCaption</div></div>
+<div class="pad10"></div>
+#end
+
+#*
+Processes a script block.
+The $firstChild is the scripts element.
+*#
+#macro( processScript $firstChild $region )
+    ## get the scripts to be executed
+    #set( $chanwScripts = $firstChild.getChildren( 'script' ) )
+    
+    ## loop through each script
+    #if( $chanwScripts.size() > 0 )
+        #foreach( $script in $chanwScripts )
+            ## first, import the script
+            #set( $chanwPath = $script.getChild( "path" ).Value.trim() )
+            #set( $chanwStatement = "#" + "import('$chanwPath')" )
+            #evaluate( $chanwStatement )
+            
+            #set( $chanwStatement = "" )
+            #set( $chanwMacros = $script.getChildren( "macro" ) )
+            ## second, invoke each macro
+            #if( $chanwMacros.size() > 0 )
+                #foreach( $macro in $chanwMacros )
+                    #if( $macro.getChild( "path" ).Value.trim() != "" )
+                        #set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
+                        #set( $chanwStatement = "" )
+                        #set( $chanwStatement = "#" + $chanwMacro )
+                        #set( $chanwParams = $macro.getChild( "params" ) )
+                
+                        #if( !$_PropertyTool.isNull( $chanwParams ) )
+                            #set( $chanwParamsChildren = $chanwParams.getChildren() )
+                    
+                            #if( $chanwParamsChildren.size() > 0 )
+                                #set( $chanwStatement = $chanwStatement + "(" )
+                        
+                                #foreach( $child in $chanwParamsChildren )
+                                    #if( $child.Name == "param" && $child.Value.trim() != "" )
+                                        #set( $chanwStatement = $chanwStatement + "'" + $child.Value.trim() + "' " )
+                                    #elseif( $child.Name == "variable" && $child.Value.trim() != "" )
+                                        #set( $chanwStatement = $chanwStatement + "$" + $child.Value.trim() + " " )
+                                    #end
+                                #end
+                        
+                                #set( $chanwStatement = $chanwStatement + ")" )
+                            #end
+                        #end
+                        #evaluate( $chanwStatement )
+                    #end
+                #end
+            #end
+        #end
+    #end
+#end
+
+#macro( processCategoryGroup $groupToBeProcessed )
+    #if( $groupToBeProcessed.getChild("category-yes").value.contains("Yes") )
+        <!--#passthrough<?php
+        require_once( '/webfs/www/bioinbrief/_extra/headlines-${currentPage.name}.htm' );
+        ?>#passthrough-->
+    #end
+#end
+
+
+
+
+
+
+
+#macro( processArticleFootGroup $groupToBeProcessed )
+
+    #import( 'site://_common_assets/formats/library/velocity/chanw_process_index_block' )
+    <div>
+        <hr />
+   
+        #set( $callCallingPage = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page" ) ) 
+        #chanwProcessSystemPage( $callCallingPage )
+        #set( $systemPageSite           = $systemPageSite.replaceAll("-dev","") )
+        #set( $systemPageTitleURLd      = $systemPageTitle.replaceAll('&amp;amp;','&amp;').replaceAll(' ','%20') )
+        #set( $systemPageSummaryURLd    = $systemPageSummary.replaceAll("&amp;amp;","&amp;").replaceAll(' ','%20') )
+
+        <div class="col-sm-8 padbottom7"> ##published and categories
+    ##Published On 
+        #if($groupToBeProcessed.getChild("show-options").value.contains("Publish Date"))        
+            Published on: $_DateTool.format( 'EEEEE, MMMM d, yyyy', $_DateTool.getDate( $systemPageStartDate ) )               
         #end
         $BR
-    #end
-#end
-
-#macro( recurseGroup $group_node )
-    Group identifier: $group_node.Identifier$BR 
-            
-    #set( $children = $group_node.Children )
-      
-    #if( $children.size() > 0 )      
-        #chanwRecurseNodes( $children )
-    #end
-#end
-
-#* 
-Populates the map.
-*#
-#macro( chanwPopulateStructuredDataListMap $chanw_bp )
-    #if( $chanw_bp.class.Name != $COM_CASCADE_BLOCK_API_CLASS_NAME &&
-        $chanw_bp.class.Name != $COM_CASCADE_PAGE_API_CLASS_NAME
-    )
-        Not a data definition block nor a page
-    #else
-        #set( $chanw_structured_data = $chanw_bp.getStructuredData() )
         
-        #if( $_PropertyTool.isNull( $chanw_structured_data ) )
-            No structured data available
-        #else
-            #set( $chanw_sd_size = $chanw_structured_data.size() )
-            
-            #if( $chanw_structured_data.size() == 0 )
-                No structured data available
-            #else
-                ##Size: $chanw_structured_data.size()$BR 
-                #set( $size = $chanw_structured_data.size() )
-                #foreach( $item in [ 1..$size ] ) ## a for loop
-                    #set( $prev_index = $foreach.index - 1 )
-                    ## previous node
-                    #if( $prev_index >= 0 )
-                        #set( $prev_node = $chanw_structured_data.get( $prev_index ) )
-                    #else
-                        #set( $prev_node = "" )
-                    #end
-                    ## current node
-                    #set( $curr_node = $chanw_structured_data.get( $foreach.index ) )
-                    ## next node
-                    #set( $next_index = $foreach.index + 1 )                    
-                    #if( $next_index < $size )
-                        #set( $next_node = $chanw_structured_data.get( $next_index ) )
-                    #else
-                        #set( $next_node = "" )
-                    #end
-                    
-                    #if( $prev_node.class.name != $JAVA_LANG_STRING_CLASS_NAME )
-                        #if( $prev_node.Identifier == $curr_node.Identifier )
-                            #set( $multiple_node = true )
-                        #else
-                            #set( $multiple_node = false )
-                        #end
-                    #end
-                    
-                    #if( !$multiple_node && $next_node.class.name != $JAVA_LANG_STRING_CLASS_NAME )
-                        #if( $next_node.Identifier == $curr_node.Identifier )
-                            #set( $multiple_node = true )
-                        #else
-                            #set( $multiple_node = false )
-                        #end
-                    #end
-                    
-                    $curr_node.Identifier Multiple: $multiple_node$BR 
+    ##Display Categories
+        #if( $groupToBeProcessed.getChild("show-options").value.contains("Categories") )
+            ##Find Teaser categories in article
+            #set( $categoriesInArticle = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page/teaser" ).value ) 
+    
+            ##Find all category pages
+            #set ( $categoryIndexBlock = $groupToBeProcessed.getChild("categories-index-block").getChild("content").getChild("system-index-block") )
+            #set( $categoryListing = $_XPathTool.selectNodes( $categoryIndexBlock, "system-page[name!='index'][name!='site-map']" ) )  
+            #set ($categoryMatches = [])
+            #foreach( $categoryType in $categoryListing )
+                #set( $categoryName = $categoryType.getChild("name").value )
+                #if ($categoriesInArticle.contains($categoryName))
+                    #set($void =     $categoryMatches.add("<a href='${categoryType.getChild('link').value}'>${categoryType.getChild('display-name').value}</a>") )          
                 #end
             #end
+            Filed under:&#160;${_DisplayTool.list( $categoryMatches )}
+        #end    
+        </div> ##published and categories
+
+
+        <div class="alignright"> ##Buttons
+    ##Share email
+        #if( $groupToBeProcessed.getChild("share").value.contains("email") )
+            <div class="sharebutton">
+                &#160;<a href="mailto:?subject=Upstate.edu:%20$systemPageTitleURLd&amp;body=Hi,%20I%20found%20this%20website%20and%20thought%20you%20might%20find%20it%20interesting:%0D%0D$systemPageTitleURLd%0Dhttp://www.upstate.edu/$systemPageSite${systemPagePath}.php%20%0D%0D$systemPageSummaryURLd.."><img alt="Send to a Friend" class="imagerollover" src="site://Upstate-Globals/assets/images/email-rwd.gif" title="Send to a Friend" width="32" height="32"/></a>
+            </div>
         #end
-    #end
-#end
-
-#* 
-Retrieves the structured data node by using the supplied identifier.
-*#
-#macro( chanwGetPageBlockStructuredDataNodeByIdArray $chanw_bp $chanw_array )
-    #if( $chanw_array.class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME || $chanw_array.size() == 0 )
-        No valid path passed in
-    #elseif( $chanw_bp.class.Name == $COM_CASCADE_BLOCK_API_CLASS_NAME ||
-        $chanw_bp.class.Name == $COM_CASCADE_PAGE_API_CLASS_NAME
-    )        
-        #foreach( $chanw_item in $chanw_array )
-            #set( $chanw_sdns = "" )
-            #set( $chanw_next = $foreach.index + 1 )
-            
-            #if( !$_PropertyTool.isNull( $_MathTool.toInteger( $chanw_array[ $foreach.index ] ) ) )
-                #set( $chanw_value = $_MathTool.toInteger( $chanw_array[ $foreach.index ] ) )
-            #else
-                #set( $chanw_value = "" )
-            #end
         
-            ## an identifier
-            #if( $chanw_value == "" )
-                #if( $chanw_next < $chanw_array.size() )
-                    #set( $chanw_next_int = $_MathTool.toInteger( $chanw_array[ $chanw_next ] ) )
+    ##Share print
+        #if( $groupToBeProcessed.getChild("share").value.contains("print") )
+            <div class="sharebutton">
+            <a href="#" onclick="window.print()"><img alt="Print Page" class="imagerollover" src="site://Upstate-Globals/assets/images/print-rwd.gif" title="Print Page" width="32" height="32" /></a>
+            </div>
+        #end    
+            
+            
+            ##Add to Any
+        #if( $groupToBeProcessed.getChild("share").value.contains("facebook") || $groupToBeProcessed.getChild("share").value.contains("twitter") || $groupToBeProcessed.getChild("share").value.contains("addtoany") )
+            <div class="a2a_kit a2a_kit_size_32 a2a_default_style alignleft hide-link-icon">
+                #if( $groupToBeProcessed.getChild("share").value.contains("facebook") )
+                    <a title="Share to Facebook" class="a2a_button_facebook"></a>
                 #end
-                
-                ## multiple nodes
-                #if( $chanw_next < $chanw_array.size() && !$_PropertyTool.isNull( $chanw_next_int ) )
-                    #if( $foreach.index == 0 ) ## first node
-                        #set( $chanw_sdns    = $chanw_bp.getStructuredDataNodes( $chanw_array[ $foreach.index ] ) )
-                    #else
-                        #set( $chanw_sdns    = $chanw_current.getChildren( $chanw_array[ $foreach.index ] ) )                       
-                    #end
-                    
-                    #set( $chanw_current = $chanw_sdns.get( $chanw_next_int ) )
-                ## single node
-                #else
-                    #if( $foreach.index == 0 ) ## first node
-                        #set( $chanw_current  = $chanw_bp.getStructuredDataNode( $chanw_array[ $foreach.index ] ) )
-                    #else
-                        #set( $chanw_current  = $chanw_current.getChild( $chanw_array[ $foreach.index ] ) )
+                #if( $groupToBeProcessed.getChild("share").value.contains("twitter") )
+                <a  title="Share to Twitter" class="a2a_button_twitter"></a>
+                #end
+                #if( $groupToBeProcessed.getChild("share").value.contains("addtoany") )
+                <a  title="Share..." class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                #end
+            </div>
+            <script>var a2a_config = a2a_config || {};a2a_config.onclick = 1;a2a_config.exclude_services = ["email"];a2a_config.prioritize = ["wordpress"];</script>
+            <script async="true" src="https://static.addtoany.com/menu/page.js"></script> 
+        #end
+        </div> ##buttons        
+    </div>  
+    <div class="clr"></div>
+    
+    ##Previous and Next
+    #if( $groupToBeProcessed.getChild("show-options").value.contains("Previous and Next") )
+        #set( $articleIndexBlock = $groupToBeProcessed.getChild("article-index-block").getChild("content").getChild("system-index-block") )
+    
+        #set( $articles = $_XPathTool.selectNodes( $articleIndexBlock,
+            "system-folder/system-page[name!='index']" ) )
+    
+        ## get all articles, aka any page on the site that has a start date:
+        ##set ( $articles = $_XPathTool.selectNodes( $findIndexBlock, "system-page[name]" ) )
+        ##set ( $articles = $_XPathTool.selectNodes( $findIndexBlock, "//system-page[start-date]" ) )
+        $_SortTool.addSortCriterion( "start-date", "", "number", "ascending", "upper-first" )
+        $_SortTool.sort( $articles )
+    
+        ## find current article:
+        #foreach( $eachArticle in $articles )
+            #if( $eachArticle.getAttribute( "current" ) )
+                ## #chanwProcessSystemPage( $eachArticle )
+                #set( $prevIndex    = $articles.indexOf( $eachArticle ) - 1 )
+                #set( $nextIndex    = $articles.indexOf( $eachArticle ) + 1 )
+    
+        
+                ##get previous and next array listings:
+                #set( $prevNextList = [ $prevIndex, $nextIndex ] )
+        
+                ##create previous and next previews:
+                #foreach( $prevNextCount in $prevNextList )
+                    #if( $prevNextCount >= 0 && $prevNextCount < $articles.size() )
+                        #chanwProcessSystemPage( $articles[ $prevNextCount ] )
+                        #set ($previewArticleYear      = $articles[$prevNextCount].getParent().getChild("name").value )
+                        #set( $previewPreviousNextText = "Previous" )
                         
-                    #end
-                #end     
-            ## an int
-            #else
-                ## do nothing
-            #end
+                        #if( $foreach.count == 2 )
+                            #set( $previewPreviousNextText = "Next" )
+                        #end
             
-            #set( $chanwGetPageBlockStructuredDataNodeByIdArray = $chanw_current )
-        #end        
-    #else
-        Neither a block nor a page
-    #end
-#end
-
-#* 
-Shows information in metadata.
-*#
-#macro( chanwShowMetadata $chanwMetadata )
-    #if( $chanwMetadata.class.name != $COM_CASCADE_METADATA_CLASS_NAME )
-        Not a metadata
-        #stop
-    #end
-
-    #if( $chanwMetadata.DisplayName )Display name: $chanwMetadata.DisplayName$BR #end
-    #if( $chanwMetadata.Description )Description: $chanwMetadata.Description$BR #end
-    #if( $chanwMetadata.Title )Title: $chanwMetadata.Title$BR #end
-    #if( $chanwMetadata.Summary )Summary: $chanwMetadata.Summary$BR #end
-    #if( $chanwMetadata.Teaser )Teaser: $chanwMetadata.Teaser$BR #end
-    #if( $chanwMetadata.Keywords )Keywords: $chanwMetadata.Keywords$BR #end
-    #if( $chanwMetadata.Author )Author: $chanwMetadata.Author$BR #end
-    #if( $chanwMetadata.ReviewDate )ReviewDate: $chanwMetadata.ReviewDate$BR #end
-    #if( $chanwMetadata.StartDate )StartDate: $chanwMetadata.StartDate$BR #end
-    #if( $chanwMetadata.EndDate )EndDate: $chanwMetadata.EndDate$BR #end
-    
-    #set( $chanwDFS = $chanwMetadata.DynamicFields )
-    
-    #if( $chanwDFS.size() > 0 )
-    *****$BR
-        #foreach( $chanwDF in $chanwDFS )
-            Name: $chanwDF.Name$BR
-            #if( $chanwDF.isCheckbox() )
-            Type: Checkbox$BR
-            #elseif( $chanwDF.isDropdown() )
-            Type: Dropdown$BR
-            #elseif( $chanwDF.isMultiselect() )
-            Type: Multiselect$BR
-            #elseif( $chanwDF.isRadio() )
-            Type: Radio$BR
-            #end
-            
-            #set( $chanwTextSize = $chanwDF.Values.size() )
-            #if( $chanwTextSize > 0 )
-                Size: $chanwTextSize$BR
-                #foreach( $value in $chanwDF.Values )
-                    #if( $value != "" )
-                    Text value: $value$BR
+                        <div class="col-4xs-6 padleft3 padright3 padbottom3 padtop9">
+                            <p class="padleft5"><strong>$previewPreviousNextText Article:</strong></p>
+                            <div class="newsfeed-item">
+                                <a href="$systemPageLink">
+                                    <div class="pad5">
+                                        <img alt="$systemPageTitle.replaceAll('&amp;amp;','&amp;')" src="images/$previewArticleYear/${systemPageName}.jpg" class="img-responsive padtop5 padbottom5" />
+                                        <h3>$systemPageTitle.replaceAll("&amp;amp;","&amp;")</h3>
+                                        <p>$systemPageSummary.replaceAll("&amp;amp;","&amp;")</p>
+                                    </div>
+                                    <div class="clr"></div>
+                                </a>   
+                            </div>
+                        </div>
                     #end
                 #end
-            #else
-            No text value$BR
-            #end
-            $BR
-        #end
-    #end
-#end
+                ##</div>
+            #end ## if current
+        #end ## for each  
+    #end ## if prevous next  
+#end ## macro
