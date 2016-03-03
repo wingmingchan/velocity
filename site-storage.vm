@@ -6,8 +6,10 @@
 ## _site-info: one per site
 ## _right-column, _footer-contact could have mulitple instances
 
+## when attached to a region
 #set( $siteInfo = $_XPathTool.selectSingleNode( $contentRoot, 'system-block[name="_site-info"]' ) )
 
+## when used in a block chooser
 #if( $_PropertyTool.isNull( $siteInfo ) && !$_PropertyTool.isNull( $block_system_index_block ) )
     #set( $siteInfo = $_XPathTool.selectSingleNode( $block_system_index_block, 'system-block[name="_site-info"]' ) )
 #end
