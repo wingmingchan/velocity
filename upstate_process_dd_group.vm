@@ -41,6 +41,14 @@ This macro is needed to process bluepage entries.
     $globalJDOMText.normalizeString( $globalStringBuffer.toString() )
 #end
 
+#macro( processCategoryGroup $groupToBeProcessed )
+    #if( $groupToBeProcessed.getChild("category-yes").value.contains("Yes") )
+        <!--#passthrough<?php
+        require_once( '/webfs/www/bioinbrief/_extra/headlines-${currentPage.name}.htm' );
+        ?>#passthrough-->
+    #end
+#end
+
 #macro( processContactGroup $groupToBeProcessed )
 	#if( $groupToBeProcessed.name != 'contact-group' )
 		Not a Contact group
@@ -146,6 +154,7 @@ This macro is needed to process bluepage entries.
     
     $globalStringBuffer.setLength( 0 )
     
+    ## the variable $groupRegion is set in blocks/code/global-velocity-code
     #if( !$_PropertyTool.isNull( $groupRegion ) )
         #set( $slideshow_div = "<div id='hide-" + $groupRegion + "'>" )
         #set( $void          = $globalStringBuffer.append( $slideshow_div ) )
@@ -227,13 +236,20 @@ This macro is needed to process bluepage entries.
     $globalJDOMText.normalizeString( $globalStringBuffer.toString() ) 
 #end
 
+#*
+Processes an instruction block.
+Currently only data definition blocks and index blocks can be attached to the first chooser.
+*#
 #macro( processInstructionBlockGroup $groupToBeProcessed )
     #set( $block_to_be_processed = $_XPathTool.selectSingleNode( $groupToBeProcessed, "block/content" ).getChildren().get( 0 ) )
-    ## try dd block first
+    ## try dd block first; note the setting of the variable $block_system_data_structure,
+    ## which should appear in the accompanying script block
     #if( $block_to_be_processed.name == "system-data-structure" )
         #set( $block_system_data_structure = $block_to_be_processed )
+    ## note the setting of the variable $block_system_index_block
     #elseif( $block_to_be_processed.name == "system-index-block" )
         #set( $block_system_index_block = $block_to_be_processed )
+    ## add code here to process feed blocks and XML blocks
     #end
 
     #set( $instruction_scripts = $_XPathTool.selectSingleNode( $groupToBeProcessed, "instruction/content/scripts" ) )
@@ -352,6 +368,59 @@ This macro is needed to process bluepage entries.
         <!--#passthrough<?php array_push( $imagearray, $ext_img ); ?>#passthrough-->
     #end
     <!--#passthrough<?php loadRandomImage($imagearray); ?>#passthrough-->
+#end
+
+#*
+Processes a script block. 
+A script block is an XML block, whose name must have a '-script' suffix.
+The $firstChild is the scripts element. $region is a string value like 'bottom-inner'.
+*#
+#macro( processScript $firstChild $region )
+    ## get the scripts to be executed
+    #set( $chanwScripts = $firstChild.getChildren( 'script' ) )
+    
+    ## loop through each script
+    #if( $chanwScripts.size() > 0 )
+        #foreach( $script in $chanwScripts )
+            ## first, import the script
+            #set( $chanwPath = $script.getChild( "path" ).Value.trim() )
+            #set( $chanwStatement = "#" + "import('$chanwPath')" )
+            #evaluate( $chanwStatement )
+            
+            #set( $chanwStatement = "" )
+            #set( $chanwMacros = $script.getChildren( "macro" ) )
+            ## second, invoke each macro
+            #if( $chanwMacros.size() > 0 )
+                #foreach( $macro in $chanwMacros )
+                    #if( $macro.getChild( "path" ).Value.trim() != "" )
+                        #set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
+                        #set( $chanwStatement = "" )
+                        #set( $chanwStatement = "#" + $chanwMacro )
+                        #set( $chanwParams = $macro.getChild( "params" ) )
+                
+                        #if( !$_PropertyTool.isNull( $chanwParams ) )
+                            #set( $chanwParamsChildren = $chanwParams.getChildren() )
+                    
+                            #if( $chanwParamsChildren.size() > 0 )
+                                #set( $chanwStatement = $chanwStatement + "(" )
+                        
+                                #foreach( $child in $chanwParamsChildren )
+                                    #if( $child.Name == "param" && $child.Value.trim() != "" )
+                                        #set( $chanwStatement = $chanwStatement + "'" + $child.Value.trim() + "' " )
+                                    #elseif( $child.Name == "variable" && $child.Value.trim() != "" )
+                                        #set( $chanwStatement = $chanwStatement + "$" + $child.Value.trim() + " " )
+                                    #end
+                                #end
+                        
+                                #set( $chanwStatement = $chanwStatement + ")" )
+                            #end
+                        #end
+                        #evaluate( $chanwStatement )
+                    #end
+                #end
+            #end
+        #end
+    #end
 #end
 
 #macro( processSingleimageGroup $groupToBeProcessed )
@@ -505,65 +574,8 @@ src="http://www.youtube.com/embed/${youtubeVideoID}?rel=0&amp;wmode=transparent"
 <div class="pad10"></div>
 #end
 
-#*
-Processes a script block.
-The $firstChild is the scripts element.
-*#
-#macro( processScript $firstChild $region )
-    ## get the scripts to be executed
-    #set( $chanwScripts = $firstChild.getChildren( 'script' ) )
-    
-    ## loop through each script
-    #if( $chanwScripts.size() > 0 )
-        #foreach( $script in $chanwScripts )
-            ## first, import the script
-            #set( $chanwPath = $script.getChild( "path" ).Value.trim() )
-            #set( $chanwStatement = "#" + "import('$chanwPath')" )
-            #evaluate( $chanwStatement )
-            
-            #set( $chanwStatement = "" )
-            #set( $chanwMacros = $script.getChildren( "macro" ) )
-            ## second, invoke each macro
-            #if( $chanwMacros.size() > 0 )
-                #foreach( $macro in $chanwMacros )
-                    #if( $macro.getChild( "path" ).Value.trim() != "" )
-                        #set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
-                        #set( $chanwStatement = "" )
-                        #set( $chanwStatement = "#" + $chanwMacro )
-                        #set( $chanwParams = $macro.getChild( "params" ) )
-                
-                        #if( !$_PropertyTool.isNull( $chanwParams ) )
-                            #set( $chanwParamsChildren = $chanwParams.getChildren() )
-                    
-                            #if( $chanwParamsChildren.size() > 0 )
-                                #set( $chanwStatement = $chanwStatement + "(" )
-                        
-                                #foreach( $child in $chanwParamsChildren )
-                                    #if( $child.Name == "param" && $child.Value.trim() != "" )
-                                        #set( $chanwStatement = $chanwStatement + "'" + $child.Value.trim() + "' " )
-                                    #elseif( $child.Name == "variable" && $child.Value.trim() != "" )
-                                        #set( $chanwStatement = $chanwStatement + "$" + $child.Value.trim() + " " )
-                                    #end
-                                #end
-                        
-                                #set( $chanwStatement = $chanwStatement + ")" )
-                            #end
-                        #end
-                        #evaluate( $chanwStatement )
-                    #end
-                #end
-            #end
-        #end
-    #end
-#end
 
-#macro( processCategoryGroup $groupToBeProcessed )
-    #if( $groupToBeProcessed.getChild("category-yes").value.contains("Yes") )
-        <!--#passthrough<?php
-        require_once( '/webfs/www/bioinbrief/_extra/headlines-${currentPage.name}.htm' );
-        ?>#passthrough-->
-    #end
-#end
+
 
 
 
@@ -701,3 +713,4 @@ The $firstChild is the scripts element.
         #end ## for each  
     #end ## if prevous next  
 #end ## macro
+    
