@@ -123,3 +123,13 @@ is part of the HTML markups.
 
 #set( $chanwCurrentMonthLongString   = $_DateTool.format( "MMMMM", $_DateTool.getSystemDate() ) )
 #set( $chanwCurrentMonthMediumString = $_DateTool.format( "MMM", $_DateTool.getSystemDate() ) )
+
+## This part can contain business logic
+
+## read the block and grab the code
+#set( $global_velocity_code = $_.locateBlock( 
+    "blocks/code/global-velocity-code" ).getXMLAsXMLElement().getChild( "global-velocity-code" ) )
+#set( $single_group_code    = $global_velocity_code.getChild( "single-group" ).value )
+#set( $multi_group_code     = $global_velocity_code.getChild( "multi-group" ).value )
+#set( $site_map_code        = $global_velocity_code.getChild( "site-map" ).value )
+#set( $macro_foreach_code   = $global_velocity_code.getChild( "generate-macro-foreach" ).value )
