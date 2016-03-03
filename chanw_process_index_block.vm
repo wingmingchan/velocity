@@ -1,7 +1,7 @@
 #*
 This format defines macros to process an index block.
 Do not process the entire block. Instead, select system-page,
-system-folder, etc, and process each individual page/folder, etc.
+system-folder, etc, and process each individual page/folder, etc. 234 lines.
 
 Example code:
 
@@ -9,23 +9,23 @@ Example code:
 
 #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page" ) )
 #chanwProcessSystemPage( $page )
-<pre>
+$S_PRE
 
 $systemPageName
 $systemPageIsPublished
 
 $chanwDynamicMetatdataNameValuesMap.get( "exclude-from-menu" )
-</pre>
+$E_PRE
 
 #set( $folder = $_XPathTool.selectSingleNode( $contentRoot, "system-folder" ) )
 #chanwProcessSystemFolder( $folder )
-<pre>
+$S_PRE
 
 $systemFolderName
 $systemFolderIsPublished
 
 $chanwDynamicMetatdataNameValuesMap.get( "exclude-from-left" )
-</pre>
+$E_PRE
 
 Output:
 test-process-index-block
@@ -38,38 +38,11 @@ true
 
 []
 *#
-##import( '/formats/library/velocity/chanw_global_values' )
 #import( '/formats/library/velocity/chanw_macro_utilities' )
-
-#*
-Dynamically creates variables assigned with values.
-*#
-#macro( chanwGetNodeValues $node $map )
-    #foreach( $var in $map.keySet() )
-        #set( $chanwNodeValue = $_EscapeTool.xml( $_XPathTool.selectSingleNode( $node, $map[ $var ] ).value ) )
-        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariables(' + "'$var' " + "'')" )
-        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariables(' + "'$var' " + "'$chanwNodeValue')" )
-        #evaluate( $chanwSetVarValStatement )
-    #end
-#end
-
-#*
-Dynamically creates variables assigned with node sets.
-*#
-#macro( chanwGetNodeSets $node $map )
-    #set( $chanwNameNodesMap = {} )
-    #foreach( $var in $map.keySet() )
-        #set( $chanwNodeSet = $_XPathTool.selectNodes( $node, $map[ $var ] ) )
-        #set( $void = $chanwNameNodesMap.put( $map[ $var ], $chanwNodeSet ) )
-        #set( $chanwSetVarValStatement = '#' + "set(" + $_EscapeTool.D + "$var = " + 
-            $_EscapeTool.D + "chanwNameNodesMap[" + $_EscapeTool.D + "map["+ "'$var']])" )
-        #evaluate( $chanwSetVarValStatement )
-    #end
-#end
 
 #macro( chanwProcessDynamicData $dynamicDataNode )
     #if( $dynamicDataNode.name != $cascadeXML_ELEMENT_DYNAMIC_METADATA )
-        Not a dynamic data!!!<br />
+        Not a dynamic data!!!$BR
         #stop
     #end
     
@@ -87,7 +60,7 @@ Dynamically creates variables assigned with node sets.
 
 #macro( chanwProcessRSSItem $itemNode )
     #if( $itemNode.name != $rssXML_ELEMENT_ITEM )
-        Not an item!!!<br />
+        Not an item!!!$BR
         #stop
     #end
     #chanwGetNodeValues( $itemNode {
@@ -101,7 +74,7 @@ Dynamically creates variables assigned with node sets.
 
 #macro( chanwProcessSystemBlock $blockNode )
     #if( $blockNode.name != $cascadeXML_ELEMENT_SYSTEM_BLOCK )
-        Not a block!!!<br />
+        Not a block!!!$BR
         #stop
     #end
     #chanwGetNodeValues( $blockNode {
@@ -117,7 +90,7 @@ Dynamically creates variables assigned with node sets.
 
 #macro( chanwProcessSystemFile $fileNode )
     #if( $fileNode.name != $cascadeXML_ELEMENT_SYSTEM_FILE )
-        Not a file!!!<br />
+        Not a file!!!$BR
         #stop
     #end
     #chanwGetNodeValues( $fileNode {
@@ -138,7 +111,7 @@ Dynamically creates variables assigned with node sets.
 
 #macro( chanwProcessSystemFolder $folderNode )
     #if( $folderNode.name != $cascadeXML_ELEMENT_SYSTEM_FOLDER )
-        Not a folder!!!<br />
+        Not a folder!!!$BR
         #stop
     #end
     #chanwGetNodeValues( $folderNode {
@@ -183,7 +156,7 @@ Dynamically creates variables assigned with node sets.
 
 #macro( chanwProcessSystemPage $pageNode )
     #if( $pageNode.name != $cascadeXML_ELEMENT_SYSTEM_PAGE )
-        Not a page!!!<br />
+        Not a page!!!$BR
         #stop
     #end
     #chanwGetNodeValues( $pageNode {
@@ -219,7 +192,7 @@ Dynamically creates variables assigned with node sets.
     
 #macro( chanwProcessSystemSymlink $symlinkNode )
     #if( $symlinkNode.name != $cascadeXML_ELEMENT_SYSTEM_SYMLINK )
-        Not a symlink!!!<br />
+        Not a symlink!!!$BR
         #stop
     #end
     #chanwGetNodeValues( $symlinkNode {
