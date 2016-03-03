@@ -5,7 +5,6 @@ any node without a fixed structure.
 Use chanw_process_index_block to process a page/folder created
 by an index block.
 *#
-##import( '/formats/library/velocity/chanw_global_values' )
 #import( '/formats/library/velocity/chanw_global_utility_objects' )
 
 ## clean up the data structures
@@ -14,7 +13,7 @@ by an index block.
 ## entry point of system-data-structure
 #macro( chanwProcessSystemDataStructure $element )
     #if( $element.Name != $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
-        Not a $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE!!!<br />
+        Not a $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE!!!$BR
         #stop
     #end
     
@@ -31,7 +30,7 @@ by an index block.
 
 #macro( chanwProcessJdomElement $node )
     #if( $node.class.name != $ORG_JDOM_ELEMENT_CLASS_NAME )
-        Not an element!!!<br />
+        Not an element!!!$BR
         #stop
     #end
     
@@ -139,8 +138,8 @@ by an index block.
             #end
         #end
     #else
-        $node.Name<br />
-        Nothing to process.<br />
+        $node.Name$BR
+        Nothing to process.$BR
     #end
 #end
 
@@ -172,14 +171,14 @@ by an index block.
                     ## nothing to do
                 #else
                     #set( $tempKey = $key.substring( $chanwFirstSlashPos ) )
-                    $tempKey<br />
+                    $tempKey$BR
                 #end
             #elseif( $key.class.name == $JAVA_LANG_STRING_CLASS_NAME )
-                $key<br />
+                $key$BR
             #end
         #end
     #else
-        Not a map!!!<br />
+        Not a map!!!$BR
     #end
 #end
 
@@ -193,19 +192,20 @@ by an index block.
                     ## nothing to do
                 #else
                     #set( $tempKey = $key.substring( $chanwFirstSlashPos ) )
-                    $tempKey: $map.get( $key )<br />
+                    $tempKey: $map.get( $key )$BR
                 #end
             #else
-                $key: $map.get( $key )<br />
+                $key: $map.get( $key )$BR
             #end
         #end
     #else
-        Not a map!!!<br />
+        Not a map!!!$BR
     #end
 #end
 
 #*
-Creates the root element out of an XML string.
+Creates the root element out of an XML string. Note that this is for feed  blocks only.
+For XML blocks, use the getXMLAsXMLElement method instead.
 Example:
 
 #set( $feed_block = $_.locateBlock( "_cascade/blocks/feed/hannonhill-sandbox-wing-asset" ) )
