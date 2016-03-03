@@ -18,6 +18,8 @@ Examples:
 #*
 Returns an object of the class, calling the default constructor.
 *#
+#import( '/formats/library/velocity/chanw_global_values' )
+
 #macro( chanwGetObjectByClassName $chanwClassName )
     #set( $chanwGetObjectByClassName = "" ) ## reinitialize the global variable
     #chanwGetConstructorByClassNameParamSize( $chanwClassName 0 )
@@ -41,7 +43,7 @@ Returns the first constructor that accepts the specified number of parameters.
     #end
     #if( !$chanwGetConstructorByClassNameParamSize || 
         $chanwGetConstructorByClassNameParamSize == "" )
-    Constructor not found<br />
+    Constructor not found$BR
     #end
 #end
 
