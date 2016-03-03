@@ -56,6 +56,32 @@ Example:
 #end
 
 #*
+Dynamically creates variables assigned with values.
+*#
+#macro( chanwGetNodeValues $node $map )
+    #foreach( $var in $map.keySet() )
+        #set( $chanwNodeValue = $_EscapeTool.xml( $_XPathTool.selectSingleNode( $node, $map[ $var ] ).value ) )
+        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariables(' + "'$var' " + "'')" )
+        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariables(' + "'$var' " + "'$chanwNodeValue')" )
+        #evaluate( $chanwSetVarValStatement )
+    #end
+#end
+
+#*
+Dynamically creates variables assigned with node sets.
+*#
+#macro( chanwGetNodeSets $node $map )
+    #set( $chanwNameNodesMap = {} )
+    #foreach( $var in $map.keySet() )
+        #set( $chanwNodeSet = $_XPathTool.selectNodes( $node, $map[ $var ] ) )
+        #set( $void = $chanwNameNodesMap.put( $map[ $var ], $chanwNodeSet ) )
+        #set( $chanwSetVarValStatement = '#' + "set(" + $_EscapeTool.D + "$var = " + 
+            $_EscapeTool.D + "chanwNameNodesMap[" + $_EscapeTool.D + "map["+ "'$var']])" )
+        #evaluate( $chanwSetVarValStatement )
+    #end
+#end
+
+#*
 Invokes a macro with the name and parameters passed in.
 Example:
 
