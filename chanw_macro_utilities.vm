@@ -61,8 +61,8 @@ Dynamically creates variables assigned with values.
 #macro( chanwGetNodeValues $node $map )
     #foreach( $var in $map.keySet() )
         #set( $chanwNodeValue = $_EscapeTool.xml( $_XPathTool.selectSingleNode( $node, $map[ $var ] ).value ) )
-        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariables(' + "'$var' " + "'')" )
-        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariables(' + "'$var' " + "'$chanwNodeValue')" )
+        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariable(' + "'$var' " + "'')" )
+        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariable(' + "'$var' " + "'$chanwNodeValue')" )
         #evaluate( $chanwSetVarValStatement )
     #end
 #end
@@ -122,7 +122,7 @@ Example:
     #end
     #if( $list.size() > 0 )
         #foreach( $var in $list )
-            #chanwSetVariables( $var "" )
+            #chanwSetVariable( $var "" )
         #end
     #end
 #end
@@ -132,7 +132,7 @@ Dynamically turns $var into a variable assigned with the value $val.
 The value of $var should be a variable name without the dollar sign like "var".
 Example: see chanwReinitializeListOfVariables
 *#
-#macro( chanwSetVariables $var $val )
+#macro( chanwSetVariable $var $val )
     #set( $chanwValue              = $_EscapeTool.xml( $val ).trim() )
     #set( $chanwSetVarValStatement = '#' + "set(" + $_EscapeTool.D + "$var = '$chanwValue')" )
     #evaluate( $chanwSetVarValStatement )
