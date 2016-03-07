@@ -133,8 +133,13 @@ The value of $var should be a variable name without the dollar sign like "var".
 Example: see chanwReinitializeListOfVariables
 *#
 #macro( chanwSetVariable $var $val )
-    #set( $chanwValue              = $_EscapeTool.xml( $val ).trim() )
-    #set( $chanwSetVarValStatement = '#' + "set(" + $_EscapeTool.D + "$var = '$chanwValue')" )
+    #if( $val.class.name == $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $chanwValue = $_EscapeTool.xml( $val ).trim() )
+    #else
+        #set( $chanwValue = $val )
+    #end
+    
+    #set( $chanwSetVarValStatement = '#' + "set(" + "$" + "$var = '$chanwValue')" )
     #evaluate( $chanwSetVarValStatement )
 #end
 
