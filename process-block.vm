@@ -75,6 +75,7 @@ The name of the block is turned into a macro name.
 Processes a block chooser or a region.
 When it is a region, what is passed in is a Document object.
 Otherwise, it is an Element whose name is content.
+Why parent of the root element is passed in: a text block may not have a root element.
 *#
 #macro( processBlockChooser $content )
     #if( $content.class.name == $ORG_JDOM_DOCUMENT_CLASS_NAME )
