@@ -11,13 +11,13 @@ Generates the required macros.
 #set( $single_group_names = [ "wysiwyg", "instruction-block" ] )
 
 ## These are multi-group blocks, and put the required dispatch macro names here.
-#set( $macro_names = [ "processDesignerProBlock", "processMegablock", "processMultimedia", "processNewsBlock" ] )
+#set( $multi_macro_names = [ "processDesignerProBlock", "processMegablock", "processMultimedia", "processNewsBlock" ] )
 
 ## These are various names of macros invoking the same macro to generate site maps.
 #set( $site_map_macro_names = [ "processSiteMapIndex", "processWsMapIndex" ] )
 
 ## These are map-code pairs used to generate macros to generate macros.
-#set( $map_code_pairs = { "macro_names"          : "multi_group_code", 
+#set( $map_code_pairs = { "multi_macro_names"    : "multi_group_code", 
                           "site_map_macro_names" : "site_map_code" } )
 
 ## generate macros that generate macros
