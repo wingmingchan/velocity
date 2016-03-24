@@ -1,0 +1,6 @@
+## attach this format to a region to process any block other than text blocks
+#import( 'site://_common_assets/formats/process_block' )
+#if( $contentRoot )
+    #set( $parent = $contentRoot.getParent() )
+    #processBlockChooser( $parent )
+#end
