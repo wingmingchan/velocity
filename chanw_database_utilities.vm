@@ -1,0 +1,21 @@
+#*
+This format defines utility macros to access the database.
+It must be used with the Java classes written for Upstate.
+
+Example:
+
+#chanwDisplayNumberOfRecords( "cxml_assetfactory" )
+*#
+#import( 'formats/library/velocity/chanw_object_creator' )
+#chanwGetObjectByClassName( 'edu.upstate.chanw.db.CascadeDB' )
+
+#set( $db = $chanwGetObjectByClassName )
+
+#macro( chanwDisplayNumberOfRecords $table )
+    #set( $sql  = "select count(*) from $table " )
+    #set( $data = $db.getResultSet( $sql ) )
+
+    #if( $data.next() )
+$S_PRE$data.getString( 1 )$E_PRE
+    #end
+#end
