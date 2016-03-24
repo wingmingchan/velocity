@@ -20,7 +20,6 @@ Example:
     $chanwPopGlobalStack$BR
 #end
 *#
-
 #import( '/formats/library/velocity/chanw_object_creator' )
 
 #set( $chanwSTACK_DATA  = "data" )
