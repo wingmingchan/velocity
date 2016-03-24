@@ -1,6 +1,6 @@
 #import( 'formats/library/velocity/chanw_process_xml' )
 #import( 'formats/library/velocity/chanw_global_utility_objects' )
-#import( 'formats/process-block' )
+#import( 'formats/process_block' )
 
 ## retrieve the config blocks
 ## _site-info: one per site
@@ -32,7 +32,6 @@ Also note that $globalStringBuffer does not work properly when there is PHP code
 <div id="hide-global-footer">
     $_SerializerTool.serialize( $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/global-footer/content" ), true )
 </div>
-
 <div id="hide-logo">
     #set( $url = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/logo-url" ).value )
     #set( $src = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/logo/link" ).value )
@@ -43,7 +42,6 @@ Also note that $globalStringBuffer does not work properly when there is PHP code
     #set( $siteTitle = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/title" ).value )
     <div id="site-title-div"><a href="${siteLink}">$siteTitle</a></div>
 </div>
-
 <div id="hide-site-title-without-link">$siteTitle</div>
 <div id="hide-menubar">
     #set( $contentNav = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/menubar/content/nav" ) )
