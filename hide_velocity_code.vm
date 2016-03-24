@@ -1,0 +1,12 @@
+#import( 'formats/library/velocity/chanw_macro_utilities' )
+
+#*=== macros used to generate div's for displaying code ===*#
+#macro( createHideVelocityCode $code $id )
+    <div id="${id}"><pre class="code">$code</pre></div>
+#end
+
+#macro( getScriptBlockCode $block_path $site_name $id )
+    #set( $code = $_.locateBlock( $block_path, $site_name ).XML )
+    #set( $code = $code.replaceAll( "<", "&lt;" ).replaceAll( ">", "&gt;" ) )
+    #createHideVelocityCode( $code $id )
+#end
