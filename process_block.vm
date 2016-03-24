@@ -1,0 +1,37 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_macro_utilities' )
+## do not change these two lines; change the content in these formats instead
+#import( 'site://_common_assets/formats/custom_macro_list' )
+#import( 'site://_common_assets/formats/custom_macros' )
+
+#*
+Generates the required macros.
+*#
+
+## These are map-code pairs used to generate macros to generate macros.
+#set( $map_code_pairs = { "multi_macro_names"    : "multi_group_code", 
+                          "site_map_macro_names" : "site_map_code" } )
+
+## generate macros that generate macros
+#set( $chanw_map_code_keys = $map_code_pairs.keySet() )
+
+#foreach( $key in $chanw_map_code_keys )
+    #set( $chanw_map_statement = $macro_foreach_code.replaceAll( "-map_name-", $key ).replaceAll( "-code_name-", $map_code_pairs[ $key ] ) )
+    #evaluate( $chanw_map_statement )
+#end
+
+#foreach( $single_group_name in $single_group_names )
+    #chanwConvertToPascalCase( $single_group_name "-" )
+    #set( $dispatch_macro_name = $MACRO_PREFIX + $chanwConvertToPascalCase )
+    #set( $single_group_name   = $single_group_name + "-group" )
+    #set( $chanw_statement     = $single_group_code.replaceAll( 
+        "-dispatch_macro_name-", $dispatch_macro_name ).replaceAll( "-single_group_name-", $single_group_name ) )
+    #evaluate( $chanw_statement )
+#end
+
+## code in chanw_global_values
+#evaluate( $processDataDefinitionBlock_code )
+#set( $processBlockChooser_code = $processBlockChooser_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ) )
+#evaluate( $processBlockChooser_code )
+#evaluate( $processIndexBlock_code )
+#set( $processScript_code = $processScript_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ) )
+#evaluate( $processScript_code )
