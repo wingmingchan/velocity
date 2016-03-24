@@ -1,0 +1,13 @@
+## include business logic here
+#import( 'site://_common_assets/formats/library/velocity/upstate_process_dd_group' )
+#import( 'site://_common_assets/formats/library/velocity/upstate_process_site_map' )
+
+## These are single-group blocks, put block type info here, and do not use '-group' in type info.
+## The group identifier should be {type-info}-group.
+#set( $single_group_names = [ "wysiwyg", "instruction-block" ] )
+
+## These are multi-group blocks, and put the required dispatch macro names here.
+#set( $multi_macro_names = [ "processDesignerProBlock", "processMegablock", "processMultimedia", "processNewsBlock" ] )
+
+## These are macro aliases invoking the same macro to generate site maps.
+#set( $site_map_macro_names = [ "processSiteMapIndex", "processWsMapIndex" ] )
