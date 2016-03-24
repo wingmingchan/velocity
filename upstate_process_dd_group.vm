@@ -370,59 +370,6 @@ Currently only data definition blocks and index blocks can be attached to the fi
     <!--#passthrough<?php loadRandomImage($imagearray); ?>#passthrough-->
 #end
 
-#*
-Processes a script block. 
-A script block is an XML block, whose name must have a '-script' suffix.
-The $firstChild is the scripts element. $region is a string value like 'bottom-inner'.
-*#
-#macro( processScript $firstChild $region )
-    ## get the scripts to be executed
-    #set( $chanwScripts = $firstChild.getChildren( 'script' ) )
-    
-    ## loop through each script
-    #if( $chanwScripts.size() > 0 )
-        #foreach( $script in $chanwScripts )
-            ## first, import the script
-            #set( $chanwPath = $script.getChild( "path" ).Value.trim() )
-            #set( $chanwStatement = "#" + "import('$chanwPath')" )
-            #evaluate( $chanwStatement )
-            
-            #set( $chanwStatement = "" )
-            #set( $chanwMacros = $script.getChildren( "macro" ) )
-            ## second, invoke each macro
-            #if( $chanwMacros.size() > 0 )
-                #foreach( $macro in $chanwMacros )
-                    #if( $macro.getChild( "path" ).Value.trim() != "" )
-                        #set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
-                        #set( $chanwStatement = "" )
-                        #set( $chanwStatement = "#" + $chanwMacro )
-                        #set( $chanwParams = $macro.getChild( "params" ) )
-                
-                        #if( !$_PropertyTool.isNull( $chanwParams ) )
-                            #set( $chanwParamsChildren = $chanwParams.getChildren() )
-                    
-                            #if( $chanwParamsChildren.size() > 0 )
-                                #set( $chanwStatement = $chanwStatement + "(" )
-                        
-                                #foreach( $child in $chanwParamsChildren )
-                                    #if( $child.Name == "param" && $child.Value.trim() != "" )
-                                        #set( $chanwStatement = $chanwStatement + "'" + $child.Value.trim() + "' " )
-                                    #elseif( $child.Name == "variable" && $child.Value.trim() != "" )
-                                        #set( $chanwStatement = $chanwStatement + "$" + $child.Value.trim() + " " )
-                                    #end
-                                #end
-                        
-                                #set( $chanwStatement = $chanwStatement + ")" )
-                            #end
-                        #end
-                        #evaluate( $chanwStatement )
-                    #end
-                #end
-            #end
-        #end
-    #end
-#end
-
 #macro( processSingleimageGroup $groupToBeProcessed )
 
     #if( $groupToBeProcessed.name != 'singleimage-group' )
@@ -659,6 +606,7 @@ src="http://www.youtube.com/embed/${youtubeVideoID}?rel=0&amp;wmode=transparent"
     <div class="clr"></div>
     
     ##Previous and Next
+    
     #if( $groupToBeProcessed.getChild("show-options").value.contains("Previous and Next") )
         #set( $articleIndexBlock = $groupToBeProcessed.getChild("article-index-block").getChild("content").getChild("system-index-block") )
     
@@ -692,20 +640,35 @@ src="http://www.youtube.com/embed/${youtubeVideoID}?rel=0&amp;wmode=transparent"
                         #if( $foreach.count == 2 )
                             #set( $previewPreviousNextText = "Next" )
                         #end
-            
-                        <div class="col-4xs-6 padleft3 padright3 padbottom3 padtop9">
-                            <p class="padleft5"><strong>$previewPreviousNextText Article:</strong></p>
-                            <div class="newsfeed-item">
-                                <a href="$systemPageLink">
-                                    <div class="pad5">
-                                        <img alt="$systemPageTitle.replaceAll('&amp;amp;','&amp;')" src="images/$previewArticleYear/${systemPageName}.jpg" class="img-responsive padtop5 padbottom5" />
-                                        <h3>$systemPageTitle.replaceAll("&amp;amp;","&amp;")</h3>
-                                        <p>$systemPageSummary.replaceAll("&amp;amp;","&amp;")</p>
-                                    </div>
-                                    <div class="clr"></div>
-                                </a>   
+                        
+                        ## Do images exist?
+                        #chanwReinitializeListOfVariables ( [ "fileSizeTest", "imageLocation" , "imageDoesNotExist" ] )
+                        #set( $imageLocation = 'images/' + $previewArticleYear + '/' + $systemPageName + '.jpg' )
+                        #set( $fileSizeTest = $_.locateFile($imageLocation , $systemPageSite ) )
+                        #if ($_PropertyTool.isNull($fileSizeTest.FileSize))
+                            #set( $imageLocation = 'images/default.jpg' )
+                            #set( $fileSizeTest = $_.locateFile($imageLocation , $systemPageSite ) )
+                            #if ($_PropertyTool.isNull($fileSizeTest.FileSize))
+                                #set( $imageDoesNotExist = true)
+                            #end
+                        #end
+                        #if ($systemPageTitle != $systemPageSummary)
+                            <div class="col-4xs-6 padleft3 padright3 padbottom3 padtop9">
+                                <p class="padleft5"><strong>$previewPreviousNextText Article:</strong></p>
+                                <div class="newsfeed-item">
+                                    <a href="$systemPageLink">
+                                        <div class="pad5">
+                                            #if ($imageDoesNotExist != true)
+                                                <img alt="$systemPageTitle.replaceAll('&amp;amp;','&amp;')" src="$imageLocation" class="img-responsive padtop5 padbottom5" />
+                                            #end
+                                            <h3>$systemPageTitle.replaceAll("&amp;amp;","&amp;")</h3>
+                                            <p>$systemPageSummary.replaceAll("&amp;amp;","&amp;")</p>
+                                        </div>
+                                        <div class="clr"></div>
+                                    </a>   
+                                </div>
                             </div>
-                        </div>
+                        #end
                     #end
                 #end
                 ##</div>
@@ -713,4 +676,3 @@ src="http://www.youtube.com/embed/${youtubeVideoID}?rel=0&amp;wmode=transparent"
         #end ## for each  
     #end ## if prevous next  
 #end ## macro
-    
