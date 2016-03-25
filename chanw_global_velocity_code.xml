@@ -1,0 +1,193 @@
+<global-velocity-code>
+    <!-- This block is hooked up with chanw_global_values_code and process_block.
+    Strings like -dispatch_macro_name-, -single_group_name- and -macro_name- are place-holders,
+    to be replaced by real values; everything else is just plain Velocity code. Note the use of casing:
+    place-holders and variables used to generated code use lowercase, underscores and dashes, 
+    real variables in generated code use camelCase. -->
+    <generate-macro-foreach>
+#foreach( $macro_name in $-map_name- )
+    #set( $chanw_foreach_statement = $-code_name-.replaceAll( "-macro_name-", $macro_name ) )
+    #evaluate( $chanw_foreach_statement )
+#end
+    </generate-macro-foreach>
+    <index-block-macro>
+#macro( -macro_name- $-node_type-Node )
+    #if( !$-node_type-Node )
+        The -node_type- element is not defined.$BR
+    #elseif( $-node_type-Node.name != $-element_name- )
+        Not a/an -node_type- element!!!$BR
+        #stop
+    #end
+    #chanwGetNodeValues( $-node_type-Node $-map_name- )
+#end
+    </index-block-macro>
+    <single-group>
+#macro(-dispatch_macro_name- $systemDataStructure)
+    #set($groupToBeProcessed=$systemDataStructure.getChild('-single_group_name-'))
+    #chanwConvertToPascalCase('-single_group_name-' '-')
+    #set($macroName=$MACRO_PREFIX+$chanwConvertToPascalCase)
+    #chanwInvokeMacro($macroName ['groupToBeProcessed'])
+#end
+    </single-group>
+    <multi-group>
+#macro(-macro_name- $systemDataStructure $region)
+    #set($groupType=$systemDataStructure.getChild('choose-type').value)
+    #set($groupRegion=$systemDataStructure.getChild('choose-region').value)
+    #set($groupToBeProcessed=$systemDataStructure.getChild("${groupType}-group"))
+    #chanwConvertToPascalCase($groupType '-')
+    #set($macroName=$MACRO_PREFIX+$chanwConvertToPascalCase+'Group')
+    #if(!$_PropertyTool.isNull($region))
+        #set($blockRegion=$region)
+        #chanwInvokeMacro($macroName ['groupToBeProcessed','blockRegion'])
+    #else
+        #chanwInvokeMacro($macroName ['groupToBeProcessed'])
+    #end
+#end     
+    </multi-group>
+    <site-config>
+#set( $contentVar = $_XPathTool.selectSingleNode( $page, 'system-data-structure/site-config-group/-node_name-/content' ) )
+#if( !$_PropertyTool.isNull( $contentVar ) )
+    #processBlockChooser( $contentVar )
+#end
+    </site-config>
+    <site-map>
+#macro( -macro_name- $systemIndexBlock )
+    #chanwCreateSiteMap( $systemIndexBlock )
+#end
+    </site-map>
+    <processBlockChooser>
+#*
+Processes a block chooser or a region.
+When it is a region, what is passed in is a Document object.
+Otherwise, it is an Element whose name is content.
+Why parent of the root element is passed in: a text block may not have a root element.
+*#
+#macro( processBlockChooser $content )
+    #if( $content.class.name == $ORG_JDOM_DOCUMENT_CLASS_NAME )
+        #set( $contentChildren = $content.getContent() )
+    #else
+        #set( $contentChildren = $content.getChildren() )
+    #end
+    
+    #if( $contentChildren.size() == 0 )
+        $_SerializerTool.serialize( $content, true )  ## plain text or code
+    #elseif( $contentChildren.size() &gt; 0 )
+        #set( $firstChild = $contentChildren.get( 0 ) )
+        #set( $childName  = $firstChild.name )
+        #set( $childPath  = $content.getParent().getChild( 'path' ).value )
+    
+        #if( $childName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
+            #processDataDefinitionBlock( $firstChild )
+        #elseif( $childName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK )
+            #processIndexBlock( $firstChild )
+        #else
+            #set( $blockName = $childPath )
+            #set( $lastIndexOfSlash = $blockName.lastIndexOf( '/' ) + 1 )
+                
+            #if( $lastIndexOfSlash &gt; -1 )
+                #set( $blockName = $blockName.substring( $lastIndexOfSlash ) )
+                   
+                ## text block containing html markups
+                #if( $blockName.endsWith( 'Text' ) || $blockName.endsWith( 'text' ) ) 
+                    $_SerializerTool.serialize( $content, true )
+                ## XML blocks containing instructions
+                #elseif( $blockName.endsWith( 'Script' ) || $blockName.endsWith( 'script' )  )
+                    #chanwInvokeMacro( "processScript" [ "firstChild" ] )
+                ## preferably having -xml, -feed suffixes
+                #else
+                    #chanwConvertToPascalCase( $blockName "-" )
+                    #set( $macroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
+                    #chanwInvokeMacro( $macroName [ "firstChild" ] )
+                #end
+            #end
+        #end
+    #end
+#end
+    </processBlockChooser>
+    <processDataDefinitionBlock>
+#*
+Processes a data definition block with type information.
+The type is turned into a macro name.
+*#
+#macro( processDataDefinitionBlock $systemDataStructure )
+    #set( $isDisplay = $systemDataStructure.getChild( 'display' ).value )
+    
+    #if( $isDisplay.toLowerCase() == 'yes' )
+        #set( $type = $systemDataStructure.getChild( 'block-type' ).value )
+        #chanwConvertToPascalCase( $type "-" )
+        #set( $macroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
+        #chanwInvokeMacro( $macroName [ "systemDataStructure" ] )
+    #end
+#end
+    </processDataDefinitionBlock>
+    <processIndexBlock>
+#*
+Processes an index block.
+The name of the block is turned into a macro name.
+*#
+#macro( processIndexBlock $firstChild )
+    #set( $blockName = $firstChild.getAttribute( 'name' ).value )
+    #chanwConvertToPascalCase( $blockName "-" )
+    #set( $macroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
+    #chanwInvokeMacro( $macroName [ "firstChild" ] )
+#end
+    </processIndexBlock>
+    <processScript>
+#*
+Processes a script block. 
+A script block, in the current implementation, is an XML block whose name must have a '-script' suffix.
+The $firstChild is the scripts element. $region is a string value like 'bottom-inner'.
+*#
+#macro( processScript $firstChild $region )
+    ## get the scripts to be executed
+    #set( $chanwScripts = $firstChild.getChildren( 'script' ) )
+    
+    ## loop through each script
+    #if( $chanwScripts.size() &gt; 0 )
+        #foreach( $script in $chanwScripts )
+            ## first, import the script
+            #set( $chanwPath = $script.getChild( "path" ).Value.trim() )
+            #set( $chanwStatement = "#" + "import('$chanwPath')" )
+            #evaluate( $chanwStatement )
+            
+            #set( $chanwStatement = "" )
+            #set( $chanwMacros = $script.getChildren( "macro" ) )
+            ## second, invoke each macro
+            #if( $chanwMacros.size() &gt; 0 )
+                #foreach( $macro in $chanwMacros )
+                    #if( $macro.getChild( "path" ).Value.trim() != "" )
+                        #set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
+                        #set( $chanwStatement = "" )
+                        #set( $chanwStatement = "#" + $chanwMacro )
+                        #set( $chanwParams = $macro.getChild( "params" ) )
+                
+                        #if( !$_PropertyTool.isNull( $chanwParams ) )
+                            #set( $chanwParamsChildren = $chanwParams.getChildren() )
+                    
+                            #if( $chanwParamsChildren.size() &gt; 0 )
+                                #set( $chanwStatement = $chanwStatement + "(" )
+                                
+                                #foreach( $child in $chanwParamsChildren )
+                                    
+                                    #if( $child.Name == "param" )
+                                        #if( $child.Value.trim() != "" )
+                                            #set( $chanwStatement = $chanwStatement + "'" + $child.Value.trim() + "' " )
+                                        #end
+                                    #elseif( $child.Name == "variable" )
+                                        #if( $child.Value.trim() != "" )
+                                            #set( $chanwStatement = $chanwStatement + "$" + $child.Value.trim() + " " )
+                                        #end
+                                    #end
+                                #end
+                                #set( $chanwStatement = $chanwStatement + ")" )
+                            #end
+                        #end
+                        #evaluate( $chanwStatement )
+                    #end
+                #end
+            #end
+        #end
+    #end
+#end
+    </processScript>
+</global-velocity-code>
