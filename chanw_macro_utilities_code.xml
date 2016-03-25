@@ -61,7 +61,11 @@ Dynamically creates variables assigned with values.
 *#
 #macro( chanwGetNodeValues $node $map )
     #foreach( $var in $map.keySet() )
-        #set( $chanwNodeValue = $_EscapeTool.xml( $_XPathTool.selectSingleNode( $node, $map[ $var ] ).value ) )
+        #if( $_XPathTool.selectSingleNode( $node, $map[ $var ] ) )
+            #set( $chanwNodeValue = $_EscapeTool.xml( $_XPathTool.selectSingleNode( $node, $map[ $var ] ).value ) )
+        #else
+            #set( $chanwNodeValue = "" )
+        #end        
         #set( $chanwSetVarValStatement = '#' + 'chanwSetVariable(' + "'$var' " + "'')" )
         #set( $chanwSetVarValStatement = '#' + 'chanwSetVariable(' + "'$var' " + "'$chanwNodeValue')" )
         #evaluate( $chanwSetVarValStatement )
@@ -75,6 +79,9 @@ Dynamically creates variables assigned with node sets.
     #set( $chanwNameNodesMap = {} )
     #foreach( $var in $map.keySet() )
         #set( $chanwNodeSet = $_XPathTool.selectNodes( $node, $map[ $var ] ) )
+        #if( $_PropertyTool.isNull( $chanwNodeSet ) )
+            #set( $chanwNodeSet = "" )
+        #end
         #set( $void = $chanwNameNodesMap.put( $map[ $var ], $chanwNodeSet ) )
         #set( $chanwSetVarValStatement = '#' + "set(" + $_EscapeTool.D + "$var = " + 
             $_EscapeTool.D + "chanwNameNodesMap[" + $_EscapeTool.D + "map["+ "'$var']])" )
@@ -136,7 +143,9 @@ The value of $var should be a variable name without the dollar sign like "var".
 Example: see chanwReinitializeListOfVariables
 *#
 #macro( chanwSetVariable $var $val )
-    #if( $val.class.name == $JAVA_LANG_STRING_CLASS_NAME )
+    #if( $_PropertyTool.isNull( $val ) )
+        #set( $chanwValue = "" )
+    #elseif( $val.class.name == $JAVA_LANG_STRING_CLASS_NAME )
         #set( $chanwValue = $_EscapeTool.xml( $val ).trim() )
     #else
         #set( $chanwValue = $val )
