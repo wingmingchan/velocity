@@ -38,7 +38,7 @@ true
 
 []
 *#
-#import( '/formats/library/velocity/chanw_macro_utilities' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_macro_utilities' )
 
 #macro( chanwProcessDynamicData $dynamicDataNode )
     #if( $dynamicDataNode.name != $cascadeXML_ELEMENT_DYNAMIC_METADATA )
@@ -60,9 +60,9 @@ true
 
 ## generate macros that process index blocks
 #set( $index_block_element_map = {
-    "chanwProcessRSSItem" :        [ "item", "rssXML_ELEMENT_ITEM", "rssItemVarElementMap" ],
-    "chanwProcessSystemBlock" :    [ "block", "cascadeXML_ELEMENT_SYSTEM_BLOCK", "systemBlockVarElementMap" ],
-    "chanwProcessSystemFile" :     [ "file", "cascadeXML_ELEMENT_SYSTEM_FILE", "systemFileVarElementMap" ],
+    "chanwProcessRSSItem" :        [ "item",    "rssXML_ELEMENT_ITEM",               "rssItemVarElementMap" ],
+    "chanwProcessSystemBlock" :    [ "block",   "cascadeXML_ELEMENT_SYSTEM_BLOCK",   "systemBlockVarElementMap" ],
+    "chanwProcessSystemFile" :     [ "file",    "cascadeXML_ELEMENT_SYSTEM_FILE",    "systemFileVarElementMap" ],
     "chanwProcessSystemSymlink" :  [ "symlink", "cascadeXML_ELEMENT_SYSTEM_SYMLINK", "systemSymlinkVarElementMap" ]
 } )
 
@@ -71,15 +71,16 @@ true
 #foreach( $macro_name in $indexBlockMapKeys )
     #set( $macro_list = $index_block_element_map[ $macro_name ] )
     #set( $chanwStatement = $index_block_code.replaceAll( "-macro_name-", $macro_name ).replaceAll(
-        "-node_type-", $macro_list[ 0 ] ).replaceAll(
-        "-element_name-", $macro_list[ 1 ] ).replaceAll(
+        "-node_type-", $macro_list[ 0 ] ).replaceAll( "-element_name-", $macro_list[ 1 ] ).replaceAll(
         "-map_name-", $macro_list[ 2 ] ) )
     #evaluate( $chanwStatement )
 #end
 
 #macro( chanwProcessSystemFolder $folderNode )
-    #if( $folderNode.name != $cascadeXML_ELEMENT_SYSTEM_FOLDER )
-        Not a folder!!!$BR
+    #if( !$folderNode )
+        The folder element is not defined.$BR
+    #elseif( $folderNode.name != $cascadeXML_ELEMENT_SYSTEM_FOLDER )
+        $folderNode.name is not a folder element!!!$BR
         #stop
     #end
     #chanwGetNodeValues( $folderNode $systemFolderVarElementMap )
@@ -109,8 +110,10 @@ true
 #end
 
 #macro( chanwProcessSystemPage $pageNode )
-    #if( $pageNode.name != $cascadeXML_ELEMENT_SYSTEM_PAGE )
-        Not a page!!!$BR
+    #if( !$pageNode )
+        The page element is not defined.$BR
+    #elseif( $pageNode.name != $cascadeXML_ELEMENT_SYSTEM_PAGE )
+        $pageNode.name is not a page element!!!$BR
         #stop
     #end
     #chanwGetNodeValues( $pageNode $systemPageVarElementMap )
