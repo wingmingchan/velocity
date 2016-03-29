@@ -383,34 +383,42 @@ Currently only data definition blocks and index blocks can be attached to the fi
     #set( $altText                  = $groupToBeProcessed.getChild( "altText" ).value )
     #set( $captionYes               = $groupToBeProcessed.getChild( "caption-yes" ).value )
     
-    #if ( $groupToBeProcessed.getChild("image-link").getAttribute("type").value == "symlink" )
-        #set( $imageSingleLink          = $groupToBeProcessed.getChild("image-link").getChild("content").value )        
+    #if ( $groupToBeProcessed.getChild( "image-link" ).getAttribute( "type" ).value == "symlink" )
+        #set( $imageSingleLink = $groupToBeProcessed.getChild(
+            "image-link" ).getChild( "content" ).getChild( "system-symlink" ).value )
     #else
-        #set( $imageSingleLink          = $_XPathTool.selectSingleNode($groupToBeProcessed,'image-link/link').value )
+        #set( $imageSingleLink = $_XPathTool.selectSingleNode($groupToBeProcessed,'image-link/link').value )
     #end
+  
+    #set( $srcSetYes = $_XPathTool.selectSingleNode($groupToBeProcessed, 'srcSetYes/value').value )
     
-    #set( $srcSetYes                = $_XPathTool.selectSingleNode($groupToBeProcessed, 'srcSetYes/value').value)
-        #if($srcSetYes != "")
-            #set( $singleImageBase      = "[system-asset:local]${singleImage}[/system-asset:local]" )
-            #set( $singleImage1000      = $singleImageBase.replace(".",".") )
-            #set( $singleImage700       = $singleImageBase.replace(".","-700x350.") )
-            #set( $singleImage400       = $singleImageBase.replace(".","-400x200.") )
-            #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 700w, $singleImage400 400w'")
-        #end
-    #if($imageSingleLink != "")
-        <a href="$imageSingleLink" class="flexslider-link hide-link-icon">
-        #set( $imageRollover            = "imagerollover")
-    #end
-            <div class="slide">
-                <img alt="${_EscapeTool.xml($altText)}" class="img-responsive ${imageRollover}" src="$singleImage" $singleImageSrcSet />
-            </div>
-        #if ($captionYes != "")
-            <div class="flexslider-caption">${_EscapeTool.xml($altText)}</div>
-        #end
-    #if($imageSingleLink != "")
-        </a>
+    #if($srcSetYes != "")
+        #set( $singleImageBase      = "[system-asset:local]${singleImage}[/system-asset:local]" )
+        #set( $singleImage1000      = $singleImageBase.replace(".",".") )
+        #set( $singleImage700       = $singleImageBase.replace(".","-700x350.") )
+        #set( $singleImage400       = $singleImageBase.replace(".","-400x200.") )
+        #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 700w, $singleImage400 400w'")
     #end
 
+    #if( $imageSingleLink != "" )
+        <a href="${imageSingleLink}" class="flexslider-link hide-link-icon">
+        #set( $imageRollover            = "imagerollover")
+    #else
+        #set( $imageRollover            = "" )
+    #end
+    
+    #set( $altText = $_EscapeTool.xml( $altText ) )
+            <div class="slide padtop5 padbottom5">
+                <img alt="${altText}" class="img-responsive ${imageRollover}" src="${singleImage}" $singleImageSrcSet />
+            </div>
+
+    #if ($captionYes != "")
+        <div class="flexslider-caption">${_EscapeTool.xml($altText)}</div>
+    #end
+    
+    #if( $imageSingleLink != "" )
+        </a>
+    #end
 #end
 
 #macro( processSingleImageGroup $groupToBeProcessed )
