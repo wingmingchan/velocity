@@ -346,9 +346,9 @@ Currently only data definition blocks and index blocks can be attached to the fi
         #end
 
         #if($imageLink != "")    
-            #set( $int_img      = "<a href='${imageLink}' class='hide-link-icon'><div class='slide'>" )   
+            #set( $int_img      = "<div class='imageblock padbottom5 padright3'><a href='${imageLink}' class='hide-link-icon'><div class='slide'>" )   
         #else
-            #set( $int_img      = "<div class='slide'>" )
+            #set( $int_img      = "<div class='imageblock padbottom5 padright3'><div class='slide'>" )
         #end
         #set( $int_img      = $int_img + "<img src='${singleImage}' alt='${_EscapeTool.xml($altText)}' class='img-responsive' $singleImageSrcSet />" )
         #set( $int_img      = $int_img + "</div>" )
@@ -356,7 +356,9 @@ Currently only data definition blocks and index blocks can be attached to the fi
             #set( $int_img      = $int_img + "<div class='flexslider-caption'>${altText} </div>" )
         #end
         #if($imageLink != "")  
-            #set( $int_img      = $int_img + "</a>" )
+            #set( $int_img      = $int_img + "</a></div>" )
+        #else
+            #set( $int_img      = $int_img + "</div>" )
         #end
         #set( $ext_img          = $_EscapeTool.Q + $int_img + $_EscapeTool.Q )
         #set( $ext_img          = $ext_img.replaceAll( "site:/", "" ) )
@@ -399,7 +401,8 @@ Currently only data definition blocks and index blocks can be attached to the fi
         #set( $singleImage400       = $singleImageBase.replace(".","-400x200.") )
         #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 700w, $singleImage400 400w'")
     #end
-
+    
+    <div class="imageblock padbottom5 padright3">
     #if( $imageSingleLink != "" )
         <a href="${imageSingleLink}" class="flexslider-link hide-link-icon">
         #set( $imageRollover            = "imagerollover")
@@ -408,7 +411,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
     #end
     
     #set( $altText = $_EscapeTool.xml( $altText ) )
-            <div class="slide padtop5 padbottom5">
+            <div class="slide">
                 <img alt="${altText}" class="img-responsive ${imageRollover}" src="${singleImage}" $singleImageSrcSet />
             </div>
 
@@ -419,6 +422,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
     #if( $imageSingleLink != "" )
         </a>
     #end
+    </div>
 #end
 
 #macro( processSingleImageGroup $groupToBeProcessed )
@@ -442,8 +446,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
         #set( $region_div = "<div id='hide-" + $blockRegion + "'>" )
         $region_div
     #end
-    
-    <div class="flexslider">
+    <div class="imageblock padbottom5 padright3"><div class="flexslider">
         <ul class="slides">
         #chanwReinitializeListOfVariables ( [ "srcSetYes", "imageSlideLink", "singleImageSrcSet", "captionYes" ] )
         #set( $srcSetYes                = $_XPathTool.selectSingleNode($groupToBeProcessed, 'srcSetYes/value').value)
@@ -486,7 +489,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
             </li>
         #end
         </ul>
-    </div>
+    </div></div>
     
     #set( $script_str = '<script type="text/javascript">' + 
         "$(window).load(function(){ $('.flexslider').flexslider({ animation: 'slide', });});" + "</script>" )
@@ -524,9 +527,9 @@ $(document).ready(function() {
         $("#video-div").fitVids();
 });
 </script>
-<div id="video-div"><iframe title="${youtubeVideoCaption}" width="${youtubeVideoWidth}" height="${youtubeVideoHeight}" allowfullscreen="true" frameborder="0" 
+<div class="padbottom5 padright3"><div id="video-div"><iframe title="${youtubeVideoCaption}" width="${youtubeVideoWidth}" height="${youtubeVideoHeight}" allowfullscreen="true" frameborder="0" 
 src="http://www.youtube.com/embed/${youtubeVideoID}?rel=0&amp;wmode=transparent"></iframe><div class="caption">$youtubeVideoCaption</div></div>
-<div class="pad10"></div>
+<div class="pad10"></div></div>
 #end
 
 
