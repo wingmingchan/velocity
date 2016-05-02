@@ -7,9 +7,9 @@ This format defines an html builder.
 Creates a pre element wrapping up a string
 *#
 #macro( chanwCreatePreWithText $text )
-<pre>
+$S_PRE
 $chanwNEWLINE$text
-</pre>
+$E_PRE
 #end
 
 #* 
