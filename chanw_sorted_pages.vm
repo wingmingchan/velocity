@@ -20,6 +20,10 @@
     #end
 #end
 
+#*
+The category is a substring of the value entered in the teaser field.
+Example: news,policies,qa
+*#
 #macro( chanwGetSortedCategorizedPages $systemIndexBlock $sortOrder $category )
     #set( $chanwPages = $_XPathTool.selectNodes( $systemIndexBlock, "//system-page[name!='index'][contains(teaser,'$category')]" ) )
     #set( $chanwSize  = $chanwPages.size() )
