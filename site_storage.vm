@@ -34,15 +34,19 @@ Also note that $globalStringBuffer does not work properly when there is PHP code
 </div>
 <div id="hide-logo">
     #set( $url = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/logo-url" ).value )
-    #set( $src = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/logo/link" ).value )
+    #set( $src = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/logo/link" ).value.trim() )
     <a href="${url}"><img src="${src}" alt="Upstate Logo" /></a>
 </div>
 <div id="hide-site-title">
     #set( $siteLink  = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/url/link" ).value )
     #set( $siteTitle = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/title" ).value )
+    #if( $siteTitle != "" && $siteTitle != "**Skip" )
     <div id="site-title-div"><a href="${siteLink}">$siteTitle</a></div>
+    #end
 </div>
-<div id="hide-site-title-without-link">$siteTitle</div>
+    #if( $siteTitle != "" && $siteTitle != "**Skip" )
+<div id="hide-site-title-without-link">$siteTitle |</div>
+    #end
 <div id="hide-menubar">
     #set( $contentNav = $_XPathTool.selectSingleNode( $siteInfo, "system-data-structure/menubar/content/nav" ) )
     #if( $contentNav )
