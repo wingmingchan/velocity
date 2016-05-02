@@ -220,4 +220,7 @@ is part of the HTML markups.
 #set( $processDataDefinitionBlock_code = $global_velocity_code.getChild( "processDataDefinitionBlock" ).value )
 #set( $processIndexBlock_code          = $global_velocity_code.getChild( "processIndexBlock" ).value )
 #set( $processScript_code              = $global_velocity_code.getChild( "processScript" ).value )
+
+#set( $macro_utilities_code = $_.locateBlock( 
+    "formats/library/velocity/chanw_macro_utilities_code", "_common_assets" ).getXMLAsXMLElement().getChild( "macro-utilities-code" ).value )
 </global-values>
