@@ -30,8 +30,8 @@ Generates the required macros.
 
 ## code in chanw_global_values
 #evaluate( $processDataDefinitionBlock_code )
-#set( $processBlockChooser_code = $processBlockChooser_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ) )
-#evaluate( $processBlockChooser_code )
+#set( $temp_code = $processBlockChooser_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ) )
+#evaluate( $temp_code )
 #evaluate( $processIndexBlock_code )
-#set( $processScript_code = $processScript_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ) )
-#evaluate( $processScript_code )
+#set( $temp_code = $processScript_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ).replaceAll( "-aa-", "&&" ) )
+#evaluate( $temp_code )
