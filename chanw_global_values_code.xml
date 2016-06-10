@@ -12,6 +12,8 @@ The format provides constants used in other library formats.
 ## HTML tags
 #define( $S_DIV )&lt;div&gt;#end
 #define( $E_DIV )&lt;/div&gt;#end
+#define( $S_H1 )&lt;h1&gt;#end
+#define( $E_H1 )&lt;/h1&gt;#end
 #define( $S_H2 )&lt;h2&gt;#end
 #define( $E_H2 )&lt;/h2&gt;#end
 #define( $S_H3 )&lt;h3&gt;#end
