@@ -143,6 +143,11 @@ The value of $var should be a variable name without the dollar sign like "var".
 Example: see chanwReinitializeListOfVariables
 *#
 #macro( chanwSetVariable $var $val )
+    #if( $var.class.name != $JAVA_LANG_STRING_CLASS_NAME )
+        The variable name $var is not acceptable
+        #stop
+    #end
+
     #if( $_PropertyTool.isNull( $val ) )
         #set( $chanwValue = "" )
     #elseif( $val.class.name == $JAVA_LANG_STRING_CLASS_NAME )
