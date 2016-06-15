@@ -146,7 +146,7 @@ Deque is empty
     #end
 #end
 
-#macro( chanwTakeLastGlobalDeque $chanwGlobalDeque $value )
+#macro( chanwTakeLastGlobalDeque $chanwGlobalDeque )
     #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
 Deque is empty
     #else
