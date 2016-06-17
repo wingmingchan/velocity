@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <global-values>
 #*
 This block is hooked up with the format chanw_global_values.
@@ -218,11 +219,20 @@ is part of the HTML markups.
 #set( $macro_foreach_code   = $global_velocity_code.getChild( "generate-macro-foreach" ).value )
 #set( $index_block_code     = $global_velocity_code.getChild( "index-block-macro" ).value )
 #set( $site_config_code     = $global_velocity_code.getChild( "site-config" ).value )
+#set( $page_config_code     = $global_velocity_code.getChild( "page-config" ).value )
 #set( $processBlockChooser_code        = $global_velocity_code.getChild( "processBlockChooser" ).value )
 #set( $processDataDefinitionBlock_code = $global_velocity_code.getChild( "processDataDefinitionBlock" ).value )
 #set( $processIndexBlock_code          = $global_velocity_code.getChild( "processIndexBlock" ).value )
 #set( $processScript_code              = $global_velocity_code.getChild( "processScript" ).value )
 
 #set( $macro_utilities_code = $_.locateBlock( 
-    "formats/library/velocity/chanw_macro_utilities_code", "_common_assets" ).getXMLAsXMLElement().getChild( "macro-utilities-code" ).value )
+    "formats/library/velocity/chanw_macro_utilities_code", "_common_assets" ).getXMLAsXMLElement().getChild( "macro-utilities-code" ) )
+#set( $convert_to_pascal_case_code = $macro_utilities_code.getChild( "convert-to-pascal-case-code" ).value )
+#set( $get_file_path_code = $macro_utilities_code.getChild( "get-file-path-code" ).value )
+#set( $get_node_values_code = $macro_utilities_code.getChild( "get-node-values-code" ).value )
+#set( $get_node_sets_code = $macro_utilities_code.getChild( "get-node-sets-code" ).value )
+#set( $invoke_macro_code = $macro_utilities_code.getChild( "invoke-macro-code" ).value )
+#set( $reinitialize_list_of_variables_code = $macro_utilities_code.getChild( "reinitialize-list-of-variables-code" ).value )
+#set( $set_variable_code = $macro_utilities_code.getChild( "set-variable-code" ).value )
+#set( $set_variable_to_non_empty_string_code = $macro_utilities_code.getChild( "set-variable-to-non-empty-string-code" ).value )
 </global-values>
