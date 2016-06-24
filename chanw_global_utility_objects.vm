@@ -12,6 +12,9 @@ This format defines global utility objects.
 #chanwGetObjectByClassName( 'org.apache.commons.lang.WordUtils' )
 #set( $globalApacheWordUtils = $chanwGetObjectByClassName )
 
+#chanwGetObjectByClassName( 'org.apache.commons.lang.math.NumberUtils' )
+#set( $globalApacheNumberUtils = $chanwGetObjectByClassName )
+
 #chanwGetConstructorByClassNameParamSize( 'org.jdom.Text' 1 )
 #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
 #set( $globalJDOMText   = $chanwConstructor.newInstance( "" ) )
