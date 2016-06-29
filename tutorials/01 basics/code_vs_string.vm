@@ -22,11 +22,12 @@
 
 ## code first, and mismatch in quotes, an error
 #macro( macro4 )
-    ##  #set( $greetings = "Hello' )
+    ## #set( $greetings = "$greetings' )
+    $greetings
 #end
 
 ## variable evaluated first, then quotes output as strings
-#macro( macro4 )
+#macro( macro5 )
     #set( $greetings = "Hello" )
     "$greetings'   ##=> "Hello'
 #end
