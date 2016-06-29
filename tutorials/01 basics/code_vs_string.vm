@@ -2,7 +2,7 @@
 ## sequences of characters as code first. If the code does not make sense, 
 ## then the engine will output them as strings.
 
-#macro4
+#macro8
 
 ## code first, causing an error
 #macro( macro1 )
@@ -30,4 +30,24 @@
 #macro( macro5 )
     #set( $greetings = "Hello" )
     "$greetings'   ##=> "Hello'
+#end
+
+## to force the string interpretation, separate # and set
+#macro( macro6 )
+    #set( $string = "#" + "set( $greetings = 'Hello' )" )
+    $string
+#end
+
+## what is intended: #set($myVar=3)
+#macro( macro7 )
+    #set( $myVar = 5 )
+    #set( $string = "#" + "set(" + "$myVar=3)" )
+    $string       ##=> #set(5=3)
+#end
+
+## separate $ and myVar
+#macro( macro8 )
+    #set( $myVar = 5 )
+    #set( $string = "#" + "set(" + "$" + "myVar=3)" )
+    $string       ##=> #set($myVar=3)
 #end
