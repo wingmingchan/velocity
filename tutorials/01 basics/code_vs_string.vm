@@ -1,0 +1,32 @@
+## Within the Velocity context, the engine will try to interpret 
+## sequences of characters as code first. If the code does not make sense, 
+## then the engine will output them as strings.
+
+#macro4
+
+## code first, causing an error
+#macro( macro1 )
+    ## "#set(" + "$int = 3)"
+#end
+
+## if the code makes sense, execute it
+#macro( macro2 )
+    #set( $int = 3 )
+    $int             ## => 3
+#end
+
+## if the code does not make sense, then string as is
+#macro( macro3 )
+    $int             ## => $int
+#end
+
+## code first, and mismatch in quotes, an error
+#macro( macro4 )
+    ##  #set( $greetings = "Hello' )
+#end
+
+## variable evaluated first, then quotes output as strings
+#macro( macro4 )
+    #set( $greetings = "Hello" )
+    "$greetings'   ##=> "Hello'
+#end
