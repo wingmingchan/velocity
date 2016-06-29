@@ -45,7 +45,7 @@
     $string       ##=> #set(5=3)
 #end
 
-## separate $ and myVar
+## separate $ and myVar to avoid evaluation of $myVar
 #macro( macro8 )
     #set( $myVar = 5 )
     #set( $string = "#" + "set(" + "$" + "myVar=3)" )
