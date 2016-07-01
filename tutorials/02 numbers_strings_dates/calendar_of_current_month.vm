@@ -8,9 +8,9 @@
 ## first day of the month
 #set( $void  = $cal.set( $year, $month, 1 ) )
 ## day of the week of 1st of the month
-#set( $curr  = $cal.get( $_FieldTool.in( $cal ).DAY_OF_WEEK ) ) ## 6
+#set( $curr  = $cal.get( $_FieldTool.in( $cal ).DAY_OF_WEEK ) )
 ## the number of empty <td> to generate before 1st of the month
-#set( $prev  = $curr - 1 ) ## 5
+#set( $prev  = $curr - 1 )
 ## the last day of the month
 #set( $last  = $cal.getActualMaximum( $_FieldTool.in( $cal ).DAY_OF_MONTH ) )
 ## the number of empty <td> to generate after the last day
