@@ -14,15 +14,18 @@
 ## the last day of the month
 #set( $last  = $cal.getActualMaximum( $_FieldTool.in( $cal ).DAY_OF_MONTH ) )
 ## the number of empty <td> to generate after the last day
-#set( $remaining = 7 - ( $last + $prev ) % 7 )
+#set( $remaining = ( 7 - ( $last + $prev ) % 7 ) % 7 )
+
 
 <table class="talignright">
 <tr><td>&#160;SUN&#160;</td><td>&#160;MON&#160;</td><td>&#160;TUE&#160;</td>
 <td>&#160;WED&#160;</td><td>&#160;THU&#160;</td><td>&#160;FRI&#160;</td><td>&#160;SAT&#160;</td></tr>
 <tr>
 ## output empty <td> before the 1st
-#foreach( $count in [ 1..$prev ] )
-    <td></td>
+#if( $prev != 0 )
+    #foreach( $count in [ 1..$prev ] )
+        <td></td>
+    #end
 #end
 
 #foreach( $day in [ 1..$last ] )
@@ -36,8 +39,10 @@
 #end
 
 ## output remaining <td>
-#foreach( $count in [ 1..$remaining ] )
-    <td></td>
+#if( $remaining != 0 )
+    #foreach( $count in [ 1..$remaining ] )
+        <td></td>
+    #end
 #end
 </tr>  ## the last </tr>
 </table>
