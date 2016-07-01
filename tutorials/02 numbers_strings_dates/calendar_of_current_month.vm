@@ -1,0 +1,43 @@
+## GregorianCalendar, today
+#set( $cal   = $_DateTool.getSystemCalendar() )
+## this month
+#set( $month = $cal.get( $_FieldTool.in( $cal ).MONTH ) )
+## this year
+#set( $year  = $cal.get( $_FieldTool.in( $cal ).YEAR ) )
+
+## first day of the month
+#set( $void  = $cal.set( $year, $month, 1 ) )
+## day of the week of 1st of the month
+#set( $curr  = $cal.get( $_FieldTool.in( $cal ).DAY_OF_WEEK ) ) ## 6
+## the number of empty <td> to generate before 1st of the month
+#set( $prev  = $curr - 1 ) ## 5
+## the last day of the month
+#set( $last  = $cal.getActualMaximum( $_FieldTool.in( $cal ).DAY_OF_MONTH ) )
+## the number of empty <td> to generate after the last day
+#set( $remaining = 7 - ( $last + $prev ) % 7 )
+
+<table class="talignright">
+<tr><td>&#160;SUN&#160;</td><td>&#160;MON&#160;</td><td>&#160;TUE&#160;</td>
+<td>&#160;WED&#160;</td><td>&#160;THU&#160;</td><td>&#160;FRI&#160;</td><td>&#160;SAT&#160;</td></tr>
+<tr>
+## output empty <td> before the 1st
+#foreach( $count in [ 1..$prev ] )
+    <td></td>
+#end
+
+#foreach( $day in [ 1..$last ] )
+    ## output the day
+    <td>$day</td>
+    
+    ## when comes to a Saturday, output </tr>
+    #if( ( $day + $prev ) % 7 == 0 && ( $day != $last ) )
+        </tr><tr>
+    #end
+#end
+
+## output remaining <td>
+#foreach( $count in [ 1..$remaining ] )
+    <td></td>
+#end
+</tr>  ## the last </tr>
+</table>
