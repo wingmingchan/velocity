@@ -9,11 +9,14 @@ This format defines global utility objects.
 #chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ComparisonDateTool' )
 #set( $globalApacheComparisonDateTool = $chanwGetObjectByClassName )
 
-#chanwGetObjectByClassName( 'org.apache.commons.lang.WordUtils' )
-#set( $globalApacheWordUtils = $chanwGetObjectByClassName )
-
 #chanwGetObjectByClassName( 'org.apache.commons.lang.math.NumberUtils' )
 #set( $globalApacheNumberUtils = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.commons.lang.StringUtils' )
+#set( $globalApacheStringUtils = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.commons.lang.WordUtils' )
+#set( $globalApacheWordUtils = $chanwGetObjectByClassName )
 
 #chanwGetConstructorByClassNameParamSize( 'org.jdom.Text' 1 )
 #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
