@@ -212,7 +212,7 @@ is part of the HTML markups.
 ## site name must be provided so that the library code can be imported in other sites.
 ## read the block and grab the code
 #set( $global_velocity_code = $_.locateBlock( 
-    "formats/library/velocity/chanw_global_velocity_code", "_common_assets" ).getXMLAsXMLElement().getChild( "global-velocity-code" ) )
+    "formats/library/velocity/chanw_global_velocity_code", $master_site_name ).getXMLAsXMLElement().getChild( "global-velocity-code" ) )
 #set( $single_group_code    = $global_velocity_code.getChild( "single-group" ).value )
 #set( $multi_group_code     = $global_velocity_code.getChild( "multi-group" ).value )
 #set( $site_map_code        = $global_velocity_code.getChild( "site-map" ).value )
@@ -224,9 +224,10 @@ is part of the HTML markups.
 #set( $processDataDefinitionBlock_code = $global_velocity_code.getChild( "processDataDefinitionBlock" ).value )
 #set( $processIndexBlock_code          = $global_velocity_code.getChild( "processIndexBlock" ).value )
 #set( $processScript_code              = $global_velocity_code.getChild( "processScript" ).value )
+#set( $processParams_code              = $global_velocity_code.getChild( "processParams" ).value )
 
 #set( $macro_utilities_code = $_.locateBlock( 
-    "formats/library/velocity/chanw_macro_utilities_code", "_common_assets" ).getXMLAsXMLElement().getChild( "macro-utilities-code" ) )
+    "formats/library/velocity/chanw_macro_utilities_code", $master_site_name ).getXMLAsXMLElement().getChild( "macro-utilities-code" ) )
 #set( $convert_to_pascal_case_code = $macro_utilities_code.getChild( "convert-to-pascal-case-code" ).value )
 #set( $get_file_path_code = $macro_utilities_code.getChild( "get-file-path-code" ).value )
 #set( $get_node_values_code = $macro_utilities_code.getChild( "get-node-values-code" ).value )
@@ -235,4 +236,5 @@ is part of the HTML markups.
 #set( $reinitialize_list_of_variables_code = $macro_utilities_code.getChild( "reinitialize-list-of-variables-code" ).value )
 #set( $set_variable_code = $macro_utilities_code.getChild( "set-variable-code" ).value )
 #set( $set_variable_to_non_empty_string_code = $macro_utilities_code.getChild( "set-variable-to-non-empty-string-code" ).value )
+#set( $test_macro_code = $macro_utilities_code.getChild( "test-macro-code" ).value )
 </global-values>
