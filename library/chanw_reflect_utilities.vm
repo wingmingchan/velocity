@@ -1,6 +1,10 @@
 #*
 This format provides utility macros for reflection.
 
+Example:
+#chanwDisplayClassAPI( "java.lang.Math", "h3", "true" ) ## pass in a class name
+#chanwDisplayClassAPI( $_, "h3", "true" )               ## pass in an object
+#chanwDisplayClassAPI( $_.Class, "h3", "true" )         ## pass in a java.lang.Class object
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
 
