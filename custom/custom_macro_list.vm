@@ -1,10 +1,16 @@
-## include business logic here
-#import( 'site://_common_assets/formats/library/velocity/upstate_process_dd_group' )
-#import( 'site://_common_assets/formats/library/velocity/upstate_process_site_map' )
+## important: used relative path so that $master_site_name can be read from chanw_global_values
+#import( 'formats/library/velocity/chanw_global_values' )
+
+## change code below to include business logic
+#set( $dd_group_path = 'site://' + $master_site_name + '/formats/library/velocity/upstate_process_dd_group' )
+#set( $site_map_path = 'site://' + $master_site_name + '/formats/library/velocity/upstate_process_site_map' )
+
+#import( $dd_group_path )
+#import( $site_map_path )
 
 ## These are single-group blocks, put block type info here, and do not use '-group' in type info.
 ## The group identifier should be {type-info}-group.
-#set( $single_group_names = [ "wysiwyg", "instruction-block" ] )
+#set( $single_group_names = [ "wysiwyg", "instruction-block", "scripts" ] )
 
 ## These are multi-group blocks, and put the required dispatch macro names here.
 #set( $multi_macro_names = [ "processDesignerProBlock", "processMegablock", "processMultimedia", "processNewsBlock" ] )
