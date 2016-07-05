@@ -1,5 +1,11 @@
-#import( 'site://_common_assets//formats/library/velocity/chanw_macro_utilities' )
-#import( 'site://_common_assets//formats/library/velocity/chanw_process_index_block' )
+## important: used relative path so that $master_site_name can be read from chanw_global_values
+#import( 'formats/library/velocity/chanw_global_values' )
+
+#set( $macro_utilities_path = 'site://' + $master_site_name + '/formats/library/velocity/chanw_macro_utilities' )
+#set( $index_block_path     = 'site://' + $master_site_name + '/formats/library/velocity/chanw_process_index_block' )
+
+#import( $macro_utilities_path )
+#import( $index_block_path )
 
 #* === process legacy blocks without type info == *#
 #macro( processPhpStaticInclude $systemDataStructure )
