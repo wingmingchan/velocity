@@ -1,4 +1,5 @@
 <macro-utilities-code>
+    <file-comment>
 #*
 The format defines macros to provide general utilities and
 to facilitate:
@@ -6,10 +7,9 @@ to facilitate:
 2. Invocation of macros
 3. Generation of macros
 *#
-#import( '/formats/library/velocity/chanw_global_utility_objects' )
+    </file-comment>
 
-#set( $MACRO_PREFIX = 'process' )
-
+    <convert-to-pascal-case-code>
 #*
 Converts a string, possibly with delimiters, into Pascal case.
 Example:
@@ -40,7 +40,9 @@ $chanwConvertToPascalCase
         #set( $chanwConvertToPascalCase = $globalApacheWordUtils.capitalize( $chanwMacroName ) )
     #end
 #end
+    </convert-to-pascal-case-code>
 
+    <get-file-path-code>
 #*
 Gets the valid file path or the default path. Invoke this macro in double quotes
 in a set directive. Created by Peter.
@@ -55,7 +57,9 @@ Example:
         $file
     #end
 #end
+    </get-file-path-code>
 
+    <get-node-values-code>
 #*
 Dynamically creates variables assigned with values.
 *#
@@ -71,7 +75,9 @@ Dynamically creates variables assigned with values.
         #evaluate( $chanwSetVarValStatement )
     #end
 #end
+    </get-node-values-code>
 
+    <get-node-sets-code>
 #*
 Dynamically creates variables assigned with node sets.
 *#
@@ -88,7 +94,9 @@ Dynamically creates variables assigned with node sets.
         #evaluate( $chanwSetVarValStatement )
     #end
 #end
+    </get-node-sets-code>
 
+    <invoke-macro-code>
 #*
 Invokes a macro with the name and parameters passed in.
 Example:
@@ -117,7 +125,9 @@ Example:
         #evaluate( $chanwStatement )
     #end
 #end
+    </invoke-macro-code>
 
+    <reinitialize-list-of-variables-code>
 #*
 Reinitializes the list of variables, all assigned the empty string.
 The list passed in should be variable names without the dollar signs.
@@ -136,7 +146,9 @@ Example:
         #end
     #end
 #end
+    </reinitialize-list-of-variables-code>
 
+    <set-variable-code>
 #*
 Dynamically turns $var into a variable assigned with the value $val.
 The value of $var should be a variable name without the dollar sign like "var".
@@ -159,7 +171,9 @@ Example: see chanwReinitializeListOfVariables
     #set( $chanwSetVarValStatement = '#' + "set(" + "$" + "$var = '$chanwValue')" )
     #evaluate( $chanwSetVarValStatement )
 #end
+    </set-variable-code>
 
+    <set-variable-to-non-empty-string-code>
 #*
 Selects the first non-empty string and assigns it to the variable.
 Example: 
@@ -198,4 +212,10 @@ Example:
     
     #chanwSetVariable( $var $chanwValue )
 #end
+    </set-variable-to-non-empty-string-code>
+    <test-macro-code>
+#macro( chanwTestMacro )
+    chanwTestMacro invoked.$BR
+#end
+    </test-macro-code>
 </macro-utilities-code>
