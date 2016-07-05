@@ -1,4 +1,7 @@
+## reset this name if it is different; this name is used throughout the entire core
+#set( $master_site_name = "_common_assets" )
+
 #set( $global_values_code = $_.locateBlock( 
-    "formats/library/velocity/chanw_global_values_code", "_common_assets" ).getXMLAsXMLElement().getChild( "global-values" ).Value )
+    "formats/library/velocity/chanw_global_values_code", $master_site_name ).getXMLAsXMLElement().getChild( "global-values" ).Value )
 #set( $global_values_code = $global_values_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ) )
 #evaluate( $global_values_code )
