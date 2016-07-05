@@ -106,29 +106,8 @@ This format provides utility macros for reflection.
                     "java.lang.Integer" ).TYPE ).invoke( 
                     null, $method.getModifiers() )&#160;
                     
-                    #*
-                    #set( $chanwTypeParams = $method.getTypeParameters() )
-                    
-                    #if( $chanwTypeParams )
-                        #set( $typeParamsString = "" )
-                        
-                        #foreach( $chanwTypeParam in $chanwTypeParams )
-                            #set( $typeParamsString = $typeParamsString + $chanwTypeParam.getTypeName() )
-                        #end
-                        
-                        $typeParamsString
-                    #end
-                    *#
-                    
-                    
-                    
-                    
-                    
-                    ##set( $chanwReturnType = $method.getReturnType() )
                     #set( $chanwReturnType = $method.getGenericReturnType().getTypeName().replaceAll( "<", "&lt;" ) )
                     $chanwReturnType
-
-                    
                     $method.Name
                     #set( $chanwParamTypes = $method.getGenericParameterTypes() )
                     #set( $paramTypesString = "( " )
