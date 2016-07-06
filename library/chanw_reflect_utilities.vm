@@ -93,7 +93,8 @@ Example:
                 #end
                 
                 #set( $paramTypesString = $paramTypesString + " )" )
-                #set( $paramTypesString = $paramTypesString.trim() )$paramTypesString</li>
+                #set( $paramTypesString = $paramTypesString.trim() )
+                $paramTypesString</li>
             #end
             </ul>
         #else
@@ -123,15 +124,16 @@ Example:
             <ul>
             #foreach( $method in $methods )
                 <li>
-                $_.class.forName( "java.lang.reflect.Modifier" ).getMethod( 
+                #set( $chanwModifier = $_.class.forName( "java.lang.reflect.Modifier" ).getMethod( 
                     "toString", $_FieldTool.in( 
                     "java.lang.Integer" ).TYPE ).invoke( 
-                    null, $method.getModifiers() )&#160;
+                    null, $method.getModifiers() ) )
                     
-                    #set( $chanwReturnType = $method.getGenericReturnType().getTypeName().replaceAll( "<", "&lt;" ) )
-                    $chanwReturnType ${method.Name}##
+                    #set( $chanwReturnType = $method.getGenericReturnType().getTypeName().replaceAll( "<", "&lt;" ).trim() )
+                    
+                    
                     #set( $chanwParamTypes = $method.getGenericParameterTypes() )
-                    #set( $paramTypesString = "( " )
+                    #set( $paramTypesString = $chanwModifier + " " + $chanwReturnType + " " + $method.Name.trim() + "( " )
                     
                     #if( $chanwParamTypes && $chanwParamTypes.size() > 0 )
                         #foreach( $chanwParamType in $chanwParamTypes )
@@ -148,7 +150,9 @@ Example:
                     #end
                     
                     #set( $paramTypesString = $paramTypesString + " )" )
-                    #set( $paramTypesString = $paramTypesString.trim() )$paramTypesString
+                    #set( $paramTypesString = " " + $paramTypesString.trim() )
+                    #set( $paramTypesString = $paramTypesString.replaceAll( " \(", "(" ) )
+                     $paramTypesString
                 </li>
             #end
             </ul>
