@@ -13,15 +13,11 @@ Example:
         No parameter supplied.
         #stop
     #end
-    #chanwDisplayObjClassName( $obj $withH2 )
-    #chanwDisplaySuperClass( $obj $heading )
-    #chanwDisplayFields( $obj $heading )
-    #chanwDisplayConstructors( $obj $heading )
-    #chanwDisplayMethods( $obj $heading )
-    $HR
+    
+    #chanwDisplayObjClass( $obj $withH2 )
 #end
 
-#macro( chanwDisplayObjClassName $obj $withH2 )
+#macro( chanwDisplayObjClass $obj $withH2 )
     #set( $objString = "" )
     #set( $objType = $obj.Class.Name )
     
@@ -33,7 +29,24 @@ Example:
         #set( $objString = $obj.Class.Name )
     #end
     
-    #if( $withH2 )<h2>$objString</h2>#end
+    #set( $chanwSuffix = "" )
+    #set( $chanwClassString = $objString )
+    
+    #if( $objString.indexOf( "," ) > -1 )
+        #set( $chanwIndex = $objString.indexOf( "," ) )
+        #set( $chanwClassString = $objString.substring( 0, $chanwIndex ) )
+        #set( $chanwSuffix = $objString.substring( $chanwIndex ) )
+        #set( $chanwSuffix = $chanwSuffix.substring( 1 ) ) ## remove comma
+        #set( $chanwSuffix = "&lt;" + $chanwSuffix + "&gt;" )
+    #end
+    
+    #if( $withH2 )<h2>$chanwClassString$chanwSuffix</h2>#end
+    
+    #chanwDisplaySuperClass( $chanwClassString $heading )
+    #chanwDisplayFields( $chanwClassString $heading )
+    #chanwDisplayConstructors( $chanwClassString $heading )
+    #chanwDisplayMethods( $chanwClassString $heading )
+    $HR    
 #end
 
 #macro( chanwDisplayConstructors $obj $heading )
@@ -59,23 +72,28 @@ Example:
                     "toString", $_FieldTool.in( 
                     "java.lang.Integer" ).TYPE ).invoke( 
                     null, $constructor.getModifiers() )
-                ${constructor.Name}##
+                $constructor.Name
                     
-                #set( $paramTypes = $constructor.getParameterTypes() )
-                #set( $paramString = "( " )
-                
-                #if( $paramTypes && $paramTypes.size() > 0 )
-                    #foreach( $paramType in $paramTypes )
-                        #set( $paramString = $paramString + $paramType.toString() )
-                        
-                        #if( $foreach.count < $paramTypes.size() )
-                            #set( $paramString = $paramString + ", " )
+                #set( $chanwParamTypes = $constructor.getGenericParameterTypes() )
+                #set( $paramTypesString = "( " )
+
+                #if( $chanwParamTypes && $chanwParamTypes.size() > 0 )
+                    #foreach( $chanwParamType in $chanwParamTypes )
+                        #if( $chanwParamType.Name )
+                            #set( $paramTypesString = $paramTypesString + $chanwParamType.Name )
+                        #elseif( $chanwParamType.getTypeName() )
+                            #set( $paramTypesString = $paramTypesString + $chanwParamType.getTypeName().replaceAll( "<", "&lt;" ) )
                         #end
+                        
+                        #if( $foreach.count < $chanwParamTypes.size() )
+                            #set( $paramTypesString = $paramTypesString + ", " )
+                        #end
+                        
                     #end
                 #end
                 
-                #set( $paramString = $paramString + " )" )
-                #set( $paramString = $paramString.trim() )$paramString</li>
+                #set( $paramTypesString = $paramTypesString + " )" )
+                #set( $paramTypesString = $paramTypesString.trim() )$paramTypesString</li>
             #end
             </ul>
         #else
@@ -111,16 +129,12 @@ Example:
                     null, $method.getModifiers() )&#160;
                     
                     #set( $chanwReturnType = $method.getGenericReturnType().getTypeName().replaceAll( "<", "&lt;" ) )
-                    $chanwReturnType
-                    $method.Name
+                    $chanwReturnType ${method.Name}##
                     #set( $chanwParamTypes = $method.getGenericParameterTypes() )
                     #set( $paramTypesString = "( " )
                     
                     #if( $chanwParamTypes && $chanwParamTypes.size() > 0 )
                         #foreach( $chanwParamType in $chanwParamTypes )
-                        
-                            
-                        
                             #if( $chanwParamType.Name )
                                 #set( $paramTypesString = $paramTypesString + $chanwParamType.Name )
                             #elseif( $chanwParamType.getTypeName() )
@@ -132,11 +146,9 @@ Example:
                             #end
                         #end
                     #end
-                    #set( $paramTypesString = $paramTypesString + " )" )
-                    #set( $paramTypesString = $paramTypesString.trim() )
-                    $paramTypesString
-                    #set( $annotatedReturnType = $method.getAnnotatedReturnType() )
                     
+                    #set( $paramTypesString = $paramTypesString + " )" )
+                    #set( $paramTypesString = $paramTypesString.trim() )$paramTypesString
                 </li>
             #end
             </ul>
@@ -188,7 +200,7 @@ Example:
         #set( $parent = $chanwClassObj.getGenericSuperclass() )
         
         #if( $parent )
-        <$heading>Parent Class</$heading><p>$parent.toString()</p>
+        <$heading>Parent Class</$heading><p>$parent.toString().replaceAll( "<", "&lt;" )</p>
         #end
     #end
 #end
