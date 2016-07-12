@@ -180,7 +180,7 @@ Example:
             <$heading>Fields</$heading>
             <ul>
             #foreach( $field in $fields )
-                <li>$field.getName(): $field.get( null )</li>
+                <li>$field.getName().replaceAll( '&', '&amp;' ): $_EscapeTool.xml( $field.get( null ) )</li>
             #end
             </ul>
         #else
