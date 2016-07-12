@@ -51,3 +51,13 @@
     #set( $string = "#" + "set(" + "$" + "myVar=3)" )
     $string       ##=> #set($myVar=3)
 #end
+
+## single quotes are OK
+#macro( macro9 )
+    ## or use single quotes
+    #set( $string = '#set($myVar=3)' )
+    $string
+#end
+
+## unparsed text, for output only
+#[[#set( $myVar = 3 )]]#
