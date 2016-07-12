@@ -1,0 +1,29 @@
+## Within the Velocity context, we are almost always dealing with Java objects
+## Objects can have fields and methods
+
+#macro2
+
+## work with an Integer object
+#macro( macro1 )
+    #set( $int = 34 )
+    ## retrieving fields
+    $_FieldTool.in( $int ).MAX_VALUE ##=> 2147483647
+    $_FieldTool.in( $int ).TYPE      ##=> int
+    $int.byteValue()                 ##=> 34
+    $int.equals( 34 )                ##=> true
+    $int.max( 12, 60 )               ##=> 60
+    ## method inherited from Object
+    $int.toString()                  ##=> 34
+#end
+
+## work with a String object
+#macro( macro2 )
+    #set( $greetings = "Hello, World!" )
+    $greetings.class.name       ##=> java.lang.String
+    $greetings.charAt( 4 )      ##=> o
+    $greetings.endsWith( "." )  ##=> false
+    
+    #set( $tokens = $greetings.split( "," ) )
+    $tokens.class.name          ##=> [Ljava.lang.String;
+    $tokens.get( 1 )            ##=>  World!
+#end
