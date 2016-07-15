@@ -38,103 +38,103 @@ by an index block.
         ##store the group path
         #set( $chanwParentNode = $node.getParent() )
         
-		#if( $chanwParentNode && $chanwParentNode.class.name != $ORG_JDOM_DOCUMENT_CLASS_NAME  )
-			#set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) + '/' )
-		#else
-			#set( $chanwParentPath = "" )
-		#end
-		
-		#set( $chanwCurrentNodePath = $chanwParentPath + $node.Name )
-		
-		#if( !$chanwNodeInfoMap.containsKey( $node ) )
-			#set( $void = $chanwNodeInfoMap.put( $node ) )
-		#end
+        #if( $chanwParentNode && $chanwParentNode.class.name != $ORG_JDOM_DOCUMENT_CLASS_NAME  )
+            #set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) + '/' )
+        #else
+            #set( $chanwParentPath = "" )
+        #end
+        
+        #set( $chanwCurrentNodePath = $chanwParentPath + $node.Name )
+        
+        #if( !$chanwNodeInfoMap.containsKey( $node ) )
+            #set( $void = $chanwNodeInfoMap.put( $node ) )
+        #end
     
         #foreach( $child in $node.Children )
-        	## test for WYSIWYG
-        	#set( $chanwIsWYSIWYG = false )
+            ## test for WYSIWYG
+            #set( $chanwIsWYSIWYG = false )
         
-        	#if( $child.Children && $child.Children.size() > 0 )
-				#foreach( $grandchild in $child.Children )
-					## ignore text by checking the name
-					#if( $grandchild.Name && $chanwHTMLElements.contains( $grandchild.Name ) )
-						#set( $chanwParentPath = $chanwNodeInfoMap.get( $child.getParent() ) )
-						#set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
-						
-						#if( !$chanwNodeInfoMap.containsKey( $child ) )
-                    		#set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
-                    	#end
-                    	
-						#set( $chanwIsWYSIWYG = true )
-						#break
-					#end
-				#end
-			#end
+            #if( $child.Children && $child.Children.size() > 0 )
+                #foreach( $grandchild in $child.Children )
+                    ## ignore text by checking the name
+                    #if( $grandchild.Name && $chanwHTMLElements.contains( $grandchild.Name ) )
+                        #set( $chanwParentPath = $chanwNodeInfoMap.get( $child.getParent() ) )
+                        #set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
+                        
+                        #if( !$chanwNodeInfoMap.containsKey( $child ) )
+                            #set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
+                        #end
+                        
+                        #set( $chanwIsWYSIWYG = true )
+                        #break
+                    #end
+                #end
+            #end
         
-			#if( $chanwIsWYSIWYG == false )
-				## get the parent path
-				#set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
-				## create the path for current child
-				#set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
-				## select all children bearing the same name
-				#set( $nodes = $_XPathTool.selectNodes( $child.getParent(), $child.Name ) )
-			
-				## multiple nodes
-				#if( $nodes.size() > 1 )
-					#set( $chanwSize = 0 )
-					
-					#foreach( $n in $nodes )
-						#if( $chanwNodeInfoMap.containsKey( $n ) ) ## already processed
-							#break
-						#end
-				
-						## create the correct XPath
-						#set( $tempChildKey = $chanwChildKey + "[$foreach.count]" )
-						## store node-path pair
-						#if( !$chanwNodeInfoMap.containsKey( $n ) )
-							#set( $void = $chanwNodeInfoMap.put( $n, $tempChildKey ) )
-						#end
-						#set( $chanwSize = $foreach.count )
-						
-					#end
-					
-					#if( !$chanwNodeInfoMap.containsKey( $chanwChildKey ) )
-						#set( $void = $chanwNodeInfoMap.put( $chanwChildKey, { 'size':$chanwSize } ) )
-					#end
-				## single node
-				#else
-					#set( $chanwParentNode = $child.getParent() )
-					#set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) )
-					#set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
+            #if( $chanwIsWYSIWYG == false )
+                ## get the parent path
+                #set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
+                ## create the path for current child
+                #set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
+                ## select all children bearing the same name
+                #set( $nodes = $_XPathTool.selectNodes( $child.getParent(), $child.Name ) )
+            
+                ## multiple nodes
+                #if( $nodes.size() > 1 )
+                    #set( $chanwSize = 0 )
                     
-					#if( !$chanwNodeInfoMap.containsKey( $child ) )
-						#set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
-					#end
-				#end
-			
-				## group
-				#if( $child.Children && $child.Children.size() > 0 )
-					#set( $void = $chanwXmlXPathTextMap.put( $chanwNodeInfoMap.get( $child ), '' ) )
-					##set( $tempChildKey = $chanwNodeInfoMap.get( $child ) )
+                    #foreach( $n in $nodes )
+                        #if( $chanwNodeInfoMap.containsKey( $n ) ) ## already processed
+                            #break
+                        #end
+                
+                        ## create the correct XPath
+                        #set( $tempChildKey = $chanwChildKey + "[$foreach.count]" )
+                        ## store node-path pair
+                        #if( !$chanwNodeInfoMap.containsKey( $n ) )
+                            #set( $void = $chanwNodeInfoMap.put( $n, $tempChildKey ) )
+                        #end
+                        #set( $chanwSize = $foreach.count )
+                        
+                    #end
+                    
+                    #if( !$chanwNodeInfoMap.containsKey( $chanwChildKey ) )
+                        #set( $void = $chanwNodeInfoMap.put( $chanwChildKey, { 'size':$chanwSize } ) )
+                    #end
+                ## single node
+                #else
+                    #set( $chanwParentNode = $child.getParent() )
+                    #set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) )
+                    #set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
+                    
+                    #if( !$chanwNodeInfoMap.containsKey( $child ) )
+                        #set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
+                    #end
+                #end
+            
+                ## group
+                #if( $child.Children && $child.Children.size() > 0 )
+                    #set( $void = $chanwXmlXPathTextMap.put( $chanwNodeInfoMap.get( $child ), '' ) )
+                    ##set( $tempChildKey = $chanwNodeInfoMap.get( $child ) )
                     ## recursive call
-					#chanwProcessJdomElement( $child )
-					##set( $tempChildKey = "" )
-				## text field
-				#elseif( $child.Value )
-					## get the parent path
-					#set( $chanwParentPath = $chanwNodeInfoMap.get( $child.getParent() ) )
-					#set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
-				
-					#if( !$chanwNodeInfoMap.containsKey( $child ) )
-						#set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
-					#end
-				
-					#processTextNode( $child  )
-				#end
+                    #chanwProcessJdomElement( $child )
+                    ##set( $tempChildKey = "" )
+                ## text field
+                #elseif( $child.Value )
+                    ## get the parent path
+                    #set( $chanwParentPath = $chanwNodeInfoMap.get( $child.getParent() ) )
+                    #set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
+                
+                    #if( !$chanwNodeInfoMap.containsKey( $child ) )
+                        #set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
+                    #end
+                
+                    #processTextNode( $child  )
+                #end
             #else
-				#set( $chanwWYSIWYGPath  = $chanwNodeInfoMap.get( $child ) )
-				#set( $chanwWYSIWYGValue = $_SerializerTool.serialize( $child, true ) )
-				#set( $void = $chanwXmlXPathTextMap.put( $chanwWYSIWYGPath, $chanwWYSIWYGValue ) )
+                #set( $chanwWYSIWYGPath  = $chanwNodeInfoMap.get( $child ) )
+                #set( $chanwWYSIWYGValue = $_SerializerTool.serialize( $child, true ) )
+                #set( $void = $chanwXmlXPathTextMap.put( $chanwWYSIWYGPath, $chanwWYSIWYGValue ) )
             #end
         #end
     #else
