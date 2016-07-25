@@ -13,10 +13,7 @@ $millisTwentyYears
 
 ## more accurate
 #set( $cal   = $_DateTool.getSystemCalendar() )
-#set( $date  = $cal.get( $_FieldTool.in( $cal ).DATE ) )
-#set( $month = $cal.get( $_FieldTool.in( $cal ).MONTH ) )
-#set( $year  = $cal.get( $_FieldTool.in( $cal ).YEAR ) + 20 )
-#set( $void  = $cal.set( $year, $month, $date ) )
+$cal.add( $_FieldTool.in( $cal ).YEAR , 20 )
 #set( $dateInTwentyYears = $_DateTool.toDate( $cal ) )
 $dateInTwentyYears
-$dateInTwentyYears.getTime()
+$cal.getTimeInMillis()
