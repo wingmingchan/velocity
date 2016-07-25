@@ -1,0 +1,22 @@
+## find the number of milliseconds of the date 20 years from today
+
+## rough calculation
+#set( $nowMillis = $_DateTool.getSystemDate().getTime() )
+#set( $classObj  = $_.Class.forName( "com.hannonhill.cascade.velocity.CascadeComparisonDateTool" ) )
+#set( $fieldObj  = $classObj.getField( "MILLIS_PER_YEAR" ) )
+#set( $millisPerYear     = $fieldObj.get( null ) )
+#set( $millisTwentyYears = $millisPerYear * 20 + $nowMillis )
+#set( $dateInTwentyYears = $_DateTool.getDate( "$millisTwentyYears" ) )
+## a few days off
+$dateInTwentyYears
+$millisTwentyYears
+
+## more accurate
+#set( $cal   = $_DateTool.getSystemCalendar() )
+#set( $date  = $cal.get( $_FieldTool.in( $cal ).DATE ) )
+#set( $month = $cal.get( $_FieldTool.in( $cal ).MONTH ) )
+#set( $year  = $cal.get( $_FieldTool.in( $cal ).YEAR ) + 20 )
+#set( $void  = $cal.set( $year, $month, $date ) )
+#set( $dateInTwentyYears = $_DateTool.toDate( $cal ) )
+$dateInTwentyYears
+$dateInTwentyYears.getTime()
