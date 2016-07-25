@@ -1,0 +1,24 @@
+## Using #set, #evaluate, and global variables to pass variables into macro by reference.
+
+#set( $myVar = 3 )
+#doubleIt( "myVar" )
+$myVar
+
+## version 1: macro only
+#macro( doubleIt $varName )
+    #set( $stmt = '#set($' + $varName + "=$" + $varName + "*2)" )
+    #evaluate( $stmt )
+#end
+
+#set( $myVar = 3 )
+#doubleIt( "myVar" )
+$myVar
+
+## version 2: macro with #define
+#macro( doubleIt $varName )
+    #define( $code )
+        #set( $stmt = '#set' + "($$varName=$$varName*2)" )
+        #evaluate( $stmt )
+    #end
+    $code ## reference the variable
+#end
