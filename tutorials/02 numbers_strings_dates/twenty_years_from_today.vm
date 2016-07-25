@@ -2,9 +2,7 @@
 
 ## rough calculation
 #set( $nowMillis = $_DateTool.getSystemDate().getTime() )
-#set( $classObj  = $_.Class.forName( "com.hannonhill.cascade.velocity.CascadeComparisonDateTool" ) )
-#set( $fieldObj  = $classObj.getField( "MILLIS_PER_YEAR" ) )
-#set( $millisPerYear     = $fieldObj.get( null ) )
+#set( $millisPerYear     = $_FieldTool.in( "org.apache.velocity.tools.generic.ComparisonDateTool" ).MILLIS_PER_YEAR )
 #set( $millisTwentyYears = $millisPerYear * 20 + $nowMillis )
 #set( $dateInTwentyYears = $_DateTool.getDate( "$millisTwentyYears" ) )
 ## a few days off
@@ -12,7 +10,7 @@ $dateInTwentyYears
 $millisTwentyYears
 
 ## more accurate
-#set( $cal   = $_DateTool.getSystemCalendar() )
+#set( $cal = $_DateTool.getSystemCalendar() )
 $cal.add( $_FieldTool.in( $cal ).YEAR , 20 )
 #set( $dateInTwentyYears = $_DateTool.toDate( $cal ) )
 $dateInTwentyYears
