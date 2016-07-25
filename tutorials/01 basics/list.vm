@@ -1,0 +1,34 @@
+## various methods in java.util.ArrayList
+
+#set( $myList = [] )
+#set( $bool   = $myList.add( 3 ) )         ## add
+#set( $bool   = $myList.add( "Hello" ) )
+$myList.size()                             ## size
+$myList.indexOf( "Hello" )                 ## indexOf
+
+#dumpArrayList( $myList )
+
+#set( $bool = $myList.remove( "Hello" ))   ## remove
+$myList.size()                             ## size
+
+$myList.get( 0 )                           ## get
+$myList.clear()                            ## clear
+$myList.size()
+$myList.isEmpty()                          ## isEmpty
+
+#set( $myEvenList = [] )
+#set( $myOddList  = [] )
+
+#foreach( $num in [ 1..100 ] )
+    #if( $num % 2 == 0 )
+        #set( $bool = $myEvenList.add( $num ) )
+    #else
+        #set( $bool = $myOddList.add( $num ) )
+    #end
+#end
+
+#set( $myEvenSubList = $myEvenList.subList( 0, 5 ) )
+
+#dumpArrayList( $myEvenSubList )
+
+#macro( dumpArrayList $al )#if( $al && $al.size() >= 0 )[ #foreach( $item in $al )$item, #end]#end#end
