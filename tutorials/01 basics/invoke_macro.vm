@@ -1,0 +1,35 @@
+## different ways to invoke a macro without parameters
+
+#macro( myMacro )
+Hello, World!
+#end
+
+## 1. simple invocation
+#myMacro
+## 2. with parentheses
+#myMacro()
+## 3. with #@
+#@myMacro()#end
+## 4. with #set
+#set( $result = "#myMacro" )
+$result
+## 5. with #define
+#define( $invokeMacro )#myMacro#end
+$invokeMacro
+## 6. with #evaluate
+#set( $stmt = '#myMacro()' )
+#evaluate( $stmt )
+## 7. with another macro
+#macro( invokeIt )
+#myMacro
+#end
+#invokeIt
+## 8. combine #define and macro in various ways
+#macro( invokeMacro2 )
+#define( $invokeIt2 )#myMacro#end
+#$invokeIt2
+#end
+#invokeMacro2
+## 9. use library
+#import( 'site://_common_assets/formats/library/velocity/chanw_macro_utilities' )
+#chanwInvokeMacro( 'myMacro' )
