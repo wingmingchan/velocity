@@ -16,20 +16,22 @@ $result
 ## 5. with #define
 #define( $invokeMacro )#myMacro#end
 $invokeMacro
-## 6. with #evaluate
+## 6. with #define and toString
+$invokeMacro.toString()
+## 7. with #evaluate
 #set( $stmt = '#myMacro()' )
 #evaluate( $stmt )
-## 7. with another macro
+## 8. with another macro
 #macro( invokeIt )
 #myMacro
 #end
 #invokeIt
-## 8. combine #define and macro in various ways
+## 9. combine #define and macro in various ways
 #macro( invokeMacro2 )
 #define( $invokeIt2 )#myMacro#end
 $invokeIt2
 #end
 #invokeMacro2
-## 9. use library
+## 10. use library
 #import( 'site://_common_assets/formats/library/velocity/chanw_macro_utilities' )
 #chanwInvokeMacro( 'myMacro' )
