@@ -27,7 +27,7 @@ $invokeMacro
 ## 8. combine #define and macro in various ways
 #macro( invokeMacro2 )
 #define( $invokeIt2 )#myMacro#end
-#$invokeIt2
+$invokeIt2
 #end
 #invokeMacro2
 ## 9. use library
