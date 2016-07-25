@@ -1,0 +1,8 @@
+## putting and getting values: java.util.HashMap
+
+#set( $myStates = {} )
+#set( $void     = $myStates.put( "New York", "NY" ) )
+#set( $void     = $myStates.put( "New Jersey", "NJ" ) )
+#dumpHashMap( $myStates )
+
+#macro( dumpHashMap $m )#if( $m && $m.size() >= 0 )#set( $keys = $m.keySet() ){ #foreach( $key in $keys )$key=$m[$key], #end }#end#end
