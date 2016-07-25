@@ -1,0 +1,28 @@
+## The #define directive is used to define a block of code as a command.
+
+## output a string
+#define( $greetings )
+Hello, World!##
+#end
+$greetings
+
+## invoke a macro
+#define( $macroInvocation )
+#myMacro
+#end
+
+#macro( myMacro )
+$myVar
+#end
+
+#set( $myVar = 3 )
+$macroInvocation       ## => 3
+#set( $myVar = 12 )
+$macroInvocation       ## => 12
+
+## the variable $greetings is NOT a string
+$greetings.class.name     ## => org.apache.velocity.runtime.directive.Block$Reference
+## the toString method
+#set( $greetingsStr = $greetings.toString() )
+$greetingsStr             ## => Hello, World!
+$greetingsStr.class.name  ## => java.lang.String
