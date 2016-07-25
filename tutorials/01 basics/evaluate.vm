@@ -1,0 +1,59 @@
+## The #evaluate directive is used to turn a string into code and execute it.
+
+## define a string as code and evaluate it
+#set( $myStatement =
+    '#set($myVar=3)' +
+    '#macro(myHelloWorld)Hello, World!#end' +
+    '$myVar' + $_EscapeTool.N +
+    '#myHelloWorld' )
+#evaluate( $myStatement )
+
+## variable interpolation
+#macro( myMacro )
+Hello, World!
+#end
+
+#set( $secretWord = 'Macro' )
+## interpolation only
+#evaluate( '#my$secretWord' )     ## => #myMacro
+## interpolation and execution
+#evaluate( "#my$secretWord" )     ## => Hello, World!
+
+## implementing a switch structure
+
+## #define
+#define( $case1 )
+Hello, World!##
+#end
+
+#define( $case2 )
+Welcome to Velocity!##
+#end
+
+#set( $switch = "case2" )
+#evaluate( "$$switch" )
+
+## macro
+#macro( sayHello )
+Hello, World!
+#end
+
+#macro( sayWelcome )
+Welcome to Velocity!
+#end
+
+#set( $switch = "Hello" )
+#evaluate( "#say$switch" )
+
+## macro with parameters
+#macro( sayHello $msg )
+Hello, $msg!
+#end
+
+#macro( sayWelcome $msg )
+Welcome to $msg!
+#end
+
+#set( $switch  = "Welcome" )
+#set( $message = "Java" )
+#evaluate( "#say$switch('$message')" )
