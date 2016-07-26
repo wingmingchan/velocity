@@ -1,12 +1,15 @@
-## various methods in java.util.ArrayList
-
 #set( $myList = [] )
 #set( $bool   = $myList.add( 3 ) )         ## add
 #set( $bool   = $myList.add( "Hello" ) )
 $myList.size()                             ## size
 $myList.indexOf( "Hello" )                 ## indexOf
 
+#set( $dummy = $myList.addAll( 0, [ 'this', 'that' ] ) ) ## added to the front
+
 #dumpArrayList( $myList )
+$myList[ 3 ] ## => Hello
+
+$myList.contains( "this" )                 ## contains
 
 #set( $bool = $myList.remove( "Hello" ))   ## remove
 $myList.size()                             ## size
