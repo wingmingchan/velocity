@@ -5,4 +5,8 @@ A note about filenames. All files whose filenames with a "chanw_" prefix contain
 
 Since some macros are contributed by Peter Thomas, there are some minor inconsistency in formatting and naming conventions.
 
-<a href="http://www.upstate.edu/cascade-admin/formats/velocity/course/index.php">Velocity Tutorial</a>.
+<ul>
+<li>
+<a href="http://www.upstate.edu/cascade-admin/formats/velocity/courses/index.php">Velocity Tutorial</a></li>
+<li><a href="http://www.upstate.edu/cascade-admin/formats/velocity/api-documentation/index.php">API Documentation</a></li>
+</ul>
