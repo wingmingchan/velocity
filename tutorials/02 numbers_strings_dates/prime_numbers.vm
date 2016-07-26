@@ -1,0 +1,32 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_object_creator' )
+
+#macro( chanwIsPrime $int )
+    #set( $chanwIsPrime = "" )
+    
+    #if( $int == 1 || $int == 2 )
+        #set( $chanwIsPrime = true )
+    #else
+        #set( $paramList = [ '$_FieldTool.in( "java.lang.Double" ).TYPE' ] )
+        #chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.Math' 'sqrt' $paramList )
+        #set( $sqrt = $chanwGetMethodByClassNameMethodNameParamTypes )
+        #chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.Math' 'floor' $paramList )
+        #set( $floor = $chanwGetMethodByClassNameMethodNameParamTypes )
+        #set( $stop  = $floor.invoke( null, $sqrt.invoke( null, $int ) ) )
+
+        #foreach( $num in [ 2..$stop ] )
+            #if( $num != 1 && $int % $num == 0 )
+                #set( $chanwIsPrime = false )
+                #break
+            #end
+        #end
+        
+        #if( $chanwIsPrime == "" )
+            #set( $chanwIsPrime = true )
+        #end
+    #end
+#end
+
+#foreach( $count in [ 1..100 ] )
+#chanwIsPrime( $count )
+$count: $chanwIsPrime<br />
+#end
