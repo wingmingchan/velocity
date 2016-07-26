@@ -15,6 +15,22 @@ Examples:
 #set( $globalStringBuffer = $chanwConstructor.newInstance( 10000 ) )
 
 #set( $value = "#chanwGetConstantValueByClassNameConstantName('com.hannonhill.cascade.velocity.CascadeComparisonDateTool' 'MILLIS_PER_YEAR')" )
+
+#set( $paramList = [ '$_FieldTool.in( "java.lang.Double" ).TYPE' ] )
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.Math' 'abs' $paramList )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, -3 )
+
+#set( $paramList = [ '$_FieldTool.in( "java.lang.Double" ).TYPE', '$_FieldTool.in( "java.lang.Double" ).TYPE' ] )
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.Math' 'min' $paramList )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, -3, -4 )
+
+#set( $str = "" )
+#set( $paramList = [ '$str.Class' ] )
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.String' 'concat' $paramList )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( "Hello, ", "World!" )
+
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.String' 'indexOf' $paramList )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( "Hello, ", 'e' )
 *#
 
 #*
@@ -86,4 +102,32 @@ Returns the field value of a field name defined in a class.
     #set( $chanwFieldObj  = $chanwClassObj.getField( $chanwConstantName ) )
     #set( $chanwGetConstantValueByClassNameConstantName = $chanwFieldObj.get( null ) )
     $chanwGetConstantValueByClassNameConstantName
+#end
+
+#*
+Returns the named method of a class.
+The $chanwParamList must be a list of strings, representing class objects.
+*#
+#macro( chanwGetMethodByClassNameMethodNameParamTypes $chanwClassName $chanwMethodName $chanwParamList )
+    #set( $chanwClassObj  = $_.Class.forName( $chanwClassName ) )
+    #set( $chanwParamListString = "" )
+    
+    #if( $chanwParamList.class.name == 'java.util.ArrayList' && $chanwParamList.size() > 0 )
+        #foreach( $chanwParam in $chanwParamList )
+            #set( $chanwParamListString = $chanwParamListString + $chanwParam )
+            
+            #if( $foreach.count < $chanwParamList.size() )
+                #set( $chanwParamListString = $chanwParamListString + ',' )
+            #end
+        #end
+    #end
+    
+    #set( $chanwStmt = '#set($chanwGetMethodByClassNameMethodNameParamTypes = $chanwClassObj.getMethod( "' + $chanwMethodName + '"' )
+    
+    #if( $chanwParamListString != "" )
+        #set( $chanwStmt = $chanwStmt + ',' + $chanwParamListString )
+    #end
+    
+    #set( $chanwStmt = $chanwStmt + '))' )
+    #evaluate( $chanwStmt )
 #end
