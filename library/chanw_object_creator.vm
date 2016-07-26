@@ -13,6 +13,8 @@ Examples:
 #chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuffer' [ 'int' ] )
 #set( $chanwConstructor   = $chanwGetConstructorByClassNameParamTypeArray )
 #set( $globalStringBuffer = $chanwConstructor.newInstance( 10000 ) )
+
+#set( $value = "#chanwGetConstantValueByClassNameConstantName('com.hannonhill.cascade.velocity.CascadeComparisonDateTool' 'MILLIS_PER_YEAR')" )
 *#
 
 #*
@@ -74,4 +76,14 @@ Returns the constructor by matching the parameter list.
             #end
         #end
     #end
+#end
+
+#*
+Returns the field value of a field name defined in a class.
+*#
+#macro( chanwGetConstantValueByClassNameConstantName $chanwClassName $chanwConstantName )
+    #set( $chanwClassObj  = $_.Class.forName( $chanwClassName ) )
+    #set( $chanwFieldObj  = $chanwClassObj.getField( $chanwConstantName ) )
+    #set( $chanwGetConstantValueByClassNameConstantName = $chanwFieldObj.get( null ) )
+    $chanwGetConstantValueByClassNameConstantName
 #end
