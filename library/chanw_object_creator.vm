@@ -113,7 +113,7 @@ The $chanwParamList must be a list of strings, representing class objects.
     #set( $chanwParamListString = $_DisplayTool.list( $chanwParamList, "," ) )
     #set( $chanwStmt = '#set($chanwGetMethodByClassNameMethodNameParamTypes = $chanwClassObj.getMethod( "' + $chanwMethodName + '"' )
     
-    #if( $chanwParamListString != "" )
+    #if( $chanwParamListString && $chanwParamListString != "" )
         #set( $chanwStmt = $chanwStmt + ',' + $chanwParamListString )
     #end
     
