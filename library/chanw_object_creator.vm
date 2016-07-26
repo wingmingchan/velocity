@@ -110,18 +110,7 @@ The $chanwParamList must be a list of strings, representing class objects.
 *#
 #macro( chanwGetMethodByClassNameMethodNameParamTypes $chanwClassName $chanwMethodName $chanwParamList )
     #set( $chanwClassObj  = $_.Class.forName( $chanwClassName ) )
-    #set( $chanwParamListString = "" )
-    
-    #if( $chanwParamList.class.name == 'java.util.ArrayList' && $chanwParamList.size() > 0 )
-        #foreach( $chanwParam in $chanwParamList )
-            #set( $chanwParamListString = $chanwParamListString + $chanwParam )
-            
-            #if( $foreach.count < $chanwParamList.size() )
-                #set( $chanwParamListString = $chanwParamListString + ',' )
-            #end
-        #end
-    #end
-    
+    #set( $chanwParamListString = $_DisplayTool.list( $chanwParamList, "," ) )
     #set( $chanwStmt = '#set($chanwGetMethodByClassNameMethodNameParamTypes = $chanwClassObj.getMethod( "' + $chanwMethodName + '"' )
     
     #if( $chanwParamListString != "" )
