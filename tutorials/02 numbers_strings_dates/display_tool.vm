@@ -1,0 +1,37 @@
+#set( $node = $_DisplayTool.alt( $_XPathTool.selectSingleNode( $contentRoot, "system-page" ), "" ) )
+$node.class.name   ## java.lang.String, because $contentRoot is undefined
+
+$_DisplayTool.br( "Hello, ${_EscapeTool.n}World!" )   ## Hello, <br />World!
+
+$_DisplayTool.capitalize( "there is a point." )  ## There is a point.
+
+#set( $states = [ 'New York', 'New Mexico', 'Texas' ] )
+
+#foreach( $state in $states )              ## -New York       -
+-$_DisplayTool.cell( $state, 15 )-         ## -New Mexico     -
+#end                                       ## -Texas          -
+
+#set( $list = ["apple","apple","apple","apple"] )  
+$_DisplayTool.list( $list )                ## apple, apple, apple and apple
+$_DisplayTool.list( $list, ", " )          ## apple, apple, apple, apple
+$_DisplayTool.list( $list, ", ", " or " )  ## apple, apple, apple or apple
+
+$_DisplayTool.measure( "LOVE IS BLUE" )    ## { height: 1, width: 12 }
+
+$_DisplayTool.plural( 3, "apple" )         ## apples
+$_DisplayTool.plural( 2, "ox", "oxen" )    ## oxen
+
+Some$_DisplayTool.space( 6 )spaces         ## Some      spaces
+
+$_DisplayTool.stripTags( "three<br />bears" )       ## threebears
+$_DisplayTool.stripTags( "three<br />bears", "br" ) ## three<br />bears
+
+$_DisplayTool.truncate( "Blue blue my love is blue, blue is my love" )                   ## Blue blue my love is blue, ...
+## note that the length includes the length of the suffix
+$_DisplayTool.truncate( "Blue blue my love is blue, blue is my love", 6 )                ## Blu...
+$_DisplayTool.truncate( "Blue blue my love is blue, blue is my love", 6, "---" )         ## Blu---
+$_DisplayTool.truncate( "Blue blue my love is blue, blue is my love", 8, "---", true )   ## Blue---
+$_DisplayTool.truncate( "Blue blue my love is blue, blue is my love", 14, "---", true )  ## Blue blue---
+$_DisplayTool.truncate( "Blue blue my love is blue, blue is my love", 14, "---", false ) ## Blue blue m---
+
+$_DisplayTool.uncapitalize( "THERE IS A POINT." )                                        ## tHERE IS A POINT.
