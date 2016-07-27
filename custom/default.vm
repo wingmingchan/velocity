@@ -70,7 +70,7 @@ as ancestors.
 </div>
 <div id="hide-page-info">
     #set( $rootFolder = "" )
-    #set( $tempPagePath = $systemPagePath.substring( 1 ) )
+    #set( $tempPagePath = $currentPagePath )
     
     ## find the root folder name
     #if( $tempPagePath != "index" )
@@ -114,7 +114,7 @@ Last Modified: #set( $lastModifiedDayObj = $_DateTool.getDate( $systemPageLastMo
     #end
     
     ## These are the block choosers for page configuration: the variable name: [ node name, div id ]
-    ## the variable names can be any strings, node names must match identifiers in the data definition,
+    ## the variable names can be any unique strings, node names must match identifiers in the data definition,
     ## div ids must be defined in the template-level format
     #set( $page_config_choosers =
         {
