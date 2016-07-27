@@ -1,0 +1,25 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+$globalApacheConversionTool.getDateFormat()
+
+$globalApacheConversionTool.parseDate( "2016-01-01", "yyyy-MM-dd" )
+
+$globalApacheConversionTool.parseNumber( "123456" )
+#set( $number = $_DisplayTool.alt( $globalApacheConversionTool.parseNumber( "N123456" ), 0 ) )
+$number   ## => 0
+
+$globalApacheConversionTool.toBoolean( 0 )        ## => false
+$globalApacheConversionTool.toBoolean( 1 )        ## => false
+$globalApacheConversionTool.toBoolean( "" )       ## => false
+$globalApacheConversionTool.toBoolean( "false" )  ## => false
+$globalApacheConversionTool.toBoolean( "true" )   ## => true
+
+$globalApacheConversionTool.toCalendar( $globalApacheConversionTool.parseDate( "2016-01-01", "yyyy-MM-dd" ) )
+
+#set( $integer = $_DisplayTool.alt( $globalApacheConversionTool.toInteger( "12" ), 0 ) )
+$integer  ## => 12
+
+#set( $double = $_DisplayTool.alt( $globalApacheConversionTool.toDouble( "3.1415" ), 0 ) )
+$double   ## => 3.1415
+
+$globalApacheConversionTool.toStrings( "this,that,these,those" )[ 0 ] ## => this
