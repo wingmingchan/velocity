@@ -1,0 +1,16 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+#set( $ct = $globalApacheClassTool.inspect( $_ ) )
+
+$ct.getFields().size()
+
+#foreach( $field in $ct.getFields() )
+    $field.getName()  ## LOG SORT_BY_MAP SORT_DIRECTION_MAP serviceProvider siteId
+#end
+
+$ct.getFullName()                ## => com.hannonhill.cascade.velocity.LocatorTool
+$ct.getSuper().getFullName()     ## => java.lang.Object
+$ct.getType().Name               ## => com.hannonhill.cascade.velocity.LocatorTool
+$ct.isAbstract()                 ## => false
+$ct.isPublic()                   ## => true
+$ct.supportsNewInstance()        ## => false
