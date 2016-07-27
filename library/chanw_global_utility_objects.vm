@@ -3,9 +3,6 @@ This format defines global utility objects.
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
 
-#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.LinkTool' )
-#set( $globalApacheLinkTool = $chanwGetObjectByClassName )
-
 #chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ClassTool' )
 #set( $globalApacheClassTool = $chanwGetObjectByClassName )
 
@@ -14,6 +11,12 @@ This format defines global utility objects.
 
 #chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ConversionTool' )
 #set( $globalApacheConversionTool = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.LinkTool' )
+#set( $globalApacheLinkTool = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.NumberTool' )
+#set( $globalApacheNumberTool = $chanwGetObjectByClassName )
 
 #chanwGetObjectByClassName( 'org.apache.commons.lang.math.NumberUtils' )
 #set( $globalApacheNumberUtils = $chanwGetObjectByClassName )
