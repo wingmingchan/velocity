@@ -1,0 +1,36 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+#set( $list = [ 37, 4, 12 ] )
+
+#set( $param = $_DisplayTool.list( $list, ',' ) )
+#set( $stmt = '#set($min=$globalApacheNumberUtils.' + "min($param))" )
+#evaluate( $stmt )
+$min   ## => 4
+
+## exception thrown here!!!
+$globalApacheNumberUtils.createInteger( "100" ).class.name  ## => java.lang.Integer
+
+#set( $input1 = "N100" )
+
+#if( $globalApacheNumberUtils.isDigits( $input1 ) )
+    $globalApacheNumberUtils.createInteger( $input1 )
+#else
+    $input1 is not an integer
+#end
+
+#set( $input2 = "3" )
+
+#if( $globalApacheNumberUtils.isNumber( $input2 ) )
+    $globalApacheNumberUtils.createNumber( $input2 )   ## => 3
+#else
+    $input2 is not a Java number
+#end
+
+#set( $input3 = "3" )
+$globalApacheNumberUtils.toInt( $input3 )              ## => 3
+
+#set( $input4 = "3.7" )
+$globalApacheNumberUtils.toInt( $input4 )              ## => 0
+$globalApacheNumberUtils.toInt( null )                 ## => 0
+$globalApacheNumberUtils.toDouble( $input4 )           ## => 3.7
+$globalApacheNumberUtils.toDouble( null )              ## => 0.0
