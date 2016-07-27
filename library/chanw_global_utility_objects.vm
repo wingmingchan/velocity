@@ -6,6 +6,9 @@ This format defines global utility objects.
 #chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.LinkTool' )
 #set( $globalApacheLinkTool = $chanwGetObjectByClassName )
 
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ClassTool' )
+#set( $globalApacheClassTool = $chanwGetObjectByClassName )
+
 #chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ComparisonDateTool' )
 #set( $globalApacheComparisonDateTool = $chanwGetObjectByClassName )
 
