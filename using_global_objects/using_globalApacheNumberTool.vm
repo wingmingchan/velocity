@@ -1,0 +1,10 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+$globalApacheNumberTool.currency( "3.279" )      ## => $3.28
+$globalApacheNumberTool.format( "10000000" )     ## => 10,000,000
+$globalApacheNumberTool.integer( "10000000N" )   ## => 10,000,000
+$globalApacheNumberTool.integer( "N10000000N" )  ## null
+$globalApacheNumberTool.percent( "0.7" )         ## => 70%
+
+$globalApacheNumberTool.toNumber( "10000000N" )  ## => 10000000
+$globalApacheNumberTool.toNumber( "N10000000N" ) ## null
