@@ -1,23 +1,23 @@
 #set( $myList = [] )
 #set( $bool   = $myList.add( 3 ) )         ## add
 #set( $bool   = $myList.add( "Hello" ) )
-$myList.size()                             ## size
-$myList.indexOf( "Hello" )                 ## indexOf
+$myList.size()                             ## size, 2
+$myList.indexOf( "Hello" )                 ## indexOf, 1
 
 #set( $dummy = $myList.addAll( 0, [ 'this', 'that' ] ) ) ## added to the front
 
-#dumpArrayList( $myList )
+$myList
 $myList[ 3 ] ## => Hello
 
-$myList.contains( "this" )                 ## contains
+$myList.contains( "this" )                 ## contains, true
 
 #set( $bool = $myList.remove( "Hello" ))   ## remove
-$myList.size()                             ## size
+$myList.size()                             ## size, 3
 
-$myList.get( 0 )                           ## get
+$myList.get( 0 )                           ## get, this
 $myList.clear()                            ## clear
-$myList.size()
-$myList.isEmpty()                          ## isEmpty
+$myList.size()                             ## => 0
+$myList.isEmpty()                          ## isEmpty, true
 
 #set( $myEvenList = [] )
 #set( $myOddList  = [] )
@@ -31,7 +31,4 @@ $myList.isEmpty()                          ## isEmpty
 #end
 
 #set( $myEvenSubList = $myEvenList.subList( 0, 5 ) )
-
-#dumpArrayList( $myEvenSubList )
-
-#macro( dumpArrayList $al )#if( $al && $al.size() >= 0 )[ #foreach( $item in $al )$item, #end]#end#end
+$myEvenSubList
