@@ -2,18 +2,15 @@
 #set( $void     = $myStates.put( "New York", "NY" ) )        ## put
 #set( $void     = $myStates.put( "New Jersey", "NJ" ) )
 
-#dumpHashMap( $myStates )
+$myStates
 $myStates.get( "New Jersey" )                                ## get
 
 $myStates.putAll( { "Alabama" : "AL", "Alaska" : "AK" } )    ## putAll
-#dumpHashMap( $myStates )
+$myStates
 $myStates.containsKey( "Minnesota" )                         ## containsKey, false
 $myStates.size()                                             ## size, 5
 
 #set( $abbreviations = $myStates.values() )
-#dumpArrayList( $abbreviations )
+$abbreviations
 $abbreviations.class.name                                    ## java.util.LinkedHashMap$LinkedValues
-$abbreviations.toArray()[ 0 ]                                ## java.util.LinkedHashMap$LinkedValues.toArray
-
-#macro( dumpHashMap $m )#if( $m && $m.size() >= 0 )#set( $keys = $m.keySet() ){ #foreach( $key in $keys )$key=$m[$key], #end }#end#end
-#macro( dumpArrayList $al )#if( $al && $al.size() >= 0 )[ #foreach( $item in $al )$item, #end]#end#end
+$abbreviations.toArray()[ 0 ]                                ## NM
