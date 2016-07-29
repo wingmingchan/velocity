@@ -1,0 +1,29 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+## retrieve and invoke java.lang.Integer.parseInt
+## java.lang.Integer.parseInt throws an exception if the string cannot be parsed
+#set( $str = "37N" )
+##set( $str = "37" )
+##set( $str = "N37" )
+
+#set( $paramList = [ '$str.Class' ] )
+#chanwGetMethodByClassNameMethodNameParamTypes( "java.lang.Integer" 'parseInt' $paramList )
+## to prevent an exception thrown here
+#if( $globalApacheStringUtils.isNumeric( $str ) )
+    $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, $str ).Class.Name$BR
+#else
+    $str cannot be parsed into an integer.$BR
+#end
+
+## use the $globalApacheNumberTool object
+$globalApacheNumberTool.integer( $str ).Class.Name$BR   ## => java.lang.String
+## use DisplayTool.alt to assign a default value
+#set( $int = $_DisplayTool.alt( $globalApacheNumberTool.toNumber( $str ), 0 ) )
+$int$BR                                                 ## => 37 or 0, depending on the string
+$int.Class.Name                                         ## => java.lang.Long or java.lang.Integer
+
+#*
+see
+https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheNumberUtils.vm
+on how to use $globalApacheNumberUtils
+*#
