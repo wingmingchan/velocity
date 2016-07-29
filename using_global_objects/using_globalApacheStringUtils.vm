@@ -1,0 +1,71 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#set( $str1 = "Hello, World" )
+#set( $str2 = "Once upon a time, in a faraway kingdom, there lived a beautiful princess." )
+#set( $str3 = "it does not matter." )
+#set( $str4 = $str1 + $_EscapeTool.n )
+#set( $str5 = "(315)464-1234" )
+#set( $str6 = "464-1234" )
+#set( $str7 = "(315)464-1" )
+#set( $str8 = "(315)464-1999" )
+
+
+$globalApacheStringUtils.abbreviate( $str2, 15 )$BR               ## => Once upon a ...
+$globalApacheStringUtils.abbreviate( $str2, 5, 15 )$BR            ## => ...upon a ti...
+
+$globalApacheStringUtils.capitalize( $str3 )$BR                   ## => It does not matter.
+
+$S_PRE$globalApacheStringUtils.center( $str3, 50 )$E_PRE          ## the string centered
+$S_PRE$globalApacheStringUtils.center( $str3, 50, "*" )$E_PRE     ## the string centered
+##$S_PRE$globalApacheStringUtils.center( $str3, 50, "*" )$E_PRE   ## the string centered
+
+$S_PRE$str4$str3$E_PRE                                            ## two lines
+$S_PRE$globalApacheStringUtils.chomp( $str4 )$str3$E_PRE          ## one line
+
+$globalApacheStringUtils.chop( 
+    $globalApacheStringUtils.chop( $str3 ) )$BR                   ## => it does not matte
+
+$globalApacheStringUtils.contains( $str1, "llo" )$BR              ## => true
+$globalApacheStringUtils.containsNone( $str1, "qx" )$BR           ## => true
+$globalApacheStringUtils.containsNone( $str1, "qxo" )$BR          ## => false
+$globalApacheStringUtils.containsOnly( $str5, "()1234567890-" )$BR## => true
+
+$globalApacheStringUtils.countMatches( $str5, "4" )$BR            ## => 3
+$globalApacheStringUtils.countMatches( $str5, "46" )$BR           ## => 1
+$globalApacheStringUtils.countMatches( $str5, "461" )$BR          ## => 0
+
+$globalApacheStringUtils.defaultString( $str1 )$BR                ## => Hello, World
+$str100$BR                                                        ## => $str100
+$globalApacheStringUtils.defaultString( $str100 )$BR              ## empty string
+
+$globalApacheStringUtils.deleteWhitespace( $str1 )$BR             ## => Hello,World
+
+$globalApacheStringUtils.difference( $str5, $str6 )$BR            ## => 464-1234
+$globalApacheStringUtils.difference( $str6, $str5 )$BR            ## => (315)464-1234
+$globalApacheStringUtils.difference( $str5, $str7 )$BR            ## empty string
+$globalApacheStringUtils.difference( $str7, $str5 )$BR            ## => 234
+$globalApacheStringUtils.difference( $str5, $str8 )$BR            ## => 999
+$globalApacheStringUtils.difference( $str8, $str5 )$BR            ## => 234
+
+$globalApacheStringUtils.equalsIgnoreCase( $str3,
+    $globalApacheStringUtils.capitalize( $str3 ) )$BR             ## => true
+
+$globalApacheStringUtils.indexOf( $str1, "lo" )$BR                ## => 3
+$globalApacheStringUtils.indexOf( $str1, "ol" )$BR                ## => -1
+$globalApacheStringUtils.indexOfAny( $str1, "ol" )$BR             ## => 2
+#set( $strs = [ "ol", "or" ] )
+$globalApacheStringUtils.indexOfAny( $str1, $strs )$BR            ## null
+$globalApacheStringUtils.indexOfAny( $str1, $strs.toArray() )$BR  ## null
+$globalApacheStringUtils.indexOfAny( $str1, ["ol","or"] )$BR      ## null
+#set( $stmt = '$globalApacheStringUtils.indexOfAny( $str1, "ol","or" )' )
+#evaluate( $stmt )$BR                                             ## => 8
+$globalApacheStringUtils.indexOfAnyBut( $str1, "qrsH" )$BR        ## => 1
+$globalApacheStringUtils.indexOfDifference( $str5, $str8 )$BR     ## => 10
+
+$globalApacheStringUtils.isAlpha( $str1 )$BR                      ## => false
+$globalApacheStringUtils.isAlpha( $str5 )$BR                      ## => false
+$globalApacheStringUtils.isAlpha(
+    $globalApacheStringUtils.chop( $str3 ) ) $BR                  ## => false
+$globalApacheStringUtils.isAlpha(
+    $globalApacheStringUtils.deleteWhitespace(
+        $globalApacheStringUtils.chop( $str3 ) ) )$BR             ## => true
