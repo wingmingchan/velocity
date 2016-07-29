@@ -26,4 +26,8 @@ $int.Class.Name                                         ## => java.lang.Long or 
 see
 https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheNumberUtils.vm
 on how to use $globalApacheNumberUtils
+
+see
+https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheConversionTool.vm
+on how to use $globalApacheConversionTool
 *#
