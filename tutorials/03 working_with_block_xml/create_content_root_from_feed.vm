@@ -1,0 +1,17 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#*
+This format illustrates how to use the Locator tool to process XML from an index block.
+The block to be located is a feed block, containing XML of an index block.
+This feed block triggers a web service script to retrieve the indexed XML
+from an XML page tied with the index block.
+See https://github.com/wingmingchan/php-cascade-ws-ns-examples/blob/master/xml_feed/index_block_xml.php
+for the program that generates the feed.
+*#
+#set( $block = $_.locateBlock( "/_cascade/blocks/feed/test-index", "cascade-admin-old" ) )
+#set( $feed  = $block.getFeed() )
+#chanwBuildXMLContentRoot( $feed )
+#set( $contentRoot = $chanwBuildXMLContentRoot )
+$contentRoot.Name$BR       ## => system-index-block
+#set( $pages = $_XPathTool.selectNodes( $contentRoot, "//system-page" ) )
+$pages.size()$BR           ## => 42
