@@ -16,8 +16,7 @@ $globalApacheStringUtils.abbreviate( $str2, 5, 15 )$BR            ## => ...upon 
 $globalApacheStringUtils.capitalize( $str3 )$BR                   ## => It does not matter.
 
 $S_PRE$globalApacheStringUtils.center( $str3, 50 )$E_PRE          ## the string centered
-$S_PRE$globalApacheStringUtils.center( $str3, 50, "*" )$E_PRE     ## the string centered
-##$S_PRE$globalApacheStringUtils.center( $str3, 50, "*" )$E_PRE   ## the string centered
+$S_PRE$globalApacheStringUtils.center( $str3, 50, "*" )$E_PRE     ## the string centered with *
 
 $S_PRE$str4$str3$E_PRE                                            ## two lines
 $S_PRE$globalApacheStringUtils.chomp( $str4 )$str3$E_PRE          ## one line
@@ -57,8 +56,7 @@ $globalApacheStringUtils.indexOfAny( $str1, "ol" )$BR             ## => 2
 $globalApacheStringUtils.indexOfAny( $str1, $strs )$BR            ## null
 $globalApacheStringUtils.indexOfAny( $str1, $strs.toArray() )$BR  ## null
 $globalApacheStringUtils.indexOfAny( $str1, ["ol","or"] )$BR      ## null
-#set( $stmt = '$globalApacheStringUtils.indexOfAny( $str1, "ol","or" )' )
-#evaluate( $stmt )$BR                                             ## => 8
+$globalApacheStringUtils.indexOfAny( $str1, "ol","or" )$BR        ## => 8
 $globalApacheStringUtils.indexOfAnyBut( $str1, "qrsH" )$BR        ## => 1
 $globalApacheStringUtils.indexOfDifference( $str5, $str8 )$BR     ## => 10
 
@@ -69,3 +67,34 @@ $globalApacheStringUtils.isAlpha(
 $globalApacheStringUtils.isAlpha(
     $globalApacheStringUtils.deleteWhitespace(
         $globalApacheStringUtils.chop( $str3 ) ) )$BR             ## => true
+        
+$globalApacheStringUtils.lastIndexOf( $str6, "4" )$BR             ## => 7
+
+$globalApacheStringUtils.leftPad( $str1, 20, "*" )$BR             ## => ********Hello, World
+
+$globalApacheStringUtils.overlay( $str1, "Greetings", 0, 5 )$BR   ## => Greetings, World
+
+$globalApacheStringUtils.repeat( "*", 20 )$BR                     ## => ********************
+
+$globalApacheStringUtils.replaceChars( $str1, "eo", "ai" )$BR     ## => Halli, Wirld
+$globalApacheStringUtils.replaceChars( $str1, "eo", "aik" )$BR    ## => Halli, Wirld
+$globalApacheStringUtils.replaceChars( $str1, "eo", "a" )$BR      ## => Hall, Wrld
+
+$globalApacheStringUtils.replaceOnce( $str6, "4", "5" )$BR        ## => 564-1234
+
+$globalApacheStringUtils.reverse( $str6 )$BR                      ## => 4321-464
+
+#set( $delimiter = "," )
+$globalApacheStringUtils.reverseDelimited( 
+    $str1, $delimiter.charAt( 0 ) )$BR                            ## => World,Hello
+
+#set( $str_array = $globalApacheStringUtils.split(
+    $str8, "()-" ) )
+#set( $last_index = $str_array.size() - 1 )
+#foreach( $index in [ 0..$last_index ] )
+$str_array[ $index ] $BR                                          ## => 315 464 1999 in three lines
+#end
+
+$globalApacheStringUtils.substringAfter( $str8, ")" )$BR          ## => 464-1999
+
+$globalApacheStringUtils.substringBetween( $str8, ")", "-" )$BR   ## => 464
