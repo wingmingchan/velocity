@@ -11,4 +11,5 @@
 #evaluate( $reinitialize_list_of_variables_code )
 #evaluate( $set_variable_code )
 #evaluate( $set_variable_to_non_empty_string_code )
+#evaluate( $build_xml_content_root_code )
 #evaluate( $test_macro_code )

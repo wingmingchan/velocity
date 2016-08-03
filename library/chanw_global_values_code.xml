@@ -237,4 +237,5 @@ is part of the HTML markups.
 #set( $set_variable_code = $macro_utilities_code.getChild( "set-variable-code" ).value )
 #set( $set_variable_to_non_empty_string_code = $macro_utilities_code.getChild( "set-variable-to-non-empty-string-code" ).value )
 #set( $test_macro_code = $macro_utilities_code.getChild( "test-macro-code" ).value )
+#set( $build_xml_content_root_code = $macro_utilities_code.getChild( "build-xml-content-root-code" ).value )
 </global-values>
