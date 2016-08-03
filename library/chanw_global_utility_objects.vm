@@ -35,5 +35,9 @@ This format defines global utility objects.
 #set( $chanwConstructor   = $chanwGetConstructorByClassNameParamTypeArray )
 #set( $globalStringBuffer = $chanwConstructor.newInstance( 10000 ) )
 
+#chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuilder' [ 'int' ] )
+#set( $chanwConstructor    = $chanwGetConstructorByClassNameParamTypeArray )
+#set( $globalStringBuilder = $chanwConstructor.newInstance( 10000 ) )
+
 #chanwGetObjectByClassName( 'org.jdom.input.SAXBuilder' )
 #set( $globalSAXBuilder = $chanwGetObjectByClassName )
