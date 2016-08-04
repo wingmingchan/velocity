@@ -2,30 +2,29 @@
 This format defines global utility objects.
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
+#import( '/formats/library/velocity/chanw_macro_utilities' )
 
-#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ClassTool' )
-#set( $globalApacheClassTool = $chanwGetObjectByClassName )
+## classes with a default constructor
+#set( $tools = {
+    'globalApacheClassTool' :        'org.apache.velocity.tools.generic.ClassTool',
+    'globalApacheClassUtils':        'org.apache.commons.lang.ClassUtils',
+    'globalApacheComparisonDateTool':'org.apache.velocity.tools.generic.ComparisonDateTool',
+    'globalApacheConversionTool':    'org.apache.velocity.tools.generic.ConversionTool',
+    'globalApacheLinkTool':          'org.apache.velocity.tools.generic.LinkTool',
+    'globalApacheNumberTool':        'org.apache.velocity.tools.generic.NumberTool',
+    'globalApacheNumberUtils':       'org.apache.commons.lang.math.NumberUtils',
+    'globalApacheStringUtils':       'org.apache.commons.lang.StringUtils',
+    'globalApacheWordUtils':         'org.apache.commons.lang.WordUtils',
+    'globalSAXBuilder':              'org.jdom.input.SAXBuilder'
+} )
 
-#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ComparisonDateTool' )
-#set( $globalApacheComparisonDateTool = $chanwGetObjectByClassName )
+#set( $tools_keys = $tools.keySet() )
 
-#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ConversionTool' )
-#set( $globalApacheConversionTool = $chanwGetObjectByClassName )
-
-#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.LinkTool' )
-#set( $globalApacheLinkTool = $chanwGetObjectByClassName )
-
-#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.NumberTool' )
-#set( $globalApacheNumberTool = $chanwGetObjectByClassName )
-
-#chanwGetObjectByClassName( 'org.apache.commons.lang.math.NumberUtils' )
-#set( $globalApacheNumberUtils = $chanwGetObjectByClassName )
-
-#chanwGetObjectByClassName( 'org.apache.commons.lang.StringUtils' )
-#set( $globalApacheStringUtils = $chanwGetObjectByClassName )
-
-#chanwGetObjectByClassName( 'org.apache.commons.lang.WordUtils' )
-#set( $globalApacheWordUtils = $chanwGetObjectByClassName )
+#foreach( $key in $tools_keys )
+    #chanwGetObjectByClassName( $tools[ $key ] )
+    #set( $stmt = '#chanwSetVariable("' + $key + '" $chanwGetObjectByClassName)' )
+    #evaluate( $stmt )
+#end
 
 #chanwGetConstructorByClassNameParamSize( 'org.jdom.Text' 1 )
 #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
@@ -38,6 +37,3 @@ This format defines global utility objects.
 #chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuilder' [ 'int' ] )
 #set( $chanwConstructor    = $chanwGetConstructorByClassNameParamTypeArray )
 #set( $globalStringBuilder = $chanwConstructor.newInstance( 10000 ) )
-
-#chanwGetObjectByClassName( 'org.jdom.input.SAXBuilder' )
-#set( $globalSAXBuilder = $chanwGetObjectByClassName )
