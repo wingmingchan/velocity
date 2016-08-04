@@ -8,23 +8,6 @@ to facilitate:
 3. Generation of macros
 *#
     </file-comment>
-    
-    <build-xml-content-root-code>
-#*
-Creates an org.jdom.Element object out of an XML string.
-Example:
-
-#set( $xml = "&lt;books&gt;&lt;book&gt;Harry Potter&lt;/book&gt;&lt;book&gt;Little Women&lt;/book&gt;&lt;/books&gt;" )
-#chanwBuildXMLContentRoot( $xml )
-#set( $contentRoot = $chanwBuildXMLContentRoot )
-*#
-#macro( chanwBuildXMLContentRoot $xml_string )
-    #chanwGetConstructorByClassNameParamSize( 'java.io.StringReader' 1 )
-    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
-    #set( $stringReader     = $chanwConstructor.newInstance( $xml_string ) )
-    #set( $chanwBuildXMLContentRoot = $globalSAXBuilder.build( $stringReader ).rootElement )
-#end
-    </build-xml-content-root-code>
 
     <convert-to-pascal-case-code>
 #*
@@ -181,11 +164,17 @@ Example: see chanwReinitializeListOfVariables
         #set( $chanwValue = "" )
     #elseif( $val.class.name == $JAVA_LANG_STRING_CLASS_NAME )
         #set( $chanwValue = $_EscapeTool.xml( $val ).trim() )
+    ## this is an object
     #else
-        #set( $chanwValue = $val )
+        #set( $chanwValue = 'val' )
     #end
     
-    #set( $chanwSetVarValStatement = '#set($' + "$var = '$chanwValue')" )
+    #if( !$chanwValue.equals( 'val' ) )
+        #set( $chanwSetVarValStatement = '#' + "set(" + "$" + "$var = '$chanwValue')" )
+    #else
+        #set( $chanwSetVarValStatement = '#' + "set(" + "$" + "$var = $" + $chanwValue + ")" )
+    #end
+
     #evaluate( $chanwSetVarValStatement )
 #end
     </set-variable-code>
@@ -231,7 +220,7 @@ Example:
 #end
     </set-variable-to-non-empty-string-code>
     
-    <test-macro-code>
+        <test-macro-code>
 #macro( chanwTestMacro )
     chanwTestMacro invoked.$BR
 #end
