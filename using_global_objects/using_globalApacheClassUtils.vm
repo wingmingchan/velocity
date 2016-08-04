@@ -1,0 +1,38 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+## => [com.hannonhill.cascade.velocity.LocatorTool]
+$globalApacheClassUtils.convertClassesToClassNames( [ $_.Class ] )$BR
+
+## => [class java.lang.Math]
+$globalApacheClassUtils.convertClassNamesToClasses(
+    [ "java.lang.Math" ] )$BR
+    
+## => [interface java.util.List, interface java.util.Collection, interface java.lang.Iterable, 
+##    interface java.util.RandomAccess, interface java.lang.Cloneable, interface java.io.Serializable]
+$globalApacheClassUtils.getAllInterfaces( 
+    $_.Class.forName( "java.util.ArrayList" ) )$BR
+    
+## => [class java.util.AbstractList, class java.util.AbstractCollection, class java.lang.Object]
+$globalApacheClassUtils.getAllSuperclasses(
+    $_.Class.forName( "java.util.ArrayList" ) )$BR
+
+## => com.hannonhill.cascade.velocity
+$globalApacheClassUtils.getPackageName( $_.Class )$BR
+
+## => LocatorTool
+$globalApacheClassUtils.getShortClassName( $_.Class )$BR
+
+## => true, meaning that an int class can be assigned to a variable of a long class
+$globalApacheClassUtils.isAssignable(
+    $_FieldTool.in( "java.lang.Integer" ).TYPE,
+    $_FieldTool.in( "java.lang.Long" ).TYPE
+)$BR
+
+## => false
+$globalApacheClassUtils.isInnerClass( $_.Class )$BR
+
+## => true, org.apache.velocity.runtime.directive.Block$Reference
+#define( $greetings )
+Hello, World!##
+#end
+$globalApacheClassUtils.isInnerClass( $greetings.Class )$BR
