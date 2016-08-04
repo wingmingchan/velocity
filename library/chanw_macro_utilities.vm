@@ -1,5 +1,4 @@
 #import( '/formats/library/velocity/chanw_global_values' )
-##import( '/formats/library/velocity/chanw_global_utility_objects' )
 
 #set( $MACRO_PREFIX = 'process' )
 #set( $macro_utilities_code = $macro_utilities_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ).replaceAll( "&amp;", "&" ) )
