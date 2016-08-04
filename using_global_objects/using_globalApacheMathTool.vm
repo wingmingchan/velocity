@@ -1,0 +1,27 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+$globalApacheMathTool.abs( -2.3 )$BR             ## => 2.3
+$globalApacheMathTool.add( 1, 2, 3.4 )$BR        ## => 6.4
+$globalApacheMathTool.ceil( 3.14159 )$BR         ## => 4
+$globalApacheMathTool.div( 9.3, 1.25 )$BR        ## => 7.44
+$globalApacheMathTool.floor( 3.14159 )$BR        ## => 3
+
+#set( $nums = [ 1..100 ] )
+$globalApacheMathTool.getAverage( $nums )$BR     ## => 50.5
+$globalApacheMathTool.getRandom()$BR             ## varies, like 0.09769217396463603
+$globalApacheMathTool.getTotal( $nums )$BR       ## => 5050
+
+$globalApacheMathTool.idiv( 9.3, 2.5 )$BR        ## => 4    9/2
+$globalApacheMathTool.max( 9.3, 2.5 )$BR         ## => 9.3
+$globalApacheMathTool.min( 9.3, 2.5 )$BR         ## => 2.5
+$globalApacheMathTool.mod( 9.3, 2.5 )$BR         ## => 1    9%2
+$globalApacheMathTool.mul( 9.3, 2.5 )$BR         ## => 23.25
+$globalApacheMathTool.pow( 9.3, 2.5 )$BR         ## => 263.7590508968366
+$globalApacheMathTool.random( 1, 10 )$BR         ## => varies, like 9
+$globalApacheMathTool.random( 1.0, 10 )$BR       ## => varies, like 6.877879617347907
+$globalApacheMathTool.round( 3.7 )$BR            ## => 4
+$globalApacheMathTool.roundTo( 2, 3.14159 )$BR   ## => 3.14
+$globalApacheMathTool.sub( 1, 2, 3.4 )$BR        ## => -4.4
+$globalApacheMathTool.toInteger( "3.2" )$BR      ## => 3
+$globalApacheMathTool.toDouble( "3.2e5" )$BR     ## => 3.2
+$globalApacheMathTool.toNumber( "3.2e5" )$BR     ## => 3.2
