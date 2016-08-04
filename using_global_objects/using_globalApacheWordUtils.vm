@@ -1,17 +1,39 @@
-#import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
-#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
 
 #set( $string = "once upon a time" )
 
-$S_PRE
+$globalApacheWordUtils.capitalize( $string )$BR                  ## => Once Upon A Time
+$globalApacheWordUtils.capitalize( 
+    $globalApacheWordUtils.initials( $string ) )$BR              ## => Ouat
+$globalApacheWordUtils.initials( 
+    $globalApacheWordUtils.capitalize( $string ) )$BR            ## => OUAT
 
-$globalApacheWordUtils.capitalize( $string )
-$globalApacheWordUtils.capitalize( $globalApacheWordUtils.initials( $string ) )
-$globalApacheWordUtils.initials( $globalApacheWordUtils.capitalize( $string ) )
+$globalApacheWordUtils.capitalizeFully( $string )$BR             ## => Once Upon A Time
+$globalApacheWordUtils.swapCase(
+    $globalApacheWordUtils.capitalizeFully( $string ) )$BR       ## => oNCE uPON a tIME
+    
+$globalApacheWordUtils.uncapitalize(
+    $globalApacheWordUtils.initials( 
+        $globalApacheWordUtils.capitalize( $string ) ) )$BR      ## => oUAT
+        
+#set( $string = "once upon a time, in a faraway land, there lived a very beautiful princess." )
+$S_PRE
+$globalApacheWordUtils.wrap( $string, 20 )
 $E_PRE
 
-#* Output:
-Once Upon A Time
-Ouat
-OUAT
+#* output:
+
+once upon a time, in
+a faraway land,
+there lived a very
+beautiful princess.
+*#
+
+$S_PRE
+$globalApacheWordUtils.wrap( $string, 20, "-", true )
+$E_PRE
+
+#* output:
+
+once upon a time, in-a faraway land,-there lived a very-beautiful princess.
 *#
