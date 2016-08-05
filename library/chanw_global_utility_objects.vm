@@ -6,14 +6,17 @@ This format defines global utility objects.
 
 ## classes with a default constructor
 #set( $tools = {
+    'globalApacheBooleanUtils' :     'org.apache.commons.lang.BooleanUtils',
     'globalApacheClassTool' :        'org.apache.velocity.tools.generic.ClassTool',
     'globalApacheClassUtils':        'org.apache.commons.lang.ClassUtils',
     'globalApacheComparisonDateTool':'org.apache.velocity.tools.generic.ComparisonDateTool',
     'globalApacheConversionTool':    'org.apache.velocity.tools.generic.ConversionTool',
     'globalApacheLinkTool':          'org.apache.velocity.tools.generic.LinkTool',
+    'globalApacheMathTool':          'org.apache.velocity.tools.generic.MathTool',
     'globalApacheNumberTool':        'org.apache.velocity.tools.generic.NumberTool',
     'globalApacheNumberUtils':       'org.apache.commons.lang.math.NumberUtils',
     'globalApacheStringUtils':       'org.apache.commons.lang.StringUtils',
+    'globalApacheStringEscapeUtils': 'org.apache.commons.lang.StringEscapeUtils',
     'globalApacheWordUtils':         'org.apache.commons.lang.WordUtils',
     'globalSAXBuilder':              'org.jdom.input.SAXBuilder'
 } )
