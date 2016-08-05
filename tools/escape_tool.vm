@@ -1,0 +1,15 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+$_EscapeTool.B$BR                ## => \
+$_EscapeTool.D$BR                ## => $
+$_EscapeTool.E$BR                ## => !
+$_EscapeTool.H$BR                ## => #
+$_EscapeTool.N$BR                ## => newline
+$_EscapeTool.Q$BR                ## => "
+$_EscapeTool.S$BR                ## => '
+
+$_EscapeTool.java( '\"' )$BR     ## => \\\"
+$_EscapeTool.xml( '<h1>' )$BR    ## => &lt;h1&gt; displayed as <h1>
+
+## https://myorg.org/index.php?name=Wing+Ming+Chan
+https://myorg.org/index.php?name=$_EscapeTool.url( 'Wing Ming Chan' )$BR
