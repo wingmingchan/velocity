@@ -204,23 +204,6 @@ by an index block.
 #end
 
 #*
-Creates the root element out of an XML string. Note that this is for feed  blocks only.
-For XML blocks, use the getXMLAsXMLElement method instead.
-Example:
-
-#set( $feed_block = $_.locateBlock( "_cascade/blocks/feed/hannonhill-sandbox-wing-asset" ) )
-#chanwBuildXMLContentRoot( $feed_block.Feed )
-#set( $contentRoot = $chanwBuildXMLContentRoot )
-$contentRoot.getAttribute( "id" ).Value
-*#
-#macro( chanwBuildXMLContentRoot $xml_string )
-    #chanwGetConstructorByClassNameParamSize( 'java.io.StringReader' 1 )
-    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
-    #set( $stringReader     = $chanwConstructor.newInstance( $xml_string ) )
-    #set( $chanwBuildXMLContentRoot = $globalSAXBuilder.build( $stringReader ).rootElement )
-#end
-
-#*
 Shows the block XML.
 *#
 #macro( chanwShowXml $block_xml )
