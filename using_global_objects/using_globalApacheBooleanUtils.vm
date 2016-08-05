@@ -1,0 +1,31 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#set( $true_bool  = $globalApacheBooleanUtils.toBoolean( "true" ) )
+#set( $false_bool = $globalApacheBooleanUtils.toBoolean( "false" ) )
+
+$globalApacheBooleanUtils.isFalse( $false_bool )$BR      ## => true
+$globalApacheBooleanUtils.isTrue( $true_bool )$BR        ## => true
+$globalApacheBooleanUtils.isNotTrue( $true_bool )$BR     ## => false
+$globalApacheBooleanUtils.negate( $true_bool )$BR        ## => false
+
+$globalApacheBooleanUtils.toBoolean( $true_bool )$BR     ## => true, the primitive
+$globalApacheBooleanUtils.toBoolean( 0 )$BR              ## => false, the primitive
+$globalApacheBooleanUtils.toBoolean( 3 )$BR              ## => true, the primitive
+## toBoolean(Integer value, Integer trueValue, Integer falseValue)
+$globalApacheBooleanUtils.toBoolean( 0, 0, 1 )$BR        ## => true, the primitive
+
+## IllegalArgumentException
+##$globalApacheBooleanUtils.toBoolean( 3, 0, 1 )$BR
+
+$globalApacheBooleanUtils.toInteger( true )$BR           ## => 1, the primitive int
+$globalApacheBooleanUtils.toInteger( false )$BR          ## => 0, the primitive int
+
+## toString(boolean bool, String trueString, String falseString)
+$globalApacheBooleanUtils.toString( true, "This", "That" )$BR           ## => This
+
+## toString(Boolean bool, String trueString, String falseString, String nullString)
+## IllegalArgumentException
+##$globalApacheBooleanUtils.toString( null, "This", "That" )
+$globalApacheBooleanUtils.toString( $blah, "This", "That", "Empty" )$BR ## => Empty
+$globalApacheBooleanUtils.toStringTrueFalse( true )$BR                  ## => true, a string
+$globalApacheBooleanUtils.toStringYesNo( true )$BR                      ## => yes, a string
