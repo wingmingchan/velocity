@@ -1,0 +1,16 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+$globalApacheStringEscapeUtils.escapeCsv( "Hello" )$BR             ## => Hello
+$globalApacheStringEscapeUtils.escapeCsv( "Hello, World!" )$BR     ## => "Hello, World!" with double quotes
+$globalApacheStringEscapeUtils.escapeCsv( "" )$BR                  ## empty string
+$globalApacheStringEscapeUtils.escapeCsv( null )$BR                ## null
+
+$globalApacheStringEscapeUtils.escapeHtml( "3 < 4 && true" )$BR    ## => 3 &lt; 4 &amp;&amp; true
+
+## the unescape methods are useful in code templates
+## exception
+##$globalApacheStringEscapeUtils.unescapeHtml( "3 &lt; 4 &amp;&amp; true" )$BR
+
+$globalApacheStringEscapeUtils.unescapeJava( 'Double quotes \"' )$BR ## => Double quotes "
+
+## other methods: unescapeJavaScript, unescapeXml
