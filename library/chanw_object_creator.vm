@@ -31,12 +31,16 @@ $chanwGetMethodByClassNameMethodNameParamTypes.invoke( "Hello, ", "World!" )
 
 #chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.String' 'indexOf' $paramList )
 $chanwGetMethodByClassNameMethodNameParamTypes.invoke( "Hello, ", 'e' )
+
+#chanwIsInstanceOf( $list "java.util.concurrent.BlockingDeque" )
+$chanwIsInstanceOf$BR                                    ## => false
 *#
 
 #*
 Returns an object of the class, calling the default constructor.
 *#
 #import( '/formats/library/velocity/chanw_global_values' )
+#import( '/formats/library/velocity/chanw_global_utility_objects' )
 
 #macro( chanwGetObjectByClassName $chanwClassName )
     #set( $chanwGetObjectByClassName = "" ) ## reinitialize the global variable
@@ -119,4 +123,49 @@ The $chanwParamList must be a list of strings, representing class objects.
     
     #set( $chanwStmt = $chanwStmt + '))' )
     #evaluate( $chanwStmt )
+#end
+
+#*
+Returns a boolean string, indicating whether the obj
+is an instance of the suppled class.
+*#
+#macro( chanwIsInstanceOf $chanwObj $chanwClassName )
+    #if( $_PropertyTool.isNull( $chanwObj ) )
+        The object cannot be null.$BR
+        #stop
+    #end
+    
+    #if( $chanwClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+        The class name must be a string.
+        #stop
+    #end
+    
+    #set( $chanwIsInstanceOf = "" )
+    
+    #if( $chanwClassName.equals( $chanwObj.Class.Name ) )
+        #set( $chanwIsInstanceOf = true )
+    #else
+        #set( $chanwInterfaces   = $globalApacheClassUtils.getAllInterfaces( $chanwObj.Class ) )
+        #set( $chanwSuperclasses = $globalApacheClassUtils.getAllSuperclasses( $chanwObj.Class ) )
+        
+        #foreach( $interface in $chanwInterfaces )
+            #if( $chanwClassName.equals( $interface.Name ) )
+                #set( $chanwIsInstanceOf = true )
+                #break
+            #end
+        #end
+        
+        #if( $chanwIsInstanceOf == "" )
+            #foreach( $superclass in $chanwSuperclasses )
+                #if( $chanwClassName.equals( $superclass.Name ) )
+                    #set( $chanwIsInstanceOf = true )
+                    #break
+                #end
+            #end            
+        #end
+        
+        #if( $chanwIsInstanceOf == "" )
+            #set( $chanwIsInstanceOf = false )
+        #end
+    #end
 #end
