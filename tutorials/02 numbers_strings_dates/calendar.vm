@@ -38,8 +38,8 @@ $today.getDisplayName( $_FieldTool.in( $today ).MONTH,
 $today.getDisplayNames( $_FieldTool.in( $today ).MONTH, 
     $_FieldTool.in( $today ).SHORT, $_FieldTool.in( "java.util.Locale" ).FRENCH )$BR
 
-$today.getFirstDayOfWeek()$BR           ## => 1
-$today.get( $_FieldTool.in( $today ).DAY_OF_WEEK )$BR           ## => 1
+$today.getFirstDayOfWeek()$BR                                   ## => 1
+$today.get( $_FieldTool.in( $today ).DAY_OF_WEEK )$BR           ## => 2, Monday, Aug 8, 2016
 
 #chanwGetMapKeyValueReversed( $today.getDisplayNames( $_FieldTool.in( $today ).DAY_OF_WEEK, 
     $_FieldTool.in( $today ).LONG, $_FieldTool.in( "java.util.Locale" ).ENGLISH ) )
