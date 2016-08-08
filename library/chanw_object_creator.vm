@@ -127,7 +127,7 @@ The $chanwParamList must be a list of strings, representing class objects.
 
 #*
 Returns a boolean string, indicating whether the obj
-is an instance of the suppled class.
+is an instance of the supplied class.
 *#
 #macro( chanwIsInstanceOf $chanwObj $chanwClassName )
     #if( $_PropertyTool.isNull( $chanwObj ) )
