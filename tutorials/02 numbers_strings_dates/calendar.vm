@@ -43,4 +43,4 @@ $today.get( $_FieldTool.in( $today ).DAY_OF_WEEK )$BR           ## => 1
 
 #chanwGetMapKeyValueReversed( $today.getDisplayNames( $_FieldTool.in( $today ).DAY_OF_WEEK, 
     $_FieldTool.in( $today ).LONG, $_FieldTool.in( "java.util.Locale" ).ENGLISH ) )
-$chanwGetMapKeyValueReversed.get( $today.getFirstDayOfWeek() )
+$chanwGetMapKeyValueReversed.get( $today.getFirstDayOfWeek() )  ## => Sunday
