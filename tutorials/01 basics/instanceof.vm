@@ -1,0 +1,23 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#chanwIsInstanceOf( $_ "com.hannonhill.cascade.velocity.LocatorTool" )
+$chanwIsInstanceOf$BR                                    ## => true
+
+#chanwIsInstanceOf( $_ "java.lang.Object" )
+$chanwIsInstanceOf$BR                                    ## => true
+
+#chanwIsInstanceOf( $_ "java.lang.String" )
+$chanwIsInstanceOf$BR                                    ## => false
+
+#set( $list = [] )
+#chanwIsInstanceOf( $list "java.util.ArrayList" )
+$chanwIsInstanceOf$BR                                    ## => true
+
+#chanwIsInstanceOf( $list "java.io.Serializable" )
+$chanwIsInstanceOf$BR                                    ## => true
+
+#chanwIsInstanceOf( $list "java.lang.Iterable" )
+$chanwIsInstanceOf$BR                                    ## => true
+
+#chanwIsInstanceOf( $list "java.util.concurrent.BlockingDeque" )
+$chanwIsInstanceOf$BR                                    ## => false
