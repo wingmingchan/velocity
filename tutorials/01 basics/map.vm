@@ -1,16 +1,21 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
 #set( $myStates = { "New Mexico" : "NM" } )
 #set( $void     = $myStates.put( "New York", "NY" ) )        ## put
 #set( $void     = $myStates.put( "New Jersey", "NJ" ) )
 
-$myStates
-$myStates.get( "New Jersey" )                                ## get
+$myStates$BR                                                 ## => {New Mexico=NM, New York=NY, New Jersey=NJ}
+$myStates.get( "New Jersey" )$BR                             ## get, NJ
 
 $myStates.putAll( { "Alabama" : "AL", "Alaska" : "AK" } )    ## putAll
-$myStates
-$myStates.containsKey( "Minnesota" )                         ## containsKey, false
-$myStates.size()                                             ## size, 5
+$myStates$BR                                                 ## => {New Mexico=NM, New York=NY, New Jersey=NJ, Alabama=AL, Alaska=AK}
+$myStates.containsKey( "Minnesota" )$BR                      ## containsKey, false
+$myStates.size()$BR                                          ## size, 5
 
 #set( $abbreviations = $myStates.values() )
-$abbreviations
-$abbreviations.class.name                                    ## java.util.LinkedHashMap$LinkedValues
-$abbreviations.toArray()[ 0 ]                                ## NM
+$abbreviations$BR                                            ## => [NM, NY, NJ, AL, AK]
+$abbreviations.class.name$BR                                 ## => java.util.LinkedHashMap$LinkedValues
+$abbreviations.toArray()[ 0 ]$BR                             ## => NM
+
+#chanwGetMapKeyValueReversed( $myStates )
+$chanwGetMapKeyValueReversed$BR                              ## => {NM=New Mexico, NY=New York, NJ=New Jersey, AL=Alabama, AK=Alaska}
