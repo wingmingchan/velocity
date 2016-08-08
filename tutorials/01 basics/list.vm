@@ -1,23 +1,28 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
 #set( $myList = [] )
 #set( $bool   = $myList.add( 3 ) )         ## add
 #set( $bool   = $myList.add( "Hello" ) )
-$myList.size()                             ## size, 2
-$myList.indexOf( "Hello" )                 ## indexOf, 1
+$myList.size()$BR                          ## size, 2
+$myList.indexOf( "Hello" )$BR              ## indexOf, 1
 
 #set( $dummy = $myList.addAll( 0, [ 'this', 'that' ] ) ) ## added to the front
 
-$myList
-$myList[ 3 ] ## => Hello
+$myList$BR                                 ## => [this, that, 3, Hello]
+#chanwGetListReversed( $myList )
+$chanwGetListReversed$BR
 
-$myList.contains( "this" )                 ## contains, true
+$myList[ 3 ]$BR                            ## => Hello
+
+$myList.contains( "this" )$BR              ## contains, true
 
 #set( $bool = $myList.remove( "Hello" ))   ## remove
-$myList.size()                             ## size, 3
+$myList.size()$BR                          ## size, 3
 
-$myList.get( 0 )                           ## get, this
-$myList.clear()                            ## clear
-$myList.size()                             ## => 0
-$myList.isEmpty()                          ## isEmpty, true
+$myList.get( 0 )$BR                        ## get, this
+$myList.clear()$BR                         ## clear
+$myList.size()$BR                          ## => 0
+$myList.isEmpty()$BR                       ## isEmpty, true
 
 #set( $myEvenList = [] )
 #set( $myOddList  = [] )
@@ -31,4 +36,4 @@ $myList.isEmpty()                          ## isEmpty, true
 #end
 
 #set( $myEvenSubList = $myEvenList.subList( 0, 5 ) )
-$myEvenSubList
+$myEvenSubList$BR                           ## subList, [2, 4, 6, 8, 10]
