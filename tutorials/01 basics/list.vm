@@ -10,7 +10,7 @@ $myList.indexOf( "Hello" )$BR              ## indexOf, 1
 
 $myList$BR                                 ## => [this, that, 3, Hello]
 #chanwGetListReversed( $myList )
-$chanwGetListReversed$BR
+$chanwGetListReversed$BR                   ## => [Hello, 3, that, this]
 
 $myList[ 3 ]$BR                            ## => Hello
 
