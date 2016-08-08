@@ -1,0 +1,46 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+## GregorianCalendar
+#set( $today = $_DateTool.getSystemCalendar() )
+## yesterday
+#set( $yesterday = $_DateTool.getSystemCalendar() )
+$yesterday.add( $_FieldTool.in( $yesterday ).DATE, -1 )
+## next month
+#set( $next_month = $_DateTool.getSystemCalendar() )
+$next_month.add( $_FieldTool.in( $next_month ).MONTH, 1 )
+## ten years from today
+#set( $ten_years = $_DateTool.getSystemCalendar() )
+$ten_years.add( $_FieldTool.in( $next_month ).YEAR, 10 )
+
+## Date object
+$today.getTime()$BR
+
+## get the int values
+$today.get( $_FieldTool.in( $today ).YEAR )$BR
+## numeric month
+$today.get( $_FieldTool.in( $today ).MONTH )$BR
+$today.get( $_FieldTool.in( $today ).DATE )$BR
+$today.getTimeInMillis()$BR
+
+$today.after( $yesterday )$BR          ## => true
+$yesterday.before( $today )$BR         ## => true
+$today.compareTo( $yesterday )$BR      ## => 1
+
+## for August, 31
+$today.getActualMaximum( $_FieldTool.in( $today ).DATE )$BR
+$today.getActualMinimum( $_FieldTool.in( $today ).YEAR )$BR    ## => 1
+
+## for August, 八月
+$today.getDisplayName( $_FieldTool.in( $today ).MONTH, 
+    $_FieldTool.in( $today ).SHORT, $_FieldTool.in( "java.util.Locale" ).CHINESE )$BR
+
+## {déc.=11, juin=5, mai=4, févr.=1, mars=2, août=7, nov.=10, janv.=0, avr.=3, juil.=6, sept.=8, oct.=9}
+$today.getDisplayNames( $_FieldTool.in( $today ).MONTH, 
+    $_FieldTool.in( $today ).SHORT, $_FieldTool.in( "java.util.Locale" ).FRENCH )$BR
+
+$today.getFirstDayOfWeek()$BR           ## => 1
+$today.get( $_FieldTool.in( $today ).DAY_OF_WEEK )$BR           ## => 1
+
+#chanwGetMapKeyValueReversed( $today.getDisplayNames( $_FieldTool.in( $today ).DAY_OF_WEEK, 
+    $_FieldTool.in( $today ).LONG, $_FieldTool.in( "java.util.Locale" ).ENGLISH ) )
+$chanwGetMapKeyValueReversed.get( $today.getFirstDayOfWeek() )
