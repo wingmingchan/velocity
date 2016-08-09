@@ -25,7 +25,14 @@ Example:
     #set( $chanwBuildXMLContentRoot = $globalSAXBuilder.build( $stringReader ).rootElement )
 #end
     </build-xml-content-root-code>
-
+    
+    <call-java-method-code>
+#macro( chanwCallJavaMethod $javaObjName $methodName )
+    #set( $chanwStmt = '#set( $chanwCallJavaMethod=' + '$' + $javaObjName + '.' + $methodName + ')' )
+    #evaluate( $chanwStmt )
+#end
+    </call-java-method-code>
+    
     <convert-to-pascal-case-code>
 #*
 Converts a string, possibly with delimiters, into Pascal case.
