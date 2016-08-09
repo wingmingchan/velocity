@@ -1,0 +1,14 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#chanwCallJavaMethod( '_DateTool' 'getCalendar()' )
+#set( $cal = $chanwCallJavaMethod )
+#chanwCallJavaMethod( 'cal' 'set($_FieldTool.in( $cal ).YEAR,2017)' )
+#chanwCallJavaMethod( 'cal' 'getTime().getTime()' )
+$chanwCallJavaMethod$BR     ## output a timestamp like 1502298484798
+
+#set( $str = "hello" )
+#chanwCallJavaMethod( 'str' 'length()' )
+$chanwCallJavaMethod$BR     ## => 5
+
+#chanwCallJavaMethod( '_' 'Class.Name' )
+$chanwCallJavaMethod$BR     ## => com.hannonhill.cascade.velocity.LocatorTool
