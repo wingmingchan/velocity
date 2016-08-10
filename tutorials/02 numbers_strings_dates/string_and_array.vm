@@ -1,0 +1,40 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#set( $str = "this piece , that toy,these people,those " )
+
+## convert a CSV string into an array
+#set( $str_array1 = $globalApacheConversionTool.toStrings( $str ) )
+
+#set( $str_array2 = $globalApacheStringUtils.split( $str, ',' ) )
+
+## convert the array back to a string
+#set( $new_str = $_DisplayTool.list( $str_array1, '","' ) )
+
+#set( $new_str = '"' + $new_str + '"' )
+## output "this piece","that toy","these people","those"
+$new_str
+
+## convert the array back to a string
+#set( $new_str = $_DisplayTool.list( $str_array2, '","' ) )
+
+#set( $new_str = '"' + $new_str + '"' )
+## output "this piece "," that toy","these people","those "
+$new_str
+
+## use replaceAll
+#set( $new_str = '"' + $str.replaceAll( ',', '","' ) + '"' )
+## output "this piece "," that toy","these people","those "
+$new_str
+
+## test lastIndexOfAny( String, String[] )
+#set( $str = "Once upon a time, in a faraway land, there lived a beautiful princess" )
+#set( $search_str = "me,an" )
+#set( $search_str_array = $globalApacheConversionTool.toStrings( $search_str ) )
+$globalApacheStringUtils.lastIndexOfAny($str, $search_str_array)
+
+## text stripAll( String[], String )
+#set( $str = "New Jersey, New York, New Mexico, Alaska, North Carolina, Oregon, Delaware" )
+#set( $str_array = $globalApacheConversionTool.toStrings( $str ) )
+#set( $new_array = $globalApacheStringUtils.stripAll( $str_array, "Ne" ) )
+## output w Jersey, w York, w Mexico, Alaska, orth Carolina, Oregon and Delawar
+$_DisplayTool.list( $new_array )
