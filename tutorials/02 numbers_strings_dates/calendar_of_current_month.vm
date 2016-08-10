@@ -129,4 +129,16 @@ Example output: July of 2016
         <td />
     </tr>
 </table>
+<hr />
+<table class="talignright">
+    <tr>
+        <td> 星期日 </td>
+        <td> 星期一 </td>
+        <td> 星期二 </td>
+        <td> 星期三 </td>
+        <td> 星期四 </td>
+        <td> 星期五 </td>
+        <td> 星期六 </td>
+    </tr>
+</table>
 *#
