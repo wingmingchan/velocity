@@ -1,0 +1,143 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#*
+This table is from https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html
+
+Letter     Date or Time Component                            Presentation        Examples
+G          Era designator                                    Text                AD
+y          Year                                              Year                1996; 96
+Y          Week year                                         Year                2009; 09
+M          Month in year (context sensitive)                 Month               July; Jul; 07
+L          Month in year (standalone form)                   Month               July; Jul; 07
+w          Week in year                                      Number              27
+W          Week in month                                     Number              2
+D          Day in year                                       Number              189
+d          Day in month                                      Number              10
+F          Day of week in month                              Number              2
+E          Day name in week                                  Text                Tuesday; Tue
+u          Day number of week (1 = Monday, ..., 7 = Sunday)  Number              1
+a          Am/pm marker                                      Text                PM
+H          Hour in day (0-23)                                Number              0
+k          Hour in day (1-24)                                Number              24
+K          Hour in am/pm (0-11)                              Number              0
+h          Hour in am/pm (1-12)                              Number              12
+m          Minute in hour                                    Number              30
+s          Second in minute                                  Number              55
+S          Millisecond                                       Number              978
+z          Time zone 	                                     General time zone   Pacific Standard Time; PST; GMT-08:00
+Z          Time zone                                         RFC 822 time zone   -0800
+X          Time zone                                         ISO 8601 time zone  -08; -0800; -08:00
+*#
+
+## test constant
+#chanwGetConstantValueByClassNameConstantName(
+    "com.hannonhill.cascade.velocity.CascadeComparisonDateTool" "MILLIS_PER_SECOND" )
+$chanwGetConstantValueByClassNameConstantName$BR    ## => 1000
+
+## test object conversion
+## get the Calendar object representing now
+#set( $now_cal1  = $_DateTool.getCalendar() )       ## Calendar object
+## get the Date object representing now
+#set( $now_date1 = $_DateTool.getSystemDate() )     ## Date object
+## get the Long object representing now
+#set( $now_long1 = $_DateTool.getSystemTime() )     ## Long object
+
+## turn the Calendar object to a Date object
+#set( $now_date2 = $now_cal1.getTime() )            ## Date object
+
+## use $_DateTool to turn the Calendar object to a Date object
+#set( $now_date3 = $_DateTool.toDate( $now_cal1 ) ) ## Date object
+
+## from Calendar to milliseconds
+#set( $now_long2 = $now_cal1.getTimeInMillis() )    ## Long
+$now_long2$BR
+## or
+$now_cal1.getTime().getTime()$BR
+
+## from Date to milliseconds
+Now: $now_date1.getTime()$BR
+
+## from millisecond Long and String to Date
+#set( $now_ms_string = $now_long1 + "" )
+#set( $now_date4 = $_DateTool.getDate( $now_ms_string ) )
+Now again: $now_date4.getTime()$BR
+
+## from millisecond Long and String to Calendar
+#set( $now_cal2 = $_DateTool.toCalendar( $_DateTool.getDate( $now_ms_string ) ) )
+$now_cal2.getTime().getTime()$BR
+
+## from String to Date
+#set( $date_obj = $_DateTool.toDate( 'MM-dd-yyyy', '10-25-2017' ) )
+$date_obj.getTime()$BR                               ## => 1508904000000
+
+## from milliseconds to days
+Days:   $_DateTool.toDays( $now_long1 )$BR                  ## => 17022
+Months: $_DateTool.toMonths( $now_long1 )$BR                ## => 567
+Years:  $_DateTool.toYears( $now_long1 )$BR                 ## => 46, from 1970
+
+## test format
+Today: $_DateTool.format( 'medium', $now_date1 )$BR         ## => Aug 9, 2016 9:15:40 AM
+
+#set ($pubDate = $_DateTool.getDate( '1351171813097' ) )
+Published day: $_DateTool.format( 'medium', $pubDate )$BR                            ## => Oct 25, 2012 9:30:13 AM
+Difference: $_DateTool.difference( $pubDate, $now_date1 )$BR                         ## => 3 years
+Difference in minutes: $_DateTool.difference( $pubDate, $now_date1 ).getMinutes()$BR ## => 1992945
+Difference in days: $_DateTool.difference( $pubDate, $now_date1 ).getDays()$BR       ## => 1383
+
+$_DateTool.whenIs( $pubDate )$BR                                                     ## => 3 years ago
+
+## test get
+#set( $year      = $_DateTool.getYear() + 1 )
+#set( $month     = $_DateTool.getMonth() )
+#set( $day       = $_DateTool.getDay() )
+#set( $next_year = $now_cal1.clone() )
+$next_year.set( $year, $month, $day )
+$_DateTool.format( 'medium', $next_year )$BR           ## => Aug 9, 2017 9:15:40 AM
+
+$next_year.before( $now_cal1 )$BR                      ## => false
+$next_year.after( $now_cal1 )$BR                       ## => true
+$next_year.compareTo( $now_cal1 )$BR                   ## => 1
+$now_cal1.compareTo( $next_year )$BR                   ## => -1
+
+#set( $current_time_zone = $now_cal1.getTimeZone() )
+$current_time_zone.getDisplayName()<br />              ## => Eastern Standard Time
+
+#set( $now = $_DateTool.getDate() )                    ## another way
+medium format: $_DateTool.format( 'medium', $now )$BR  ## => Aug 9, 2016 9:15:40 AM
+short format: $_DateTool.format( 'short', $now )$BR    ## => 8/9/16 9:15 AM
+long format: $_DateTool.format( 'long', $now )$BR      ## => August 9, 2016 9:15:40 AM EDT
+full format: $_DateTool.format( 'full', $now )$BR      ## => Tuesday, August 9, 2016 9:15:40 AM EDT
+Era: $_DateTool.format( 'G', $now )$BR                 ## => AD
+Year: $_DateTool.format( 'yy', $now )$BR               ## => 16
+Year: $_DateTool.format( 'yyyy', $now )$BR             ## => 2016
+Month: $_DateTool.format( 'M', $now )$BR               ## => 8
+Month: $_DateTool.format( 'MM', $now )$BR              ## => 08
+Month: $_DateTool.format( 'MMM', $now )$BR             ## => Aug
+Month: $_DateTool.format( 'MMMMM', $now )$BR           ## => August
+
+Week in year: $_DateTool.format( 'w', $now )$BR        ## => 33
+Week in month: $_DateTool.format( 'W', $now )$BR       ## => 2
+Day in year: $_DateTool.format( 'D', $now )$BR         ## => 222
+Day in month: $_DateTool.format( 'd', $now )$BR        ## => 9
+Day in month: $_DateTool.format( 'dd', $now )$BR       ## => 09
+
+## the get method uses the current date
+Day of week in month: $_DateTool.get( 'F' )$BR         ## => 2
+Day in week: $_DateTool.get( 'E' )$BR                  ## => Tue
+Day in week: $_DateTool.get( 'EEEEE' )$BR              ## => Tuesday
+AM/PM: $_DateTool.get( 'a' )$BR                        ## => AM
+AM/PM: $_DateTool.get( 'aa' )$BR                       ## => AM
+AM/PM: $_DateTool.get( 'aaa' )$BR                      ## => AM
+AM/PM: $_DateTool.get( 'aaaa' )$BR                     ## => AM
+Hour in day: $_DateTool.get( 'h' )$BR                  ## => 9
+Hour in day: $_DateTool.get( 'H' )$BR                  ## => 9
+Hour in day: $_DateTool.get( 'k' )$BR                  ## => 9
+Hour in day: $_DateTool.get( 'K' )$BR                  ## => 9
+Hour in day: $_DateTool.get( 'hh' )$BR                 ## => 09
+Minute in hour : $_DateTool.get( 'm' )$BR              ## => 15
+Minute in hour : $_DateTool.get( 'mm' )$BR             ## => 15
+Second in minute: $_DateTool.get( 's' )$BR             ## => 40
+Second in minute: $_DateTool.get( 'ss' )$BR            ## => 40
+Millisecond: $_DateTool.get( 'S' )$BR                  ## => 277
+Time zone: $_DateTool.get( 'z' )$BR                    ## => EDT
+Time zone: $_DateTool.get( 'Z' )$BR                    ## => -0400
