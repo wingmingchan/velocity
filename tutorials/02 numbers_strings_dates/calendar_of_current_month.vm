@@ -46,6 +46,21 @@
 </tr>  ## the last </tr>
 </table>
 
+<hr/>
+
+## other languages
+<table class="talignright">
+<tr>
+## change $_FieldTool.in( "java.util.Locale" ).CHINESE to other languages
+#chanwGetMapKeyValueReversed( $cal.getDisplayNames( $_FieldTool.in( $cal ).DAY_OF_WEEK, 
+    $_FieldTool.in( $cal ).SHORT, $_FieldTool.in( "java.util.Locale" ).CHINESE ) )
+    
+#foreach( $num in [ 1..7 ] )
+<td>&#160;$chanwGetMapKeyValueReversed.get( $num )&#160;</td>
+#end
+</tr>
+</table>
+
 #*
 Example output: July of 2016
 
