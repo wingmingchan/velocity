@@ -47,3 +47,9 @@ $globalApacheStringUtils.indexOfAny( "New Jersey is a state", $str_list.toArray(
 
 $str_array.class.name            ## [Ljava.lang.String;
 $str_list.toArray().Class.Name   ## [Ljava.lang.Object;
+
+## when an Object array is OK
+$globalApacheStringUtils.join( $str_list.toArray(), ", " )
+
+## when there is no ambiguity, OK to pass in a whole bunch of arguments instead of an array
+$globalApacheStringUtils.join( "one", "two", "three" ) ## => onetwothree
