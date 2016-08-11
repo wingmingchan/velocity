@@ -1,0 +1,41 @@
+<system-folder id="8d3cca128b7f08ee37c14fb2f761069a">
+	<name>miscellaneous-notes</name>
+	<display-name>Miscellaneous Notes</display-name>
+	<path>/java/java-jsp/miscellaneous-notes</path>
+	<site>cascade-admin</site>
+	<link>site://cascade-admin/java/java-jsp/miscellaneous-notes</link>
+	<dynamic-metadata>
+		<name>exclude-from-menu</name>
+	</dynamic-metadata>
+	<dynamic-metadata>
+		<name>show-intra-icon</name>
+	</dynamic-metadata>
+	<system-page id="8d3cca758b7f08ee37c14fb2e227b6c7">
+		<name>index</name>
+		<title>Miscellaneous Notes</title>
+		<display-name>Miscellaneous Notes</display-name>
+		<path>/java/java-jsp/miscellaneous-notes/index</path>
+		<site>cascade-admin</site>
+		<link>site://cascade-admin/java/java-jsp/miscellaneous-notes/index</link>
+		<dynamic-metadata>
+			<name>exclude-from-menu</name>
+		</dynamic-metadata>
+		<dynamic-metadata>
+			<name>exclude-from-left</name>
+		</dynamic-metadata>
+	</system-page>
+	<system-page id="8d3ccade8b7f08ee37c14fb2b5695668">
+		<name>session</name>
+		<title>StandardSessionFacade</title>
+		<display-name>StandardSessionFacade</display-name>
+		<path>/java/java-jsp/miscellaneous-notes/session</path>
+		<site>cascade-admin</site>
+		<link>site://cascade-admin/java/java-jsp/miscellaneous-notes/session</link>
+		<dynamic-metadata>
+			<name>exclude-from-menu</name>
+		</dynamic-metadata>
+		<dynamic-metadata>
+			<name>exclude-from-left</name>
+		</dynamic-metadata>
+	</system-page>
+</system-folder>
