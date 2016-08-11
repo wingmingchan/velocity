@@ -1,0 +1,11 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+$contentRoot.Name$BR
+
+#set( $children = $contentRoot.getChildren() )
+#set( $contentRoot = $children.get( 0 ) )
+
+$contentRoot.getChild( "name" ).Value$BR
+$contentRoot.getChild( "title" ).Value$BR
+$contentRoot.getChild( "display-name" ).Value$BR
+$contentRoot.getChild( "path" ).Value$BR
