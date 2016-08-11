@@ -37,6 +37,13 @@ $globalApacheStringUtils.lastIndexOfAny($str, $search_str_array)
 $_DisplayTool.list( $new_array )
 
 ## turn a list to an array before calling stripAll
-#set( $str_list = [ "New Jersey", "New York", "New Mexico", "Alaska", "North Carolina", "Oregon, Delaware" ] )
+#set( $str_list = [ "New Jersey", "New York", "New Mexico", "Alaska", "North Carolina", "Oregon", "Delaware" ] )
 #set( $new_array = $globalApacheStringUtils.stripAll( $str_list.toArray(), "Ne" ) )
 $_DisplayTool.list( $new_array )
+
+## watch out for the difference between a String array and $list.toArray
+$globalApacheStringUtils.indexOfAny( "New Jersey is a state", $str_array )           ## => 0
+$globalApacheStringUtils.indexOfAny( "New Jersey is a state", $str_list.toArray() )  ## null
+
+$str_array.class.name            ## [Ljava.lang.String;
+$str_list.toArray().Class.Name   ## [Ljava.lang.Object;
