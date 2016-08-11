@@ -4,19 +4,16 @@
 
 ## convert a CSV string into an array
 #set( $str_array1 = $globalApacheConversionTool.toStrings( $str ) )
-
 #set( $str_array2 = $globalApacheStringUtils.split( $str, ',' ) )
 
 ## convert the array back to a string
 #set( $new_str = $_DisplayTool.list( $str_array1, '","' ) )
-
 #set( $new_str = '"' + $new_str + '"' )
 ## output "this piece","that toy","these people","those"
 $new_str
 
 ## convert the array back to a string
 #set( $new_str = $_DisplayTool.list( $str_array2, '","' ) )
-
 #set( $new_str = '"' + $new_str + '"' )
 ## output "this piece "," that toy","these people","those "
 $new_str
@@ -32,9 +29,14 @@ $new_str
 #set( $search_str_array = $globalApacheConversionTool.toStrings( $search_str ) )
 $globalApacheStringUtils.lastIndexOfAny($str, $search_str_array)
 
-## text stripAll( String[], String )
+## test stripAll( String[], String )
 #set( $str = "New Jersey, New York, New Mexico, Alaska, North Carolina, Oregon, Delaware" )
 #set( $str_array = $globalApacheConversionTool.toStrings( $str ) )
 #set( $new_array = $globalApacheStringUtils.stripAll( $str_array, "Ne" ) )
 ## output w Jersey, w York, w Mexico, Alaska, orth Carolina, Oregon and Delawar
+$_DisplayTool.list( $new_array )
+
+## turn a list to an array before calling stripAll
+#set( $str_list = [ "New Jersey", "New York", "New Mexico", "Alaska", "North Carolina", "Oregon, Delaware" ] )
+#set( $new_array = $globalApacheStringUtils.stripAll( $str_list.toArray(), "Ne" ) )
 $_DisplayTool.list( $new_array )
