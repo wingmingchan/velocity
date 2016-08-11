@@ -1,0 +1,26 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+## The NumberUtils.min method works for an int[]: int min(int[] array)
+
+## OK to list individual arguments instead
+$globalApacheNumberUtils.min( 4, 3, 2, 1, 9, -5 )  ## -5
+
+## in Velocity, we almost always work with an ArrayList object
+#set( $list = [ 37, 4, 12 ] )
+
+## not OK to pass in a list or an array of objects
+$globalApacheNumberUtils.min( $list )              ## null
+$globalApacheNumberUtils.min( $list.toArray() )    ## null
+$globalApacheNumberUtils.min( [ 37, 4, 12 ] )      ## null
+
+## turn the list into a string, containing all the primitive values
+#set( $int_list = $_DisplayTool.list( $list.toArray(), "," ) )   
+$int_list     ## => 37,4,12   this is a string
+## pass in the list of primitive values into the method call
+## all in the form of a string
+#set( $stmt = '#set($min=$globalApacheNumberUtils.min(' + $int_list + '))' )
+## call evaluate
+#evaluate( $stmt )
+$min          ## => 4
+
+## the same trick can be played on double[], Number[], etc.
