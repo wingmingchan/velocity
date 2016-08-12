@@ -39,7 +39,7 @@ by an index block.
         #set( $chanwParentNode = $node.getParent() )
         
         #if( $chanwParentNode && $chanwParentNode.class.name != $ORG_JDOM_DOCUMENT_CLASS_NAME  )
-			#set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) + '/' )
+    		#set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) + '/' )
 		#else
 			#set( $chanwParentPath = "" )
 		#end
@@ -206,23 +206,21 @@ by an index block.
 #*
 Shows the block XML. $block_xml should be an Element object.
 *#
-#macro( chanwShowXml $block_xml )
-    #set( $chanwXmlString = $_SerializerTool.serialize( $block_xml, false ) )
-    #chanwShowXmlString( $chanwXmlString true true )
+#macro( chanwShowXml $block_xml $with_pre $with_newline )
+#set( $chanwXmlString = $_SerializerTool.serialize( $block_xml, false ) )
+#chanwShowXmlString( $chanwXmlString $with_pre $with_newline )
 #end
 
 #*
 Displays an XML string, possibly formatted.
 *#
 #macro( chanwShowXmlString $xml_string $with_pre $with_newline )
-    #if( $with_pre )$S_PRE#end
-    
-    #if( $with_newline )
-        #set( $chanwXmlString = $xml_string.replaceAll( "<", "$NEWLINE&lt;" ) )
-    #else
-        #set( $chanwXmlString = $xml_string.replaceAll( "<", "&lt;" ) )
-    #end
-    
+#if( $with_pre )$S_PRE#end##
+#if( $with_newline )
+#set( $chanwXmlString = $xml_string.replaceAll( "<", "$NEWLINE&lt;" ) )##
+#else
+#set( $chanwXmlString = $xml_string.replaceAll( "<", "&lt;" ) )##
+#end##
 $chanwXmlString
-    #if( $with_pre )$E_PRE#end
+#if( $with_pre )$E_PRE#end
 #end
