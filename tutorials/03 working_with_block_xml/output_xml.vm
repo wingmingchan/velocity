@@ -1,8 +1,20 @@
 #import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
 
 ## when an org.jdom.Element is passed in
+## works for all types of blocks
 #chanwShowXml( $contentRoot true )
 
+## a text block containing XML
 ## when an XML string is passed in
-#set( $block = $_.locateBlock( '/_cascade/blocks/code/system-page', 'velocity-test' ) )
-#chanwShowXmlString( $block.Text true )
+#set( $text_block = $_.locateBlock( '/_cascade/blocks/code/system-page', 'velocity-test' ) )
+#chanwShowXmlString( $text_block.Text true )
+
+## an XML block
+#set( $xml_block = $_.locateBlock( '/_cascade/blocks/xml/empty-element', 'velocity-test' ) )
+## note that a root element is created
+#chanwShowXml( $xml_block.XMLAsXMLElement true )
+#chanwShowXmlString( $xml_block.XML true )
+
+## a feed block
+#set( $feed_block = $_.locateBlock( '/_cascade/blocks/news-feed', 'velocity-test' ) )
+#chanwShowXmlString( $feed_block.Feed true )
