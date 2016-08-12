@@ -1,11 +1,35 @@
 #import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
 
-$contentRoot.Name$BR
+#*
+This format works with a text block containing the following contents:
+<system-page id="8d3cca758b7f08ee37c14fb2e227b6c7">
+    <name>index</name>
+    <title>Miscellaneous Notes</title>
+    <display-name>Miscellaneous Notes</display-name>
+    <path>/java/java-jsp/miscellaneous-notes/index</path>
+    <site>cascade-admin</site>
+    <link>site://cascade-admin/java/java-jsp/miscellaneous-notes/index</link>
+    <dynamic-metadata>
+        <name>exclude-from-menu</name>
+    </dynamic-metadata>
+    <dynamic-metadata>
+        <name>exclude-from-left</name>
+    </dynamic-metadata>
+</system-page>
+*#
 
-#set( $children = $contentRoot.getChildren() )
-#set( $contentRoot = $children.get( 0 ) )
+$contentRoot.Name$BR                              ## => system-xml
 
-$contentRoot.getChild( "name" ).Value$BR
-$contentRoot.getChild( "title" ).Value$BR
-$contentRoot.getChild( "display-name" ).Value$BR
-$contentRoot.getChild( "path" ).Value$BR
+#set( $contentRoot = $contentRoot.Children.get( 0 ) )
+
+$contentRoot.getChild( "name" ).Value$BR          ## => index
+$contentRoot.getChild( "title" ).Value$BR         ## => Miscellaneous Notes
+$contentRoot.getChild( "display-name" ).Value$BR  ## => Miscellaneous Notes
+$contentRoot.getChild( "path" ).Value$BR          ## => /java/java-jsp/miscellaneous-notes/index
+
+## use $_ instead
+#set( $block = $_.locateBlock( '/_cascade/blocks/code/system-page', 'velocity-test' ) )
+#chanwShowXmlString( $block.Text true )
+#chanwBuildXMLContentRoot( $block.Text )
+#set( $contentRoot = $chanwBuildXMLContentRoot.Children.get( 0 ) )
+$contentRoot.Name$BR                              ## => system-page
