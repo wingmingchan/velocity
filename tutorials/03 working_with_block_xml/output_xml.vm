@@ -1,0 +1,8 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+## when an org.jdom.Element is passed in
+#chanwShowXml( $contentRoot true )
+
+## when an XML string is passed in
+#set( $block = $_.locateBlock( '/_cascade/blocks/code/system-page', 'velocity-test' ) )
+#chanwShowXmlString( $block.Text true )
