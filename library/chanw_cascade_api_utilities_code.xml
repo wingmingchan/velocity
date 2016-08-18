@@ -1,0 +1,16 @@
+<cascade-api-utilities-code>
+    <file-comment>
+#*
+The format defines macros to provide general utilities for Cascade API objects.
+*#
+    </file-comment>
+    
+    <get-folder-contained-asset-name-code>
+#macro( chanwGetFolderContainedAssetName $asset )
+    #set( $chanwPathSegments = $asset.Identifier.Path.PathSegments )
+    #set( $lastIndex = $chanwPathSegments.size() - 1 )
+    #set( $chanwGetFolderContainedAssetName = $chanwPathSegments.get( $lastIndex ) )
+#end
+    </get-folder-contained-asset-name-code>
+
+</cascade-api-utilities-code>
