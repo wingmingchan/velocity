@@ -43,6 +43,12 @@ The format provides constants used in other library formats.
 #set( $ORG_JDOM_DOCUMENT_CLASS_NAME             = 'org.jdom.Document' )
 #set( $ORG_JDOM_ELEMENT_CLASS_NAME              = 'org.jdom.Element' )
 
+## cascade pseudo tags
+#set( $S_SYSTEM_ASSET       = "[system-asset]" )
+#set( $E_SYSTEM_ASSET       = "[/system-asset]" )
+#set( $S_SYSTEM_ASSET_LOCAL = "[system-asset:local]" )
+#set( $E_SYSTEM_ASSET_LOCAL = "[/system-asset:local]" )
+
 ## cascade element names
 #set( $cascadeXML_ELEMENT_CREATED_BY            = 'created-by' )
 #set( $cascadeXML_ELEMENT_CREATED_ON            = 'created-on' )
@@ -245,4 +251,9 @@ is part of the HTML markups.
     "formats/library/velocity/chanw_list_map_utilities_code", $master_site_name ).getXMLAsXMLElement().getChild( "map-list-utilities-code" ) )
 #set( $get_list_reversed_code = $list_map_utilities_code.getChild( "get-list-reversed-code" ).value )
 #set( $get_map_key_value_reversed_code = $list_map_utilities_code.getChild( "get-map-key-value-reversed-code" ).value )
+
+#set( $cascade_api_utilities_code = $_.locateBlock( 
+    "formats/library/velocity/chanw_cascade_api_utilities_code", $master_site_name ).getXMLAsXMLElement().getChild( "cascade-api-utilities-code" ) )
+#set( $get_folder_contained_asset_name_code = $cascade_api_utilities_code.getChild( "get-folder-contained-asset-name-code" ).value )
+
 </global-values>
