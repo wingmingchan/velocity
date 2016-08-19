@@ -1,5 +1,7 @@
+<?xml version="1.0"?>
 <global-velocity-code>
     <!-- This block is hooked up with chanw_global_values_code and process_block.
+    Code defined here is executed in chanw_global_values.
     
     Code templates: Strings like -dispatch_macro_name-, -single_group_name- and -macro_name- are place-holders,
     to be replaced by real values; everything else is just plain Velocity code, except XML entities like &lt;
@@ -13,8 +15,64 @@
     3. processIndexBlock
     4. processScript
     -->
+
+    <build-xml-content-root-code>
+#*
+Creates an org.jdom.Element object out of an XML string.
+Example:
+
+#set( $xml = "&lt;books&gt;&lt;book&gt;Harry Potter&lt;/book&gt;&lt;book&gt;Little Women&lt;/book&gt;&lt;/books&gt;" )
+#chanwBuildXMLContentRoot( $xml )
+#set( $contentRoot = $chanwBuildXMLContentRoot )
+*#
+#macro( chanwBuildXMLContentRoot $xml_string )
+    #chanwGetConstructorByClassNameParamSize( 'java.io.StringReader' 1 )
+    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
+    #set( $stringReader     = $chanwConstructor.newInstance( $xml_string ) )
+    #set( $chanwBuildXMLContentRoot = $globalSAXBuilder.build( $stringReader ).rootElement )
+#end
+    </build-xml-content-root-code>
     
-    <!-- code templates -->
+    <call-java-method-code>
+#macro( chanwCallJavaMethod $javaObjName $methodName )
+    #set( $chanwStmt = '#set( $chanwCallJavaMethod=' + '$' + $javaObjName + '.' + $methodName + ')' )
+    #evaluate( $chanwStmt )
+#end
+    </call-java-method-code>
+    
+    <convert-to-pascal-case-code>
+#*
+Converts a string, possibly with delimiters, into Pascal case.
+Example:
+
+#chanwConvertToPascalCase( "xml-group" "-" )
+$chanwConvertToPascalCase
+## converting xml-group to XmlGroup
+*#
+#macro( chanwConvertToPascalCase $chanwMacroName $chanwDelimiter )
+    #if( $chanwMacroName.class.name != $JAVA_LANG_STRING_CLASS_NAME || $chanwMacroName.length() == 0 )
+        Not a String$BR 
+        #stop
+    #end
+    
+    #if( !$chanwDelimiter || $chanwDelimiter.class.name != $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $chanwDelimiter = '' ) ## default to empty string
+    #end
+    
+    #if( $chanwDelimiter.length() &gt; 0 ) ## there is a delimiter passed in
+        #if( $chanwMacroName.indexOf( $chanwDelimiter ) &lt; 0 ) ## the delimiter does not exist
+            #set( $chanwConvertToPascalCase = $globalApacheWordUtils.capitalize( $chanwMacroName ) )
+        #else
+            #set( $chanwMacroName = $chanwMacroName.replaceAll( $chanwDelimiter, ' ' ) ) ## replace delimiters with spaces
+            #set( $chanwMacroName = $globalApacheWordUtils.capitalize( $chanwMacroName ) ) ## capitalize words
+            #set( $chanwConvertToPascalCase = $chanwMacroName.replaceAll( ' ', '' ) ) ## remove spaces
+        #end
+    #else ## no delimiter passed in
+        #set( $chanwConvertToPascalCase = $globalApacheWordUtils.capitalize( $chanwMacroName ) )
+    #end
+#end
+    </convert-to-pascal-case-code>
+
     <generate-macro-foreach>
 #foreach( $macro_name in $-list_name- )
     #set( $chanw_foreach_statement = $-code_name-.replaceAll( "-macro_name-", $macro_name ) )
@@ -22,6 +80,103 @@
 #end
     </generate-macro-foreach>
     
+    <get-file-path-code>
+#*
+Gets the valid file path or the default path. Invoke this macro in double quotes
+in a set directive. Created by Peter.
+Example:
+
+#set( $myFile = "#chanwGetFilePath( 'images/computer-people-700x350.jpg' 'thomas-test' 'images/default.jpg' )" )
+*#
+#macro( chanwGetFilePath $file $site $default )
+    #if( $_PropertyTool.isNull( $_.locateFile( $file, $site ) ) )
+        $default
+    #else
+        $file
+    #end
+#end
+    </get-file-path-code>
+
+    <get-folder-contained-asset-name-code>
+#macro( chanwGetFolderContainedAssetName $asset )
+    #set( $chanwPathSegments = $asset.Identifier.Path.PathSegments )
+    #set( $lastIndex = $chanwPathSegments.size() - 1 )
+    #set( $chanwGetFolderContainedAssetName = $chanwPathSegments.get( $lastIndex ) )
+#end
+    </get-folder-contained-asset-name-code>
+
+    <get-list-reversed-code>
+#*
+Returns the list in reversed order.
+*#
+#macro( chanwGetListReversed $chanwList )
+    #set( $chanwGetListReversed = [] )
+    
+    #if( $chanwList.Class.Name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME -aa- $chanwList.size() &gt; 0 )
+        #set( $chanwEndIndex = $chanwList.size() - 1 )
+        #foreach( $num in [ $chanwEndIndex..0 ] )
+            #set( $void = $chanwGetListReversed.add( $chanwList.get( $num ) ) )
+        #end
+    #end
+#end
+    </get-list-reversed-code>
+    
+    <get-map-key-value-reversed-code>
+#*
+Returns the map with keys as values, and values as keys.
+This macro assumes that the values are unique. Else later values, when treated as keys,
+overwrite earlier values.
+*#
+#macro( chanwGetMapKeyValueReversed $chanwMap )
+    #set( $chanwGetMapKeyValueReversed = {} )
+    
+    #if( ( $chanwMap.Class.Name == $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME || $chanwMap.Class.Name == $JAVA_UTIL_HASHMAP_CLASS_NAME )
+        -aa- $chanwMap.size() &gt; 0 )
+        #set( $chanwKeySet = $chanwMap.keySet() )
+        #foreach( $key in $chanwKeySet )
+            #set( $void = $chanwGetMapKeyValueReversed.put( $chanwMap.get( $key ), $key ) )
+        #end
+    #end
+#end    
+    </get-map-key-value-reversed-code>
+    
+    <get-node-values-code>
+#*
+Dynamically creates variables assigned with values.
+*#
+#macro( chanwGetNodeValues $node $map )
+    #foreach( $var in $map.keySet() )
+        #if( $_XPathTool.selectSingleNode( $node, $map[ $var ] ) )
+            #set( $chanwNodeValue = $_EscapeTool.xml( $_XPathTool.selectSingleNode( $node, $map[ $var ] ).value ) )
+        #else
+            #set( $chanwNodeValue = "" )
+        #end        
+        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariable(' + "'$var' " + "'')" )
+        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariable(' + "'$var' " + "'$chanwNodeValue')" )
+        #evaluate( $chanwSetVarValStatement )
+    #end
+#end
+    </get-node-values-code>
+
+    <get-node-sets-code>
+#*
+Dynamically creates variables assigned with node sets.
+*#
+#macro( chanwGetNodeSets $node $map )
+    #set( $chanwNameNodesMap = {} )
+    #foreach( $var in $map.keySet() )
+        #set( $chanwNodeSet = $_XPathTool.selectNodes( $node, $map[ $var ] ) )
+        #if( $_PropertyTool.isNull( $chanwNodeSet ) )
+            #set( $chanwNodeSet = "" )
+        #end
+        #set( $void = $chanwNameNodesMap.put( $map[ $var ], $chanwNodeSet ) )
+        #set( $chanwSetVarValStatement = '#' + "set(" + $_EscapeTool.D + "$var = " + 
+            $_EscapeTool.D + "chanwNameNodesMap[" + $_EscapeTool.D + "map["+ "'$var']])" )
+        #evaluate( $chanwSetVarValStatement )
+    #end
+#end
+    </get-node-sets-code>
+
     <index-block-macro>
 #macro( -macro_name- $-node_type-Node )
     #if( !$-node_type-Node )
@@ -34,6 +189,37 @@
 #end
     </index-block-macro>
     
+    <invoke-macro-code>
+#*
+Invokes a macro with the name and parameters passed in.
+Example:
+
+#set( $file    = 'images/computer-people-700x350.jpg' )
+#set( $site    = 'thomas-test' )
+#set( $default = 'images/default.jpg' )
+#set( $myFile  = "#chanwInvokeMacro('chanwGetFilePath' ['file', 'site', 'default'] )" )
+*#
+#macro( chanwInvokeMacro $chanwMacroName $chanwMacroParams )
+    #if( $chanwMacroName.class.name == $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $chanwStatement = "#$chanwMacroName(" )
+    
+        #if( $chanwMacroParams.class.name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+            #if( $chanwMacroParams.size() &gt; 0 )
+                #foreach( $chanwMacroParam in $chanwMacroParams )
+                    #if( $chanwMacroParam.class.name == $JAVA_LANG_STRING_CLASS_NAME )
+                        #set( $chanwStatement = $chanwStatement + "$" + $chanwMacroParam + " " )
+                    #end
+                #end
+            #end
+        #end
+    
+        #set( $chanwStatement = $chanwStatement.trim() )
+        #set( $chanwStatement = $chanwStatement + ")" )
+        #evaluate( $chanwStatement )
+    #end
+#end
+    </invoke-macro-code>
+
     <multi-group>
 #macro(-macro_name- $systemDataStructure $region)
     #set($groupType=$systemDataStructure.getChild('choose-type').value)
@@ -50,22 +236,6 @@
 #end     
     </multi-group>
     
-    <single-group>
-#macro(-dispatch_macro_name- $systemDataStructure)
-    #set($groupToBeProcessed=$systemDataStructure.getChild('-single_group_name-'))
-    #chanwConvertToPascalCase('-single_group_name-' '-')
-    #set($macroName=$MACRO_PREFIX+$chanwConvertToPascalCase)
-    #chanwInvokeMacro($macroName ['groupToBeProcessed'])
-#end
-    </single-group>
-    
-    <site-config>
-#set( $contentVar = $_XPathTool.selectSingleNode( $page, 'system-data-structure/site-config-group/-node_name-/content' ) )
-#if( !$_PropertyTool.isNull( $contentVar ) )
-    #processBlockChooser( $contentVar )
-#end
-    </site-config>
-    
     <page-config>
 #set( $-block_content- = $_XPathTool.selectSingleNode( $page, 'system-data-structure/page-config-group/-node_name-/content' ) )
 #if( !$_PropertyTool.isNull( $-block_content- ) )
@@ -75,13 +245,6 @@
     #end
     </page-config>
     
-    <site-map>
-#macro( -macro_name- $systemIndexBlock )
-    #chanwCreateSiteMap( $systemIndexBlock )
-#end
-    </site-map>
-    
-    <!-- macros used in the library -->
     <processBlockChooser>
 #*
 Processes a block chooser or a region.
@@ -169,86 +332,11 @@ The name of the block is turned into a macro name.
 #end
     </processIndexBlock>
     
-    <processScript>
-#*
-Processes a script block. 
-A script block, in the current implementation, is an XML block whose name must have a '-script' suffix.
-The $firstChild is the scripts element.
-*#
-#macro( processScript $firstChild )
-    ## get the scripts to be executed
-    #set( $chanwScripts = $firstChild.getChildren( 'script' ) )
-    
-    ## loop through each script
-    #if( $chanwScripts.size() &gt; 0 )
-        #foreach( $script in $chanwScripts )
-            ## first, check for redirect
-            #set( $chanwRedirect = "" )
-            #set( $chanwRedirect = $_XPathTool.selectSingleNode( $script, "redirect" ) )
-
-            ## second, import the script
-            #set( $chanwPath = "" )
-            #set( $chanwPath = $script.getChild( "path" ) )
-            
-            #if( $chanwPath )
-                #set( $chanwPath = $chanwPath.Value.trim() )
-            #end
-            
-            ## make the path optional
-            #if( $chanwPath != "" )
-                #set( $chanwStatement = "#" + "import('$chanwPath')" )
-                #evaluate( $chanwStatement )
-            #end
-            
-            #set( $chanwStatement = "" )
-            #set( $chanwMacros = $script.getChildren( "macro" ) )
-            
-            ## second, invoke each macro
-            #if( $chanwMacros.size() &gt; 0 )
-                #foreach( $macro in $chanwMacros )
-    				#set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
-					#set( $chanwStatement = "" )
-					#set( $chanwStatement = "#" + $chanwMacro )
-					
-					#if( $chanwRedirect == "" )
-						#set( $chanwParams = $macro.getChild( "params" ) )
-                        #set( $chanwLoop   = $macro.getChild( "loop" ) )
-			
-						#if( !$_PropertyTool.isNull( $chanwParams ) )
-                            ## pass in the global statement
-                            #processParams( $chanwStatement $chanwParams )
-                            #evaluate( $chanwStatement )
-                        #elseif( !$_PropertyTool.isNull( $chanwLoop ) )
-                            #set( $chanwParamsNodes = $chanwLoop.getChildren( "params" ) )
-                            
-                            #if( $chanwParamsNodes -aa- $chanwParamsNodes.size() &gt; 0 )
-                                #foreach( $chanwParamsNode in $chanwParamsNodes )
-                                    #set( $chanwStatement = "" )
-    				                #set( $chanwStatement = "#" + $chanwMacro )
-                                    #processParams( $chanwStatement $chanwParamsNode )
-                                    ##$chanwStatement
-                                    #evaluate( $chanwStatement )
-                                #end
-                            #end
-						#end
-					#else
-						#set( $chanwStatement = $chanwStatement + "(" )
-						#set( $chanwStatement = $chanwStatement + "$" + "firstChild" )
-						#set( $chanwStatement = $chanwStatement + ")" )
-                        #evaluate( $chanwStatement )
-					#end
-					##$chanwStatement
-                #end
-            #end
-        #end
-    #end
-#end
-    </processScript>
     <processParams>
 ## Note that the global variable $chanwStatement is passed in
 #macro( processParams $chanwStatement $params )
     #set( $paramsChildren = $params.getChildren() )
-    			
+        		
 	#if( $paramsChildren.size() &gt; 0 )
 		#set( $chanwStatement = $chanwStatement + "(" )
 
@@ -326,4 +414,196 @@ The $firstChild is the scripts element.
 	#end
 #end
     </processParams>
+    
+    <processScript>
+#*
+Processes a script block. 
+A script block, in the current implementation, is an XML block whose name must have a '-script' suffix.
+The $firstChild is the scripts element.
+*#
+#macro( processScript $firstChild )
+    ## get the scripts to be executed
+    #set( $chanwScripts = $firstChild.getChildren( 'script' ) )
+    
+    ## loop through each script
+    #if( $chanwScripts.size() &gt; 0 )
+        #foreach( $script in $chanwScripts )
+            ## first, check for redirect
+            #set( $chanwRedirect = "" )
+            #set( $chanwRedirect = $_XPathTool.selectSingleNode( $script, "redirect" ) )
+
+            ## second, import the script
+            #set( $chanwPath = "" )
+            #set( $chanwPath = $script.getChild( "path" ) )
+            
+            #if( $chanwPath )
+                #set( $chanwPath = $chanwPath.Value.trim() )
+            #end
+            
+            ## make the path optional
+            #if( $chanwPath != "" )
+                #set( $chanwStatement = "#" + "import('$chanwPath')" )
+                #evaluate( $chanwStatement )
+            #end
+            
+            #set( $chanwStatement = "" )
+            #set( $chanwMacros = $script.getChildren( "macro" ) )
+            
+            ## second, invoke each macro
+            #if( $chanwMacros.size() &gt; 0 )
+                #foreach( $macro in $chanwMacros )
+        			#set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
+					#set( $chanwStatement = "" )
+					#set( $chanwStatement = "#" + $chanwMacro )
+					
+					#if( $chanwRedirect == "" )
+						#set( $chanwParams = $macro.getChild( "params" ) )
+                        #set( $chanwLoop   = $macro.getChild( "loop" ) )
+			
+						#if( !$_PropertyTool.isNull( $chanwParams ) )
+                            ## pass in the global statement
+                            #processParams( $chanwStatement $chanwParams )
+                            #evaluate( $chanwStatement )
+                        #elseif( !$_PropertyTool.isNull( $chanwLoop ) )
+                            #set( $chanwParamsNodes = $chanwLoop.getChildren( "params" ) )
+                            
+                            #if( $chanwParamsNodes -aa- $chanwParamsNodes.size() &gt; 0 )
+                                #foreach( $chanwParamsNode in $chanwParamsNodes )
+                                    #set( $chanwStatement = "" )
+    				                #set( $chanwStatement = "#" + $chanwMacro )
+                                    #processParams( $chanwStatement $chanwParamsNode )
+                                    ##$chanwStatement
+                                    #evaluate( $chanwStatement )
+                                #end
+                            #end
+						#end
+					#else
+						#set( $chanwStatement = $chanwStatement + "(" )
+						#set( $chanwStatement = $chanwStatement + "$" + "firstChild" )
+						#set( $chanwStatement = $chanwStatement + ")" )
+                        #evaluate( $chanwStatement )
+					#end
+					##$chanwStatement
+                #end
+            #end
+        #end
+    #end
+#end
+    </processScript>
+    
+    <reinitialize-list-of-variables-code>
+#*
+Reinitializes the list of variables, all assigned the empty string.
+The list passed in should be variable names without the dollar signs.
+Example: 
+
+#chanwReinitializeListOfVariables( [ "first", "second", "third" ] )
+*#
+#macro( chanwReinitializeListOfVariables $list )
+    #if( $list.class.name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+        A list of variable names is required.
+        #stop
+    #end
+    #if( $list.size() &gt; 0 )
+        #foreach( $var in $list )
+            #chanwSetVariable( $var "" )
+        #end
+    #end
+#end
+    </reinitialize-list-of-variables-code>
+
+    <set-variable-code>
+#*
+Dynamically turns $var into a variable assigned with the value $val.
+The value of $var should be a variable name without the dollar sign like "var".
+Example: see chanwReinitializeListOfVariables
+*#
+#macro( chanwSetVariable $var $val )
+    #if( $var.class.name != $JAVA_LANG_STRING_CLASS_NAME )
+        The variable name $var is not acceptable
+        #stop
+    #end
+
+    #if( $_PropertyTool.isNull( $val ) )
+        #set( $chanwValue = "" )
+    #elseif( $val.class.name == $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $chanwValue = $_EscapeTool.xml( $val ).trim() )
+    ## this is an object
+    #else
+        #set( $chanwValue = 'val' )
+    #end
+    
+    #if( !$chanwValue.equals( 'val' ) )
+        #set( $chanwSetVarValStatement = '#' + "set(" + "$" + "$var = '$chanwValue')" )
+    #else
+        #set( $chanwSetVarValStatement = '#' + "set(" + "$" + "$var = $" + $chanwValue + ")" )
+    #end
+
+    #evaluate( $chanwSetVarValStatement )
+#end
+    </set-variable-code>
+
+    <set-variable-to-non-empty-string-code>
+#*
+Selects the first non-empty string and assigns it to the variable.
+Example: 
+
+#chanwSetVariableToNonEmptyString( "var" [ " ", "", "content" ] )
+## $var assigned "content" 
+*#
+#macro( chanwSetVariableToNonEmptyString $var $list )
+    #if( $list.class.name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+        Not a list!!!$BR 
+        #stop
+    #end
+    
+    #set( $size = $list.size() )
+    
+    #if( $size == 0 )
+        Empty list!!!$BR 
+        #stop
+    #end
+    
+    #set( $chanwValue = "" ) ## empty string, the last resort
+    
+    #foreach( $num in [ 1..$size ] )
+        #set( $index = $num - 1 )
+        
+        #if( $list[ $index ].class.name != $JAVA_LANG_STRING_CLASS_NAME )
+            Not a String!!!$BR 
+            #stop
+        #end
+        
+        #if( $list[ $index ].trim() != "" )
+            #set( $chanwValue = $list[ $index ].trim() )
+            #break
+        #end
+    #end
+    
+    #chanwSetVariable( $var $chanwValue )
+#end
+    </set-variable-to-non-empty-string-code>
+    
+    <single-group>
+#macro(-dispatch_macro_name- $systemDataStructure)
+    #set($groupToBeProcessed=$systemDataStructure.getChild('-single_group_name-'))
+    #chanwConvertToPascalCase('-single_group_name-' '-')
+    #set($macroName=$MACRO_PREFIX+$chanwConvertToPascalCase)
+    #chanwInvokeMacro($macroName ['groupToBeProcessed'])
+#end
+    </single-group>
+    
+    <site-config>
+#set( $contentVar = $_XPathTool.selectSingleNode( $page, 'system-data-structure/site-config-group/-node_name-/content' ) )
+#if( !$_PropertyTool.isNull( $contentVar ) )
+    #processBlockChooser( $contentVar )
+#end
+    </site-config>
+    
+    <site-map>
+#macro( -macro_name- $systemIndexBlock )
+    #chanwCreateSiteMap( $systemIndexBlock )
+#end
+    </site-map>
+    
 </global-velocity-code>

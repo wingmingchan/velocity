@@ -38,7 +38,7 @@ true
 
 []
 *#
-#import( 'site://_common_assets/formats/library/velocity/chanw_macro_utilities' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
 
 #macro( chanwProcessDynamicData $dynamicDataNode )
     #if( $dynamicDataNode.name != $cascadeXML_ELEMENT_DYNAMIC_METADATA )

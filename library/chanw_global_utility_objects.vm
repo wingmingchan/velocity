@@ -2,7 +2,7 @@
 This format defines global utility objects.
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
-#import( '/formats/library/velocity/chanw_macro_utilities' )
+##import( '/formats/library/velocity/chanw_macro_utilities' )
 
 ## classes with a default constructor
 #set( $tools = {
@@ -15,6 +15,7 @@ This format defines global utility objects.
     'globalApacheMathTool':          'org.apache.velocity.tools.generic.MathTool',
     'globalApacheNumberTool':        'org.apache.velocity.tools.generic.NumberTool',
     'globalApacheNumberUtils':       'org.apache.commons.lang.math.NumberUtils',
+    'globalApacheSortTool':          'org.apache.velocity.tools.generic.SortTool',
     'globalApacheStringUtils':       'org.apache.commons.lang.StringUtils',
     'globalApacheStringEscapeUtils': 'org.apache.commons.lang.StringEscapeUtils',
     'globalApacheWordUtils':         'org.apache.commons.lang.WordUtils',

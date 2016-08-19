@@ -1,4 +1,4 @@
-#import( 'formats/library/velocity/chanw_macro_utilities' )
+#import( 'formats/library/velocity/chanw_global_values' )
 ## do not change these two lines; change the content in these formats instead
 ## when needed, add more import statements here
 #import( 'formats/custom_macro_list' )

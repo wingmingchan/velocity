@@ -39,7 +39,7 @@ by an index block.
         #set( $chanwParentNode = $node.getParent() )
         
         #if( $chanwParentNode && $chanwParentNode.class.name != $ORG_JDOM_DOCUMENT_CLASS_NAME  )
-    		#set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) + '/' )
+        	#set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) + '/' )
 		#else
 			#set( $chanwParentPath = "" )
 		#end

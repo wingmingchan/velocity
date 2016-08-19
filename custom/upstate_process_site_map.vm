@@ -1,8 +1,8 @@
 #*
 This format defines macros to process an index block to create a site map.
 *#
-#import( 'site://_common_assets//formats/library/velocity/chanw_macro_utilities' )
-#import( 'site://_common_assets//formats/library/velocity/chanw_process_index_block' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_process_index_block' )
 
 #macro( chanwCreateSiteMap $systemIndexBlock )
     #set( $pageFolderChildren = $_XPathTool.selectNodes( 

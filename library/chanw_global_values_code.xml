@@ -2,7 +2,8 @@
 <global-values>
 #*
 This block is hooked up with the format chanw_global_values.
-The format provides constants used in other library formats.
+The format provides constants used in other library formats,
+and populates global variables storing Velocity code.
 *#
 ## special characters
 #define( $chanwDOUBLE_HASH )$_EscapeTool.getH()$_EscapeTool.getH()#end
@@ -220,6 +221,8 @@ is part of the HTML markups.
 ## read the block and grab the code
 #set( $global_velocity_code = $_.locateBlock( 
     "formats/library/velocity/chanw_global_velocity_code", $master_site_name ).getXMLAsXMLElement().getChild( "global-velocity-code" ) )
+    
+## these are code templates used to generate code
 #set( $single_group_code    = $global_velocity_code.getChild( "single-group" ).value )
 #set( $multi_group_code     = $global_velocity_code.getChild( "multi-group" ).value )
 #set( $site_map_code        = $global_velocity_code.getChild( "site-map" ).value )
@@ -227,33 +230,30 @@ is part of the HTML markups.
 #set( $index_block_code     = $global_velocity_code.getChild( "index-block-macro" ).value )
 #set( $site_config_code     = $global_velocity_code.getChild( "site-config" ).value )
 #set( $page_config_code     = $global_velocity_code.getChild( "page-config" ).value )
+
+## these are macros used to process block choosers and various types of blocks
 #set( $processBlockChooser_code        = $global_velocity_code.getChild( "processBlockChooser" ).value )
 #set( $processDataDefinitionBlock_code = $global_velocity_code.getChild( "processDataDefinitionBlock" ).value )
 #set( $processIndexBlock_code          = $global_velocity_code.getChild( "processIndexBlock" ).value )
 #set( $processScript_code              = $global_velocity_code.getChild( "processScript" ).value )
 #set( $processParams_code              = $global_velocity_code.getChild( "processParams" ).value )
 
-#set( $macro_utilities_code = $_.locateBlock( 
-    "formats/library/velocity/chanw_macro_utilities_code", $master_site_name ).getXMLAsXMLElement().getChild( "macro-utilities-code" ) )
-#set( $build_xml_content_root_code = $macro_utilities_code.getChild( "build-xml-content-root-code" ).value )
-#set( $call_java_method_code = $macro_utilities_code.getChild( "call-java-method-code" ).value )
-#set( $convert_to_pascal_case_code = $macro_utilities_code.getChild( "convert-to-pascal-case-code" ).value )
-#set( $get_file_path_code = $macro_utilities_code.getChild( "get-file-path-code" ).value )
-#set( $get_node_values_code = $macro_utilities_code.getChild( "get-node-values-code" ).value )
-#set( $get_node_sets_code = $macro_utilities_code.getChild( "get-node-sets-code" ).value )
-#set( $invoke_macro_code = $macro_utilities_code.getChild( "invoke-macro-code" ).value )
-#set( $reinitialize_list_of_variables_code = $macro_utilities_code.getChild( "reinitialize-list-of-variables-code" ).value )
-#set( $set_variable_code = $macro_utilities_code.getChild( "set-variable-code" ).value )
-#set( $set_variable_to_non_empty_string_code = $macro_utilities_code.getChild( "set-variable-to-non-empty-string-code" ).value )
-#set( $test_macro_code = $macro_utilities_code.getChild( "test-macro-code" ).value )
+## these are macros providing general utilities
+#set( $build_xml_content_root_code           = $global_velocity_code.getChild( "build-xml-content-root-code" ).value )
+#set( $call_java_method_code                 = $global_velocity_code.getChild( "call-java-method-code" ).value )
+#set( $convert_to_pascal_case_code           = $global_velocity_code.getChild( "convert-to-pascal-case-code" ).value )
+#set( $get_file_path_code                    = $global_velocity_code.getChild( "get-file-path-code" ).value )
+#set( $get_node_values_code                  = $global_velocity_code.getChild( "get-node-values-code" ).value )
+#set( $get_node_sets_code                    = $global_velocity_code.getChild( "get-node-sets-code" ).value )
+#set( $invoke_macro_code                     = $global_velocity_code.getChild( "invoke-macro-code" ).value )
+#set( $reinitialize_list_of_variables_code   = $global_velocity_code.getChild( "reinitialize-list-of-variables-code" ).value )
+#set( $set_variable_code                     = $global_velocity_code.getChild( "set-variable-code" ).value )
+#set( $set_variable_to_non_empty_string_code = $global_velocity_code.getChild( "set-variable-to-non-empty-string-code" ).value )
 
-#set( $list_map_utilities_code = $_.locateBlock(
-    "formats/library/velocity/chanw_list_map_utilities_code", $master_site_name ).getXMLAsXMLElement().getChild( "map-list-utilities-code" ) )
-#set( $get_list_reversed_code = $list_map_utilities_code.getChild( "get-list-reversed-code" ).value )
-#set( $get_map_key_value_reversed_code = $list_map_utilities_code.getChild( "get-map-key-value-reversed-code" ).value )
+## these are macros providing services related to lists and maps
+#set( $get_list_reversed_code          = $global_velocity_code.getChild( "get-list-reversed-code" ).value )
+#set( $get_map_key_value_reversed_code = $global_velocity_code.getChild( "get-map-key-value-reversed-code" ).value )
 
-#set( $cascade_api_utilities_code = $_.locateBlock( 
-    "formats/library/velocity/chanw_cascade_api_utilities_code", $master_site_name ).getXMLAsXMLElement().getChild( "cascade-api-utilities-code" ) )
-#set( $get_folder_contained_asset_name_code = $cascade_api_utilities_code.getChild( "get-folder-contained-asset-name-code" ).value )
-
+## these are macros providing services to work with Cascade API objects
+#set( $get_folder_contained_asset_name_code = $global_velocity_code.getChild( "get-folder-contained-asset-name-code" ).value )
 </global-values>

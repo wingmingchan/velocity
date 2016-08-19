@@ -1,7 +1,0 @@
-#import( '/formats/library/velocity/chanw_global_values' )
-
-#set( $get_list_reversed_code = $get_list_reversed_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ).replaceAll( "-aa-", "&&" ) )
-#evaluate( $get_list_reversed_code )
-
-#set( $get_map_key_value_reversed_code = $get_map_key_value_reversed_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ).replaceAll( "-aa-", "&&" ) )
-#evaluate( $get_map_key_value_reversed_code )

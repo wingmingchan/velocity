@@ -84,13 +84,16 @@ This macro is needed to process bluepage entries.
     	#set( $void = $globalStringBuffer.append( "<br />" ) )
     #end
     
-    #set( $contactGroups = $groupToBeProcessed.getChildren( 'contact-group' ) )
+    #set( $contactGroups = $groupToBeProcessed.getChildren( 'contact-af-group' ) )
     
     #if( $contactGroups.size() > 0 )
         #foreach( $contactGroup in $contactGroups )
-    		#if( $contactGroup.getChild( 'contact-group-content' ).value != "" )
-    			#if( $contactGroup.getChild( 'contact-group-label' ).value != "" )
-    				#set( $void = $globalStringBuffer.append( "<br />" ) )
+        	#if( $contactGroup.getChild( 'contact-af-content' ).value != "" )
+    			#if( $contactGroup.getChild( 'contact-af-label' ).value != "" )
+        			#set( $void = $globalStringBuffer.append( "<span class='label'>") )
+            		#set( $void = $globalStringBuffer.append( $contactGroup.getChild( 'contact-af-label' ).value ) )
+            		#set( $void = $globalStringBuffer.append( ":</span> ") )
+    				#set( $void = $globalStringBuffer.append( $contactGroup.getChild( 'contact-af-content' ).value ) )
     			#end
                 #set( $void = $globalStringBuffer.append( "<br />" ) )
     		#end
@@ -187,7 +190,7 @@ This macro is needed to process bluepage entries.
             #set( $singleImage1000      = $singleImageBase.replace( ".", "${largeSuffix}." ) )
             #set( $singleImage700       = $singleImageBase.replace( ".", "${mediumSuffix}." ) )
             #set( $singleImage400       = $singleImageBase.replace( ".", "${smallSuffix}." ) )
-            #set( $singleImageSrcSet    = "srcset='$singleImage1000 940w, $singleImage700 730w, $singleImage400 430w'")
+            #set( $singleImageSrcSet    = "srcset='$singleImage1000 940w, $singleImage700 750w, $singleImage400 460w'")
         #else
             #set( $singleImageSrcSet    = "" )
         #end
@@ -342,7 +345,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
                 #set( $singleImage1000      = $singleImageBase.replace( ".", "." ) )
                 #set( $singleImage700       = $singleImageBase.replace( ".", "-700x350." ) )
                 #set( $singleImage400       = $singleImageBase.replace( ".", "-400x200." ) )
-                #set( $singleImageSrcSet    = "srcset='$singleImage1000 1030w, $singleImage700 730w, $singleImage400 430w'")
+                #set( $singleImageSrcSet    = "srcset='$singleImage1000 1030w, $singleImage700 750w, $singleImage400 460w'")
         #end
 
         #if($imageLink != "")    
@@ -352,17 +355,23 @@ Currently only data definition blocks and index blocks can be attached to the fi
         #end
         #set( $int_img      = $int_img + "<img src='${singleImage}' alt='${_EscapeTool.xml($altText)}' class='img-responsive' $singleImageSrcSet />" )
         #set( $int_img      = $int_img + "</div>" )
-        #if ($captionYes != "")
+        #if ($captionYes != "" && $altText.length() <= 62)
             #set( $int_img      = $int_img + "<div class='flexslider-caption'>${altText} </div>" )
         #end
         #if($imageLink != "")  
-            #set( $int_img      = $int_img + "</a></div>" )
-        #else
-            #set( $int_img      = $int_img + "</div>" )
+            #set( $int_img      = $int_img + "</a>" )
         #end
+        
+        #if ($captionYes != "" && $altText.length() > 62)
+            #set( $int_img      = $int_img + "<div class='caption padtop3'>${_EscapeTool.xml($altText)}</div>" )
+        #end
+        
+        
+        #set( $int_img          = $int_img + "</div>" )
+    
         #set( $ext_img          = $_EscapeTool.Q + $int_img + $_EscapeTool.Q )
         #set( $ext_img          = $ext_img.replaceAll( "site:/", "" ) )
-        #set( $ext_img          = $ext_img.replaceAll( "-dev", "" ) )
+  ##      #set( $ext_img          = $ext_img.replaceAll( "-dev", "" ) )
         #set( $ext_img          = $ext_img.replaceAll( "\[system-asset:local\]", "" ).replaceAll( "\[/system-asset:local\]", "" ) )
         #if( $foreach.index == $randImage )
             [system-view:internal]${int_img}[/system-view:internal]
@@ -370,6 +379,49 @@ Currently only data definition blocks and index blocks can be attached to the fi
         <!--#passthrough<?php array_push( $imagearray, $ext_img ); ?>#passthrough-->
     #end
     <!--#passthrough<?php loadRandomImage($imagearray); ?>#passthrough-->
+#end
+
+#macro( processScriptsGroup $groupToBeProcessed )
+    #set( $scripts = $groupToBeProcessed.children )
+    
+    #foreach( $script in $scripts )
+        #set( $scriptPath = $script.getChild( "path" ).value )
+        #set( $chanwStatement = "#" + "import('$scriptPath')" )
+        #evaluate( $chanwStatement )
+        
+        #set( $macros = $script.getChildren( "macro-group" ) )
+        #set( $chanwStatement = "" )
+        
+        #foreach( $macro in $macros )
+            #set( $macroName = $macro.getChild( "name" ).value )
+            #set( $chanwStatement = "#" + $macroName + "(" )
+            
+            #set( $paramGroups = $macro.getChildren( "params-group" ) )
+            
+            #foreach( $paramGroup in $paramGroups )
+                #set( $variables = $paramGroup.getChildren( "variable" ) )
+                #set( $params = $paramGroup.getChildren( "param" ) )
+                
+                #foreach( $variable in $variables )
+                    #if( $variable.value.trim() != "" )
+                        
+                        #set( $chanwStatement = $chanwStatement + "$" + $variable.value + " " )
+                    #end
+                #end
+                #foreach( $param in $params )
+                    #if( $param.value.trim() != "" )
+                        #set( $chanwStatement = $chanwStatement + "$" + $param.value + " " )
+                    #end
+                #end
+            #end
+            
+            #set( $chanwStatement = $chanwStatement + ")" )
+            
+        #end
+        
+        #evaluate( $chanwStatement )
+    #end
+    
 #end
 
 #macro( processSingleimageGroup $groupToBeProcessed )
@@ -399,7 +451,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
         #set( $singleImage1000      = $singleImageBase.replace(".",".") )
         #set( $singleImage700       = $singleImageBase.replace(".","-700x350.") )
         #set( $singleImage400       = $singleImageBase.replace(".","-400x200.") )
-        #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 700w, $singleImage400 400w'")
+        #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 750w, $singleImage400 460w'")
     #end
     
     <div class="imageblock padbottom5 padright3">
@@ -415,12 +467,16 @@ Currently only data definition blocks and index blocks can be attached to the fi
                 <img alt="${altText}" class="img-responsive ${imageRollover}" src="${singleImage}" $singleImageSrcSet />
             </div>
 
-    #if ($captionYes != "")
+    #if ($captionYes != "" && $altText.length() <= 62)
         <div class="flexslider-caption">${_EscapeTool.xml($altText)}</div>
     #end
     
     #if( $imageSingleLink != "" )
         </a>
+    #end
+    
+    #if ($captionYes != "" && $altText.length() > 62)
+        <div class="caption padtop3">${_EscapeTool.xml($altText)}</div>
     #end
     </div>
 #end
@@ -433,7 +489,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
     #set( $link700 = $link.substring( 7 ) )
     #set( $link400 = $link700.substring( 0, $endIndex ) + "-400x200.jpg" )
     
-    <div class=""><img class="img-responsive" src="${link}" alt="${alt}" srcset="http://www.upstate.edu/${link700} 500w, http://www.upstate.edu/${link400} 400w"/></div>
+    <div class=""><img class="img-responsive" src="${link}" alt="${alt}" srcset="http://www.upstate.edu/${link700} 750w, http://www.upstate.edu/${link400} 460w"/></div>
 #end
 
 #macro( processSlideShowGroup $groupToBeProcessed $blockRegion )
@@ -448,12 +504,12 @@ Currently only data definition blocks and index blocks can be attached to the fi
     #end
     <div class="imageblock padbottom5 padright3"><div class="flexslider">
         <ul class="slides">
-        #chanwReinitializeListOfVariables ( [ "srcSetYes", "imageSlideLink", "singleImageSrcSet", "captionYes" ] )
+        #chanwReinitializeListOfVariables ( [ "srcSetYes", "imageSlideLink", "singleImageSrcSet", "captionYes", "autoplayOff" ] )
         #set( $srcSetYes                = $_XPathTool.selectSingleNode($groupToBeProcessed, 'srcSetYes/value').value)
         #set( $selectImage              = $_XPathTool.selectNodes($groupToBeProcessed, 'image'))
         #set( $captionYes               = $groupToBeProcessed.getChild( "caption-yes" ).value )
         #foreach ($selectedImage in $selectImage)
-        
+  
             #chanwReinitializeListOfVariables ( [ "imageSlideLink" ] ) 
             #set( $altText                  = $selectedImage.getChild( "altText" ).value )
             #if ( $selectedImage.getChild("image-link").getAttribute("type").value == "symlink" )
@@ -468,7 +524,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
                     #set( $singleImage1000      = $singleImageBase.replace(".",".") )
                     #set( $singleImage700       = $singleImageBase.replace(".","-700x350.") )
                     #set( $singleImage400       = $singleImageBase.replace(".","-400x200.") )
-                    #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 700w, $singleImage400 400w'")
+                    #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 750w, $singleImage400 460w'")
                 #end
     
             <li>
@@ -478,7 +534,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
                     <div class="slide">
                         <img alt="${_EscapeTool.xml($altText)}" src="$singleImage" $singleImageSrcSet />
                     </div>
-                #if ($captionYes != "")
+                #if ($captionYes != ""  && $altText.length() <= 62 )
                     <div class="flexslider-caption">
                         ${_EscapeTool.xml($altText)}
                     </div>
@@ -486,13 +542,22 @@ Currently only data definition blocks and index blocks can be attached to the fi
             #if($imageSlideLink != "")
                 </a>
             #end
+            #if ($captionYes != "" && $altText.length() > 62 )
+                #set( $autoplayOff  =   "slideshow: false" )
+                <div class='caption padtop3'>
+                    ${_DisplayTool.truncate($_EscapeTool.xml($altText),600,"…",true)}
+                    #if($imageSlideLink != "")
+                        (<a href='$imageSlideLink'>read more</a>)
+                    #end                 
+                </div>
+            #end
             </li>
         #end
         </ul>
     </div></div>
     
     #set( $script_str = '<script type="text/javascript">' + 
-        "$(window).load(function(){ $('.flexslider').flexslider({ animation: 'slide', });});" + "</script>" )
+        "$(window).load(function(){ $('.flexslider').flexslider({ animation: 'slide', $autoplayOff });});" + "</script>" )
     $script_str
     
     #if( !$_PropertyTool.isNull( $blockRegion ) && $blockRegion.trim() != "" )
@@ -507,6 +572,23 @@ Currently only data definition blocks and index blocks can be attached to the fi
 	#end
     $_SerializerTool.serialize( $groupToBeProcessed.getChild( 'wysiwyg-content' ), true )
 #end
+
+#macro( processLocalWysiwygGroup $groupToBeProcessed )
+    #if( $groupToBeProcessed.name != 'local-wysiwyg-group' )
+    	Not a WYSIWYG group
+		#stop
+	#end
+    <!--#passthrough<?php
+    if ($localflag==1){
+    ?>#passthrough-->
+    <div class="bg5 pad5 marginbottom3 margintop3 solid1 round5">
+        <p>(<em>Contents in this box are only visible on campus</em>)</p>
+        $_SerializerTool.serialize( $groupToBeProcessed.getChild( 'wysiwyg-content' ), true )
+    </div>
+    <!--#passthrough<?php }
+    ?>#passthrough-->
+#end
+
 
 #macro( processYoutubeVideoGroup $groupToBeProcessed )
 

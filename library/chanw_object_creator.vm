@@ -40,7 +40,6 @@ $chanwIsInstanceOf$BR                                    ## => false
 Returns an object of the class, calling the default constructor.
 *#
 #import( '/formats/library/velocity/chanw_global_values' )
-#import( '/formats/library/velocity/chanw_global_utility_objects' )
 
 #macro( chanwGetObjectByClassName $chanwClassName )
     #set( $chanwGetObjectByClassName = "" ) ## reinitialize the global variable
@@ -127,7 +126,7 @@ The $chanwParamList must be a list of strings, representing class objects.
 
 #*
 Returns a boolean string, indicating whether the obj
-is an instance of the supplied class.
+is an instance of the suppled class.
 *#
 #macro( chanwIsInstanceOf $chanwObj $chanwClassName )
     #if( $_PropertyTool.isNull( $chanwObj ) )
