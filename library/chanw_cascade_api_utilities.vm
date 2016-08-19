@@ -1,3 +1,0 @@
-#import( '/formats/library/velocity/chanw_global_values' )
-
-#evaluate( $get_folder_contained_asset_name_code )
