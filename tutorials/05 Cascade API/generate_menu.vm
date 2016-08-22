@@ -9,9 +9,9 @@
     
     ## process the folder here
     #if( $folder.Path == "/" )
-        <li>Folder: <a href="index">$folder.Metadata.DisplayName</a>
+        <li>Folder: <a href="index">$_EscapeTool.xml( $folder.Metadata.DisplayName )</a>
     #else
-        <li>Folder: <a href="${folder.Path}/index">$folder.Metadata.DisplayName</a>
+        <li>Folder: <a href="${folder.Path}/index">$_EscapeTool.xml( $folder.Metadata.DisplayName )</a>
     #end
     
     #if( $chanwChildren.size() > 0 )
@@ -22,14 +22,14 @@
                 
                 #if( $chanwLevel > $last_level )
                     #set( $chanwLevel = $chanwLevel - 1 )
-                    <li>Folder: <a href="${chanwChild.Path}/index">$chanwChild.Metadata.DisplayName</a></li>
+                    <li>Folder: <a href="${chanwChild.Path}/index">$_EscapeTool.xml( $chanwChild.Metadata.DisplayName )</a></li>
                 #else
                     #processFolder( $chanwChild $chanwLevel )
                 #end
 
                 #set( $chanwLevel = $chanwLevel - 1 )
             #elseif( $chanwChild.Identifier.Type == $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_PAGE )
-                <li>Page: <a href="${chanwChild.Path}">$chanwChild.Metadata.DisplayName</a></li>
+                <li>Page: <a href="${chanwChild.Path}">$_EscapeTool.xml( $chanwChild.Metadata.DisplayName )</a></li>
             #end
         #end
         </ul>
