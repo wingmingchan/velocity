@@ -1,7 +1,0 @@
-<code-templates>
-	<macroDoTheRealWorkAliasCode>
-#macro( -macro_name- $param1 $param2 )
-    #doTheRealWork( $param1 $param2 )
-#end
-    </macroDoTheRealWorkAliasCode>
-</code-templates>

@@ -1,8 +1,0 @@
-#*
-How often do we write code like this? How do we avoid it?
-*#
-#set( $page = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page" ) )
-#set( $name         = $page.getChild( "name" ) )
-#set( $title        = $page.getChild( "title" ) )
-#set( $display_name = $page.getChild( "display-name" ) )
-#set( $site         = $page.getChild( "site" ) )
