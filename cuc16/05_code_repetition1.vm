@@ -1,0 +1,12 @@
+#*
+How often do we write code like this? How do we avoid it?
+*#
+#set( $var1 = "" )
+#set( $var2 = "" )
+#set( $var3 = "" )
+#set( $var4 = "" )
+#set( $var5 = "" )
+#set( $var6 = "" )
+#set( $var7 = "" )
+#set( $var8 = "" )
+#set( $var9 = "" )

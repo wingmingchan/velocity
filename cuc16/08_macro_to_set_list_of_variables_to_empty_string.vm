@@ -1,0 +1,29 @@
+#** Two macros from the reusable library *#
+#macro( chanwSetVariable $var $val )
+    #if( $_PropertyTool.isNull( $val ) )
+        #set( $chanwValue = "" )
+    #elseif( $val.class.name == "java.lang.String" )
+        #set( $chanwValue = $_EscapeTool.xml( $val ).trim() )
+    #else
+        #set( $chanwValue = $val )
+    #end
+    #set( $chanwSetVarValStatement = '#' + "set(" + "$" + "$var = '$chanwValue')" )
+    #evaluate( $chanwSetVarValStatement )
+#end
+#macro( chanwReinitializeListOfVariables $list )
+    #if( $list.class.name != "java.util.ArrayList" )
+        A list of variable names is required.
+        #stop
+    #end
+    #if( $list.size() > 0 )
+        #foreach( $var in $list )
+            #chanwSetVariable( $var "" )
+        #end
+    #end
+#end
+#chanwReinitializeListOfVariables( [ "var1", "var2", "var3" ] )
+
+- $var1 -
+- $var2 -
+- $var3 -
+- $var4 -     ## not defined

@@ -1,0 +1,28 @@
+#** The #set directive either creates a new global variable, or
+assigns a new value to an exsiting global variable.  *#
+#macro( echoGlobalVariable )
+    $myVar
+#end
+
+#set( $myVar = 3 )
+#echoGlobalVariable
+
+#macro( createGlobalVariable )
+    #set( $newVar = 14 ) 
+#end
+
+## before the macro is invoked, $newVar is undefined
+$newVar
+
+## after the macro is invoked, the variable is defined
+#createGlobalVariable
+$newVar
+
+## overwrite the local variable
+#macro( redefineVariable $myVar2 )
+    $myVar2
+    #set( $myVar2 = "Hello" )
+    $myVar2
+#end
+
+#redefineVariable( 52 )$myVar2

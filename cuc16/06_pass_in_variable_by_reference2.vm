@@ -1,0 +1,15 @@
+#**
+To pass in information of a global variable, we can pass in its name instead.
+Inside the macro, we need to use #evaluate to turn the name back to
+the variable itself.
+*#
+#macro( changeGlobalVariable $var )
+    #set( $stmt = '#set($' + $var + "='Predefined value')" )
+    ##$stmt
+    #evaluate( $stmt )
+#end
+
+#set( $myVar = 3 )
+#changeGlobalVariable( "myVar" )
+
+$myVar

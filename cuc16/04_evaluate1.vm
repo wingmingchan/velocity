@@ -1,0 +1,24 @@
+#** The #evaluate directive can be used to turn a string that looks like
+Velocity code into real code and execute it. The directive can take either an object or a string.
+*#
+#evaluate( $_ )
+
+#evaluate( "Hello" )
+
+#evaluate( "#set($myVar=3)" )
+$myVar
+
+#*
+Why #evaluate:
+We may want to create Velocity code dynamically and execute the resulting code on the fly.
+There are also things that can be done only with #evaluate.
+The min method below takes a list of int, not Integer objects:
+*#
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+
+#set( $list  = [ 37, 4, 12 ] )
+#set( $param = $_DisplayTool.list( $list, ',' ) )
+#set( $stmt  = '#set($min=$globalApacheNumberUtils.' + "min($param))" )
+$stmt
+#evaluate( $stmt )
+$min   ## => 4

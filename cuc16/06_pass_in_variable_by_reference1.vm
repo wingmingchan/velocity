@@ -1,0 +1,21 @@
+#**
+Somewhere out there, there is a global variable.
+We want to create a macro to change the value of the global variable.
+However, we do not know the name of the global variable because we are
+writing reusable library code.
+The global variable must be passed in by "reference."
+*#
+#set( $myVar = 3 ) ## could be in some other format
+
+#macro( changeGlobalVariable $var )
+    #set( $var = "Predefined value" )
+#end
+
+#* 
+It does not make sense to pass in the global variable,
+because the macro simply ignores it and creates another global variable instead.
+*#
+#changeGlobalVariable( $myVar )
+
+$myVar
+$var

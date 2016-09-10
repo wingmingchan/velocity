@@ -1,0 +1,21 @@
+#*
+Why code templates:
+
+1. They can be used to generate large amount of code
+   and reduce repeated code in an organization
+2. They can be used to generate library code to promote reusability
+3. They can be displayed on pages for illustrating purposes
+4. They can be sources for synching
+
+How to build a code template:
+1. Identify a pattern
+2. Write real code for a macros
+3. Change the macro name and params to place-holders
+4. Put code in an XML block
+5. Create a list/map to test the code template
+
+Something about generated macros:
+1. They are available in memory
+2. When they are invoked, no format information (e.g., format name/path) is needed
+   see 10_use_library_code_to_process_system_page
+*#

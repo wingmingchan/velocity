@@ -1,0 +1,15 @@
+#** overshadowing; within the macro, the variable $myVar is local *#
+#macro( echoGlobalVariable2 $myVar )
+    $myVar
+#end
+
+#echoGlobalVariable2( 5 )
+
+## a global variable is created
+#set( $myVar = "Hello" )
+#echoGlobalVariable2  ## no parameter passed in, => Hello
+
+## skip null assignment
+#set( $var = "Hello" )
+#set( $var = $contentRoot )
+$var  ## still => Hello

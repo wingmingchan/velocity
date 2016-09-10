@@ -1,0 +1,26 @@
+#*
+Code repetition in the library
+*#
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ClassTool' )
+#set( $globalApacheClassTool = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ComparisonDateTool' )
+#set( $globalApacheComparisonDateTool = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.ConversionTool' )
+#set( $globalApacheConversionTool = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.LinkTool' )
+#set( $globalApacheLinkTool = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.NumberTool' )
+#set( $globalApacheNumberTool = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.commons.lang.math.NumberUtils' )
+#set( $globalApacheNumberUtils = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.commons.lang.StringUtils' )
+#set( $globalApacheStringUtils = $chanwGetObjectByClassName )
+
+#chanwGetObjectByClassName( 'org.apache.commons.lang.WordUtils' )
+#set( $globalApacheWordUtils = $chanwGetObjectByClassName )
