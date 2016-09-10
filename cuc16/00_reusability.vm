@@ -1,0 +1,16 @@
+#*
+1. Reusability:
+   a. Resources ready to use without any modifications
+   b. Supported by documentation and examples
+2. Two senses of reusability:
+   a. Narrow sense: within an organization; 
+      for example, macros with proprietary data and business logic
+   b. Broad sense: code for anyone, including the author(s); i.e. library code
+3. There is a general lacking of reusability of the second sense
+   in the Cascade community.
+4. Everybody is busy writing his or her own code.
+5. Repeated code and code patterns within any organization.
+6. Repeated code and code patterns across organizations.
+7. My concerns: how to avoid reinventing the wheel, code reptition, 
+   and how to promote reusability of both senses.
+*#
