@@ -10,7 +10,7 @@ $myVar
 "$myVar"
 $myVar2
 
-## What is the difference between quotes in line 8 and in line 11?
+## What is the difference between quotes in line 10 and in line 14?
 "$myVar'
 
 ## difference between single and double quotes in #set
