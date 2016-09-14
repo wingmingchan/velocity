@@ -1,0 +1,25 @@
+#**
+Goal: to create a string that looks exactly like Velocity code
+
+Since a string is always interpreted as code first, 
+especially when it appears inside double quotes, 
+some strings can cause an exception.
+e.g. #set( $string = "#set(" + "$myVar=3)" )
+When #set( is processed as code, it is not well-formed.
+*#
+## when # and set are seperated, OK
+#set( $string = "#" + "set(" + "$myVar=3)" )
+$string
+
+## when $myVar is set, $myVar is evaluted first
+#set( $myVar = 5 )
+#set( $string = "#" + "set(" + "$myVar=3)" )
+$string
+
+## to avoid evaluation of $myVar, seperate $ and myVar
+#set( $string = "#" + "set(" + "$" + "myVar=3)" )
+$string
+
+## or use single quotes
+#set( $string = '#set($myVar=3)' )
+$string

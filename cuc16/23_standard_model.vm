@@ -1,0 +1,30 @@
+#*
+What is the Standard Model?
+1. A way of using Cascade CMS
+2. Currently the best way of using Cascade CMS
+3. A design, and its implementation
+4. Master site approach: a single site to drive all other sites of the same design
+5. One one-region template, one config set, one content type for a design
+6. What does "best" mean?
+   - Clean
+   - Lean and small
+   - Reusable core (about 90% reusable), maintained by me
+     - The design
+     - Web services
+     - Velocity
+   - Detailed documentation and lots of examples
+   - Coexistence of old and new approaches
+7. Extremely short turnaround time for new implementation using the core
+
+Components of the Stardard Model:
+1. Data definitions
+2. Velocity library
+3. Macro name computation and automatic macro invocations
+4. The Script Block
+5. Code templates
+6. Instruction blocks
+7. Site configuration
+8. Web services
+9. Java components
+10. External resources
+*#
