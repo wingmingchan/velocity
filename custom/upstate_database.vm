@@ -1,0 +1,36 @@
+#*
+This format populates lists with values drawn from the database. It is assumed that
+The Java classes used to connect and query the database have been installed.
+See https://github.com/wingmingchan/java/tree/master/edu/upstate/chanw/db for the two
+Java classes.
+
+To use this format:
+
+#import( 'site://_common_assets/formats/library/velocity/upstate_database' )
+
+#foreach( $site in $upstateSiteName )
+    $site
+#end
+*#
+#import( 'site://_common_assets/formats/library/velocity/chanw_object_creator' )
+#chanwGetObjectByClassName( 'edu.upstate.chanw.db.CascadeDB' )
+
+#set( $db = $chanwGetObjectByClassName )
+#set( $maxNumber = 500000 )
+
+#set( $sql  = "select name from cxml_site " )
+#set( $data = $db.getResultSet( $sql ) )
+#set( $upstateSiteName = [] )
+
+#if( $data.next() )
+    #set( $void = $data.first() )
+    #set( $void = $upstateSiteName.add( $data.getString( 1 ) ) )
+    
+    #foreach( $num in [ 1..$maxNumber ] )
+        #if( $data.next() )
+            #set( $void = $upstateSiteName.add( $data.getString( 1 ) ) )
+        #else
+            #break
+        #end
+    #end
+#end
