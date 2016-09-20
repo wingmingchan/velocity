@@ -1,6 +1,6 @@
 #*
 This format populates lists with values drawn from the database. It is assumed that
-The Java classes used to connect and query the database have been installed.
+the Java classes used to connect and query the database have been installed.
 See https://github.com/wingmingchan/java/tree/master/edu/upstate/chanw/db for the two
 Java classes.
 
