@@ -137,7 +137,10 @@ Retrieves the structured data node by using the supplied identifier.
         No valid path passed in
     #elseif( $chanw_bp.class.Name == $COM_CASCADE_BLOCK_API_CLASS_NAME ||
         $chanw_bp.class.Name == $COM_CASCADE_PAGE_API_CLASS_NAME
-    )        
+    )
+        #set( $chanw_next = 0 )
+        #set( $chanw_next_int = 0 )
+        
         #foreach( $chanw_item in $chanw_array )
             #set( $chanw_sdns = "" )
             #set( $chanw_next = $foreach.index + 1 )
