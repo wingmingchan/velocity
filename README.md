@@ -5,7 +5,7 @@ A note about filenames. All files whose filenames with a "chanw_" prefix contain
 
 Since some macros are contributed by Peter Thomas, there are some minor inconsistency in formatting and naming conventions.
 
-To upgrade the library, use the web service program <a href="https://github.com/wingmingchan/velocity/blob/master/library/upgrade_standard_model.php">upgrade_standard_model.php</a>. Before running the program, make sure that the $site_name variable is assigned the correct value to match the name of the site to be upgraded. Since the library can be upgraded in this way, I won't update the code posted here any more.
+To upgrade the library, use the web service program <a href="https://github.com/wingmingchan/velocity/blob/master/library/upgrade_standard_model.php">upgrade_standard_model.php</a>. Before running the program, make sure that the $site_name variable is assigned the correct value to match the name of the site to be upgraded. Since the library can be upgraded in this way, I won't update the code posted here too frequently. For the newest version of the library, see <a href="http://www.upstate.edu/cascade-admin/standard-model/source/index.php">Source</a>.
 
 <ul>
 <li>
