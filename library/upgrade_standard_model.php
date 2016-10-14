@@ -1,5 +1,5 @@
 <?php
-$site_name = "_common_assets"; // name of the site to be upgraded
+$site_name = "_common_assets_barebone"; // name of the site to be upgraded
 $source    = "http://www.upstate.edu/cascade-admin/standard-model/source/";
 
 /*
