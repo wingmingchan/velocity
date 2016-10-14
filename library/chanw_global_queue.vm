@@ -13,9 +13,9 @@ Example:
 
 #chanwSizeGlobalQueue( $queue )
 #set( $size = $chanwSizeGlobalQueue )
-<pre>
+$S_PRE
 
-Current size: $size<br />
+Current size: $size$BR
 #foreach( $num in [1..10] )
 #chanwSizeGlobalQueue( $queue )
 #set( $size = $chanwSizeGlobalQueue )
@@ -25,16 +25,16 @@ Current size: $size<br />
 $item.Class.Name
 #else#break#end
 #end
-</pre>
+$E_PRE
 
 #chanwClearGlobalQueue( $queue )
 
 #chanwSizeGlobalQueue( $queue )
 #set( $size = $chanwSizeGlobalQueue )
-<pre>
+$S_PRE
 
-Current size: $size<br />
-</pre>
+Current size: $size$BR
+$E_PRE
 
 #foreach( $num in [1..1000] )
     #chanwRemainingCapacityGlobalQueue( $queue )
@@ -51,10 +51,10 @@ Current size: $size<br />
 
 #chanwSizeGlobalQueue( $queue )
 #set( $size = $chanwSizeGlobalQueue )
-<pre>
+$S_PRE
 
-Current size: $size<br />
-</pre>
+Current size: $size$BR
+$E_PRE
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
 

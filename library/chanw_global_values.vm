@@ -5,28 +5,6 @@
 #set( $global_values_code = $_.locateBlock( 
     "formats/library/velocity/${library_namespace}_global_values_code", 
     $master_site_name ).getXMLAsXMLElement().getChild( "global-values" ).Value )
-#set( $global_values_code = $global_values_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ) )
+#set( $global_values_code = $global_values_code.replaceAll( "&amp;", "&" ).replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ) )
+
 #evaluate( $global_values_code )
-
-## general utilities
-#set( $MACRO_PREFIX = 'process' )
-#evaluate( $build_xml_content_root_code )
-#evaluate( $call_java_method_code )
-#evaluate( $convert_to_pascal_case_code )
-#evaluate( $get_file_path_code )
-#evaluate( $get_node_values_code )
-#evaluate( $get_node_sets_code )
-#evaluate( $invoke_macro_code )
-#evaluate( $reinitialize_list_of_variables_code )
-#evaluate( $set_variable_code )
-#evaluate( $set_variable_to_non_empty_string_code )
-#evaluate( $test_macro_code )
-
-## list and map utilities
-#set( $get_list_reversed_code = $get_list_reversed_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ).replaceAll( "-aa-", "&&" ) )
-#evaluate( $get_list_reversed_code )
-#set( $get_map_key_value_reversed_code = $get_map_key_value_reversed_code.replaceAll( "&lt;", "<" ).replaceAll( "&gt;", ">" ).replaceAll( "-aa-", "&&" ) )
-#evaluate( $get_map_key_value_reversed_code )
-
-## Cascade API utilities
-#evaluate( $get_folder_contained_asset_name_code )

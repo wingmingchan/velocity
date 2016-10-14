@@ -45,10 +45,10 @@ and populates global variables storing Velocity code.
 #set( $ORG_JDOM_ELEMENT_CLASS_NAME              = 'org.jdom.Element' )
 
 ## cascade pseudo tags
-#set( $S_SYSTEM_ASSET       = "[system-asset]" )
-#set( $E_SYSTEM_ASSET       = "[/system-asset]" )
-#set( $S_SYSTEM_ASSET_LOCAL = "[system-asset:local]" )
-#set( $E_SYSTEM_ASSET_LOCAL = "[/system-asset:local]" )
+#set( $S_SYSTEM_ASSET       = "[" + "system-asset]" )
+#set( $E_SYSTEM_ASSET       = "[" + "/system-asset]" )
+#set( $S_SYSTEM_ASSET_LOCAL = "[" + "system-asset:local]" )
+#set( $E_SYSTEM_ASSET_LOCAL = "[" + "/system-asset:local]" )
 
 ## cascade element names
 #set( $cascadeXML_ELEMENT_CREATED_BY            = 'created-by' )
@@ -246,9 +246,12 @@ is part of the HTML markups.
 #set( $get_node_values_code                  = $global_velocity_code.getChild( "get-node-values-code" ).value )
 #set( $get_node_sets_code                    = $global_velocity_code.getChild( "get-node-sets-code" ).value )
 #set( $invoke_macro_code                     = $global_velocity_code.getChild( "invoke-macro-code" ).value )
+#set( $locate_asset_code                     = $global_velocity_code.getChild( "locate-asset-code" ).value )
 #set( $reinitialize_list_of_variables_code   = $global_velocity_code.getChild( "reinitialize-list-of-variables-code" ).value )
 #set( $set_variable_code                     = $global_velocity_code.getChild( "set-variable-code" ).value )
 #set( $set_variable_to_non_empty_string_code = $global_velocity_code.getChild( "set-variable-to-non-empty-string-code" ).value )
+#set( $create_database_php_code_code         = $global_velocity_code.getChild( "create-database-php-code-code" ).value )
+#set( $get_database_list_code                = $global_velocity_code.getChild( "get-database-list-code" ).value )
 
 ## these are macros providing services related to lists and maps
 #set( $get_list_reversed_code          = $global_velocity_code.getChild( "get-list-reversed-code" ).value )
@@ -256,4 +259,30 @@ is part of the HTML markups.
 
 ## these are macros providing services to work with Cascade API objects
 #set( $get_folder_contained_asset_name_code = $global_velocity_code.getChild( "get-folder-contained-asset-name-code" ).value )
+
+## general utilities
+#set( $MACRO_PREFIX = 'process' )
+#evaluate( $build_xml_content_root_code )
+#evaluate( $call_java_method_code )
+#evaluate( $convert_to_pascal_case_code )
+#evaluate( $get_file_path_code )
+#evaluate( $get_node_values_code )
+#evaluate( $get_node_sets_code )
+#evaluate( $invoke_macro_code )
+#evaluate( $reinitialize_list_of_variables_code )
+#evaluate( $set_variable_code )
+#evaluate( $set_variable_to_non_empty_string_code )
+#evaluate( $create_database_php_code_code )
+#evaluate( $get_database_list_code )
+
+## list and map utilities
+#set( $get_list_reversed_code = $get_list_reversed_code.replaceAll( "&amp;lt;", "&lt;" ).replaceAll( "&amp;gt;", "&gt;" ).replaceAll( "-aa-", "&amp;&amp;" ) )
+#evaluate( $get_list_reversed_code )
+#set( $get_map_key_value_reversed_code = $get_map_key_value_reversed_code.replaceAll( "&amp;lt;", "&lt;" ).replaceAll( "&amp;gt;", "&gt;" ).replaceAll( "-aa-", "&amp;&amp;" ) )
+#evaluate( $get_map_key_value_reversed_code )
+
+## Cascade API utilities
+#evaluate( $get_folder_contained_asset_name_code )
+#evaluate( $locate_asset_code )
+
 </global-values>

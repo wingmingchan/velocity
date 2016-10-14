@@ -40,7 +40,7 @@ Example:
         #set( $chanwSuffix = "&lt;" + $chanwSuffix + "&gt;" )
     #end
     
-    #if( $withH2 )<h2>$chanwClassString$chanwSuffix</h2>#end
+    #if( $withH2 )$S_H2$chanwClassString$chanwSuffix$E_H2#end
     
     #chanwDisplaySuperClass( $chanwClassString $heading )
     #chanwDisplayFields( $chanwClassString $heading )
@@ -65,9 +65,9 @@ Example:
         
         #if( $constructors && $constructors.size() > 0 )
             <$heading>Constructors</$heading>
-            <ul>
+            $S_UL
             #foreach( $constructor in $constructors )
-                <li>## print modifiers
+                $S_LI## print modifiers
                 $_.class.forName( "java.lang.reflect.Modifier" ).getMethod( 
                     "toString", $_FieldTool.in( 
                     "java.lang.Integer" ).TYPE ).invoke( 
@@ -94,9 +94,9 @@ Example:
                 
                 #set( $paramTypesString = $paramTypesString + " )" )
                 #set( $paramTypesString = $paramTypesString.trim() )
-                $paramTypesString</li>
+                $paramTypesString$E_LI
             #end
-            </ul>
+            $E_UL
         #else
             ## No constructors found.
         #end
@@ -121,9 +121,9 @@ Example:
         
         #if( $methods && $methods.size() > 0 )
             <$heading>Methods</$heading>
-            <ul>
+            $S_UL
             #foreach( $method in $methods )
-                <li>
+                $S_LI
                 #set( $chanwModifier = $_.class.forName( "java.lang.reflect.Modifier" ).getMethod( 
                     "toString", $_FieldTool.in( 
                     "java.lang.Integer" ).TYPE ).invoke( 
@@ -153,9 +153,9 @@ Example:
                     #set( $paramTypesString = " " + $paramTypesString.trim() )
                     #set( $paramTypesString = $paramTypesString.replaceAll( " \(", "(" ) )
                      $paramTypesString
-                </li>
+                $E_LI
             #end
-            </ul>
+            $E_UL
         #else
             ## No methods.
         #end
@@ -178,11 +178,11 @@ Example:
         
         #if( $fields && $fields.size() > 0 )
             <$heading>Fields</$heading>
-            <ul>
+            $S_UL
             #foreach( $field in $fields )
-                <li>$field.getName().replaceAll( '&', '&amp;' ): $_EscapeTool.xml( $field.get( null ) )</li>
+                $S_LI$field.getName().replaceAll( '&', '&amp;' ): $_EscapeTool.xml( $field.get( null ) )$E_LI
             #end
-            </ul>
+            $E_UL
         #else
             ## No fields.
         #end
@@ -204,7 +204,7 @@ Example:
         #set( $parent = $chanwClassObj.getGenericSuperclass() )
         
         #if( $parent )
-        <$heading>Parent Class</$heading><p>$parent.toString().replaceAll( "<", "&lt;" )</p>
+        <$heading>Parent Class</$heading>$S_P$parent.toString().replaceAll( "<", "&lt;" )$E_P
         #end
     #end
 #end

@@ -12,9 +12,9 @@ Example:
 
 #chanwSizeGlobalDeque( $deque )
 #set( $size = $chanwSizeGlobalDeque ) 
-<pre>
+$S_PRE
 
-Current size: $size<br />
+Current size: $size$BR
 #foreach( $num in [1..10] )
 #chanwEmptyGlobalDeque( $deque )
 #set( $empty = $chanwEmptyGlobalDeque )
@@ -24,14 +24,14 @@ Current size: $size<br />
 $item.Class.Name $item
 #else#break#end
 #end
-</pre>
+$E_PRE
 
 Use deque as a stack
 #foreach( $num in [1..10] )
 #chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
 #end
 
-<pre>
+$S_PRE
 #foreach( $num in [1..10] )
 #chanwEmptyGlobalDeque( $deque )
 #set( $empty = $chanwEmptyGlobalDeque )
@@ -41,14 +41,14 @@ Use deque as a stack
 $item.Class.Name $item
 #else#break#end
 #end
-</pre>
+$E_PRE
 
 Use deque as a queue
 #foreach( $num in [1..10] )
 #chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
 #end
 
-<pre>
+$S_PRE
 #foreach( $num in [1..10] )
 #chanwEmptyGlobalDeque( $deque )
 #set( $empty = $chanwEmptyGlobalDeque )
@@ -58,14 +58,14 @@ Use deque as a queue
 $item.Class.Name $item
 #else#break#end
 #end
-</pre>
+$E_PRE
 
 Use deque as a deque
 #foreach( $num in [1..10] )
 #chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
 #end
 
-<pre>
+$S_PRE
 #foreach( $num in [1..10] )
 #set( $empty = $chanwEmptyGlobalDeque )
 #if( !$empty )
@@ -80,7 +80,7 @@ $item.Class.Name $item
 #end        
 #else#break#end
 #end
-</pre>
+$E_PRE
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
 

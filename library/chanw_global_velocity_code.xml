@@ -34,6 +34,17 @@ Example:
     </build-xml-content-root-code>
     
     <call-java-method-code>
+#*
+Calls the named method through the Java object. The second string can be any string containing
+acceptable Java code.
+Examples:
+
+#chanwCallJavaMethod( '_DateTool' 'getCalendar()' )
+
+#set( $list = [] )
+#set( $void = $list.add( "let's have " ) )
+#chanwCallJavaMethod( 'list' 'add("fun")' )
+*#
 #macro( chanwCallJavaMethod $javaObjName $methodName )
     #set( $chanwStmt = '#set( $chanwCallJavaMethod=' + '$' + $javaObjName + '.' + $methodName + ')' )
     #evaluate( $chanwStmt )
@@ -72,6 +83,55 @@ $chanwConvertToPascalCase
     #end
 #end
     </convert-to-pascal-case-code>
+    
+    <create-database-php-code-code>
+#*
+The first column of the view must be keys, and the view must have at least two columns.
+For one-column views, use upstate_database instead.
+*#
+#macro( chanwCreateDatabasePHPCode $data )
+    #set( $chanwColumnCount = $data.getMetaData().getColumnCount() )
+    ##set( $chanwStatement = "" )
+    $globalStringBuffer.setLength( 0 )
+    #set( $void = $globalStringBuffer.append( '$view=array(' ) )
+    
+    #if( $data.next() )
+        #set( $void = $data.first() )
+        
+        #foreach( $count in [ 1..$chanwColumnCount ] )
+            #if( $count == 1 )
+                #set( $void = $globalStringBuffer.append('"').append($data.getString($count)).append('"=&gt;array(') )
+            #else
+                #set( $void = $globalStringBuffer.append('"').append($data.getString($count) ).append('",' ) )
+            
+                #if( $count == $chanwColumnCount )
+                    #set( $void = $globalStringBuffer.append("),") )
+                #end
+            #end
+        #end
+        
+        #foreach( $num in [ 1..50000 ] )
+            #if( $data.next() )
+                #foreach( $count in [ 1..$chanwColumnCount ] )
+                    #if( $count == 1 )
+                        #set( $void = $globalStringBuffer.append('"').append($data.getString($count)).append('"=&gt;array(') )
+                    #else
+                        #set( $void = $globalStringBuffer.append('"').append($data.getString($count) ).append('",' ) )
+            
+                        #if( $count == $chanwColumnCount )
+                            #set( $void = $globalStringBuffer.append("),") )
+                        #end
+                    #end
+                #end
+            #else
+                #break
+            #end
+        #end
+        
+        #set( $void = $globalStringBuffer.append(");") )
+    #end
+#end
+    </create-database-php-code-code>
 
     <generate-macro-foreach>
 #foreach( $macro_name in $-list_name- )
@@ -79,6 +139,29 @@ $chanwConvertToPascalCase
     #evaluate( $chanw_foreach_statement )
 #end
     </generate-macro-foreach>
+    
+    <get-database-list-code>
+#macro( chanwGetDatabaseList $listName )
+    #set( $data = $db.getResultSet( $sql ) )
+    #set( $chanwStmt = '#set($' + $listName + '=[])' )
+    #evaluate( $chanwStmt )
+
+    #if( $data.next() )
+        #set( $void = $data.first() )
+        #set( $chanwStmt = '#set($void=$' + $listName + '.add( $data.getString( 1 ) ) )' )
+        #evaluate( $chanwStmt )
+    
+        #foreach( $num in [ 1..$maxNumber ] )
+            #if( $data.next() )
+                #set( $chanwStmt = '#set($void=$' + $listName + '.add( $data.getString( 1 ) ) )' )
+                #evaluate( $chanwStmt )
+            #else
+                #break
+            #end
+        #end
+    #end
+#end
+    </get-database-list-code>
     
     <get-file-path-code>
 #*
@@ -98,6 +181,9 @@ Example:
     </get-file-path-code>
 
     <get-folder-contained-asset-name-code>
+#*
+Returns the name of the asset. The $asset passed in should be a Cascade API object.
+*#
 #macro( chanwGetFolderContainedAssetName $asset )
     #set( $chanwPathSegments = $asset.Identifier.Path.PathSegments )
     #set( $lastIndex = $chanwPathSegments.size() - 1 )
@@ -219,6 +305,24 @@ Example:
     #end
 #end
     </invoke-macro-code>
+    
+    <locate-asset-code>
+#macro ( chanwLocateAsset $folderPath $siteName $assetName )
+    #set( $chanwFolderAPI   = $_.locateFolder( $folderPath, $siteName ) )
+    #set( $chanwFolderAPIChildren = $chanwFolderAPI.getChildren() )
+    #set( $chanwLocateAsset = "" )
+    
+    #if( $chanwFolderAPIChildren.size() &gt; 0 )
+        #foreach( $chanwFolderAPIChild as $chanwFolderAPIChildren )
+            #chanwGetFolderContainedAssetName( $chanwFolderAPIChild )
+            #if( $chanwGetFolderContainedAssetName == $assetName )
+                #set( $chanwLocateAsset = $chanwFolderAPIChild )
+                #break
+            #end
+        #end
+    #end
+#end
+    </locate-asset-code>
 
     <multi-group>
 #macro(-macro_name- $systemDataStructure $region)
@@ -333,10 +437,13 @@ The name of the block is turned into a macro name.
     </processIndexBlock>
     
     <processParams>
+#*
+Creates the param lists as a string and attaches it to the statement passed in.
+*#
 ## Note that the global variable $chanwStatement is passed in
 #macro( processParams $chanwStatement $params )
     #set( $paramsChildren = $params.getChildren() )
-        		
+            	
 	#if( $paramsChildren.size() &gt; 0 )
 		#set( $chanwStatement = $chanwStatement + "(" )
 
