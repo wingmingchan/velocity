@@ -4,7 +4,7 @@ $source    = "http://www.upstate.edu/cascade-admin/standard-model/source/";
 
 /*
 This program reads source code from the Upstate server,
-and update all library formats and xml blocks.
+and updates all library formats and xml blocks.
 */
 
 require_once('auth_tutorial7.php');
