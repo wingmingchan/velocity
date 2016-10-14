@@ -37,7 +37,6 @@ try
         "chanw_global_stack",
         "chanw_global_utility_objects",
         "chanw_global_values",
-        "chanw_global_values",
         "chanw_global_values_code",   // xml block
         "chanw_global_velocity_code", // xml block
         "chanw_html_builder",
