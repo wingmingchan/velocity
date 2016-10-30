@@ -1,13 +1,9 @@
 #import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
 
 #set( $page = $contentRoot.getChild( "system-page" ) )
-#chanwGetCascadeObjectFromElement(
-    $page 
-    $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_PAGE )
+#chanwGetCascadeObjectFromElement( $page $CASCADE_API_PAGE_TYPE )
 $chanwGetCascadeObjectFromElement.Class.Name
 
 #set( $folder = $contentRoot.getChild( "system-folder" ) )
-#chanwGetCascadeObjectFromElement(
-    $folder
-    $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FOLDER )
+#chanwGetCascadeObjectFromElement( $folder $CASCADE_API_FOLDER_TYPE )
 $chanwGetCascadeObjectFromElement.Name
