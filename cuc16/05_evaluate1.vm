@@ -1,5 +1,6 @@
 #** The #evaluate directive can be used to turn a string that looks like
-Velocity code into real code and execute it. The directive can take either an object or a string.
+Velocity code into real code and execute it. The directive can take either 
+an object or a string.
 *#
 #evaluate( $_ )
 
@@ -10,7 +11,8 @@ $myVar
 
 #*
 Why #evaluate:
-We may want to create Velocity code dynamically and execute the resulting code on the fly.
+We may want to create Velocity code dynamically and execute the resulting 
+code on the fly.
 There are also things that can be done only with #evaluate.
 The min method below takes a list of int, not Integer objects:
 *#

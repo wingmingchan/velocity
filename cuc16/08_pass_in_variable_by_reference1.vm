@@ -13,7 +13,8 @@ The global variable must be passed in by "reference."
 
 #* 
 It does not make sense to pass in the global variable,
-because the macro simply ignores it and creates another global variable instead.
+because the macro simply ignores it and creates another global variable 
+instead.
 *#
 #changeGlobalVariable( $myVar )
 

@@ -17,7 +17,8 @@ $myVar2
 ## single quotes output as strings, variable still interpolated
 '$myVar'
 
-## however, in #set, everythinhg in single quotes is treated as characters, not code
+## however, in #set, everythinhg in single quotes is treated as characters, 
+## not code
 #set( $myVar3 = '$myVar' )
 $myVar3
 #set( $myVar4 = '#set(' )

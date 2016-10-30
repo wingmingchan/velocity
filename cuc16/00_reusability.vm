@@ -5,7 +5,8 @@
 2. Two senses of reusability:
    a. Narrow sense: within an organization; 
       for example, macros with proprietary data and business logic
-   b. Broad sense: code for anyone, including the author(s); i.e. library code
+   b. Broad sense: code for anyone, including the author(s); 
+      i.e. library code
 3. There is a general lacking of reusability of the second sense
    in the Cascade community.
 4. Everybody is busy writing his or her own code.
