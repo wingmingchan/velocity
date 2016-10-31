@@ -1,3 +1,7 @@
+#*
+This format turns the strings defined in chanw_global_values_code into code
+and executes it.
+*#
 ## reset this name if it is different; this name is used throughout the entire core
 #set( $master_site_name  = "_common_assets" )
 #set( $library_namespace = "chanw" )

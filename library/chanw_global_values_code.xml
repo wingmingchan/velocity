@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <global-values>
 #*
 This block is hooked up with the format chanw_global_values.
@@ -89,6 +88,12 @@ and populates global variables storing Velocity code.
 #set( $rssXML_ELEMENT_LINK                      = 'link' )
 #set( $rssXML_ELEMENT_PUB_DATE                  = 'pubDate' )
 #set( $rssXML_ELEMENT_TITLE                     = 'title' )
+
+## Cascade API types
+#set( $CASCADE_API_PAGE_TYPE   = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_PAGE )
+#set( $CASCADE_API_FOLDER_TYPE = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FOLDER )
+#set( $CASCADE_API_BLOCK_TYPE  = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_BLOCK )
+
 
 ## HTML element names, used in processing data definition blocks
 #* 'link', 'summary', 'title' are omitted from this list because they are used in Cascade.
@@ -216,6 +221,9 @@ is part of the HTML markups.
         'systemSymlinkLink':           $cascadeXML_ELEMENT_LINK
     } )
 
+## a prefix used in macro names
+#set( $MACRO_PREFIX = 'process' )
+
 ## This part can contain business logic. Note that when the Locator Tool is used,
 ## site name must be provided so that the library code can be imported in other sites.
 ## read the block and grab the code
@@ -237,6 +245,7 @@ is part of the HTML markups.
 #set( $processIndexBlock_code          = $global_velocity_code.getChild( "processIndexBlock" ).value )
 #set( $processScript_code              = $global_velocity_code.getChild( "processScript" ).value )
 #set( $processParams_code              = $global_velocity_code.getChild( "processParams" ).value )
+#set( $processBlockWithMacro_code      = $global_velocity_code.getChild( "processBlockWithMacro" ).value )
 
 ## these are macros providing general utilities
 #set( $build_xml_content_root_code           = $global_velocity_code.getChild( "build-xml-content-root-code" ).value )
@@ -252,6 +261,8 @@ is part of the HTML markups.
 #set( $set_variable_to_non_empty_string_code = $global_velocity_code.getChild( "set-variable-to-non-empty-string-code" ).value )
 #set( $create_database_php_code_code         = $global_velocity_code.getChild( "create-database-php-code-code" ).value )
 #set( $get_database_list_code                = $global_velocity_code.getChild( "get-database-list-code" ).value )
+#set( $get_image_by_page_path_code           = $global_velocity_code.getChild( "get-image-by-page-path-code" ).value )
+#set( $invoke_query_code                     = $global_velocity_code.getChild( "invoke-query-code" ).value )
 
 ## these are macros providing services related to lists and maps
 #set( $get_list_reversed_code          = $global_velocity_code.getChild( "get-list-reversed-code" ).value )
@@ -259,30 +270,47 @@ is part of the HTML markups.
 
 ## these are macros providing services to work with Cascade API objects
 #set( $get_folder_contained_asset_name_code = $global_velocity_code.getChild( "get-folder-contained-asset-name-code" ).value )
+#set( $get_cascade_object_from_element_code = $global_velocity_code.getChild( "get-cascade-object-from-element" ).value )
 
-## general utilities
-#set( $MACRO_PREFIX = 'process' )
-#evaluate( $build_xml_content_root_code )
-#evaluate( $call_java_method_code )
-#evaluate( $convert_to_pascal_case_code )
-#evaluate( $get_file_path_code )
-#evaluate( $get_node_values_code )
-#evaluate( $get_node_sets_code )
-#evaluate( $invoke_macro_code )
-#evaluate( $reinitialize_list_of_variables_code )
-#evaluate( $set_variable_code )
-#evaluate( $set_variable_to_non_empty_string_code )
-#evaluate( $create_database_php_code_code )
-#evaluate( $get_database_list_code )
 
-## list and map utilities
-#set( $get_list_reversed_code = $get_list_reversed_code.replaceAll( "&amp;lt;", "&lt;" ).replaceAll( "&amp;gt;", "&gt;" ).replaceAll( "-aa-", "&amp;&amp;" ) )
-#evaluate( $get_list_reversed_code )
-#set( $get_map_key_value_reversed_code = $get_map_key_value_reversed_code.replaceAll( "&amp;lt;", "&lt;" ).replaceAll( "&amp;gt;", "&gt;" ).replaceAll( "-aa-", "&amp;&amp;" ) )
-#evaluate( $get_map_key_value_reversed_code )
+## a list of names of variables associated with Velocity code
+#set( $chanwCodeList = [
+    'build_xml_content_root_code',
+    'call_java_method_code',
+    'convert_to_pascal_case_code',
+    'create_database_php_code_code',
+    'get_cascade_object_from_element_code',
+    'get_database_list_code',
+    'get_file_path_code',
+    'get_folder_contained_asset_name_code',
+    'get_image_by_page_path_code',
+    'get_list_reversed_code',
+    'get_map_key_value_reversed_code',
+    'get_node_values_code',
+    'get_node_sets_code',
+    'invoke_macro_code',
+    'invoke_query_code',
+    'locate_asset_code',
+    'processBlockChooser_code',
+    'processBlockWithMacro_code',
+    'processDataDefinitionBlock_code',
+    'processIndexBlock_code',
+    'processParams_code',
+    'processScript_code',
+    'reinitialize_list_of_variables_code',
+    'set_variable_code',
+    'set_variable_to_non_empty_string_code'
+] )
 
-## Cascade API utilities
-#evaluate( $get_folder_contained_asset_name_code )
-#evaluate( $locate_asset_code )
+## a macro to execute the blocks of code
+#macro( chanwGenerateCode $codeName )
+    #set( $chanwStmt = '#set($chanwCode=$' + $codeName + ' )' )
+    #evaluate( $chanwStmt )
+    #set( $chanwCode = $chanwCode.replaceAll("&amp;lt;", "&lt;").replaceAll("&amp;gt;", "&gt;").replaceAll("-aa-", "&amp;&amp;") )
+    #evaluate( $chanwCode )
+#end
 
+#foreach( $codeName in $chanwCodeList )
+    #chanwGenerateCode( $codeName )
+#end
 </global-values>

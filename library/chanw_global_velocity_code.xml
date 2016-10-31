@@ -1,7 +1,6 @@
-<?xml version="1.0"?>
 <global-velocity-code>
-    <!-- This block is hooked up with chanw_global_values_code and process_block.
-    Code defined here is executed in chanw_global_values.
+    <!-- This block is hooked up with chanw_global_values_code.
+    Code defined here is executed in chanw_global_values_code and chanw_global_values.
     
     Code templates: Strings like -dispatch_macro_name-, -single_group_name- and -macro_name- are place-holders,
     to be replaced by real values; everything else is just plain Velocity code, except XML entities like &lt;
@@ -140,6 +139,23 @@ For one-column views, use upstate_database instead.
 #end
     </generate-macro-foreach>
     
+    <get-cascade-object-from-element>
+#macro( chanwGetCascadeObjectFromElement $element $type )
+    #if( $element.Class.Name != $ORG_JDOM_ELEMENT_CLASS_NAME )
+        Not a jdom.Element.
+        #stop
+    #end
+
+    #set( $chanwGetCascadeObjectFromElement = 
+        $_.locate(
+            $element.getChild( "path" ).Value.substring( 1 ),
+            $type,
+            $element.getChild( "site" ).Value
+        ) 
+    )
+#end
+    </get-cascade-object-from-element>
+    
     <get-database-list-code>
 #macro( chanwGetDatabaseList $listName )
     #set( $data = $db.getResultSet( $sql ) )
@@ -190,6 +206,66 @@ Returns the name of the asset. The $asset passed in should be a Cascade API obje
     #set( $chanwGetFolderContainedAssetName = $chanwPathSegments.get( $lastIndex ) )
 #end
     </get-folder-contained-asset-name-code>
+    
+    <get-image-by-page-path-code>
+#*
+Important: 
+The third argument should be a line of code, evaluated to a map.
+The fourth argument should be the name of the map defined in the third argument.
+The fifth and sixth arguments should be variables storing html markups defined in the format
+specified in the path element.
+
+Invoking the macro in a script block:
+        <path>site://_common_assets/formats/custom_html_wrappers</path>
+        <macro>
+            <name>thomaspeGetImageByPagePath</name>
+            <params>
+                <param>images</param>
+                <param>.jpg</param>
+                <param>#set($valueMap={"1000w":"", "750w":"-700x350","460w":"-400x200"})</param>
+                <param>valueMap</param>
+                <variable>start_slide_wrapper</variable>
+                <variable>end_slide_wrapper</variable>
+            </params>
+        </macro>
+*#
+#macro( thomaspeGetImageByPagePath $thomaspeImageFolder $thomaspeImageExtension $srcSetMapCode $thomaspeMapName $startWrapper $endWrapper )
+  #evaluate( $srcSetMapCode )
+  #set( $thomaspeImage                = "/" + $thomaspeImageFolder + "/" + $currentPage.path + $thomaspeImageExtension )
+  #set( $thomaspeFileSizeTest         = "" )
+  #set( $thomaspeFileSizeTest = $_.locateFile($thomaspeImage , $currentPage.siteName ) )
+  
+  #if (!$_PropertyTool.isNull($thomaspeFileSizeTest.FileSize)) ## if corresponding image exists, then begin process
+
+    ## Find out if there are SRC SET images ##
+    #set( $thomaspeSingleImageSrcSet    = "")
+    
+    ## $thomaspeMapName defined in the fourth argument
+    #set( $thomaspeStmt = '#set($thomaspeMap=$' + $thomaspeMapName + ')' )
+    #evaluate( $thomaspeStmt )
+    
+    #foreach( $srcSetPair in $thomaspeMap.entrySet() )
+        #set( $thomaspeNewSuffix = "" )
+        #set( $thomaspeNewSuffix = $srcSetPair.value + $thomaspeImageExtension )
+        #set( $srcSetReplace = "" )
+        #set( $srcSetReplace = $thomaspeImage.replace( $thomaspeImageExtension , $thomaspeNewSuffix ) )     
+        #if (!$_PropertyTool.isNull( $_.locateFile( $srcSetReplace, $currentPage.siteName ) ))
+            #set( $thomaspeSingleImageSrcSet    = $thomaspeSingleImageSrcSet + $S_SYSTEM_ASSET_LOCAL + 
+                "site://" + $currentPage.siteName + $srcSetReplace + $E_SYSTEM_ASSET_LOCAL + " " +  $srcSetPair.key +", ")
+        #end       
+    #end
+    
+    #if ( $thomaspeSingleImageSrcSet != "")
+        #set( $thomaspeSingleImageSrcSet    = "srcset='" + $thomaspeSingleImageSrcSet + "'")
+    #end
+
+    $startWrapper
+    &lt;img src="$thomaspeImage" alt="${_EscapeTool.xml( $currentPage.metadata.displayName )}" class="img-responsive" $thomaspeSingleImageSrcSet /&gt;
+    $endWrapper
+    
+  #end ## if System Name-based Image Exists test
+#end
+    </get-image-by-page-path-code>
 
     <get-list-reversed-code>
 #*
@@ -306,6 +382,69 @@ Example:
 #end
     </invoke-macro-code>
     
+    <invoke-query-code>
+#*
+ $type: "MetadataSet" or "ContentType"
+ $link: e.g. "Blog", "site://common/Standard Page"
+ $assets: a list of five boolean values for blocks, files, folders, pages, symlinks [ true, false, true, true, true ]
+ $hasMetadata: either an empty list[] or a list containing two strings [ "displayName", "Index" ]
+ $maxResults: an integer, e.g. -1, 50
+ $sortBy: "author", "description", etc.
+ $direction: "asc", "desc"
+ $siteName: "" meaning searchAcrossAllSites(), or a site name like "medicine"
+ $indexablePublishable: a list of two boolean values, [ true, true ]
+ 
+ Example:
+ #chanwInvokeQuery( "MetadataSet" "site://_common/Page" [ false, false, false, true, false ] [] 30 "author" "desc" "" [ true, false ] )
+*#
+#macro( chanwInvokeQuery $type $link $assets $hasMetadata $maxResults $sortBy $direction $siteName $indexablePublishable )
+    #set( $chanwStmt = '#set($chanwQuery=$_.query())' )
+    #set( $chanwStmt = $chanwStmt + '#set($chanwInvokeQuery=' )
+    
+    #if( $assets.size() == 5 )
+        #set( $chanwStmt = $chanwStmt + '$chanwQuery.by' + $type + "('$link')" +
+                       '.includeBlocks(' + $assets[ 0 ] + ')' +
+                       '.includeFiles(' + $assets[ 1 ] + ')' +
+                       '.includeFolders(' + $assets[ 2 ] + ')' +
+                       '.includePages(' + $assets[ 3 ] + ')' +
+                       '.includeSymlinks(' + $assets[ 4 ] + ')'
+        )
+    #end
+    
+    #if( $hasMetadata.size() == 2 )
+        #set( $chanwStmt = $chanwStmt + '.hasMetadata(' +
+            "'" + $hasMetadata[ 0 ] + "','" + $hasMetadata[ 1 ] + "'" + ')' )
+    #end
+    
+    #if( $maxResults &gt; 0 )
+        #set( $chanwStmt = $chanwStmt + '.maxResults(' + $maxResults + ')' )
+    #end
+    
+    #if( $sortBy != "" )
+        #set( $chanwStmt = $chanwStmt + '.sortBy' + "('$sortBy')" )
+    #end
+    
+    #if( $direction != "" )
+        #set( $chanwStmt = $chanwStmt + '.sortDirection' + "('$direction')" )
+    #end
+    
+    #if( $siteName == "" )
+        #set( $chanwStmt = $chanwStmt + '.searchAcrossAllSites()' )
+    #else
+        #set( $chanwStmt = $chanwStmt + '.siteName' + "('$siteName')" )
+    #end
+    
+    #if( $indexablePublishable.size() == 2 )
+        #set( $chanwStmt = $chanwStmt + '.indexableOnly' + '(' + $indexablePublishable[ 0 ] + ')' +
+            '.publishableOnly' + '(' + $indexablePublishable[ 1 ] + ')' )
+    #end
+    
+    #set( $chanwStmt = $chanwStmt + '.execute() )' )
+    ##$chanwStmt
+    #evaluate( $chanwStmt )
+#end
+    </invoke-query-code>
+    
     <locate-asset-code>
 #macro ( chanwLocateAsset $folderPath $siteName $assetName )
     #set( $chanwFolderAPI   = $_.locateFolder( $folderPath, $siteName ) )
@@ -369,24 +508,29 @@ Why parent of the root element is passed in: a text block may not have a root el
         #set( $firstChild = $contentChildren.get( 0 ) )
         #set( $childName  = $firstChild.name )
         #set( $childPath  = $content.getParent().getChild( 'path' ).value )
+        #set( $siteName   = $content.getParent().getChild( 'site' ).value )
     
         #if( $childName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
             #processDataDefinitionBlock( $firstChild )
-        #elseif( $childName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK )
-            #processIndexBlock( $firstChild )
         #else
             #set( $blockName = $childPath )
             #set( $lastIndexOfSlash = $blockName.lastIndexOf( '/' ) + 1 )
                 
             #if( $lastIndexOfSlash &gt; -1 )
                 #set( $blockName = $blockName.substring( $lastIndexOfSlash ) )
-                   
+                
+                #if( $blockName.endsWith( 'Macro' ) || $blockName.endsWith( 'macro' ) )
+                    #chanwInvokeMacro( "processBlockWithMacro" [ "firstChild", "childPath", "siteName" ] )
+                ## index block
+                #elseif( $childName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK )
+                    #processIndexBlock( $blockName $firstChild )
                 ## text block containing html markups
-                #if( $blockName.endsWith( 'Text' ) || $blockName.endsWith( 'text' ) ) 
+                #elseif( $blockName.endsWith( 'Text' ) || $blockName.endsWith( 'text' ) ) 
                     $_SerializerTool.serialize( $content, true )
                 ## XML blocks containing instructions
                 #elseif( $blockName.endsWith( 'Script' ) || $blockName.endsWith( 'script' )  )
                     #chanwInvokeMacro( "processScript" [ "firstChild" ] )
+                
                 ## preferably having -xml, -feed suffixes
                 #else
                     #chanwConvertToPascalCase( $blockName "-" )
@@ -398,6 +542,19 @@ Why parent of the root element is passed in: a text block may not have a root el
     #end
 #end
     </processBlockChooser>
+    
+    <processBlockWithMacro>
+#macro( processBlockWithMacro $firstChild $childPath $siteName )
+    #set( $chanwBlock = $_.locateBlock( $childPath, $siteName ) )
+    #set( $chanwacroName = $chanwBlock.Metadata.getDynamicField( 'macro' ).Value )
+    
+    #if( $chanwacroName == "" )
+        #set( $chanwacroName = "processUnknown" )
+    #end
+    
+    #chanwInvokeMacro( $chanwacroName [ "firstChild" ] )
+#end
+    </processBlockWithMacro>
     
     <processDataDefinitionBlock>
 #*
@@ -428,8 +585,7 @@ The type is turned into a macro name.
 Processes an index block.
 The name of the block is turned into a macro name.
 *#
-#macro( processIndexBlock $firstChild )
-    #set( $blockName = $firstChild.getAttribute( 'name' ).value )
+#macro( processIndexBlock $blockName $firstChild )
     #chanwConvertToPascalCase( $blockName "-" )
     #set( $macroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
     #chanwInvokeMacro( $macroName [ "firstChild" ] )
@@ -443,82 +599,82 @@ Creates the param lists as a string and attaches it to the statement passed in.
 ## Note that the global variable $chanwStatement is passed in
 #macro( processParams $chanwStatement $params )
     #set( $paramsChildren = $params.getChildren() )
-            	
-	#if( $paramsChildren.size() &gt; 0 )
-		#set( $chanwStatement = $chanwStatement + "(" )
+                
+    #if( $paramsChildren.size() &gt; 0 )
+        #set( $chanwStatement = $chanwStatement + "(" )
 
-		#foreach( $child in $paramsChildren )
-			#if( $child.Name == "param" )
-				#if( $child.Value.trim() != "" )
-					#set( $chanwStatement = $chanwStatement + "'" + $child.Value.trim() + "' " )
-				#end
-			#elseif( $child.Name == "variable" )
-				#if( $child.Value.trim() != "" )
-					#set( $chanwStatement = $chanwStatement + "$" + $child.Value.trim() + " " )
-				#end
-			#elseif( $child.Name == "list" )
-				#set( $chanwListChildren = $child.getChildren() )
-		
-				#if( $chanwListChildren.size() &gt; 0 )
-					#set( $chanwStatement = $chanwStatement + "[" )
+        #foreach( $child in $paramsChildren )
+            #if( $child.Name == "param" )
+                #if( $child.Value.trim() != "" )
+                    #set( $chanwStatement = $chanwStatement + "'" + $child.Value.trim() + "' " )
+                #end
+            #elseif( $child.Name == "variable" )
+                #if( $child.Value.trim() != "" )
+                    #set( $chanwStatement = $chanwStatement + "$" + $child.Value.trim() + " " )
+                #end
+            #elseif( $child.Name == "list" )
+                #set( $chanwListChildren = $child.getChildren() )
+        
+                #if( $chanwListChildren.size() &gt; 0 )
+                    #set( $chanwStatement = $chanwStatement + "[" )
 
-					#foreach( $list_child in $chanwListChildren )
-						#if( $list_child.Name == "param" )
-							#if( $list_child.Value.trim() != "" )
-								#set( $chanwStatement = $chanwStatement + "'" + $list_child.Value.trim() + "', " )
-							#end
-						#elseif( $list_child.Name == "variable" )
-							#if( $list_child.Value.trim() != "" )
-								#set( $chanwStatement = $chanwStatement + "$" + $list_child.Value.trim() + ", " )
-							#end
-						#end
-					#end
-			
-					## remove last comma
-					#set( $chanwStatement = $chanwStatement.trim() )
-				
-					#if( $chanwStatement.endsWith( "," ) )
-						#set( $end_index = $chanwStatement.length() - 1 )
-						#set( $chanwStatement = $chanwStatement.substring( 0, $end_index ) )
-					#end
-					#set( $chanwStatement = " " + $chanwStatement + "]" )
-				#end
-			#elseif( $child.Name == "map" )
-				#set( $chanwMapPairs = $child.getChildren() )
-		
-				#if( $chanwMapPairs.size() &gt; 0 )
-					#set( $chanwStatement = $chanwStatement + "{" )
-			
-					#foreach( $map_pair in $chanwMapPairs )
-						#set( $key = $map_pair.getChild( "key" ) )
-						#set( $value = $map_pair.getChild( "value" ) )
-				
-						#if( $key )
-							#set( $key = $key.Value.trim() )
-						#end
-					
-						#if( $value )
-							#set( $value = $value.Value.trim() )
-						#end
-				
-						#if( $key != "" -aa- $value != "" )
-							#set( $chanwStatement = $chanwStatement + "'$key':'$value'," )
-						#end
-					#end
-					## remove last comma
-					#set( $chanwStatement = $chanwStatement.trim() )
-				
-					#if( $chanwStatement.endsWith( "," ) )
-						#set( $end_index = $chanwStatement.length() - 1 )
-						#set( $chanwStatement = $chanwStatement.substring( 0, $end_index ) )
-					#end
-					#set( $chanwStatement = " " + $chanwStatement + "}" )
-				#end
-			#end
-		#end
+                    #foreach( $list_child in $chanwListChildren )
+                        #if( $list_child.Name == "param" )
+                            #if( $list_child.Value.trim() != "" )
+                                #set( $chanwStatement = $chanwStatement + "'" + $list_child.Value.trim() + "', " )
+                            #end
+                        #elseif( $list_child.Name == "variable" )
+                            #if( $list_child.Value.trim() != "" )
+                                #set( $chanwStatement = $chanwStatement + "$" + $list_child.Value.trim() + ", " )
+                            #end
+                        #end
+                    #end
+            
+                    ## remove last comma
+                    #set( $chanwStatement = $chanwStatement.trim() )
+                
+                    #if( $chanwStatement.endsWith( "," ) )
+                        #set( $end_index = $chanwStatement.length() - 1 )
+                        #set( $chanwStatement = $chanwStatement.substring( 0, $end_index ) )
+                    #end
+                    #set( $chanwStatement = " " + $chanwStatement + "]" )
+                #end
+            #elseif( $child.Name == "map" )
+                #set( $chanwMapPairs = $child.getChildren() )
+        
+                #if( $chanwMapPairs.size() &gt; 0 )
+                    #set( $chanwStatement = $chanwStatement + "{" )
+            
+                    #foreach( $map_pair in $chanwMapPairs )
+                        #set( $key = $map_pair.getChild( "key" ) )
+                        #set( $value = $map_pair.getChild( "value" ) )
+                
+                        #if( $key )
+                            #set( $key = $key.Value.trim() )
+                        #end
+                    
+                        #if( $value )
+                            #set( $value = $value.Value.trim() )
+                        #end
+                
+                        #if( $key != "" -aa- $value != "" )
+                            #set( $chanwStatement = $chanwStatement + "'$key':'$value'," )
+                        #end
+                    #end
+                    ## remove last comma
+                    #set( $chanwStatement = $chanwStatement.trim() )
+                
+                    #if( $chanwStatement.endsWith( "," ) )
+                        #set( $end_index = $chanwStatement.length() - 1 )
+                        #set( $chanwStatement = $chanwStatement.substring( 0, $end_index ) )
+                    #end
+                    #set( $chanwStatement = " " + $chanwStatement + "}" )
+                #end
+            #end
+        #end
 
-		#set( $chanwStatement = $chanwStatement + ")" )
-	#end
+        #set( $chanwStatement = $chanwStatement + ")" )
+    #end
 #end
     </processParams>
     
@@ -540,17 +696,19 @@ The $firstChild is the scripts element.
             #set( $chanwRedirect = $_XPathTool.selectSingleNode( $script, "redirect" ) )
 
             ## second, import the script
-            #set( $chanwPath = "" )
-            #set( $chanwPath = $script.getChild( "path" ) )
+            #set( $chanwPaths = "" )
+            #set( $chanwPaths = $script.getChildren( "path" ) )
             
-            #if( $chanwPath )
-                #set( $chanwPath = $chanwPath.Value.trim() )
-            #end
+            #if( $chanwPaths.size() &gt; 0 )
+                #foreach( $chanwPath in $chanwPaths )
+                    #set( $chanwPath = $chanwPath.Value.trim() )
             
-            ## make the path optional
-            #if( $chanwPath != "" )
-                #set( $chanwStatement = "#" + "import('$chanwPath')" )
-                #evaluate( $chanwStatement )
+                    ## make the path optional
+                    #if( $chanwPath != "" )
+                        #set( $chanwStatement = "#" + "import('$chanwPath')" )
+                        #evaluate( $chanwStatement )
+                    #end
+                #end
             #end
             
             #set( $chanwStatement = "" )
@@ -559,15 +717,15 @@ The $firstChild is the scripts element.
             ## second, invoke each macro
             #if( $chanwMacros.size() &gt; 0 )
                 #foreach( $macro in $chanwMacros )
-        			#set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
-					#set( $chanwStatement = "" )
-					#set( $chanwStatement = "#" + $chanwMacro )
-					
-					#if( $chanwRedirect == "" )
-						#set( $chanwParams = $macro.getChild( "params" ) )
+                    #set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
+                    #set( $chanwStatement = "" )
+                    #set( $chanwStatement = "#" + $chanwMacro )
+                    
+                    #if( $chanwRedirect == "" )
+                        #set( $chanwParams = $macro.getChild( "params" ) )
                         #set( $chanwLoop   = $macro.getChild( "loop" ) )
-			
-						#if( !$_PropertyTool.isNull( $chanwParams ) )
+            
+                        #if( !$_PropertyTool.isNull( $chanwParams ) )
                             ## pass in the global statement
                             #processParams( $chanwStatement $chanwParams )
                             #evaluate( $chanwStatement )
@@ -577,20 +735,20 @@ The $firstChild is the scripts element.
                             #if( $chanwParamsNodes -aa- $chanwParamsNodes.size() &gt; 0 )
                                 #foreach( $chanwParamsNode in $chanwParamsNodes )
                                     #set( $chanwStatement = "" )
-    				                #set( $chanwStatement = "#" + $chanwMacro )
+                                    #set( $chanwStatement = "#" + $chanwMacro )
                                     #processParams( $chanwStatement $chanwParamsNode )
                                     ##$chanwStatement
                                     #evaluate( $chanwStatement )
                                 #end
                             #end
-						#end
-					#else
-						#set( $chanwStatement = $chanwStatement + "(" )
-						#set( $chanwStatement = $chanwStatement + "$" + "firstChild" )
-						#set( $chanwStatement = $chanwStatement + ")" )
+                        #end
+                    #else
+                        #set( $chanwStatement = $chanwStatement + "(" )
+                        #set( $chanwStatement = $chanwStatement + "$" + "firstChild" )
+                        #set( $chanwStatement = $chanwStatement + ")" )
                         #evaluate( $chanwStatement )
-					#end
-					##$chanwStatement
+                    #end
+                    ##$chanwStatement
                 #end
             #end
         #end
