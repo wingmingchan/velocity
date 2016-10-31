@@ -394,8 +394,9 @@ Example:
  $siteName: "" meaning searchAcrossAllSites(), or a site name like "medicine"
  $indexablePublishable: a list of two boolean values, [ true, true ]
  
- Example:
- #chanwInvokeQuery( "MetadataSet" "site://_common/Page" [ false, false, false, true, false ] [] 30 "author" "desc" "" [ true, false ] )
+Example:
+#chanwInvokeQuery( "MetadataSet" "site://_common/Page" [ false, false, false, true, false ] [] 30 "author" "desc" "" [ true, false ] )
+$chanwInvokeQuery.size()
 *#
 #macro( chanwInvokeQuery $type $link $assets $hasMetadata $maxResults $sortBy $direction $siteName $indexablePublishable )
     #set( $chanwStmt = '#set($chanwQuery=$_.query())' )
