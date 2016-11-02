@@ -1,7 +1,15 @@
-## for selectSingleNode, no complaint if the selection fails
-#set( $node = $_XPathTool.selectSingleNode( $contentRoot, "system-pag" ) )
+## for selectSingleNode and getChild, no complaint if the selection fails
+#set( $node = $_XPathTool.selectSingleNode( $contentRoot, "system-page" ) )
 $node.getChild('name').Value
 
-## for selectNodes, if the selection fails, java.util.Collections$EmptyList is thrown
+#set( $node = $contentRoot.getChild( "system-pag" ) )
+$node.getChild('name').Value
+
+
+## for selectNodes and getChildren, if the selection fails, 
+## an exception is thrown
 #set( $node = $_XPathTool.selectNodes( $contentRoot, "system-pag" )[0] )
+$node.getChild('name').Value
+
+#set( $node = $contentRoot.getChildren( "system-pag" )[0] )
 $node.getChild('name').Value
