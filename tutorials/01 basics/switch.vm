@@ -1,0 +1,19 @@
+#set( $inputMacroNameMap = { 
+    1:"printHello", 2:"printGreetings", 3:"printMerryChristmas" } )
+
+#macro( printHello )
+Hello!
+#end
+
+#macro( printGreetings )
+Greetings!
+#end
+
+#macro( printMerryChristmas )
+Merry Christmas!
+#end
+
+#set( $input = 3 )
+
+#set( $stmt = '#' + $inputMacroNameMap[ $input ] )
+#evaluate( $stmt )
