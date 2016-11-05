@@ -1,4 +1,4 @@
 #import( 'site://_common_assets/formats/library/velocity/chanw_reflect_utilities' )
 
-##chanwDisplayClassAPI( $currentPage "h3" true )
-#chanwDisplayClassAPI( "java.lang.String" "h3" true )
+##chanwDisplayClassAPI( $currentPage )
+#chanwDisplayClassAPI( "java.lang.String" )
