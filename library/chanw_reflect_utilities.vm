@@ -14,13 +14,25 @@ Example:
         #stop
     #end
     
-    #chanwDisplayObjClass( $obj $withH2 )
+    #if( !$heading || $heading.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $chanwHeading = "h3" )
+    #else
+        #set( $chanwHeading = $heading )
+    #end
+    
+    #if( !$withH2 )
+        #set( $chanwWithH2 = true )
+    #else
+        #set( $chanwWithH2 = $withH2 )
+    #end
+    
+    #chanwDisplayObjClass( $obj $chanwHeading $chanwWithH2 )
 #end
 
-#macro( chanwDisplayObjClass $obj $withH2 )
+#macro( chanwDisplayObjClass $obj $heading $withH2 )
     #set( $objString = "" )
     #set( $objType = $obj.Class.Name )
-    
+ 
     #if( $objType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
         #set( $objString = $obj )
     #elseif( $objType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
@@ -41,12 +53,12 @@ Example:
     #end
     
     #if( $withH2 )$S_H2$chanwClassString$chanwSuffix$E_H2#end
-    
+   
     #chanwDisplaySuperClass( $chanwClassString $heading )
     #chanwDisplayFields( $chanwClassString $heading )
     #chanwDisplayConstructors( $chanwClassString $heading )
     #chanwDisplayMethods( $chanwClassString $heading )
-    $HR    
+    $HR
 #end
 
 #macro( chanwDisplayConstructors $obj $heading )
@@ -199,7 +211,7 @@ Example:
     #else                                              ## obj of other types
         #set( $chanwClassObj = $obj.Class )
     #end
-    
+      
     #if( $chanwClassObj )
         #set( $parent = $chanwClassObj.getGenericSuperclass() )
         
