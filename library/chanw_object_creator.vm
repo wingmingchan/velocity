@@ -42,6 +42,11 @@ Returns an object of the class, calling the default constructor.
 #import( '/formats/library/velocity/chanw_global_values' )
 
 #macro( chanwGetObjectByClassName $chanwClassName )
+    #if( !$chanwClassName || $chanwClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $chanwClassName == "" )
+        A valid class name is required.
+        #stop
+    #end
+
     #set( $chanwGetObjectByClassName = "" ) ## reinitialize the global variable
     #chanwGetConstructorByClassNameParamSize( $chanwClassName 0 )
     #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
@@ -52,6 +57,16 @@ Returns an object of the class, calling the default constructor.
 Returns the first constructor that accepts the specified number of parameters.
 *#
 #macro( chanwGetConstructorByClassNameParamSize $chanwClassName $chanwParamSize )
+    #if( !$chanwClassName || $chanwClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $chanwClassName == "" )
+        A valid class name is required.
+        #stop
+    #end
+
+    #if( $chanwParamSize.Class.Name != $JAVA_LANG_INTEGER_CLASS_NAME || $chanwParamSize < 0 )
+        An integer larger than -1 is required.
+        #stop
+    #end
+
     #set( $chanwGetConstructorByClassNameParamSize = "" )
     #set( $chanwClassObj = $_PropertyTool.class.forName( $chanwClassName ) )
     #set( $constructors  = $chanwClassObj.getConstructors() )
@@ -72,6 +87,16 @@ Returns the first constructor that accepts the specified number of parameters.
 Returns the constructor by matching the parameter list.
 *#
 #macro( chanwGetConstructorByClassNameParamTypeArray $chanwClassName $chanwTypeArray )
+    #if( !$chanwClassName || $chanwClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $chanwClassName == "" )
+        A valid class name is required.
+        #stop
+    #end
+
+    #if( !$chanwTypeArray || !$chanwTypeArray.size() )
+        An array of types is required.
+        #stop
+    #end
+
     #set( $chanwGetConstructorByClassNameParamTypeArray = "" )
     #set( $chanwClassObj = $_PropertyTool.class.forName( $chanwClassName ) )
     #set( $constructors  = $chanwClassObj.getConstructors() )
@@ -101,10 +126,20 @@ Returns the constructor by matching the parameter list.
 Returns the field value of a field name defined in a class.
 *#
 #macro( chanwGetConstantValueByClassNameConstantName $chanwClassName $chanwConstantName )
+    #if( !$chanwClassName || $chanwClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $chanwClassName == "" )
+        A valid class name is required.
+        #stop
+    #end
+
+    #if( !$chanwConstantName || $chanwConstantName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $chanwConstantName == "" )
+        A valid constant name is required.
+        #stop
+    #end
+
     #set( $chanwClassObj  = $_.Class.forName( $chanwClassName ) )
     #set( $chanwFieldObj  = $chanwClassObj.getField( $chanwConstantName ) )
     #set( $chanwGetConstantValueByClassNameConstantName = $chanwFieldObj.get( null ) )
-    $chanwGetConstantValueByClassNameConstantName
+    ##$chanwGetConstantValueByClassNameConstantName
 #end
 
 #*
@@ -112,8 +147,24 @@ Returns the named method of a class.
 The $chanwParamList must be a list of strings, representing class objects.
 *#
 #macro( chanwGetMethodByClassNameMethodNameParamTypes $chanwClassName $chanwMethodName $chanwParamList )
+    #if( !$chanwClassName || $chanwClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $chanwClassName == "" )
+        A valid class name is required.
+        #stop
+    #end
+
+    #if( !$chanwMethodName || $chanwMethodName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $chanwMethodName == "" )
+        A valid method name is required.
+        #stop
+    #end
+
     #set( $chanwClassObj  = $_.Class.forName( $chanwClassName ) )
     #set( $chanwParamListString = $_DisplayTool.list( $chanwParamList, "," ) )
+    
+    #if( !$chanwParamListString )
+        A param list is required.
+        #stop
+    #end
+    
     #set( $chanwStmt = '#set($chanwGetMethodByClassNameMethodNameParamTypes = $chanwClassObj.getMethod( "' + $chanwMethodName + '"' )
     
     #if( $chanwParamListString && $chanwParamListString != "" )
@@ -130,12 +181,12 @@ is an instance of the suppled class.
 *#
 #macro( chanwIsInstanceOf $chanwObj $chanwClassName )
     #if( $_PropertyTool.isNull( $chanwObj ) )
-        The object cannot be null.$BR
+        The object cannot be null.
         #stop
     #end
     
-    #if( $chanwClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
-        The class name must be a string.
+    #if( !$chanwClassName || $chanwClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+        A valid class name is required.
         #stop
     #end
     
