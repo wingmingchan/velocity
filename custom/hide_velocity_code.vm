@@ -1,9 +1,43 @@
-#import( 'formats/library/velocity/chanw_macro_utilities' )
+#import( 'formats/library/velocity/chanw_global_values' )
 
 #*=== macros used to generate div's for displaying code ===*#
 #macro( createHideVelocityCode $code $id )
-    #set( $code = $code.replaceAll( "<", "&lt;" ).replaceAll( ">", "&gt;" ).replaceAll( "-aa-", "&amp;&amp;" ) )
+    #set( $code = $code.replaceAll( "<", "&lt;" ).replaceAll( ">", "&gt;" ).replaceAll( 
+        "-aa-", "&amp;&amp;" ).replaceAll( "\[", "［" ).replaceAll( "\]", "］" ) )
     <div id="${id}"><pre class="code">$code</pre></div>
+#end
+
+#macro( chanwGetDocumentation $block_path $site_name )
+    #set( $chanwXml = $_.locateBlock( $block_path, $site_name ).XML )
+    #chanwBuildXMLContentRoot( $chanwXml )
+    #set( $chanwDocs = $_XPathTool.selectNodes( $chanwBuildXMLContentRoot, "//documentation" ) )
+    
+    #if( $chanwDocs &&  $chanwDocs.size() > 0 )
+        $S_UL
+        #foreach( $doc in $chanwDocs )
+            ${S_LI}#getMacroDocumentation( $doc.Value )$E_LI
+        #end
+        $E_UL
+    #end
+#end
+
+#macro( getMacroDocumentation $code )
+    ##set( $chanwStartIndexOf = $code.indexOf( "#*" ) + 3 )
+    ##set( $chanwEndIndexOf = $code.indexOf( "*#" ) )
+    
+    ## the two calls of replaceAll do not seem to be necessary; having them here just to make sure that they are removed
+    #*
+    #if( $chanwStartIndexOf && $chanwEndIndexOf && $chanwStartIndexOf > -1 && $chanwEndIndexOf > -1 )
+        $code.substring( $chanwStartIndexOf, $chanwEndIndexOf ).replaceAll( "<documentation>", "" ).replaceAll( "</documentation>", "" ).replaceAll(
+            "-lt-", "&lt;" ).replaceAll( "-gt-", "&gt;" ).replaceAll(
+            "-p-", "<p>" ).replaceAll( "-/p-", "</p>" ).replaceAll( "-code-", "<code>" ).replaceAll( "-/code-", "</code>" ).replaceAll(
+            "-pre-", "<pre>" ).replaceAll( "-/pre-", "</pre>" )
+    #else
+    *#
+        $code.replaceAll( "-p-", "<p>" ).replaceAll( "-/p-", "</p>" ).replaceAll( "-code-", "<code>" ).replaceAll( "-/code-", "</code>" ).replaceAll(
+            "-lt-", "&lt;" ).replaceAll( "-gt-", "&gt;" ).replaceAll(
+            "-pre-", "<pre>" ).replaceAll( "-/pre-", "</pre>" )
+    ##end
 #end
 
 #macro( getScriptBlockCode $block_path $site_name $id )
