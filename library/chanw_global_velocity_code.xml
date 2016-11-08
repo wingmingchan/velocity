@@ -18,13 +18,13 @@
     <build-xml-content-root-code>
 #*
 <documentation>
--p--code-#chanwBuildXMLContentRoot( $xml_string )-/code--/p-
--p-Creates an -code-org.jdom.Element-/code- object out of an XML string. The variable -code-$xml_string-/code- should contain a valid XML string with a root element.
-Example:-/p-
--pre-
+<p><code>#chanwBuildXMLContentRoot( $xml_string )</code></p>
+<p>Creates an <code>org.jdom.Element</code> object out of an XML string. The variable <code>$xml_string</code> should contain a valid XML string with a root element.
+Example:</p>
+<pre>
 #chanwBuildXMLContentRoot( $xml )
 #set( $contentRoot = $chanwBuildXMLContentRoot )
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwBuildXMLContentRoot $xml_string )
@@ -43,18 +43,18 @@ Example:-/p-
     <call-java-method-code>
 #*
 <documentation>
--p--code-#chanwCallJavaMethod( $javaObjName $methodName )-/code--/p-
--p-Calls the named method through the Java object. The second string can be any string containing
+<p><code>#chanwCallJavaMethod( $javaObjName $methodName )</code></p>
+<p>Calls the named method through the Java object. The second string can be any string containing
 acceptable Java code.
-Examples:-/p-
+Examples:</p>
 
--pre-
+<pre>
 #chanwCallJavaMethod( '_DateTool' 'getCalendar()' )
 
 #set( $list = [] )
 #set( $void = $list.add( "let's have " ) )
 #chanwCallJavaMethod( 'list' 'add("fun")' )
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwCallJavaMethod $javaObjName $methodName )
@@ -66,16 +66,16 @@ Examples:-/p-
     <convert-to-pascal-case-code>
 #*
 <documentation>
--p--code-#chanwConvertToPascalCase( $chanwMacroName $chanwDelimiter )-/code--/p-
+<p><code>#chanwConvertToPascalCase( $chanwMacroName $chanwDelimiter )</code></p>
 
--p-Converts a string, possibly with delimiters, into Pascal case. The -code-$chanwDelimiter-/code- variable is treated as a marker
+<p>Converts a string, possibly with delimiters, into Pascal case. The <code>$chanwDelimiter</code> variable is treated as a marker
 of word boundaries.
-Example:-/p-
--pre-
+Example:</p>
+<pre>
 #chanwConvertToPascalCase( "xml-group" "-" )
 $chanwConvertToPascalCase
 ## converting xml-group to XmlGroup
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwConvertToPascalCase $chanwMacroName $chanwDelimiter )
@@ -102,16 +102,16 @@ $chanwConvertToPascalCase
 #end
     </convert-to-pascal-case-code>
     
-    <create-database-php-code-code>
+    <create-database-php-code>
 #*
 <documentation>
--p--code-#chanwCreateDatabasePHPCode( $data )-/code--/p-
+<p><code>#chanwCreateDatabasePHPCode( $data )</code></p>
 
--p-Creates PHP code containing a variable named -code-$view-/code-, pointing to an array of values drawn from the result set -code-$data-/code-.
+<p>Creates PHP code containing a variable named <code>$view</code>, pointing to an array of values drawn from the result set <code>$data</code>.
 The first column of the view must be keys, and the view must have at least two columns.
-For one-column views, use upstate_database instead. Example:-/p-
+For one-column views, use upstate_database instead. Example:</p>
 
--pre-
+<pre>
 #import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
 #chanwGetObjectByClassName( 'edu.upstate.chanw.db.CascadeDB' )
 
@@ -121,7 +121,7 @@ For one-column views, use upstate_database instead. Example:-/p-
 
 #chanwCreateDatabasePHPCode( $data )
 $globalStringBuffer.toString()
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwCreateDatabasePHPCode $data )
@@ -177,7 +177,7 @@ $globalStringBuffer.toString()
         #set( $void = $globalStringBuffer.append(");") )
     #end
 #end
-    </create-database-php-code-code>
+    </create-database-php-code>
 
     <generate-macro-foreach>
 #*
@@ -192,12 +192,12 @@ This foreach loop is used to generate code, using a list with the supplied code 
     <get-cascade-object-from-element>
 #*
 <documentation>
--p--code-#chanwGetCascadeObjectFromElement( $element $type )-/code--/p-
+<p><code>#chanwGetCascadeObjectFromElement( $element $type )</code></p>
 
--p-Creates a Cascade API object out of an -code-org.jdom.Element-/code- object. The -code-$type-/code- should be a constant like
--code-$CASCADE_API_PAGE_TYPE-/code- defined in chanw_global_values_code. Example:-/p-
+<p>Creates a Cascade API object out of an <code>org.jdom.Element</code> object. The <code>$type</code> should be a constant like
+<code>$CASCADE_API_PAGE_TYPE</code> defined in chanw_global_values_code. Example:</p>
 
--pre-
+<pre>
 #set( $page = $contentRoot.getChild( "system-page" ) )
 #chanwGetCascadeObjectFromElement( $page $CASCADE_API_PAGE_TYPE )
 $chanwGetCascadeObjectFromElement.Class.Name
@@ -205,7 +205,7 @@ $chanwGetCascadeObjectFromElement.Class.Name
 #set( $folder = $contentRoot.getChild( "system-folder" ) )
 #chanwGetCascadeObjectFromElement( $folder $CASCADE_API_FOLDER_TYPE )
 $chanwGetCascadeObjectFromElement.Name
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwGetCascadeObjectFromElement $element $type )
@@ -227,11 +227,11 @@ $chanwGetCascadeObjectFromElement.Name
     <get-database-list-code>
 #*
 <documentation>
--p--code-#chanwGetDatabaseList( $listName )-/code--/p-
+<p><code>#chanwGetDatabaseList( $listName )</code></p>
 
--p-Creates a list containing single values drawn from the database. The value of -code-$listName-/code- should be a name of a variable.
-The associated sql statement selects a single value from a table. This macro is used by upstate_database. Example from upstate_database:-/p-
--pre-
+<p>Creates a list containing single values drawn from the database. The value of <code>$listName</code> should be a name of a variable.
+The associated sql statement selects a single value from a table. This macro is used by upstate_database. Example from upstate_database:</p>
+<pre>
 #import( 'site://_common_assets/formats/library/velocity/chanw_object_creator' )
 #chanwGetObjectByClassName( 'edu.upstate.chanw.db.CascadeDB' )
 
@@ -245,7 +245,7 @@ The associated sql statement selects a single value from a table. This macro is 
     #set( $sql = $list_sql_map[ $key ] )
     #chanwGetDatabaseList( $key )
 #end
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwGetDatabaseList $listName )
@@ -273,12 +273,12 @@ The associated sql statement selects a single value from a table. This macro is 
     <get-file-path-code>
 #*
 <documentation>
--p--code-#chanwGetFilePath( $file $site $default )-/code--/p-
+<p><code>#chanwGetFilePath( $file $site $default )</code></p>
 
--p-Gets the valid file path or the default path. Invoke this macro in double quotes in a set directive. Created by Peter. Example:-/p-
--pre-
+<p>Gets the valid file path or the default path. Invoke this macro in double quotes in a set directive. Created by Peter. Example:</p>
+<pre>
 #set( $myFile = "#chanwGetFilePath( 'images/computer-people-700x350.jpg' 'thomas-test' 'images/default.jpg' )" )
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwGetFilePath $file $site $default )
@@ -293,13 +293,13 @@ The associated sql statement selects a single value from a table. This macro is 
     <get-folder-contained-asset-name-code>
 #*
 <documentation>
--p--code-#chanwGetFolderContainedAssetName( $asset )-/code--/p-
+<p><code>#chanwGetFolderContainedAssetName( $asset )</code></p>
 
--p-Returns the name of the asset. The -code-$asset-/code- passed in should be a Cascade API object. Example:-/p-
--pre-
+<p>Returns the name of the asset. The <code>$asset</code> passed in should be a Cascade API object. Example:</p>
+<pre>
 #chanwGetFolderContainedAssetName( $chanwGetCascadeObjectFromElement )
 $chanwGetFolderContainedAssetName
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwGetFolderContainedAssetName $asset )
@@ -323,16 +323,16 @@ $chanwGetFolderContainedAssetName
     <get-image-by-page-path-code>
 #*
 <documentation>
--p--code-#thomaspeGetImageByPagePath( $thomaspeImageFolder $thomaspeImageExtension $srcSetMapCode $thomaspeMapName $startWrapper $endWrapper )-/code--/p-
+<p><code>#thomaspeGetImageByPagePath( $thomaspeImageFolder $thomaspeImageExtension $srcSetMapCode $thomaspeMapName $startWrapper $endWrapper )</code></p>
 
--p-
+<p>
 Important: The third argument should be a line of code, evaluated to a map.
 The fourth argument should be the name of the map defined in the third argument.
 The fifth and sixth arguments should be variables storing html markups defined in the format
-specified in the path element.-/p-
+specified in the path element.</p>
 
--p-Invoking the macro in a script block:-/p-
--pre-
+<p>Invoking the macro in a script block:</p>
+<pre>
         -lt-path-gt-site://_common_assets/formats/custom_html_wrappers-lt-/path-gt-
         -lt-macro-gt-
             -lt-name-gt-thomaspeGetImageByPagePath-lt-/name-gt-
@@ -345,7 +345,7 @@ specified in the path element.-/p-
                 -lt-variable-gt-end_slide_wrapper-lt-/variable-gt-
             -lt-/params-gt-
         -lt-/macro-gt-
--/pre-
+</pre>
 </documentation>
 *#
 #macro( thomaspeGetImageByPagePath $thomaspeImageFolder $thomaspeImageExtension $srcSetMapCode $thomaspeMapName $startWrapper $endWrapper )
@@ -389,9 +389,9 @@ specified in the path element.-/p-
     <get-list-reversed-code>
 #*
 <documentation>
--p--code-#chanwGetListReversed( $chanwList )-/code--/p-
+<p><code>#chanwGetListReversed( $chanwList )</code></p>
 
--p-Returns the list in reversed order. Example:-/p-
+<p>Returns the list in reversed order. Example:</p>
 </documentation>
 *#
 #macro( chanwGetListReversed $chanwList )
@@ -409,10 +409,10 @@ specified in the path element.-/p-
     <get-map-key-value-reversed-code>
 #*
 <documentation>
--p--code-#chanwGetMapKeyValueReversed( $chanwMap )-/code--/p-
+<p><code>#chanwGetMapKeyValueReversed( $chanwMap )</code></p>
 
--p-Returns the map with keys as values, and values as keys. This macro assumes that the values are unique. Else later values, when treated as keys,
-overwrite earlier values.-/p-
+<p>Returns the map with keys as values, and values as keys. This macro assumes that the values are unique. Else later values, when treated as keys,
+overwrite earlier values.</p>
 </documentation>
 *#
 #macro( chanwGetMapKeyValueReversed $chanwMap )
@@ -431,9 +431,9 @@ overwrite earlier values.-/p-
     <get-node-values-code>
 #*
 <documentation>
--p--code-#chanwGetNodeValues( $node $map )-/code--/p-
+<p><code>#chanwGetNodeValues( $node $map )</code></p>
 
--p-Dynamically creates variables assigned with values.-/p-
+<p>Dynamically creates variables assigned with values.</p>
 </documentation>
 *#
 #macro( chanwGetNodeValues $node $map )
@@ -453,9 +453,9 @@ overwrite earlier values.-/p-
     <get-node-sets-code>
 #*
 <documentation>
--p--code-#chanwGetNodeSets( $node $map )-/code--/p-
+<p><code>#chanwGetNodeSets( $node $map )</code></p>
 
--p-Dynamically creates variables assigned with node sets.-/p-
+<p>Dynamically creates variables assigned with node sets.</p>
 </documentation>
 *#
 #macro( chanwGetNodeSets $node $map )
@@ -488,15 +488,15 @@ overwrite earlier values.-/p-
     <invoke-macro-code>
 #*
 <documentation>
--p--code-#chanwInvokeMacro( $chanwMacroName $chanwMacroParams )-/code--/p-
+<p><code>#chanwInvokeMacro( $chanwMacroName $chanwMacroParams )</code></p>
 
--p-Invokes a macro with the name and parameters passed in. Example:-/p-
--pre-
+<p>Invokes a macro with the name and parameters passed in. Example:</p>
+<pre>
 #set( $file    = 'images/computer-people-700x350.jpg' )
 #set( $site    = 'thomas-test' )
 #set( $default = 'images/default.jpg' )
 #set( $myFile  = "#chanwInvokeMacro('chanwGetFilePath' ['file', 'site', 'default'] )" )
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwInvokeMacro $chanwMacroName $chanwMacroParams )
@@ -523,11 +523,11 @@ overwrite earlier values.-/p-
     <invoke-query-code>
 #*
 <documentation>
--p--code-#chanwInvokeQuery( $type $link $assets $hasMetadata $maxResults $sortBy $direction $siteName $indexablePublishable )-/code--/p-
+<p><code>#chanwInvokeQuery( $type $link $assets $hasMetadata $maxResults $sortBy $direction $siteName $indexablePublishable )</code></p>
 
--p-Creates a -code-$query-/code- object, sets the parameters, and executes the query. Parameters:-/p-
+<p>Creates a <code>$query</code> object, sets the parameters, and executes the query. Parameters:</p>
 
--pre-
+<pre>
  $type: "MetadataSet" or "ContentType"
  $link: e.g. "Blog", "site://common/Standard Page"
  $assets: a list of five boolean values for blocks, files, folders, pages, symlinks [ true, false, true, true, true ]
@@ -537,14 +537,14 @@ overwrite earlier values.-/p-
  $direction: "asc", "desc"
  $siteName: "" meaning searchAcrossAllSites(), or a site name like "medicine"
  $indexablePublishable: a list of two boolean values, [ true, true ]
--/pre-
+</pre>
 
--p-Example:-/p-
+<p>Example:</p>
 
--pre-
+<pre>
 #chanwInvokeQuery( "MetadataSet" "site://_common/Page" [ false, false, false, true, false ] [] 30 "author" "desc" "" [ true, false ] )
 $chanwInvokeQuery.size()
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwInvokeQuery $type $link $assets $hasMetadata $maxResults $sortBy $direction $siteName $indexablePublishable )
@@ -608,9 +608,9 @@ $chanwInvokeQuery.size()
     <locate-asset-code>
 #*
 <documentation>
--p--code-#chanwLocateAsset( $folderPath $siteName $assetName )-/code--/p-
+<p><code>#chanwLocateAsset( $folderPath $siteName $assetName )</code></p>
 
--p-Locates the named assets.-/p-
+<p>Locates the named assets.</p>
 </documentation>
 *#
 #macro ( chanwLocateAsset $folderPath $siteName $assetName )
@@ -683,11 +683,11 @@ $chanwInvokeQuery.size()
     <processBlockChooser>
 #*
 <documentation>
--p--code-#processBlockChooser( $content )-/code--/p-
--p-Processes a block chooser or a region.
+<p><code>#processBlockChooser( $content )</code></p>
+<p>Processes a block chooser or a region.
 When it is a region, what is passed in is a Document object.
 Otherwise, it is an Element whose name is content.
-Why parent of the root element is passed in: a text block may not have a root element.-/p-
+Why parent of the root element is passed in: a text block may not have a root element.</p>
 </documentation>
 *#
 #macro( processBlockChooser $content )
@@ -741,9 +741,9 @@ Why parent of the root element is passed in: a text block may not have a root el
     <processBlockWithMacro>
 #*
 <documentation>
--p--code-#processBlockWithMacro( $firstChild $childPath $siteName )-/code--/p-
+<p><code>#processBlockWithMacro( $firstChild $childPath $siteName )</code></p>
 
--p-Processes a block containing a macro name in a dynamic field. This macro is used by -code-#processBlockChooser-/code-.-/p-
+<p>Processes a block containing a macro name in a dynamic field. This macro is used by <code>#processBlockChooser</code>.</p>
 </documentation>
 *#
 #macro( processBlockWithMacro $firstChild $childPath $siteName )
@@ -761,9 +761,9 @@ Why parent of the root element is passed in: a text block may not have a root el
     <processDataDefinitionBlock>
 #*
 <documentation>
--p--code-#processDataDefinitionBlock( $systemDataStructure )-/code--/p-
+<p><code>#processDataDefinitionBlock( $systemDataStructure )</code></p>
 
--p-Processes a data definition block with type information. The type is turned into a macro name. This macro is used by -code-#processBlockChooser-/code-.-/p-
+<p>Processes a data definition block with type information. The type is turned into a macro name. This macro is used by <code>#processBlockChooser</code>.</p>
 </documentation>
 *#
 #macro( processDataDefinitionBlock $systemDataStructure )
@@ -788,9 +788,9 @@ Why parent of the root element is passed in: a text block may not have a root el
     <processIndexBlock>
 #*
 <documentation>
--p--code-#processIndexBlock( $blockName $firstChild )-/code--/p-
+<p><code>#processIndexBlock( $blockName $firstChild )</code></p>
 
--p-Processes an index block. The name of the block is turned into a macro name. This macro is used by -code-#processBlockChooser-/code-.-/p-
+<p>Processes an index block. The name of the block is turned into a macro name. This macro is used by <code>#processBlockChooser</code>.</p>
 </documentation>
 *#
 #macro( processIndexBlock $blockName $firstChild )
@@ -803,10 +803,10 @@ Why parent of the root element is passed in: a text block may not have a root el
     <processParams>
 #*
 <documentation>
--p--code-#processParams( $chanwStatement $params )-/code--/p-
+<p><code>#processParams( $chanwStatement $params )</code></p>
 
--p-Creates the param lists as a string and attaches it to the statement passed in. Note that the global variable -code-$chanwStatement-/code- is passed in.
-This macro is used by -code-#processScript-/code-.-/p-
+<p>Creates the param lists as a string and attaches it to the statement passed in. Note that the global variable <code>$chanwStatement</code> is passed in.
+This macro is used by <code>#processScript</code>.</p>
 </documentation>
 *#
 #macro( processParams $chanwStatement $params )
@@ -893,10 +893,10 @@ This macro is used by -code-#processScript-/code-.-/p-
     <processScript>
 #*
 <documentation>
--p--code-#processScript( $firstChild )-/code--/p-
+<p><code>#processScript( $firstChild )</code></p>
 
--p-Processes a script block. A script block, in the current implementation, is an XML block whose name must have a '-script' suffix.
-The -code-$firstChild-/code- is the scripts element. This macro is used by -code-#processBlockChooser-/code-.-/p-
+<p>Processes a script block. A script block, in the current implementation, is an XML block whose name must have a '-script' suffix.
+The <code>$firstChild</code> is the scripts element. This macro is used by <code>#processBlockChooser</code>.</p>
 </documentation>
 *#
 #macro( processScript $firstChild )
@@ -974,13 +974,13 @@ The -code-$firstChild-/code- is the scripts element. This macro is used by -code
     <reinitialize-list-of-variables-code>
 #*
 <documentation>
--p--code-#chanwReinitializeListOfVariables( $list )-/code--/p-
+<p><code>#chanwReinitializeListOfVariables( $list )</code></p>
 
--p-Reinitializes the list of variables, all assigned the empty string. The list passed in should be variable names without the dollar signs. Example:-/p-
+<p>Reinitializes the list of variables, all assigned the empty string. The list passed in should be variable names without the dollar signs. Example:</p>
 
--pre-
+<pre>
 #chanwReinitializeListOfVariables( [ "first", "second", "third" ] )
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwReinitializeListOfVariables $list )
@@ -999,10 +999,10 @@ The -code-$firstChild-/code- is the scripts element. This macro is used by -code
     <set-variable-code>
 #*
 <documentation>
--p--code-#chanwSetVariable( $var $val )-/code--/p-
+<p><code>#chanwSetVariable( $var $val )</code></p>
 
--p-Dynamically turns -code-$var-/code- into a variable assigned with the value -code-$val-/code-. The value of -code-$var-/code- should be a variable name without the dollar sign like "var".
-Example: see -code-#chanwReinitializeListOfVariables-/code-.-/p-
+<p>Dynamically turns <code>$var</code> into a variable assigned with the value <code>$val</code>. The value of <code>$var</code> should be a variable name without the dollar sign like "var".
+Example: see <code>#chanwReinitializeListOfVariables</code>.</p>
 </documentation>
 *#
 #macro( chanwSetVariable $var $val )
@@ -1033,13 +1033,13 @@ Example: see -code-#chanwReinitializeListOfVariables-/code-.-/p-
     <set-variable-to-non-empty-string-code>
 #*
 <documentation>
--p--code-#chanwSetVariableToNonEmptyString( $var $var $list )-/code--/p-
+<p><code>#chanwSetVariableToNonEmptyString( $var $var $list )</code></p>
 
--p-Selects the first non-empty string and assigns it to the variable. Example:-/p-
+<p>Selects the first non-empty string and assigns it to the variable. Example:</p>
 
--pre-
+<pre>
 #chanwSetVariableToNonEmptyString( "var" [ " ", "", "content" ] ) ## $var assigned "content" 
--/pre-
+</pre>
 </documentation>
 *#
 #macro( chanwSetVariableToNonEmptyString $var $list )
