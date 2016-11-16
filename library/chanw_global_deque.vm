@@ -1,8 +1,9 @@
 #*
-This format defines a global deque.
-
-Example:
-
+《code》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines a global deque. Example:《/p》
+《pre》
 #import( 'site://_common_assets/formats/library/velocity/chanw_global_deque' )
 
 #set( $deque = $chanwGlobalDeque )
@@ -81,21 +82,40 @@ $item.Class.Name $item
 #else#break#end
 #end
 $E_PRE
+《/pre》
+《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
-
+#*
+《global-variables》
+*#
+#set( $chanwGlobalDequeGlobalVariables = [] )
 #set( $chanwDEQUE_DATA  = "data" )
 #set( $chanwDEQUE_SIZE  = 500 )
 #set( $chanwGlobalDeque = {} )
-
+#*
+《/global-variables》
+《documentation》
+《code》#chanwInitializeGlobalDeque( $chanwGlobalDeque )《/code》
+《p》Initializes the deque.《/p》
+《/documentation》
+《macro id=“chanwInitializeGlobalDeque”》
+*#
 #macro( chanwInitializeGlobalDeque $chanwGlobalDeque )
     #chanwGetConstructorByClassNameParamTypeArray( "java.util.concurrent.LinkedBlockingDeque", ["int"] )
-    #set( $constructor = $chanwGetConstructorByClassNameParamTypeArray )
-    #set( $data  = $constructor.newInstance( $chanwDEQUE_SIZE ) )
+    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamTypeArray )
+    #set( $chanwData = $constructor.newInstance( $chanwDEQUE_SIZE ) )
     
     #set( $dummy = $chanwGlobalDeque.put( $chanwDEQUE_DATA, $data ) )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwAddFirstGlobalDeque( $chanwGlobalDeque $value )《/code》
+《p》Adds the value to the front of the deque.《/p》
+《/documentation》
+《macro id=“chanwAddFirstGlobalDeque”》
+*#
 #macro( chanwAddFirstGlobalDeque $chanwGlobalDeque $value )
     #if( $_PropertyTool.isNull( $value ) )
 Null not allow
@@ -104,7 +124,14 @@ Null not allow
     
     #set( $chanwAddFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addFirst( $value ) )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwAddLastGlobalDeque( $chanwGlobalDeque $value )《/code》
+《p》Adds the value to the back of the deque.《/p》
+《/documentation》
+《macro id=“chanwAddLastGlobalDeque”》
+*#
 #macro( chanwAddLastGlobalDeque $chanwGlobalDeque $value )
     #if( $_PropertyTool.isNull( $value ) )
 Null not allow
@@ -113,11 +140,25 @@ Null not allow
     
     #set( $chanwAddLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addLast( $value ) )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwClearGlobalDeque( $chanwGlobalDeque )《/code》
+《p》Clears the deque of all the data.《/p》
+《/documentation》
+《macro id=“chanwClearGlobalDeque”》
+*#
 #macro( chanwClearGlobalDeque $chanwGlobalDeque )
     $chanwGlobalDeque.get( $chanwDEQUE_DATA ).clear()
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwPeekFirstGlobalDeque( $chanwGlobalDeque )《/code》
+《p》Retrieves the value in the front without removing it.《/p》
+《/documentation》
+《macro id=“chanwPeekFirstGlobalDeque”》
+*#
 #macro( chanwPeekFirstGlobalDeque $chanwGlobalDeque )
     #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
 Deque is empty
@@ -125,7 +166,14 @@ Deque is empty
         #set( $chanwPeekFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).peekFirst() )
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwPeekLastGlobalDeque( $chanwGlobalDeque )《/code》
+《p》Retrieves the value in the back without removing it.《/p》
+《/documentation》
+《macro id=“chanwPeekLastGlobalDeque”》
+*#
 #macro( chanwPeekLastGlobalDeque $chanwGlobalDeque )
     #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
 Deque is empty
@@ -133,11 +181,25 @@ Deque is empty
         #set( $chanwPeekLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).peekLast() )
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwSizeGlobalDeque( $chanwGlobalDeque )《/code》
+《p》Returns the size of the deque (the number of items stored).《/p》
+《/documentation》
+《macro id=“chanwSizeGlobalDeque”》
+*#
 #macro( chanwSizeGlobalDeque $chanwGlobalDeque )
     #set( $chanwSizeGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).size() )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwTakeFirstGlobalDeque( $chanwGlobalDeque )《/code》
+《p》Removes the value from the front.《/p》
+《/documentation》
+《macro id=“chanwTakeFirstGlobalDeque”》
+*#
 #macro( chanwTakeFirstGlobalDeque $chanwGlobalDeque )
     #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
 Deque is empty
@@ -145,7 +207,14 @@ Deque is empty
         #set( $chanwTakeFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).takeFirst() )
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwTakeLastGlobalDeque( $chanwGlobalDeque )《/code》
+《p》Removes the value from the back.《/p》
+《/documentation》
+《macro id=“chanwTakeLastGlobalDeque”》
+*#
 #macro( chanwTakeLastGlobalDeque $chanwGlobalDeque )
     #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
 Deque is empty
@@ -153,9 +222,23 @@ Deque is empty
         #set( $chanwTakeLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).takeLast() )
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwEmptyGlobalDeque( $chanwGlobalDeque )《/code》
+《p》Returns a boolean, indicating whether the deque is empty.《/p》
+《/documentation》
+《macro id=“chanwEmptyGlobalDeque”》
+*#
 #macro( chanwEmptyGlobalDeque $chanwGlobalDeque )
     #set( $chanwEmptyGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).size() == 0 )
 #end
-
+#*
+《/macro》
+*#
 #chanwInitializeGlobalDeque( $chanwGlobalDeque )
+#*
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
