@@ -1,0 +1,22 @@
+#set( $states    = [ "AL", "AK", "AR", "AZ", "CA", "CO", "CT", "DE", "FL", "GA" ] )
+#set( $max       = $states.size() - 1 )
+#set( $intList   = [ 0..$max ] )
+#set( $countList = [ $max..0 ] )
+
+#set( $method = $_.Class.forName( 
+    "java.util.concurrent.ThreadLocalRandom" ).getMethod( 
+    "current" ) )
+#set( $random = $method.invoke( null ) )
+
+## Fisher–Yates shuffle
+#foreach( $num in $countList )
+    #set( $next  = $num + 1 )
+    #set( $index = $random.nextInt( $next ) )
+    #set( $temp  = $intList[ $index ] )
+    #set( $intList[ $index ] = $intList[ $num ] )
+    #set( $intList[ $num ]   = $temp )
+#end
+
+#foreach( $num in $intList )
+    $states[ $num ]
+#end
