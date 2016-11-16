@@ -1,8 +1,9 @@
 #*
-This format defines a global queue.
-
-Example:
-
+《code》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines a global queue. Example:《/p》
+《pre》
 #import( 'site://_common_assets/formats/library/velocity/chanw_global_queue' )
 
 #set( $queue = $chanwGlobalQueue )
@@ -55,20 +56,38 @@ $S_PRE
 
 Current size: $size$BR
 $E_PRE
+《/pre》
+《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
-
+#*
+《global-variables》
+*#
 #set( $chanwQUEUE_DATA  = "data" )
 #set( $chanwQUEUE_SIZE  = 500 )
 #set( $chanwGlobalQueue = {} )
-
+#*
+《/global-variables》
+《documentation》
+《code》#chanwInitializeGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Initializes the queue.《/p》
+《/documentation》
+《macro id=“chanwInitializeGlobalQueue”》
+*#
 #macro( chanwInitializeGlobalQueue $chanwGlobalQueue )
     #chanwGetConstructorByClassNameParamSize( "java.util.concurrent.ArrayBlockingQueue", 1 )
     #set( $constructor = $chanwGetConstructorByClassNameParamSize )
     #set( $data = $constructor.newInstance( $chanwQUEUE_SIZE ) )
     #set( $dummy = $chanwGlobalQueue.put( $chanwQUEUE_DATA, $data ) )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwEnqueueGlobalQueue( $chanwGlobalQueue $value )《/code》
+《p》Enqueues the value.《/p》
+《/documentation》
+《macro id=“chanwEnqueueGlobalQueue”》
+*#
 #macro( chanwEnqueueGlobalQueue $chanwGlobalQueue $value )
     #if( $_PropertyTool.isNull( $value ) )
 Null not allow
@@ -87,7 +106,14 @@ Failed to enqueue
         #stop
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwDequeueGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Dequeus and returns the value.《/p》
+《/documentation》
+《macro id=“chanwDequeueGlobalQueue”》
+*#
 #macro( chanwDequeueGlobalQueue $chanwGlobalQueue )
     #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() > 0 )
         #set( $chanwDequeueGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).take() )
@@ -95,19 +121,47 @@ Failed to enqueue
 The queue is empty
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwSizeGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Returns the size of the queue (the number of items stored).《/p》
+《/documentation》
+《macro id=“chanwSizeGlobalQueue”》
+*#
 #macro( chanwSizeGlobalQueue $chanwGlobalQueue )
     #set( $chanwSizeGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwRemainingCapacityGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Returns the remaining capacity of the queue.《/p》
+《/documentation》
+《macro id=“chanwRemainingCapacityGlobalQueue”》
+*#
 #macro( chanwRemainingCapacityGlobalQueue $chanwGlobalQueue )
     #set( $chanwRemainingCapacityGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).remainingCapacity() )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwClearGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Clears the queue.《/p》
+《/documentation》
+《macro id=“chanwClearGlobalQueue”》
+*#
 #macro( chanwClearGlobalQueue $chanwGlobalQueue )
     $chanwGlobalQueue.get( $chanwQUEUE_DATA ).clear()
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwPeekGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Returns the value without dequeing.《/p》
+《/documentation》
+《macro id=“chanwPeekGlobalQueue”》
+*#
 #macro( chanwPeekGlobalQueue $chanwGlobalQueue )
     #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() > 0 )
         #set( $chanwPeekGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).peek() )
@@ -115,5 +169,12 @@ The queue is empty
 The queue is empty
     #end
 #end
-
+#*
+《/macro》
+*#
 #chanwInitializeGlobalQueue( $chanwGlobalQueue )
+#*
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
