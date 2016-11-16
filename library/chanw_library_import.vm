@@ -3,8 +3,22 @@ This format defines all import statements to the library.
 Import this single format to access all library resources.
 *#
 #import( 'formats/library/velocity/chanw_object_creator' )
+#import( 'formats/library/velocity/chanw_global_values' )
+#import( 'formats/library/velocity/chanw_global_macros' )
+#import( 'formats/library/velocity/chanw_display_velocity_code' )
+
 #import( 'formats/library/velocity/chanw_process_index_block' )
 #import( 'formats/library/velocity/chanw_process_xml' )
-#import( 'formats/library/velocity/chanw_global_utility_objects' )
 #import( 'formats/library/velocity/chanw_structured_data_worker' )
-#import( 'formats/process_block' )
+
+#*
+Optional:
+
+#import( 'formats/library/velocity/chanw_global_deque' )
+#import( 'formats/library/velocity/chanw_global_queue' )
+#import( 'formats/library/velocity/chanw_global_stack' )
+
+#import( 'formats/library/velocity/chanw_html_builder' )
+#import( 'formats/library/velocity/chanw_html_builder_with_deque' )
+#import( 'formats/library/velocity/chanw_reflect_utilities' )
+*#
