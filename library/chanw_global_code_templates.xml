@@ -1,0 +1,62 @@
+<global-code-templates>
+
+    <index-block-macro>
+#macro( -macro_name- $-node_type-Node )
+    #if( !$-node_type-Node )
+        The -node_type- element is not defined.$BR
+    #elseif( $-node_type-Node.name != $-element_name- )
+        Not a/an -node_type- element!!!$BR
+        #stop
+    #end
+    #chanwGetNodeValues( $-node_type-Node $-map_name- )
+#end
+    </index-block-macro>
+
+    <multi-group>
+#macro(-macro_name- $systemDataStructure $region)
+    #set($groupType=$systemDataStructure.getChild('choose-type').value)
+    #set($groupRegion=$systemDataStructure.getChild('choose-region').value)
+    #set($groupToBeProcessed=$systemDataStructure.getChild("${groupType}-group"))
+    #chanwConvertToPascalCase($groupType '-')
+    #set($macroName=$MACRO_PREFIX+$chanwConvertToPascalCase+'Group')
+    #if(!$_PropertyTool.isNull($region))
+        #set($blockRegion=$region)
+        #chanwInvokeMacro($macroName ['groupToBeProcessed','blockRegion'])
+    #else
+        #chanwInvokeMacro($macroName ['groupToBeProcessed'])
+    #end
+#end     
+    </multi-group>
+    
+    <page-config>
+#set( $-block_content- = $_XPathTool.selectSingleNode( $page, 'system-data-structure/page-config-group/-node_name-/content' ) )
+#if( !$_PropertyTool.isNull( $-block_content- ) )
+-lt-div id="-div_id-"-gt-
+        #processBlockChooser( $-block_content- )
+-lt-/div-gt-
+    #end
+    </page-config>
+    
+    <single-group>
+#macro(-dispatch_macro_name- $systemDataStructure)
+    #set($groupToBeProcessed=$systemDataStructure.getChild('-single_group_name-'))
+    #chanwConvertToPascalCase('-single_group_name-' '-')
+    #set($macroName=$MACRO_PREFIX+$chanwConvertToPascalCase)
+    #chanwInvokeMacro($macroName ['groupToBeProcessed'])
+#end
+    </single-group>
+    
+    <site-config>
+#set( $contentVar = $_XPathTool.selectSingleNode( $page, 'system-data-structure/site-config-group/-node_name-/content' ) )
+#if( !$_PropertyTool.isNull( $contentVar ) )
+    #processBlockChooser( $contentVar )
+#end
+    </site-config>
+    
+    <site-map>
+#macro( -macro_name- $systemIndexBlock )
+    #chanwCreateSiteMap( $systemIndexBlock )
+#end
+    </site-map>
+    
+</global-code-templates>
