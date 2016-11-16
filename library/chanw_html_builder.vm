@@ -1,20 +1,31 @@
 #*
-This format defines an html builder.
+《code》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines an html builder.《/p》
+《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_global_values' )
-
-#* 
-Creates a pre element wrapping up a string
+#*
+《documentation》
+《code》#chanwCreatePreWithText( $text )《/code》
+《p》Creates a pre element wrapping up a string.《/p》
+《/documentation》
+《macro id=“chanwCreatePreWithText”》
 *#
 #macro( chanwCreatePreWithText $text )
 $S_PRE
 $chanwNEWLINE$text
 $E_PRE
 #end
-
-#* 
-Creates an element by passing in the element name, an id (or empty string), 
-a string of CSS classes (or empty string), and the text of the element.
+#*
+《/macro》
+《documentation》
+《code》#chanwCreateElementWithIdClassesText( $chanw_element $chanw_id $chanw_classes $chanw_text )《/code》
+《p》Creates an element by passing in the element name, an id (or empty string),
+a string of CSS classes (or empty string), and the text of the element.《/p》
+《/documentation》
+《macro id=“chanwCreateElementWithIdClassesText”》
 *#
 #macro( chanwCreateElementWithIdClassesText $chanw_element $chanw_id $chanw_classes $chanw_text )
     #set( $chanw_start_tag       = "<$chanw_element" )
@@ -33,11 +44,18 @@ a string of CSS classes (or empty string), and the text of the element.
     #set( $chanwCreateElementWithIdClassesText = 
         $chanw_start_tag + ">" + $chanw_text + "</$chanw_element>" )
 #end
+#*
+《/macro》
+《documentation》
+《code》#chanwCreateElementWithIdClassesMacroGlobal(  $chanw_element $chanw_id $chanw_classes $chanw_code $chanw_global_var )《/code》
+《p》Creates an element by passing in the element name, an id (or empty string),
+a string of CSS classes (or empty string), a string containing Velocity code (call to a macro) to be evaluated, and the corresponding global variable.《/p》
+《/documentation》
+《macro id=“chanwCreateElementWithIdClassesMacroGlobal”》
+*#
 
 #* 
-Creates an element by passing in the element name, an id (or empty string), 
-a string of CSS classes (or empty string), a string containing Velocity code (call to a macro) to be evaluated, 
-and the corresponding global variable.
+
 *#
 #macro( chanwCreateElementWithIdClassesMacroGlobal 
     $chanw_element $chanw_id $chanw_classes $chanw_code $chanw_global_var )
@@ -47,10 +65,13 @@ and the corresponding global variable.
     #set( $chanwCreateElementWithIdClassesMacroGlobal = 
         $chanwCreateElementWithIdClassesText )
 #end
-
-#* 
-Creates an element by passing in the element name, a map containing attribute names and values,
-and the text of the element.
+#*
+《/macro》
+《documentation》
+《code》#chanwCreateElementWithAttrsText( $chanw_element $chanw_map $chanw_text )《/code》
+《p》Creates an element by passing in the element name, a map containing attribute names and values, and the text of the element.《/p》
+《/documentation》
+《macro id=“chanwCreateElementWithAttrsText”》
 *#
 #macro( chanwCreateElementWithAttrsText $chanw_element $chanw_map $chanw_text )
     #set( $chanw_start_tag = "<$chanw_element" )
@@ -68,3 +89,9 @@ and the text of the element.
     #set( $chanwCreateElementWithAttrsText = $chanw_start_tag + ">" + 
         $chanw_text + "</$chanw_element>" )
 #end
+#*
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
