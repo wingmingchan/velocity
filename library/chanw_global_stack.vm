@@ -1,7 +1,9 @@
 #*
-This format defines a global stack.
-
-Example:
+《code》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines a global stack. Example:《/p》
+《pre》
 #import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
 #import( 'site://_common_assets/formats/library/velocity/chanw_global_stack' )
 
@@ -19,21 +21,46 @@ Example:
     #chanwPopGlobalStack( $chanwGlobalStack )
     $chanwPopGlobalStack$BR
 #end
+《/pre》
+《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
-
+#*
+《global-variables》
+*#
 #set( $chanwSTACK_DATA  = "data" )
 #set( $chanwGlobalStack = {} )
-
+#*
+《/global-variables》
+《documentation》
+《code》#chanwInitializeGlobalStack( $chanwGlobalStack )《/code》
+《p》Initializes the stack.《/p》
+《/documentation》
+《macro id=“chanwInitializeGlobalStack”》
+*#
 #macro( chanwInitializeGlobalStack $chanwGlobalStack )
     #chanwGetObjectByClassName( "java.util.Stack" )
     #set( $dummy = $chanwGlobalStack.put( $chanwSTACK_DATA, $chanwGetObjectByClassName ) )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwClearGlobalStack( $chanwGlobalStack )《/code》
+《p》Clears the stack.《/p》
+《/documentation》
+《macro id=“chanwClearGlobalStack”》
+*#
 #macro( chanwClearGlobalStack $chanwGlobalStack )
     $chanwGlobalStack.get( $chanwSTACK_DATA ).clear()
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwPeekGlobalStack( $chanwGlobalStack )《/code》
+《p》Returns the value without popping the stack.《/p》
+《/documentation》
+《macro id=“chanwPeekGlobalStack”》
+*#
 #macro( chanwPeekGlobalStack $chanwGlobalStack )
     #if( $chanwGlobalStack.get( $chanwSTACK_DATA ).empty() )
 Stack is empty
@@ -41,7 +68,14 @@ Stack is empty
         #set( $chanwPeekGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).peek() )
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwPushGlobalStack( $chanwGlobalStack $value )《/code》
+《p》Pushes the value.《/p》
+《/documentation》
+《macro id=“chanwPushGlobalStack”》
+*#
 #macro( chanwPushGlobalStack $chanwGlobalStack $value )
     #if( $_PropertyTool.isNull( $value ) )
 Null not allow
@@ -50,7 +84,14 @@ Null not allow
     
     #set( $chanwPushGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).push( $value ) )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwPopGlobalStack( $chanwGlobalStack )《/code》
+《p》Pops the stack and returns the value.《/p》
+《/documentation》
+《macro id=“chanwPopGlobalStack”》
+*#
 #macro( chanwPopGlobalStack $chanwGlobalStack )
     #if( $chanwGlobalStack.get( $chanwSTACK_DATA ).empty() )
 Stack is empty
@@ -58,13 +99,34 @@ Stack is empty
         #set( $chanwPopGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).pop() )
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwEmptyGlobalStack( $chanwGlobalStack )《/code》
+《p》Returns a boolean, indicating whether the stack is empty.《/p》
+《/documentation》
+《macro id=“chanwEmptyGlobalStack”》
+*#
 #macro( chanwEmptyGlobalStack $chanwGlobalStack )
     #set( $chanwEmptyGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).empty() )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwSizeGlobalStack( $chanwGlobalStack )《/code》
+《p》Returns the size of the stack (the number of items stored)《/p》
+《/documentation》
+《macro id=“chanwSizeGlobalStack”》
+*#
 #macro( chanwSizeGlobalStack $chanwGlobalStack )
     #set( $chanwSizeGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).size() )
 #end
-
+#*
+《/macro》
+*#
 #chanwInitializeGlobalStack( $chanwGlobalStack )
+#*
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
