@@ -1,16 +1,26 @@
 #*
-This format provides utility macros for reflection.
-
-The #chanwDisplayClassAPI macro can accept three params, the second and third are optional.
-
-Example:
+《code》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format provides utility macros for reflection.
+The 《code》#chanwDisplayClassAPI《/code》 macro can accept three params, the second and third are optional. Example:《/p》
+《pre》
 #chanwDisplayClassAPI( "java.lang.Math", "h3", "true" ) ## pass in a class name
 #chanwDisplayClassAPI( $_, "h3", "true" )               ## pass in an object
 #chanwDisplayClassAPI( $_.Class, "h3", "true" )         ## pass in a java.lang.Class object
 #chanwDisplayClassAPI( $_ )                             ## pass in an object
+《/pre》
+《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
-
+#*
+《documentation》
+《code》#chanwDisplayClassAPI( $obj $heading $withH2 )《/code》
+《p》Displays essential information of a class, including a list of constructors and methods. Use this macro
+as the entry point to this library format.《/p》
+《/documentation》
+《macro id=“chanwDisplayClassAPI”》
+*#
 #macro( chanwDisplayClassAPI $obj $heading $withH2 )
     #if( $_PropertyTool.isNull( $obj ) )
         No parameter supplied.
@@ -31,7 +41,14 @@ Example:
     
     #chanwDisplayObjClass( $obj $chanwHeading $chanwWithH2 )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplayObjClass( $obj $heading $withH2 )《/code》
+《p》Calls other macros and displays class information.《/p》
+《/documentation》
+《macro id=“chanwDisplayObjClass”》
+*#
 #macro( chanwDisplayObjClass $obj $heading $withH2 )
     #set( $objString = "" )
     #set( $objType = $obj.Class.Name )
@@ -63,7 +80,14 @@ Example:
     #chanwDisplayMethods( $chanwClassString $heading )
     $HR
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplayConstructors( $obj $heading )《/code》
+《p》Displays a list of constructors.《/p》
+《/documentation》
+《macro id=“chanwDisplayConstructors”》
+*#
 #macro( chanwDisplayConstructors $obj $heading )
     #set( $objType = $obj.Class.Name )
     
@@ -119,7 +143,14 @@ Example:
         ## No constructors found.
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplayMethods( $obj $heading )《/code》
+《p》Displays a list of methods.《/p》
+《/documentation》
+《macro id=“chanwDisplayMethods”》
+*#
 #macro( chanwDisplayMethods $obj $heading )
     #set( $objType = $obj.Class.Name )
     
@@ -176,7 +207,14 @@ Example:
         #end
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplayFields( $obj $heading )《/code》
+《p》Displays a list of fields and values.《/p》
+《/documentation》
+《macro id=“chanwDisplayFields”》
+*#
 #macro( chanwDisplayFields $obj $heading )
     #set( $objType = $obj.Class.Name )
     
@@ -203,7 +241,14 @@ Example:
         #end
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplaySuperClass( $obj $heading )《/code》
+《p》Displays the parent class name.《/p》
+《/documentation》
+《macro id=“chanwDisplaySuperClass”》
+*#
 #macro( chanwDisplaySuperClass $obj $heading )
     #set( $objType = $obj.Class.Name )
     
@@ -223,3 +268,9 @@ Example:
         #end
     #end
 #end
+#*
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
