@@ -1,0 +1,423 @@
+#*
+《code》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format retrieves Velocity code from blocks and formats and displays the
+documentation, possibly with the source code.《/p》
+《p》For these macros to work properly, make sure that:《/p》
+《ul》
+《li》Annotation markups inside comments always use the four special unicode characters:
+&#12298;, &#12299;, &#8220; and &#8221;.《/li》
+《li》No single quotes are used in annotation markups.《/li》
+《li》Annotation markups, after before transformed back to normal XML markups, are well-formed.《/li》
+《li》To display the documentation or code of a single macro, macros are surrounded by
+the 《code》macro《/code》 tags with id's, and the macro name is passed in.《/li》
+《/ul》
+《p》Characters like 《code》<《/code》 and 《code》&《/code》 can be used in documentation because
+the contents of documentation go through 《code》$_EscapeTool.xml《/code》.《/p》
+《/documentation》
+*#
+#import( '/formats/library/velocity/chanw_global_macros' )
+#*
+《global-variables》
+*#
+#set( $chanwDisplayVelocityCodeGlobalVariables = [ 
+    "chanwBottomDocumentationElement",
+    "chanwFormatCode",
+    "chanwFormatXml",
+    "chanwGetDocumentationElements",
+    "chanwGetGlobalVariablesElement",
+    "chanwGetMacroCode",
+    "chanwGetMacroDocumentation",
+    "chanwGetRootElementFromXMLBlock",
+    "chanwGetScriptFormatCode",
+    "chanwGetScriptFormatRootElement",
+    "chanwTopDocumentationElement",
+    "chanwWithSource"
+] )
+#set( $chanwStartChar  = "&#12298;" )
+#set( $chanwEndChar    = "&#12299;" )
+#set( $chanwStartQuote = "&#8220;" )
+#set( $chanwEndQuote   = "&#8221;" )
+#set( $chanwMacroNameDocumentationMap = {} )
+#set( $chanwDocumentationMacroNameMap = {} )
+#*
+《/global-variables》
+《documentation》
+《code》#chanwDisplayDocumentation( $format_name $folder_path $site_name )《/code》
+《p》Displays the documentation of a format, possibly including the source code. This macro
+should be used as an entry point to this library format. Example:《/p》
+《pre》
+#chanwDisplayDocumentation( "chanw_display_velocity_code" "formats/library/velocity" "_common_assets" )
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayDocumentation”》
+*#
+#macro( chanwDisplayDocumentation $format_name $folder_path $site_name $with_source )
+    ## reinitialize all global variables
+    #chanwReinitializeDisplayVelocityCodeGlobalVariables
+    
+    ## the $with_source variable is a string
+    #if( $_PropertyTool.isNull( $with_source ) || $with_source == "true" ) ## defaulted to true
+        #set( $chanwWithSource = true )
+    #else
+        #set( $chanwWithSource = false ) ## don't assign $with_source because it is a string
+    #end
+
+    #chanwGetScriptFormatRootElement( $format_name $folder_path $site_name )
+    #chanwGetDocumentationElements( $chanwGetScriptFormatRootElement )
+    #chanwDisplayDocumentationElements( $chanwGetDocumentationElements )
+    
+    #if( $chanwGetScriptFormatCode != "" && $chanwWithSource )
+        #chanwDisplayHideVelocityCode( $chanwGetScriptFormatCode )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplayDocumentationElements( $docElements )《/code》
+《p》Displays the set of documentation elements, each as an li. The first
+documentation element should contain general introduction of the format.
+Example:《/p》
+《pre》
+#chanwDisplayDocumentationElements( $chanwGetDocumentationElements )
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayDocumentationElements”》
+*#
+#macro( chanwDisplayDocumentationElements $docElements )
+    #if( $docElements && $docElements.size() > 0 )
+        ## output introduction
+        #if( $chanwTopDocumentationElement != "" )
+            $_SerializerTool.serialize( $chanwTopDocumentationElement, true )
+        #end
+        
+        ## display global variables
+        #if( $chanwGetGlobalVariablesElement != "" )
+            ${S_H2}Global Variables$E_H2
+            $S_PRE$_SerializerTool.serialize( $chanwGetGlobalVariablesElement, true ).trim()$E_PRE
+        #end
+        
+        ## display list of macros
+        
+        #set( $chanwMacroNames = $chanwMacroNameDocumentationMap.keySet() )
+        
+        #if( $chanwMacroNames.size() > 0 )
+            ${S_H2}List of Macros$E_H2
+            $S_UL
+            #foreach( $macroName in $chanwMacroNames )
+                ${S_LI}<a href="#${macroName}">$macroName</a>$E_LI
+            #end
+            $E_UL
+
+            ## output heading
+            ${S_H2}Macros$E_H2
+            $S_UL
+            #foreach( $doc in $docElements )
+                #set( $chanwMacroName = $chanwDocumentationMacroNameMap.get( $doc ) )
+            
+                ${S_LI}<a name="${chanwMacroName}"></a>$_SerializerTool.serialize( $doc, true )$E_LI
+            #end
+            $E_UL
+        #end
+        
+        ## output postscript
+        #if( $chanwBottomDocumentationElement != "" )
+            $_SerializerTool.serialize( $chanwBottomDocumentationElement, true )
+        #end
+        
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplayHideVelocityCode( $code $id $create_id_div )《/code》
+《p》Displays a piece of code, wrapped inside a pre element, possibly wrapped
+in an outer div element with an ID. Example:《/p》
+《pre》
+#chanwCreateHideVelocityCode( $chanwGetScriptFormatCode )
+#chanwCreateHideVelocityCode( $chanwGetScriptFormatCode "hide-code1" true )
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayHideVelocityCode”》
+*#
+#macro( chanwDisplayHideVelocityCode $code $id $create_id_div )
+    #set( $chanwCode = $_EscapeTool.xml( $code ).replaceAll( 
+        "-aa-", "&amp;&amp;" ) )
+    
+    #if( !$create_id_div )
+    $S_H2$SOURCE_CODE$E_H2 $S_PRE$chanwCode$E_PRE
+    #else
+        #set( $chanwStartDiv = '<div ' + 'id="' + $id + '">' )
+    $chanwStartDiv$S_H2$SOURCE_CODE4E_H2$S_PRE$chanwCode$E_PRE$E_DIV
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplayMacroCode( $format_name $folder_path $site_name $macro_name )《/code》
+《p》Displays the code of the macro bearing the ID. Example:《/p》
+《pre》
+#chanwDisplayMacroCode( "chanw_display_velocity_code" "formats/library/velocity" "_common_assets" "chanwDisplayMacroCode" )
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayMacroCode”》
+*#
+#macro( chanwDisplayMacroCode $format_name $folder_path $site_name $macro_name )
+    #chanwGetMacroCode( $format_name $folder_path $site_name $macro_name )
+
+    #if( $chanwGetMacroCode != "" )
+        $S_PRE$_EscapeTool.xml( $chanwGetMacroCode ).replaceAll( '#\*', '' ).replaceAll( '\*#', '' ).trim()$E_PRE
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplayMacroDocumentation( $format_name $folder_path $site_name $macro_name )《/code》
+《p》Displays the documentation of the macro bearing the ID. Example:《/p》
+《pre》
+#chanwDisplayMacroDocumentation( "chanw_display_velocity_code" "formats/library/velocity" "_common_assets" "chanwDisplayMacroCode" )
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayMacroDocumentation”》
+*#
+#macro( chanwDisplayMacroDocumentation $format_name $folder_path $site_name $macro_name )
+    #chanwGetMacroDocumentation( $format_name $folder_path $site_name $macro_name )
+    
+    #if( $chanwGetMacroDocumentation != "" )
+        $_SerializerTool.serialize( $chanwGetMacroDocumentation, true )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwDisplayScriptBlockCode( $block_path $site_name $id )《/code》
+《p》Wraps the code of an XML block in a pre element. Since the
+《code》locateBlock《/code》 method is called, there is no need to split the
+path of the block into two (the parent folder path and the name of the block).
+Example:《/p》
+《pre》
+#chanwDisplayScriptBlockCode(
+    "formats/library/velocity/chanw_global_code_templates" "_common_assets" "hide-code1" )
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayScriptBlockCode”》
+*#
+#macro( chanwDisplayScriptBlockCode $block_path $site_name $id )
+    #set( $code = $_.locateBlock( $block_path, $site_name ).XML )
+    #chanwCreateHideVelocityCode( $code )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetDocumentationElements( $root )《/code》
+《p》Gets all 《code》documentation《/code》 descendants of the root element. Example:《/p》
+《pre》
+#chanwGetScriptFormatRootElement(
+    "chanw_global_macros" "formats/library/velocity" "_common_assets" )
+#chanwGetDocumentationElements( $chanwGetScriptFormatRootElement )
+$chanwGetDocumentationElements.size()
+$chanwMacroNameDocumentationMap
+《/pre》
+《/documentation》
+《macro id=“chanwGetDocumentationElements”》
+*#
+#macro( chanwGetDocumentationElements $root )
+    #if( $root.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
+        #set( $chanwTopDocumentationElement    = $_XPathTool.selectSingleNode( $root, "//documentation[@id='top']" ) )
+        #set( $chanwBottomDocumentationElement = $_XPathTool.selectSingleNode( $root, "//documentation[@id='bottom']" ) )
+        #set( $chanwGetDocumentationElements   = $_XPathTool.selectNodes( $root, "//documentation[not(@id='top') and not(@id='bottom')]" ) )
+        #set( $chanwMacros                     = $_XPathTool.selectNodes( $root, "//macro" ) )
+        
+        #foreach( $macro in $chanwMacros )
+            #set( $chanwMacroName = $macro.getAttributeValue( "id" ) )
+            ## get all preceding documentation elements
+            #set( $chanwPrecedingDocumentationNodes = $_XPathTool.selectNodes(
+                $macro, "preceding-sibling::documentation" ) )
+            ## the last element
+            #if( $chanwPrecedingDocumentationNodes.size() > 0 )
+                #set( $chanwLastNode = $chanwPrecedingDocumentationNodes.size() - 1 )
+                #set( $chanwMacroDocumentation = $chanwPrecedingDocumentationNodes[ $chanwLastNode ] )
+                #set( $void = $chanwMacroNameDocumentationMap.put( $chanwMacroName, $chanwMacroDocumentation ) )
+                #set( $void = $chanwDocumentationMacroNameMap.put( $chanwMacroDocumentation, $chanwMacroName ) )
+            #end
+        #end
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetGlobalVariablesElement( $root )《/code》
+《p》Gets the global-variables element. Example:《/p》
+《pre》
+#chanwGetGlobalVariablesElement( $chanwGetScriptFormatRootElement )
+《/pre》
+《/documentation》
+《macro id=“chanwGetGlobalVariablesElement”》
+*#
+#macro( chanwGetGlobalVariablesElement $root )
+    #if( $root.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
+        #set( $chanwGetGlobalVariablesElement = $_XPathTool.selectSingleNode( $root, "//global-variables" ) )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetMacroCode( $format_name $folder_path $site_name $macro_name )《/code》
+《p》Returns the code of the macro bearing the ID. Example:《/p》
+《pre》
+## a String element
+#chanwGetMacroCode( "chanw_display_velocity_code" "formats/library/velocity" "_common_assets" "chanwDisplayDocumentation" )
+$chanwGetMacroCode.Class.Name
+$_EscapeTool.xml( $chanwGetMacroCode )
+《/pre》
+《/documentation》
+《macro id=“chanwGetMacroDocumentation”》
+*#
+#macro( chanwGetMacroCode $format_name $folder_path $site_name $macro_name )
+    ## reinitialize all global variables
+    #chanwReinitializeDisplayVelocityCodeGlobalVariables
+    #chanwGetScriptFormatRootElement( $format_name $folder_path $site_name )
+    
+    #set( $chanwGetMacroCode = $_XPathTool.selectSingleNode(
+        $chanwGetScriptFormatRootElement, "//macro[@id='$macro_name']" ).Value )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetMacroDocumentation( $format_name $folder_path $site_name $macro_name )《/code》
+《p》Returns the documentation element of the macro bearing the ID. Example:《/p》
+《pre》
+## an org.jdom.Element
+#chanwGetMacroDocumentation( "chanw_display_velocity_code" "formats/library/velocity" "_common_assets" "chanwDisplayDocumentation" )
+$_SerializerTool.serialize( $chanwGetMacroDocumentation, true )
+《/pre》
+《/documentation》
+《macro id=“chanwGetMacroDocumentation”》
+*#
+#macro( chanwGetMacroDocumentation $format_name $folder_path $site_name $macro_name )
+    ## reinitialize all global variables
+    #chanwReinitializeDisplayVelocityCodeGlobalVariables
+    #chanwGetScriptFormatRootElement( $format_name $folder_path $site_name )
+    #chanwGetDocumentationElements( $chanwGetScriptFormatRootElement )
+    
+    #set( $chanwGetMacroDocumentation = $chanwMacroNameDocumentationMap.get( $macro_name ) )
+#*
+    ## get all preceding documentation elements
+    #set( $chanwDocumentationNodes = $_XPathTool.selectNodes(
+        $chanwGetScriptFormatRootElement, "//macro[@id='$macro_name']/preceding-sibling::documentation" ) )
+
+    ## return the last element
+    #if( $chanwDocumentationNodes.size() > 0 )
+        #set( $chanwLastNode = $chanwDocumentationNodes.size() - 1 )
+        #set( $chanwGetMacroDocumentation = $chanwDocumentationNodes[ $chanwLastNode ] )
+        #set( $void = $chanwMacroNameDocumentationMap.put( $macro_name, $chanwGetMacroDocumentation ) )
+    #end
+*#
+#end
+#*
+《/macro》
+《documentation》
+《code》chanwGetScriptFormatCode( $format_name $folder_path $site_name )《/code》
+《p》Gets the Velocity code in a script format. Example:《/p》
+《pre》
+#chanwGetScriptFormatCode( $format_name $folder_path $site_name )
+《/pre》
+《/documentation》
+《macro id=“chanwGetScriptFormatCode”》
+*#
+#macro( chanwGetScriptFormatCode $format_name $folder_path $site_name )
+    #chanwLocateAsset( $folder_path $site_name $format_name )
+    
+    #if( $chanwLocateAsset != "" )
+        #set( $chanwGetScriptFormatCode = $chanwLocateAsset.Script )
+    #else
+        #set( $chanwGetScriptFormatCode = "" )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetScriptFormatRootElement( $format_name $folder_path $site_name )《/code》
+《p》Creates a 《code》org.jdom.Element《/code》 object, containing all the code
+retrieved from a Velocity format. This is the starting point of this library format. Example:《/p》
+《pre》
+#chanwGetScriptFormatRootElement(
+    "chanw_display_velocity_code" "formats/library/velocity" "_common_assets" )
+#if( $chanwGetDocumentationElements != "" )
+    $chanwGetDocumentationElements.size()
+#end
+《/pre》
+《/documentation》
+《macro id=“chanwGetScriptFormatRootElement”》
+*#
+#macro( chanwGetScriptFormatRootElement $format_name $folder_path $site_name )
+    ## get the format code
+    #chanwGetScriptFormatCode( $format_name $folder_path $site_name )
+    
+    #if( $chanwGetScriptFormatCode != "" )
+        ## turn code to a presentable xml string
+        #set( $chanwFormatCode = $_EscapeTool.xml( $chanwGetScriptFormatCode ) )
+        ## remove all comment markers
+        #set( $chanwFormatXml = $chanwFormatCode.replaceAll( '#\*', '' ).replaceAll( '\*#', '' ).trim() )
+        ## turn the four special characters back to XML characters
+        #set( $chanwFormatXml = $chanwFormatXml.replaceAll( 
+            $chanwStartChar, '<' ).replaceAll(
+            $chanwEndChar, '>' ).replaceAll(
+            $chanwStartQuote, '"' ).replaceAll(
+            $chanwEndQuote, '"' )
+        )
+
+        ## build root element
+        #chanwBuildXMLContentRoot( $chanwFormatXml )
+        
+        #if( $chanwBuildXMLContentRoot && $chanwBuildXMLContentRoot.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
+            ## store the root element
+            #set( $chanwGetScriptFormatRootElement = $chanwBuildXMLContentRoot )
+            ## store the documentation elements
+            #chanwGetDocumentationElements( $chanwGetScriptFormatRootElement )
+            ## store the global-variables element
+            #chanwGetGlobalVariablesElement( $chanwGetScriptFormatRootElement )
+        #end
+    #else
+        No code available.
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetXMLBlockRootElement( $block_path $site_name )《/code》
+《p》Gets the root element of the XML block. Example:《/p》
+《pre》
+#chanwGetXMLBlockRootElement( "formats/library/velocity/chanw_global_code_templates" "_common_assets" )
+$chanwGetXMLBlockRootElement.Class.Name
+《/pre》
+《/documentation》
+《macro id=“chanwGetXMLBlockRootElement”》
+*#
+#macro( chanwGetXMLBlockRootElement $block_path $site_name )
+    #set( $chanwGetRootElementFromXMLBlock = "" )
+    #set( $chanwGetRootElementFromXMLBlock = $_.locateBlock( $block_path, $site_name ).XMLAsXMLElement )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwReinitializeDisplayVelocityCodeGlobalVariables《/code》
+《p》Reinitializes all global variables created in this format. Example:《/p》
+《pre》
+#chanwReinitializeDisplayVelocityCodeGlobalVariables
+《/pre》
+《/documentation》
+《macro id=“chanwReinitializeDisplayVelocityCodeGlobalVariables”》
+*#
+#macro( chanwReinitializeDisplayVelocityCodeGlobalVariables )
+    #chanwReinitializeListOfVariables( $chanwDisplayVelocityCodeGlobalVariables )
+    #set( $chanwMacroNameDocumentationMap = {} )
+    #set( $chanwDocumentationMacroNameMap = {} )
+#end
+#*
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
