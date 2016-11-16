@@ -1,11 +1,13 @@
 #*
-This format defines an html builder using the global deque. 
+《code》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines an html builder using the global deque. 
 The builder ensures that all tags are closed and nested properly.
 It will also avoid unneccessary whitespace characters.
-When using these macros, do it inside out, layer by layer.
-
-Example code:
-#import( 'site://_common_assets/formats/library/velocity/chanw_html_builder_with_deque' )
+When using these macros, do it inside out, layer by layer.《/p》
+《p》Example code:《/p》
+《pre》#import( 'site://_common_assets/formats/library/velocity/chanw_html_builder_with_deque' )
 
 ## create an img element
 #chanwCreateEmptyElement( { 'name':'img', 'src':'/images/photo.jpg', 'class':'img-responsive', 'alt':'Photo' } )
@@ -15,15 +17,20 @@ Example code:
 #chanwCreateElementWithText( { 'name':'div', 'class':'slide' }, $imgelement )
 #set( $subelement = $chanwCreateElementWithText )
 #chanwCreateElementWithText( { 'name':'div', 'id':'slideshow', 'class':'col-xs-12' }, $subelement )
-
-This will produce:
-<div id='slideshow' class='col-xs-12'><div class='slide'><img src='/images/photo.jpg' class='img-responsive' alt='Photo' /></div></div> 
+《/pre》
+《p》This will produce:《/p》
+《pre》<div id='slideshow' class='col-xs-12'><div class='slide'><img src='/images/photo.jpg' class='img-responsive' alt='Photo' /></div></div> 
+《/pre》
+《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_global_values' )
 #import( '/formats/library/velocity/chanw_global_deque' )
-
 #*
-Returns an HTML element with text.
+《documentation》
+《code》#chanwCreateElementWithText( $chanwMap $chanwText )《/code》
+《p》Returns an HTML element with text.《/p》
+《/documentation》
+《macro id=“chanwCreateElementWithText”》
 *#
 #macro( chanwCreateElementWithText $chanwMap $chanwText )
     #if( $chanwMap.class.name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
@@ -44,9 +51,13 @@ Returns an HTML element with text.
     #chanwEmptyDequeGetElement()                  ## get the string out
     #set( $chanwCreateElementWithText = $chanwEmptyDequeGetElement )
 #end
-
 #*
-Returns an empty HTML element.
+《/macro》
+《documentation》
+《code》#chanwCreateEmptyElement( $chanwMap )《/code》
+《p》Returns an empty HTML element.《/p》
+《/documentation》
+《macro id=“chanwCreateEmptyElement”》
 *#
 #macro( chanwCreateEmptyElement $chanwMap )
     #if( $chanwMap.class.name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
@@ -72,9 +83,13 @@ Returns an empty HTML element.
     
     #set( $chanwCreateEmptyElement = $chanwStartTag + " />" )
 #end
-
 #*
-Creates the start tag and end tag.
+《/macro》
+《documentation》
+《code》#chanwAddElementToGlobalDeque( $chanwMap )《/code》
+《p》Creates the start tag and end tag, possibly with attributes.《/p》
+《/documentation》
+《macro id=“chanwAddElementToGlobalDeque”》
 *#
 #macro( chanwAddElementToGlobalDeque $chanwMap )
     #set( $chanwAttrs = $chanwMap.keySet() )
@@ -91,9 +106,13 @@ Creates the start tag and end tag.
     #set( $chanwEndTag = "</" + $chanwMap[ 'name' ] + ">" )
     #chanwAddLastGlobalDeque( $deque $chanwEndTag )
 #end
-
 #*
-Empties the deque and returns the concatenated string.
+《/macro》
+《documentation》
+《code》#chanwEmptyDequeGetElement《/code》
+《p》Empties the deque and returns the concatenated string.《/p》
+《/documentation》
+《macro id=“chanwEmptyDequeGetElement”》
 *#
 #macro( chanwEmptyDequeGetElement )
     #set( $chanwElement = "" )
@@ -111,3 +130,9 @@ Empties the deque and returns the concatenated string.
     #end
     #set( $chanwEmptyDequeGetElement = $chanwElement )
 #end
+#*
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
