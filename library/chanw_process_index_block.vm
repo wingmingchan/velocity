@@ -1,10 +1,13 @@
 #*
-This format defines macros to process an index block.
-Do not process the entire block. Instead, select system-page,
-system-folder, etc, and process each individual page/folder, etc.
-
-Example code:
-
+《code》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines macros to process an index block.
+Do not process the entire block. Instead, select 《code》system-page《/code》,
+《code》system-folder《/code》, etc, and process each individual page/folder object
+(《code》org.jdom.Element《/code》 objects).《/p》
+《p》Example code:《/p》
+《pre》
 #import( 'site://_common_assets/formats/library/velocity/chanw_process_index_block' )
 
 #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page" ) )
@@ -26,8 +29,9 @@ $systemFolderIsPublished
 
 $chanwDynamicMetatdataNameValuesMap.get( "exclude-from-left" )
 $E_PRE
-
-Output:
+《/pre》
+《p》Output:《/p》
+《pre》
 test-process-index-block
 true
 
@@ -37,9 +41,18 @@ true
 true
 
 []
+《/pre》
+《/documentation》
 *#
-#import( 'site://_common_assets/formats/library/velocity/chanw_global_values' )
-
+#import( 'formats/library/velocity/chanw_global_values' )
+#*
+《documentation》
+《code》#chanwProcessDynamicData( $dynamicDataNode )《/code》
+《p》Processes the dynamic fields of the metadata and stores the name-value-list pairs in
+a variable named 《code》$chanwDynamicMetatdataNameValuesList《/code》.《/p》
+《/documentation》
+《macro id=“chanwProcessDynamicData”》
+*#
 #macro( chanwProcessDynamicData $dynamicDataNode )
     #if( $dynamicDataNode.name != $cascadeXML_ELEMENT_DYNAMIC_METADATA )
         Not a dynamic data!!!$BR
@@ -57,8 +70,15 @@ true
         $dynamicDataNode.getChild( 'name' ).value,
         $chanwDynamicMetatdataNameValuesList ) )
 #end
-
-## generate macros that process index blocks
+#*
+《/macro》
+《documentation》
+There is code and a code template used to generate four macros: 《code》#chanwProcessRSSItem《/code》,
+《code》#chanwProcessSystemBlock《/code》, 《code》#chanwProcessSystemFile《/code》, and 《code》#chanwProcessSystemSymlink《/code》.
+《/documentation》
+《macro id=“generatedCode”》
+*#
+## generate macros that process rss item, system-block, system-file, system-symlink
 #set( $index_block_element_map = {
     "chanwProcessRSSItem" :        [ "item",    "rssXML_ELEMENT_ITEM",               "rssItemVarElementMap" ],
     "chanwProcessSystemBlock" :    [ "block",   "cascadeXML_ELEMENT_SYSTEM_BLOCK",   "systemBlockVarElementMap" ],
@@ -75,7 +95,15 @@ true
         "-map_name-", $macro_list[ 2 ] ) )
     #evaluate( $chanwStatement )
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwProcessSystemFolder( $folderNode )《/code》
+《p》Processes a 《code》system-folder《/code》 object, stores values
+in a set of variables, and processes the dynamic fields, if there are any.《/p》
+《/documentation》
+《macro id=“chanwProcessSystemFolder”》
+*#
 #macro( chanwProcessSystemFolder $folderNode )
     #if( !$folderNode )
         The folder element is not defined.$BR
@@ -108,7 +136,15 @@ true
         #end
     #end
 #end
-
+#*
+《/macro》
+《documentation》
+《code》#chanwProcessSystemPage( $pageNode )《/code》
+《p》Processes a 《code》system-page《/code》 object, stores values
+in a set of variables, and processes the dynamic fields, if there are any.《/p》
+《/documentation》
+《macro id=“chanwProcessSystemPage”》
+*#
 #macro( chanwProcessSystemPage $pageNode )
     #if( !$pageNode )
         The page element is not defined.$BR
@@ -130,3 +166,9 @@ true
         #end
     #end
 #end
+#*
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
