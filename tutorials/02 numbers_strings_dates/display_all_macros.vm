@@ -13,5 +13,5 @@
         $site_name $macro_id )
 
     #chanwDisplayMacroCode( $format_name $folder_path
-        "_common_assets" $macro_id )
+        $site_name $macro_id )
 #end
