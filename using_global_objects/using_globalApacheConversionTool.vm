@@ -1,10 +1,10 @@
-#import( 'site://_common_assets/formats/library/velocity/chanw_global_utility_objects' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_object_creator' )
 
-$globalApacheConversionTool.getDateFormat()
+$globalApacheConversionTool.getDateFormat() ## => default
 
-$globalApacheConversionTool.parseDate( "2016-01-01", "yyyy-MM-dd" )
+$globalApacheConversionTool.parseDate( "2016-01-01", "yyyy-MM-dd" ) ## => Fri Jan 01 00:00:00 EST 2016
 
-$globalApacheConversionTool.parseNumber( "123456" )
+$globalApacheConversionTool.parseNumber( "123456" ) ## => 123456
 #set( $number = $_DisplayTool.alt( $globalApacheConversionTool.parseNumber( "N123456" ), 0 ) )
 $number   ## => 0
 
