@@ -1,0 +1,17 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#set( $site_name   = "_common_assets" )
+#set( $folder_path = "formats/library/velocity" )
+#set( $format_name = "chanw_global_macros" )
+
+#chanwGetScriptFormatRootElement( $format_name $folder_path $site_name )
+#set( $macro_ids = $chanwMacroNameDocumentationMap.keySet() )
+
+#foreach( $macro_id in $macro_ids )
+    ## invoke macro
+    #chanwDisplayMacroDocumentation( $format_name $folder_path
+        $site_name $macro_id )
+
+    #chanwDisplayMacroCode( $format_name $folder_path
+        "_common_assets" $macro_id )
+#end
