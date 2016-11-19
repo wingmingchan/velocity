@@ -1,0 +1,22 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+## switch
+#set( $case = 1 )
+
+## define to set format name and macro name
+#define($case1)#set( $format_name = "chanw_global_macros" )
+#set( $macro_name  = "chanwIsInstanceOf" )#end
+
+#define($case2)#set( $format_name = "chanw_global_macros" )
+#set( $macro_name  = "chanwInvokeMacro" )#end
+
+## execute the switch
+#set( $stmt = '$case' + $case )
+#evaluate( $stmt )
+
+## invoke macro
+#chanwDisplayMacroDocumentation( $format_name "formats/library/velocity"
+    "_common_assets" $macro_name )
+
+#chanwDisplayMacroCode( $format_name "formats/library/velocity"
+    "_common_assets" $macro_name )
