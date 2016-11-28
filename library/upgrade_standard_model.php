@@ -41,6 +41,7 @@ try
     
     $formats_to_be_deleted = array(
         "chanw_global_utility_objects",
+        "chanw_structured_data_worker"
     );
     
     foreach( $blocks_to_be_deleted as $block_to_be_deleted )
@@ -69,11 +70,11 @@ try
         "chanw_html_builder_with_deque",
         "chanw_library_import",
         "chanw_object_creator",
+        "chanw_process_cascade_api",
         "chanw_process_index_block",
         "chanw_process_xml",
         "chanw_reflect_utilities",
         "chanw_sorted_pages",
-        "chanw_structured_data_worker",
         "upstate_database"
     );
     
