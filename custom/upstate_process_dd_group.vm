@@ -1,17 +1,58 @@
 #import( 'formats/library/velocity/chanw_process_xml' )
-#import( 'formats/library/velocity/chanw_global_utility_objects' )
+
+#macro( processTabGroup $groupToBeProcessed )
+    #if( $groupToBeProcessed.name != 'tab-group' )
+        Not a Tab group
+        #stop
+	#end
+    <p>IN TESTING</p>
+    #set( $tabGroups = $groupToBeProcessed.getChildren( 'tab-panel-group' )  )
+    #if( $tabGroups.size() > 0 )
+        
+        <ul class='nav nav-tabs'>
+        #foreach( $tabGroup in $tabGroups )
+            #set ($activeClass = "" )
+            #if($foreach.count == 1)
+                #set($activeClass = " class='active'" )
+            #end
+            <li${activeClass}><a data-toggle="tab" href="#tab${foreach.count}">
+        	    ${_EscapeTool.xml( $tabGroup.getChild( 'tab-label' ).value )}
+            </a></li>
+		#end
+		</ul>
+        <div class='tab-content'>
+        #foreach( $tabGroup in $tabGroups )
+            #set ($activeClass = "" )
+            #if($foreach.count == 1)
+                #set($activeClass = " in active" )
+            #end
+            <div id="tab${foreach.count}" class="tab-pane fade${activeClass}">
+                ${_EscapeTool.xml( $tabGroup.getChild( 'tab-content' ).value )}
+            </div>
+        #end
+        </div>
+    #end
+    
+#end
+
 
 #macro( processAccordionGroup $groupToBeProcessed )
     #if( $groupToBeProcessed.name != 'accordion-group' )
         Not an Accordion group
-		#stop
+    	#stop
 	#end
 	
     $globalStringBuffer.setLength( 0 )
-    #set( $accordionGroups = $groupToBeProcessed.getChildren() )
+    #set( $accordionGroups = $groupToBeProcessed.getChildren( 'accordion-h2-wysiwyg-group' )  )
+    
+
     
     #if( $accordionGroups.size() > 0 )
-        #set( $void = $globalStringBuffer.append( "<p><a href='#' id='expand_all'>Expand all</a></p><div class='accordion'>" ) )
+        #if( $groupToBeProcessed.getChild('accordion-expandall').value == 'Yes' )
+            #set( $void = $globalStringBuffer.append( "<p><a href='#' id='expand_all'>Expand all</a></p>" ) )
+        #end
+        
+        #set( $void = $globalStringBuffer.append( "<div class='accordion'>" ) )
 
         #foreach( $accordionGroup in $accordionGroups )
 			#set( $void = $globalStringBuffer.append( "<h2>" ) )
@@ -165,8 +206,6 @@ This macro is needed to process bluepage entries.
 
     #set( $void           = $globalStringBuffer.append( '<div class="flexslider"><ul class="slides">' ) )
     #set( $captionClass   = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'caption-class' ).value )
-    #set( $srcSetYes      = "")
-    #set( $srcSetYes      = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'srcSetYes/value' ).value )
     #set( $largeSuffix    = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'large-suffix' ).value )
     #set( $mediumSuffix   = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'medium-suffix' ).value )
     #set( $smallSuffix    = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'small-suffix' ).value )
@@ -184,17 +223,13 @@ This macro is needed to process bluepage entries.
             #set( $imageHPLink          = $_XPathTool.selectSingleNode($selectedImage,'image-link/link').value )
         #end
         #set( $singleImage              = $selectedImage.getChild( "selectimage" ).getChild( "link" ).value )
+            #set( $singleImageSite          = $selectedImage.getChild( "selectimage" ).getChild( "site" ).value )
+            #set( $singleImagePath          = $selectedImage.getChild( "selectimage" ).getChild( "path" ).value )
 
-        #if( $srcSetYes != "" )
-            #set( $singleImageBase      = " [system-asset:local]${singleImage}[/system-asset:local]" )
-            #set( $singleImage1000      = $singleImageBase.replace( ".", "${largeSuffix}." ) )
-            #set( $singleImage700       = $singleImageBase.replace( ".", "${mediumSuffix}." ) )
-            #set( $singleImage400       = $singleImageBase.replace( ".", "${smallSuffix}." ) )
-            #set( $singleImageSrcSet    = "srcset='$singleImage1000 940w, $singleImage700 750w, $singleImage400 460w'")
-        #else
-            #set( $singleImageSrcSet    = "" )
-        #end
-
+            #thomaspeSrcSetValues
+            #thomaspeGetSrcSetCode( $singleImagePath $singleImageSite $thomaspeSrcSetValues)
+            ## $thomaspeGetSrcSetCode
+            
         #set( $void = $globalStringBuffer.append( '<li>' ) )
 
         #if( $imageHPLink != "" )
@@ -202,7 +237,7 @@ This macro is needed to process bluepage entries.
         #end
 
         #set( $void = $globalStringBuffer.append( '<div class="slide">' ) )
-        #set( $void = $globalStringBuffer.append( "<img alt='${_EscapeTool.xml($altText)}' src='${singleImage}' $singleImageSrcSet />" ) )
+        #set( $void = $globalStringBuffer.append( "<img alt='${_EscapeTool.xml($altText)}' src='${singleImage}' $thomaspeGetSrcSetCode />" ) )
         #set( $void = $globalStringBuffer.append( '</div>' ) )
 
         #if( $captionYes != "" )
@@ -256,7 +291,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
     #end
 
     #set( $instruction_scripts = $_XPathTool.selectSingleNode( $groupToBeProcessed, "instruction/content/scripts" ) )
-    #processScript( $instruction_scripts )
+    #chanwProcessScript( $instruction_scripts )
 #end
 
 #macro( processQuickLinksGroup $groupToBeProcessed )
@@ -322,16 +357,15 @@ Currently only data definition blocks and index blocks can be attached to the fi
 #end
 
 #macro( processRandomImageGroup $groupToBeProcessed )
-    #chanwReinitializeListOfVariables ( [ "captionYes", "srcSetYes" ] )
+    #chanwReinitializeListOfVariables ( [ "captionYes" ] )
     #set( $images           = $groupToBeProcessed.getChildren( "image" ) )
-    #set( $captionYes       = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'caption-yes' ).value )
-    #set( $srcSetYes        = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'srcSetYes/value' ).value )     
+    #set( $captionYes       = $_XPathTool.selectSingleNode( $groupToBeProcessed, 'caption-yes' ).value )  
     #set( $numberOfImages   = $images.size() )
     #set( $randImage        = $_MathTool.random(0,$numberOfImages) )    
 
     <!--#passthrough<?php $imagearray = array(); ?>#passthrough-->
     #foreach( $image in $images )
-        #chanwReinitializeListOfVariables ( [ "imageLink", "singleImageSrcSet" ] )
+        #chanwReinitializeListOfVariables ( [ "imageLink" ] )
         #set( $singleImage  = $image.getChild( "selectimage" ).getChild( "link" ).value )
         #set( $altText      = $image.getChild( "altText" ).value )
         #if ( $image.getChild("image-link").getAttribute("type").value == "symlink" )
@@ -340,20 +374,19 @@ Currently only data definition blocks and index blocks can be attached to the fi
             #set( $imageLink          = $_XPathTool.selectSingleNode($image,'image-link/link').value )
         #end
 
-        #if( $srcSetYes != "" )
-                #set( $singleImageBase      = " [system-asset:local]${singleImage}[/system-asset:local]" )
-                #set( $singleImage1000      = $singleImageBase.replace( ".", "." ) )
-                #set( $singleImage700       = $singleImageBase.replace( ".", "-700x350." ) )
-                #set( $singleImage400       = $singleImageBase.replace( ".", "-400x200." ) )
-                #set( $singleImageSrcSet    = "srcset='$singleImage1000 1030w, $singleImage700 750w, $singleImage400 460w'")
-        #end
+        #set( $singleImageSite          = $image.getChild( "selectimage" ).getChild( "site" ).value )
+        #set( $singleImagePath          = $image.getChild( "selectimage" ).getChild( "path" ).value )
+
+            #thomaspeSrcSetValues
+            #thomaspeGetSrcSetCode( $singleImagePath $singleImageSite $thomaspeSrcSetValues)
+            ## $thomaspeGetSrcSetCode
 
         #if($imageLink != "")    
             #set( $int_img      = "<div class='imageblock padbottom5 padright3'><a href='${imageLink}' class='hide-link-icon'><div class='slide'>" )   
         #else
             #set( $int_img      = "<div class='imageblock padbottom5 padright3'><div class='slide'>" )
         #end
-        #set( $int_img      = $int_img + "<img src='${singleImage}' alt='${_EscapeTool.xml($altText)}' class='img-responsive' $singleImageSrcSet />" )
+        #set( $int_img      = $int_img + "<img src='${singleImage}' alt='${_EscapeTool.xml($altText)}' class='img-responsive' $thomaspeGetSrcSetCode />" )
         #set( $int_img      = $int_img + "</div>" )
         #if ($captionYes != "" && $altText.length() <= 62)
             #set( $int_img      = $int_img + "<div class='flexslider-caption'>${altText} </div>" )
@@ -431,7 +464,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
         #stop
 	#end
 
-    #chanwReinitializeListOfVariables ( [ "imageRollover", "srcSetYes", "imageSingleLink", "singleImageSrcSet", "captionYes" ] )
+    #chanwReinitializeListOfVariables ( [ "imageRollover", "imageSingleLink", "captionYes" ] )
     
     #set( $singleImage              = $groupToBeProcessed.getChild( "selectimage" ).getChild( "link" ).value )
     #set( $altText                  = $groupToBeProcessed.getChild( "altText" ).value )
@@ -443,16 +476,13 @@ Currently only data definition blocks and index blocks can be attached to the fi
     #else
         #set( $imageSingleLink = $_XPathTool.selectSingleNode($groupToBeProcessed,'image-link/link').value )
     #end
-  
-    #set( $srcSetYes = $_XPathTool.selectSingleNode($groupToBeProcessed, 'srcSetYes/value').value )
+
+    #set( $singleImageSite          = $groupToBeProcessed.getChild( "selectimage" ).getChild( "site" ).value )
+    #set( $singleImagePath          = $groupToBeProcessed.getChild( "selectimage" ).getChild( "path" ).value )
     
-    #if($srcSetYes != "")
-        #set( $singleImageBase      = "[system-asset:local]${singleImage}[/system-asset:local]" )
-        #set( $singleImage1000      = $singleImageBase.replace(".",".") )
-        #set( $singleImage700       = $singleImageBase.replace(".","-700x350.") )
-        #set( $singleImage400       = $singleImageBase.replace(".","-400x200.") )
-        #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 750w, $singleImage400 460w'")
-    #end
+    #thomaspeSrcSetValues
+    #thomaspeGetSrcSetCode( $singleImagePath $singleImageSite $thomaspeSrcSetValues)
+    ## $thomaspeGetSrcSetCode
     
     <div class="imageblock padbottom5 padright3">
     #if( $imageSingleLink != "" )
@@ -464,7 +494,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
     
     #set( $altText = $_EscapeTool.xml( $altText ) )
             <div class="slide">
-                <img alt="${altText}" class="img-responsive ${imageRollover}" src="${singleImage}" $singleImageSrcSet />
+                <img alt="${altText}" class="img-responsive ${imageRollover}" src="${singleImage}" $thomaspeGetSrcSetCode />
             </div>
 
     #if ($captionYes != "" && $altText.length() <= 62)
@@ -504,35 +534,33 @@ Currently only data definition blocks and index blocks can be attached to the fi
     #end
     <div class="imageblock padbottom5 padright3"><div class="flexslider">
         <ul class="slides">
-        #chanwReinitializeListOfVariables ( [ "srcSetYes", "imageSlideLink", "singleImageSrcSet", "captionYes", "autoplayOff" ] )
-        #set( $srcSetYes                = $_XPathTool.selectSingleNode($groupToBeProcessed, 'srcSetYes/value').value)
+        #chanwReinitializeListOfVariables ( [  "imageSlideLink", "captionYes", "autoplayOff" ] )
         #set( $selectImage              = $_XPathTool.selectNodes($groupToBeProcessed, 'image'))
         #set( $captionYes               = $groupToBeProcessed.getChild( "caption-yes" ).value )
         #foreach ($selectedImage in $selectImage)
   
-            #chanwReinitializeListOfVariables ( [ "imageSlideLink" ] ) 
+            #chanwReinitializeListOfVariables ( [ "imageSlideLink", "singleImageSite" , "singleImagePath"] ) 
             #set( $altText                  = $selectedImage.getChild( "altText" ).value )
             #if ( $selectedImage.getChild("image-link").getAttribute("type").value == "symlink" )
                 #set( $imageSlideLink          = $selectedImage.getChild("image-link").getChild("content").value )        
             #else
                 #set( $imageSlideLink          = $_XPathTool.selectSingleNode($selectedImage,'image-link/link').value )
             #end
-            
+
             #set( $singleImage              = $selectedImage.getChild( "selectimage" ).getChild( "link" ).value )
-                #if($srcSetYes != "")
-                    #set( $singleImageBase      = "[system-asset:local]${singleImage}[/system-asset:local]" )
-                    #set( $singleImage1000      = $singleImageBase.replace(".",".") )
-                    #set( $singleImage700       = $singleImageBase.replace(".","-700x350.") )
-                    #set( $singleImage400       = $singleImageBase.replace(".","-400x200.") )
-                    #set( $singleImageSrcSet    = "srcset='$singleImage1000 1000w, $singleImage700 750w, $singleImage400 460w'")
-                #end
+            #set( $singleImageSite          = $selectedImage.getChild( "selectimage" ).getChild( "site" ).value )
+            #set( $singleImagePath          = $selectedImage.getChild( "selectimage" ).getChild( "path" ).value )
+
+            #thomaspeSrcSetValues
+            #thomaspeGetSrcSetCode( $singleImagePath $singleImageSite $thomaspeSrcSetValues)
+            ## $thomaspeGetSrcSetCode
     
             <li>
             #if($imageSlideLink != "")
                 <a href="$imageSlideLink" class="flexslider-link hide-link-icon">
             #end
                     <div class="slide">
-                        <img alt="${_EscapeTool.xml($altText)}" src="$singleImage" $singleImageSrcSet />
+                        <img alt="${_EscapeTool.xml($altText)}" src="$singleImage" $thomaspeGetSrcSetCode />
                     </div>
                 #if ($captionYes != ""  && $altText.length() <= 62 )
                     <div class="flexslider-caption">
@@ -547,7 +575,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
                 <div class='caption padtop3'>
                     ${_DisplayTool.truncate($_EscapeTool.xml($altText),600,"…",true)}
                     #if($imageSlideLink != "")
-                        (<a href='$imageSlideLink'>read more</a>)
+                        (<a href='$imageSlideLink'>more</a>)
                     #end                 
                 </div>
             #end
@@ -588,6 +616,7 @@ Currently only data definition blocks and index blocks can be attached to the fi
     <!--#passthrough<?php }
     ?>#passthrough-->
 #end
+
 
 
 #macro( processYoutubeVideoGroup $groupToBeProcessed )
@@ -641,6 +670,12 @@ src="http://www.youtube.com/embed/${youtubeVideoID}?rel=0&amp;wmode=transparent"
             Published on: $_DateTool.format( 'EEEEE, MMMM d, yyyy', $_DateTool.getDate( $systemPageStartDate ) )               
         #end
         $BR
+        
+    ##Published On 
+        #if($groupToBeProcessed.getChild("show-options").value.contains("Author") && $currentPage.metadata.author )        
+            $_EscapeTool.xml($currentPage.metadata.author )
+            $BR
+        #end
         
     ##Display Categories
         #if( $groupToBeProcessed.getChild("show-options").value.contains("Categories") )
