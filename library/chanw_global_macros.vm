@@ -165,32 +165,39 @@ $globalStringBuffer.toString()
 #*
 《/macro》
 《documentation》
-《code》#chanwGetCascadeObjectFromElement( $element $type )《/code》
-《p》Creates a Cascade API object out of an 《code》org.jdom.Element《/code》 object. The 《code》$type《/code》 should be a constant like
-《code》$CASCADE_API_PAGE_TYPE《/code》 defined in chanw_global_values_code. Example:《/p》
+《code》#chanwGetCascadeObjectFromElement( $element )《/code》
+《p》Creates a Cascade API object out of an 《code》org.jdom.Element《/code》 object.
+Note that since a reference only contains the path of the referenced asset, not its own path,
+this macro does not work for references.
+ Example:《/p》
 《pre》
-#set( $page = $contentRoot.getChild( “system-page“ ) )
-#chanwGetCascadeObjectFromElement( $page $CASCADE_API_PAGE_TYPE )
+#set( $page = $_XPathTool.selectSingleNode( $contentRoot,  "system-folder[6]/system-page" ) )
+$page.getChild( "name" ).Value
+#chanwGetCascadeObjectFromElement( $page )
 $chanwGetCascadeObjectFromElement.Class.Name
+-$chanwGetCascadeObjectFromElement-
 
-#set( $folder = $contentRoot.getChild( “system-folder“ ) )
-#chanwGetCascadeObjectFromElement( $folder $CASCADE_API_FOLDER_TYPE )
+#set( $folder = $contentRoot.getChild( "system-folder" ) )
+#chanwGetCascadeObjectFromElement( $folder )
 $chanwGetCascadeObjectFromElement.Name
+$chanwGetCascadeObjectFromElement.Class.Name
 《/pre》
 《/documentation》
 《macro id=“chanwGetCascadeObjectFromElement”》
 *#
-#macro( chanwGetCascadeObjectFromElement $element $type )
+#macro( chanwGetCascadeObjectFromElement $element )
     #if( $element.Class.Name != $ORG_JDOM_ELEMENT_CLASS_NAME )
         Not a jdom.Element.
         #stop
     #end
 
+    #set( $chanwCascadeType = $CASCADE_TYPE_ELEMENT_MAP.get( $element.Name ) )
     #set( $chanwGetCascadeObjectFromElement = "" )
+    
     #set( $chanwGetCascadeObjectFromElement = 
         $_.locate(
             $element.getChild( "path" ).Value.substring( 1 ),
-            $type,
+            $chanwCascadeType,
             $element.getChild( "site" ).Value
         ) 
     )
@@ -374,14 +381,23 @@ $chanwGetMapKeyValueReversed
 *#
 #macro( chanwGetNodeValues $node $map )
     #foreach( $var in $map.keySet() )
-        #if( $_XPathTool.selectSingleNode( $node, $map[ $var ] ) )
-            #set( $chanwNodeValue = $_EscapeTool.xml( $_XPathTool.selectSingleNode( $node, $map[ $var ] ).value ) )
+        #set( $chanwChildNodes = $_XPathTool.selectNodes( $node, $map[ $var ] ) )
+    
+        ## the element exists
+        #if( $chanwChildNodes.size() > 0 )
+            ## two possible cases: element containing elements, or text node
+            #set( $chanwChildNode = $chanwChildNodes[ 0 ] )
+            #set( $chanwGrandChildNodes = $chanwChildNode.Children )
+            
+            #if( $chanwGrandChildNodes.size() > 0 )
+                #set( $chanwNodeValue = $chanwChildNodes )        ## a list
+            #else
+                #set( $chanwNodeValue = $chanwChildNode.Value )   ## a string
+            #end
         #else
             #set( $chanwNodeValue = "" )
-        #end        
-        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariable(' + "'$var' " + "'')" )
-        #set( $chanwSetVarValStatement = '#' + 'chanwSetVariable(' + "'$var' " + "'$chanwNodeValue')" )
-        #evaluate( $chanwSetVarValStatement )
+        #end
+        #chanwSetVariable( $var $chanwNodeValue )
     #end
 #end
 #*
@@ -403,6 +419,66 @@ $chanwGetMapKeyValueReversed
         #set( $chanwSetVarValStatement = '#' + "set(" + $_EscapeTool.D + "$var = " + 
             $_EscapeTool.D + "chanwNameNodesMap[" + $_EscapeTool.D + "map["+ "'$var']])" )
         #evaluate( $chanwSetVarValStatement )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetParamListAsStrings( $list )《/code》
+《p》Converts a list of items into a string, containing all items in the list, each as a string value in quotes and separated by commas.《/p》
+《pre》
+#set( $strings = [ "one", "two", "three" ] )
+#chanwGetParamListAsStrings( $strings )
+$chanwGetParamListAsStrings ## output "one","two","three"
+《/pre》
+《/documentation》
+《macro id=“chanwGetParamListAsStrings”》
+*#
+#macro( chanwGetParamListAsStrings $list )
+    #if( $list.Class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+        Not a list.
+        #stop
+    #end
+    
+    #set( $chanwGetParamListAsStrings = '' )
+    
+    #if( $list.size() > 0 )
+        #foreach( $item in $list )
+            #set( $chanwGetParamListAsStrings = $chanwGetParamListAsStrings + '"' + $item + '"' )
+            #if( $foreach.count < $list.size() )
+                #set( $chanwGetParamListAsStrings = $chanwGetParamListAsStrings + ',' )
+            #end
+        #end
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetParamListAsStrings( $list )《/code》
+《p》Converts a list of items into a string, containing all items in the list, each as a value separated by commas.《/p》
+《pre》
+#set( $ints = [ 1, 2, 3, 4 ] )
+#chanwGetParamListAsValues( $ints )
+$chanwGetParamListAsValues ## output 1,2,3,4 as a string
+《/pre》
+《/documentation》
+《macro id=“chanwGetParamListAsValues”》
+*#
+#macro( chanwGetParamListAsValues $list )
+    #if( $list.Class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+        Not a list.
+        #stop
+    #end
+    
+    #set( $chanwGetParamListAsValues = '' )
+    
+    #if( $list.size() > 0 )
+        #foreach( $item in $list )
+            #set( $chanwGetParamListAsValues = $chanwGetParamListAsValues + $item )
+            #if( $foreach.count < $list.size() )
+                #set( $chanwGetParamListAsValues = $chanwGetParamListAsValues + ',' )
+            #end
+        #end
     #end
 #end
 #*   
@@ -437,86 +513,6 @@ $chanwGetMapKeyValueReversed
         #set( $chanwStatement = $chanwStatement + ")" )
         #evaluate( $chanwStatement )
     #end
-#end
-#*
-《/macro》
-《documentation》
-《code》#chanwInvokeQuery( $type $link $assets $hasMetadata $maxResults $sortBy $direction $siteName $indexablePublishable )《/code》
-《p》Creates a 《code》$query《/code》 object, sets the parameters, and executes the query. Parameters:《/p》
-《pre》
- $type: “MetadataSet“ or “ContentType“
- $link: e.g. “Blog“, “site://common/Standard Page“
- $assets: a list of five boolean values for blocks, files, folders, pages, symlinks [ true, false, true, true, true ]
- $hasMetadata: either an empty list[] or a list containing two strings [ “displayName“, “Index“ ]
- $maxResults: an integer, e.g. -1, 50
- $sortBy: “author“, “description“, etc.
- $direction: “asc“, “desc“
- $siteName: ““ meaning searchAcrossAllSites(), or a site name like “medicine“
- $indexablePublishable: a list of two boolean values, [ true, true ]
-《/pre》
-《p》Example:《/p》
-《pre》
-#chanwInvokeQuery( “MetadataSet“ “site://_common/Page“ [ false, false, false, true, false ] [] 30 “author“ “desc“ ““ [ true, false ] )
-$chanwInvokeQuery.size()
-《/pre》
-《/documentation》
-《macro id=“chanwInvokeQuery”》
-*#
-#macro( chanwInvokeQuery $type $link $assets $hasMetadata $maxResults $sortBy $direction $siteName $indexablePublishable )
-    #if( $type != "MetadataSet" && $type != "ContentType" )
-        $type is not an acceptable type.
-        #stop
-    #end
-    
-    #if( !$link || $link == "" )
-        A path to either the MetadataSet or ContentType must be provided.
-        #stop
-    #end
-    
-    #set( $chanwStmt = '#set($chanwQuery=$_.query())' )
-    #set( $chanwStmt = $chanwStmt + '#set($chanwInvokeQuery=' )
-    
-    #if( $assets.size() == 5 )
-        #set( $chanwStmt = $chanwStmt + '$chanwQuery.by' + $type + "('$link')" +
-                       '.includeBlocks(' + $assets[ 0 ] + ')' +
-                       '.includeFiles(' + $assets[ 1 ] + ')' +
-                       '.includeFolders(' + $assets[ 2 ] + ')' +
-                       '.includePages(' + $assets[ 3 ] + ')' +
-                       '.includeSymlinks(' + $assets[ 4 ] + ')'
-        )
-    #end
-    
-    #if( $hasMetadata.size() == 2 )
-        #set( $chanwStmt = $chanwStmt + '.hasMetadata(' +
-            "'" + $hasMetadata[ 0 ] + "','" + $hasMetadata[ 1 ] + "'" + ')' )
-    #end
-    
-    #if( $maxResults > 0 )
-        #set( $chanwStmt = $chanwStmt + '.maxResults(' + $maxResults + ')' )
-    #end
-    
-    #if( $sortBy && $sortBy != "" )
-        #set( $chanwStmt = $chanwStmt + '.sortBy' + "('$sortBy')" )
-    #end
-    
-    #if( $direction && $direction != "" )
-        #set( $chanwStmt = $chanwStmt + '.sortDirection' + "('$direction')" )
-    #end
-    
-    #if( !$siteName || $siteName == "" )
-        #set( $chanwStmt = $chanwStmt + '.searchAcrossAllSites()' )
-    #else
-        #set( $chanwStmt = $chanwStmt + '.siteName' + "('$siteName')" )
-    #end
-    
-    #if( $indexablePublishable.size() == 2 )
-        #set( $chanwStmt = $chanwStmt + '.indexableOnly' + '(' + $indexablePublishable[ 0 ] + ')' +
-            '.publishableOnly' + '(' + $indexablePublishable[ 1 ] + ')' )
-    #end
-    
-    #set( $chanwStmt = $chanwStmt + '.execute() )' )
-    ##$chanwStmt
-    #evaluate( $chanwStmt )
 #end
 #*
 《/macro》
@@ -646,35 +642,35 @@ Why parent of the root element is passed in: a text block may not have a root el
         #set( $childName  = $firstChild.name )
         #set( $childPath  = $content.getParent().getChild( 'path' ).value )
         #set( $siteName   = $content.getParent().getChild( 'site' ).value )
-    
-        #if( $childName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
+        
+        #set( $blockName  = $childPath )
+        ## there is at least one slash
+        #set( $lastIndexOfSlash = $blockName.lastIndexOf( '/' ) + 1 )
+        
+        #if( $lastIndexOfSlash > -1 )
+            #set( $blockName = $blockName.substring( $lastIndexOfSlash ) )
+        #end
+        
+        ## macro blocks
+        #if( $blockName.endsWith( 'Macro' ) || $blockName.endsWith( 'macro' ) )
+            #chanwInvokeMacro( "chanwProcessBlockWithMacro" [ "firstChild", "childPath", "siteName" ] )
+        ## text blocks
+        #elseif( $blockName.endsWith( 'Text' ) || $blockName.endsWith( 'text' ) ) 
+            $_SerializerTool.serialize( $content, true )
+        ## script blocks
+        #elseif( $blockName.endsWith( 'Script' ) || $blockName.endsWith( 'script' )  )
+            #chanwInvokeMacro( "chanwProcessScript" [ "firstChild" ] )
+        ## data definition blocks
+        #elseif( $childName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
             #chanwProcessDataDefinitionBlock( $firstChild )
+        ## index block
+        #elseif( $childName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK )
+            #chanwProcessIndexBlock( $blockName $firstChild )
+        ## others, preferably having -xml, -feed suffixes
         #else
-            #set( $blockName = $childPath )
-            #set( $lastIndexOfSlash = $blockName.lastIndexOf( '/' ) + 1 )
-                
-            #if( $lastIndexOfSlash > -1 )
-                #set( $blockName = $blockName.substring( $lastIndexOfSlash ) )
-                
-                #if( $blockName.endsWith( 'Macro' ) || $blockName.endsWith( 'macro' ) )
-                    #chanwInvokeMacro( "chanwProcessBlockWithMacro" [ "firstChild", "childPath", "siteName" ] )
-                ## index block
-                #elseif( $childName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK )
-                    #chanwProcessIndexBlock( $blockName $firstChild )
-                ## text block containing html markups
-                #elseif( $blockName.endsWith( 'Text' ) || $blockName.endsWith( 'text' ) ) 
-                    $_SerializerTool.serialize( $content, true )
-                ## XML blocks containing instructions
-                #elseif( $blockName.endsWith( 'Script' ) || $blockName.endsWith( 'script' )  )
-                    #chanwInvokeMacro( "chanwProcessScript" [ "firstChild" ] )
-                
-                ## preferably having -xml, -feed suffixes
-                #else
-                    #chanwConvertToPascalCase( $blockName "-" )
-                    #set( $macroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
-                    #chanwInvokeMacro( $macroName [ "firstChild" ] )
-                #end
-            #end
+            #chanwConvertToPascalCase( $blockName "-" )
+            #set( $macroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
+            #chanwInvokeMacro( $macroName [ "firstChild" ] )
         #end
     #end
 #end
@@ -827,11 +823,66 @@ This macro is used by 《code》#chanwProcessScript《/code》.《/p》
 《documentation》
 《code》#chanwProcessScript( $firstChild )《/code》
 《p》Processes a script block. A script block, in the current implementation, is an XML block whose name must have a '-script' suffix.
-The 《code》$firstChild《/code》 is the scripts element. This macro is used by 《code》#chanwProcessBlockChooser《/code》.《/p》
+The 《code》$firstChild《/code》 is the 《code》scripts《/code》 element. The 《code》scripts《/code》 can contain: 1) zero or one
+《code》code《/code》 element, which contains actual Velocity code; 2) zero or more 《code》path《/code》 elements, which are formats
+to be imported; and 3) zero or more 《code》macro《/code》 elements. Each 《code》macro《/code》 element must contain
+a 《code》name《/code》 element, and zero or one 《code》params《/code》 element. A 《code》params《/code》 element contains
+one or more 《code》param《/code》 and/or 《code》variable《/code》 elements in any order. A 《code》param《/code》 element contains
+a string value to be passed into the macro, and a 《code》variable《/code》 element contains a name of a variable to be passed in
+the macro.《/p》
+《p》If there is a 《code》code《/code》 element, this element will be processed first.
+Code inside cannot contain 《code》<《/code》, 《code》>《/code》 and
+《code》&&《/code》. Use 《code》&lt;《/code》, 《code》&gt;《/code》 and 《code》-aa-《/code》 instead. A 《code》code《/code》
+element can be followed by 《code》script《/code》 elements. 《/p》
+《p》The following two 《code》scripts《/code》 elements are equivalent:《/p》
+《pre》
+<scripts>
+    <code>
+#import( "site://_common_assets/formats/library/velocity/chanw_display_velocity_code" )
+#chanwGetMacroCode( "chanw_object_creator" "formats/library/velocity" "_common_assets" "chanwGetObjectByClassName" )
+#chanwDisplayHideVelocityCode( $chanwGetMacroCode "hide-code1" "true" "false" )
+    </code>
+</scripts>
+
+<scripts>
+    <script>
+        <path>site://_common_assets/formats/library/velocity/chanw_display_velocity_code</path>
+        <macro>
+            <name>chanwGetMacroCode</name>
+            <params>
+                <param>chanw_object_creator</param>
+                <param>formats/library/velocity</param>
+                <param>_common_assets</param>
+                <param>chanwGetObjectByClassName</param>
+            </params>
+        </macro>
+        <macro>
+            <name>chanwDisplayHideVelocityCode</name>
+            <params>
+                <variable>chanwGetMacroCode</variable>
+                <param>hide-code1</param>
+                <param>true</param>
+                <param>false</param>
+            </params>
+        </macro>
+    </script>
+</scripts>
+《/pre》
 《/documentation》
 《macro id=“chanwProcessScript”》
 *#
 #macro( chanwProcessScript $firstChild )
+    ## allow only one code element, and process it first
+    #set( $chanwCode = $firstChild.getChild( 'code' ) )
+    
+    #if( $chanwCode )
+        #set( $chanCodeStmt = $chanwCode.Value.replaceAll( 
+        	'&lt;', '<' ).replaceAll(
+    		'&gt;', '>' ).replaceAll(
+    		'-aa-', '&&' ) )
+    	#evaluate( $chanCodeStmt )
+    #end
+
     ## get the scripts to be executed
     #set( $chanwScripts = $firstChild.getChildren( 'script' ) )
     
@@ -965,6 +1016,45 @@ The 《code》$firstChild《/code》 is the scripts element. This macro is used 
     
     #chanwSetVariable( $var $chanwValue )
 #end
+#*
+《/macro》
+《documentation》
+《code》#thomaspeGetSrcSetCode ( $imagePath $imageSiteName $map )《/code》
+《p》Returns a string of code in a variable for use in srcset images. Using the parameters of an image path, image site location, and a custom map of values, it finds if srcset image exists. If so it adds them, if not, it moves on.
+Example: 《/p》
+《pre》
+#import("site://_common_assets/formats/custom_macros")
+#set( $image ="/images/computer-people.jpg" )
+#set( $site = "thomas-test" )
+
+#thomaspeSrcSetValues
+#thomaspeGetSrcSetCode( $image $site $thomaspeSrcSetValues)
+$thomaspeGetSrcSetCode
+《/pre》
+《/documentation》
+《macro id=“thomaspeGetSrcSetCode”》
+*#
+#macro( thomaspeGetSrcSetCode $imagePath $imageSiteName $map )
+    ## replace ".jpg" with array of replacements in order of priority
+    #set( $thomaspeGetSrcSetCode = "srcset='" )
+    #foreach( $imageOptions in $map.keySet()  )
+        #set( $thomaspeImageOptionsFound = false )   
+        #foreach( $imageSize in $map[ $imageOptions ] )
+            #set( $thomaspeNewImagePath = $imagePath.replaceAll( ".jpg", $imageSize ) )
+            #if( !$_PropertyTool.isNull(
+                $_.locateFile( $thomaspeNewImagePath, $imageSiteName ) ) &&
+                !$thomaspeImageOptionsFound )
+                
+                #set( $thomaspeImageOptionsFound = true )
+                #set( $thomaspeGetSrcSetCode =
+                    $thomaspeGetSrcSetCode + " " + $S_SYSTEM_ASSET_LOCAL + "site://" + $imageSiteName +
+                    $thomaspeNewImagePath + $E_SYSTEM_ASSET_LOCAL + " " +
+                    $imageOptions + ", ")
+            #end
+        #end
+    #end
+    #set( $thomaspeGetSrcSetCode = $thomaspeGetSrcSetCode + "'" )
+#end ##end macro 
 #*
 《/macro》
 《documentation id=“bottom”》
