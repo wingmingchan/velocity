@@ -1,5 +1,82 @@
 <global-code-templates>
 
+    <generate-macro-foreach>
+#*
+This foreach loop is used to generate code, using a list with the supplied code templates.
+*#
+#foreach( $macro_name in $-list_name- )
+    #set( $chanw_foreach_statement = $-code_name-.replaceAll( "-macro_name-", $macro_name ) )
+    #evaluate( $chanw_foreach_statement )
+#end
+    </generate-macro-foreach>
+    
+        <get-image-by-page-path-code>
+#*
+        <documentation>
+            <p>
+                <code>#thomaspeGetImageByPagePath( $thomaspeImageFolder $thomaspeImageExtension $srcSetMapCode $thomaspeMapName $startWrapper $endWrapper )</code>
+            </p>
+            <p>
+Important: The third argument should be a line of code, evaluated to a map.
+The fourth argument should be the name of the map defined in the third argument.
+The fifth and sixth arguments should be variables storing html markups defined in the format
+specified in the path element.</p>
+            <p>Invoking the macro in a script block:</p>
+            <pre>
+        -lt-path-gt-site://_common_assets/formats/custom_html_wrappers-lt-/path-gt-
+        -lt-macro-gt-
+            -lt-name-gt-thomaspeGetImageByPagePath-lt-/name-gt-
+            -lt-params-gt-
+                -lt-param-gt-images-lt-/param-gt-
+                -lt-param-gt-.jpg-lt-/param-gt-
+                -lt-param-gt-#set($valueMap={"1000w":"", "750w":"-700x350","460w":"-400x200"})-lt-/param-gt-
+                -lt-param-gt-valueMap-lt-/param-gt-
+                -lt-variable-gt-start_slide_wrapper-lt-/variable-gt-
+                -lt-variable-gt-end_slide_wrapper-lt-/variable-gt-
+            -lt-/params-gt-
+        -lt-/macro-gt-
+</pre>
+        </documentation>
+*#
+#macro( thomaspeGetImageByPagePath $thomaspeImageFolder $thomaspeImageExtension $srcSetMapCode $thomaspeMapName $startWrapper $endWrapper )
+  #evaluate( $srcSetMapCode )
+  #set( $thomaspeImage                = "/" + $thomaspeImageFolder + "/" + $currentPage.path + $thomaspeImageExtension )
+  #set( $thomaspeFileSizeTest         = "" )
+  #set( $thomaspeFileSizeTest = $_.locateFile($thomaspeImage , $currentPage.siteName ) )
+  
+  #if (!$_PropertyTool.isNull($thomaspeFileSizeTest.FileSize)) ## if corresponding image exists, then begin process
+
+    ## Find out if there are SRC SET images ##
+    #set( $thomaspeSingleImageSrcSet    = "")
+    
+    ## $thomaspeMapName defined in the fourth argument
+    #set( $thomaspeStmt = '#set($thomaspeMap=$' + $thomaspeMapName + ')' )
+    #evaluate( $thomaspeStmt )
+    
+    #foreach( $srcSetPair in $thomaspeMap.entrySet() )
+        #set( $thomaspeNewSuffix = "" )
+        #set( $thomaspeNewSuffix = $srcSetPair.value + $thomaspeImageExtension )
+        #set( $srcSetReplace = "" )
+        #set( $srcSetReplace = $thomaspeImage.replace( $thomaspeImageExtension , $thomaspeNewSuffix ) )     
+        #if (!$_PropertyTool.isNull( $_.locateFile( $srcSetReplace, $currentPage.siteName ) ))
+            #set( $thomaspeSingleImageSrcSet    = $thomaspeSingleImageSrcSet + $S_SYSTEM_ASSET_LOCAL + 
+                "site://" + $currentPage.siteName + $srcSetReplace + $E_SYSTEM_ASSET_LOCAL + " " +  $srcSetPair.key +", ")
+        #end       
+    #end
+    
+    #if ( $thomaspeSingleImageSrcSet != "")
+        #set( $thomaspeSingleImageSrcSet    = "srcset='" + $thomaspeSingleImageSrcSet + "'")
+    #end
+
+    $startWrapper
+    &lt;img src="$thomaspeImage" alt="${_EscapeTool.xml( $currentPage.metadata.displayName )}" class="img-responsive" $thomaspeSingleImageSrcSet /&gt;
+    $endWrapper
+    
+  #end ## if System Name-based Image Exists test
+#end
+    
+    </get-image-by-page-path-code>
+    
     <index-block-macro>
 #macro( -macro_name- $-node_type-Node )
     #if( !$-node_type-Node )
@@ -8,7 +85,25 @@
         Not a/an -node_type- element!!!$BR
         #stop
     #end
+    
+    ## create the global variables
     #chanwGetNodeValues( $-node_type-Node $-map_name- )
+
+    ## initialize the map
+    #set( $chanwDynamicMetatdataNameValuesMap  = {} )
+
+    ## revive the global variable and assign it to another global variable
+    #if( '-dm_name-' != "" )
+        #set( $chanwStmt = '#set($chanwAssetDynamicMetadata=$-dm_name-)' )
+        #evaluate( $chanwStmt )
+    
+        ## process the corresponding dynamic metadata
+        #if( $chanwAssetDynamicMetadata.size() &gt; 0 )
+            #foreach( $dm in $chanwAssetDynamicMetadata )
+                #chanwProcessDynamicData( $dm )
+            #end
+        #end
+    #end
 #end
     </index-block-macro>
 
@@ -32,10 +127,27 @@
 #set( $-block_content- = $_XPathTool.selectSingleNode( $page, 'system-data-structure/page-config-group/-node_name-/content' ) )
 #if( !$_PropertyTool.isNull( $-block_content- ) )
 -lt-div id="-div_id-"-gt-
-        #processBlockChooser( $-block_content- )
+        #chanwProcessBlockChooser( $-block_content- )
 -lt-/div-gt-
     #end
     </page-config>
+    
+    <process-cascade-api-asset-code>
+#macro( chanwProcess-asset_type- $asset )
+    #if( !$asset || 
+        $asset.Class.Name != $CASCADE_API_-asset_type-_CLASS_NAME )
+        Not a -asset_type-.$BR
+        #stop
+    #end
+    
+    #set( $chanwKeySet = $-asset_type-PropertyMap.keySet() )
+    #foreach( $var in $chanwKeySet )
+        #set( $chanwStmt = '#chanwSetVariable( $var $asset.' +
+            $-asset_type-PropertyMap.get( $var ) + ')' )
+        #evaluate( $chanwStmt )
+    #end
+#end
+    </process-cascade-api-asset-code>
     
     <single-group>
 #macro(-dispatch_macro_name- $systemDataStructure)
@@ -49,7 +161,7 @@
     <site-config>
 #set( $contentVar = $_XPathTool.selectSingleNode( $page, 'system-data-structure/site-config-group/-node_name-/content' ) )
 #if( !$_PropertyTool.isNull( $contentVar ) )
-    #processBlockChooser( $contentVar )
+    #chanwProcessBlockChooser( $contentVar )
 #end
     </site-config>
     
