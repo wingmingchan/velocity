@@ -18,18 +18,44 @@ by an index block.《/p》
 *#
 #*
 《documentation》
-《p》Processes a 《code》system-data-structure《/code》 object (a 《code》org.jdom.Element《/code》 object). This can be the entry point of the library format.《/p》
+《code》#chanwProcessSystemDataStructure( $element $wysiwyg_ids )《/code》
+《p》Processes a 《code》system-data-structure《/code》 object (a 《code》org.jdom.Element《/code》 object).
+This can be the entry point of the library format. Note that the element passed in does not have to be
+a 《code》system-data-structure《/code》 element. It can be any element selected from the XML tree. To bypass
+WYSISYG nodes, there are two options:《/p》
+《ul》
+《li》Use a suffix 《code》-wysiwyg《/code》 or 《code》-content《/code》 when assigning identifiers to
+WYSISYG fields in a data definition《/li》
+《li》When invoke this macro, pass in a list of names of WYSISYG fields《/li》
+《/ul》
 《pre》
+#chanwProcessSystemDataStructure( $contentRoot [ 'wysiwyg' ] )
+$chanwXmlXPathTextMap
+
+#set( $nodes = $contentRoot.getChildren( "multiple-first" ) )
+
+#foreach( $node in $node )
+    #set( $key = "system-data-structure/multiple-first[" + $foreach.count + "]" )
+    $chanwXmlXPathTextMap.get( $key )
+#end
 《/pre》
 《/documentation》
 《macro id=“chanwProcessSystemDataStructure”》
 *#
-#macro( chanwProcessSystemDataStructure $element )
-    #if( $element.Name != $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
-        Not a $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE!!!$BR
+#macro( chanwProcessSystemDataStructure $element $wysiwyg_ids )
+    #if( $element.Class.Name != $ORG_JDOM_ELEMENT_CLASS_NAME )
+        Not an element.$BR
         #stop
     #end
     
+    #if( $wysiwyg_ids && 
+        ( $wysiwyg_ids.Class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME ||
+          $wysiwyg_ids.size() == 0 ) )
+        #set( $chanwWithWysiwygIds = false )
+    #else
+        #set( $chanwWithWysiwygIds = true )
+    #end
+
     ## store empty string for text value
     #if( !$chanwXmlXPathTextMap.containsKey( $element.Name ) )
         #set( $void = $chanwXmlXPathTextMap.put( $element.Name, '' ) )
@@ -40,39 +66,52 @@ by an index block.《/p》
         #set( $void = $chanwNodeInfoMap.put( $element, $element.Name ) )
     #end
     
-    #chanwProcessJdomElement( $element )
+    #if( $chanwWithWysiwygIds )
+        #chanwProcessJdomElement( $element $wysiwyg_ids )
+    #else
+        #chanwProcessJdomElement( $element )
+    #end
 #end
 #*
 《/macro》
 《documentation》
-《p》《/p》
-《pre》
-
-《/pre》
+《code》#chanwProcessJdomElement( $node $ids )《/code》
+《p》Processes an element. This macro is invoked by 《code》#chanwProcessSystemDataStructure《/code》.
+Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use 《code》#chanwProcessSystemDataStructure《/code》.《/p》
 《/documentation》
 《macro id=“chanwProcessJdomElement”》
 *#
-#macro( chanwProcessJdomElement $node )
+#macro( chanwProcessJdomElement $node $ids )
     #if( $node.Class.Name != $ORG_JDOM_ELEMENT_CLASS_NAME )
         Not an element!!!$BR
         #stop
     #end
     
-    ## WYSIWYG
+    #if( $ids )
+        #set( $chanwWithWysiwygIds = true )
+    #else
+        #set( $chanwWithWysiwygIds = false )
+    #end
+    
+    ## WYSIWYG or block chooser
     ## allow two suffixes in the node name: content and wysiwyg
-    #if( $node.Name.endsWith( "-content" ) || $node.Name.endsWith( "-wysiwyg" ) )
+    #if( $node.Name.endsWith( "-content" ) || $node.Name.endsWith( "-wysiwyg" ) ||
+        ( $chanwWithWysiwygIds && $ids.contains( $node.Name ) ) || $node.Name == "content"
+    )
         ## get the parent path
         #set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
         ## create the path for current child
         #set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
     
         ##set( $chanwWYSIWYGPath  = $chanwNodeInfoMap.get( $child ) )
-        #set( $chanwWYSIWYGValue = $_SerializerTool.serialize( $child, true ) )
-        #set( $void = $chanwXmlXPathTextMap.put(
-            $chanwChildKey, $chanwWYSIWYGValue ) )
-    ## skip chooser
-    #elseif( $node.Name == "content" )
-        ## do nothing
+        #if( $node.Name != "content" )
+            #set( $chanwNodeValue = $_SerializerTool.serialize( $child, true ) )
+        #else
+            #set( $chanwNodeValue = $node )
+        #end
+        
+        #set( $void = $chanwXmlXPathTextMap.put( $chanwChildKey, $chanwNodeValue ) )
+
     #elseif( $node.Children && $node.Children.size() > 0 )
         ##store the group path
         #set( $chanwParentNode = $node.getParent() )
@@ -97,12 +136,20 @@ by an index block.《/p》
             ##else
                 ## test for WYSIWYG
                 #set( $chanwIsWYSIWYG = false )
+                #set( $chanwIsContent = false )
+                
                 ## allow two suffixes in the node name: content and wysiwyg
-                #if( $node.Name.endsWith( "-content" ) || $node.Name.endsWith( "-wysiwyg" ) )
+                #if( $node.Name.endsWith( "-content" ) || $node.Name.endsWith( "-wysiwyg" ) ||
+                    ( $chanwWithWysiwygIds && $ids.contains( $node.Name ) ) 
+                )
                     #set( $chanwIsWYSIWYG = true )
                 #end
+                
+                #if( $node.Name == "content" )
+                    #set( $chanwIsContent = true )
+                #end
         
-                #if( $chanwIsWYSIWYG == false )
+                #if( !$chanwIsWYSIWYG  && !$chanwIsContent )
                     ## get the parent path
                     #set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
                     ## create the path for current child
@@ -162,7 +209,7 @@ by an index block.《/p》
                 
                         #processTextNode( $child  )
                     #end
-                #else
+                #elseif( $chanwIsWYSIWYG )
                     ## get the parent path
                     #set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
                     ## create the path for current child
@@ -172,6 +219,13 @@ by an index block.《/p》
                     #set( $chanwWYSIWYGValue = $_SerializerTool.serialize( $child, true ) )
                     #set( $void = $chanwXmlXPathTextMap.put(
                         $chanwChildKey, $chanwWYSIWYGValue ) )
+                #elseif( $chanwIsContent )
+                    ## get the parent path
+                    #set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
+                    ## create the path for current child
+                    #set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
+                
+                    #set( $void = $chanwXmlXPathTextMap.put( $chanwChildKey, $child ) )
                 #end
             ##end
         #end
@@ -183,10 +237,9 @@ by an index block.《/p》
 #*
 《/macro》
 《documentation》
-《p》《/p》
-《pre》
-
-《/pre》
+《code》#processTextNode( $node  )《/code》
+《p》Processes a text node. This macro is invoked by 《code》#chanwProcessSystemDataStructure《/code》,
+and do not use it independently.《/p》
 《/documentation》
 《macro id=“processTextNode”》
 *#
@@ -205,10 +258,9 @@ by an index block.《/p》
 #*
 《/macro》
 《documentation》
-《p》《/p》
-《pre》
-
-《/pre》
+《code》#chanwCleanUpMaps《/code》
+《p》Cleans up the maps. This macro is invoked by 《code》#chanwProcessSystemDataStructure《/code》
+and do not use it independently.《/p》
 《/documentation》
 《macro id=“chanwCleanUpMaps”》
 *#
@@ -219,9 +271,14 @@ by an index block.《/p》
 #*
 《/macro》
 《documentation》
-《p》《/p》
+《code》#chanwDisplayMapKeys( $map $trimRoot )《/code》
+《p》Displays the keys of a map. The macro can be used to display the keys of
+《code》$chanwXmlXPathTextMap《/code》, showing all XPath expressions in an XML tree.
+When processing a data definition block, the name of the root element(《code》system-data-definition《/code》)
+is always part of the keys. To trim this part for displaying purposes, pass in a true value for the second
+parameter.《/p》
 《pre》
-
+#chanwDisplayMapKeys( $chanwXmlXPathTextMap true )
 《/pre》
 《/documentation》
 《macro id=“chanwDisplayMapKeys”》
@@ -249,9 +306,15 @@ by an index block.《/p》
 #*
 《/macro》
 《documentation》
-《p》《/p》
+《code》#chanwDisplayMapKeyValuePairs( $map $trimRoot )《/code》
+《p》Displays the key-value pairs of a map. The macro can be used to display the contents of
+《code》$chanwXmlXPathTextMap《/code》, showing all XPath expressions in an XML tree as keys, associated with
+corresponding text values.
+When processing a data definition block, the name of the root element(《code》system-data-definition《/code》)
+is always part of the keys. To trim this part for displaying purposes, pass in a true value for the second
+parameter.《/p》
 《pre》
-
+#chanwDisplayMapKeyValuePairs( $chanwXmlXPathTextMap true )
 《/pre》
 《/documentation》
 《macro id=“chanwDisplayMapKeyValuePairs”》
@@ -279,8 +342,10 @@ by an index block.《/p》
 #*
 《/macro》
 《documentation》
-《p》Shows the block XML. 《code》$block_xml《/code》 should be an Element object.《/p》
+《code》#chanwShowXml $block_xml $with_pre $with_newline )《/code》
+《p》Shows the block XML. 《code》$block_xml《/code》 should be an 《code》org.jdom.Element《/code》 object.《/p》
 《pre》
+#chanwShowXml( $contentRoot )
 《/pre》
 《/documentation》
 《macro id=“chanwShowXml”》
@@ -292,8 +357,10 @@ by an index block.《/p》
 #*
 《/macro》
 《documentation》
+《code》#chanwShowXmlString( $xml_string $with_pre $with_newline )《/code》
 《p》Displays an XML string, possibly formatted.《/p》
 《pre》
+#chanwShowXmlString( $_SerializerTool.serialize( $contentRoot, false ) )
 《/pre》
 《/documentation》
 《macro id=“chanwShowXmlString”》
