@@ -1,9 +1,10 @@
 ## important: used relative path so that $master_site_name can be read from chanw_global_values
-#import( 'formats/library/velocity/chanw_global_values' )
+#import( 'formats/library/velocity/chanw_global_macros' )
 
 #set( $index_block_path     = 'site://' + $master_site_name + '/formats/library/velocity/chanw_process_index_block' )
 
 #import( $index_block_path )
+
 
 #* === process legacy blocks without type info == *#
 #macro( processPhpStaticInclude $systemDataStructure )
@@ -12,7 +13,6 @@
     #set( $macroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
     #chanwInvokeMacro( $macroName [ "groupToBeProcessed" ] )
 #end
-
 
 #macro( processNewsArticlePreviousNext $systemDataStructure )
     
@@ -81,4 +81,11 @@
         #end
     #end    
   
+#end
+
+#macro( thomaspeSrcSetValues )
+    #set( $thomaspeSrcSetValues = {} )
+    #set( $void =  $thomaspeSrcSetValues.put( "1000w", [".jpg"] ) )
+    #set( $void =  $thomaspeSrcSetValues.put( "750w", ["-700x350.jpg","-700x233.jpg"] ) )
+    #set( $void =  $thomaspeSrcSetValues.put( "460w", ["-400x200.jpg","-400x133.jpg"] ) )
 #end
