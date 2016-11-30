@@ -45,6 +45,7 @@ true
 《/documentation》
 *#
 #import( 'formats/library/velocity/chanw_global_values' )
+#import( 'formats/library/velocity/chanw_global_macros' )
 #*
 《documentation》
 《code》#chanwProcessDynamicData( $dynamicDataNode )《/code》
@@ -63,11 +64,15 @@ a variable named 《code》$chanwDynamicMetatdataNameValuesList《/code》.《/p
     #set( $chanwDynamicMetatdataValues         = $dynamicDataNode.getChildren( 'value' ) )
     
     #foreach( $value in $chanwDynamicMetatdataValues )
-        #set( $void = $chanwDynamicMetatdataNameValuesList.add( $value.value ) )
+        #set( $void = $chanwDynamicMetatdataNameValuesList.add( $value.Value ) )
+    #end
+    
+    #if( !$chanwDynamicMetatdataNameValuesMap )
+        #set( $chanwDynamicMetatdataNameValuesMap = {} )
     #end
     
     #set( $void = $chanwDynamicMetatdataNameValuesMap.put( 
-        $dynamicDataNode.getChild( 'name' ).value,
+        $dynamicDataNode.getChild( 'name' ).Value,
         $chanwDynamicMetatdataNameValuesList ) )
 #end
 #*
@@ -75,15 +80,55 @@ a variable named 《code》$chanwDynamicMetatdataNameValuesList《/code》.《/p
 《documentation》
 There is code and a code template used to generate four macros: 《code》#chanwProcessRSSItem《/code》,
 《code》#chanwProcessSystemBlock《/code》, 《code》#chanwProcessSystemFile《/code》, and 《code》#chanwProcessSystemSymlink《/code》.
+《p》The four macros generated each creates a set of global variables. The variable names are defined in
+《code》chanw_global_values《/code》. For example, the global variables associted with 《code》#chanwProcessSystemBlock《/code》
+are defined as:《/p》
+《pre》
+#set( $systemBlockVarElementMap = {
+        'systemBlockName':           $cascadeXML_ELEMENT_NAME,
+        'systemBlockTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemBlockSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemBlockAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemBlockTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemBlockKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemBlockDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemBlockStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemBlockEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemBlockReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
+        'systemBlockDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
+        'systemBlockPath':           $cascadeXML_ELEMENT_PATH,
+        'systemBlockSite':           $cascadeXML_ELEMENT_SITE,
+        'systemBlockCreatedBy':      $cascadeXML_ELEMENT_CREATED_BY,
+        'systemBlockCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
+        'systemBlockLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
+        'systemBlockLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED
+    } )
+《/pre》
+《p》This means that after the macro 《code》#chanwProcessSystemBlock《/code》 is invoked, variables like
+《code》$systemBlockName《/code》 will be populated with values from the 《code》system-block《/code》 element
+being processed. Example:《/p》
+《pre》
+## because the macro #chanwProcessSystemBlock is generated,
+## the test code must appear after the foreach structure below
+#set( $block = $contentRoot.getChildren( "system-block" )[ 0 ] )
+#chanwProcessSystemBlock( $block )
+systemBlockName: $systemBlockName$BR
+systemBlockPath: $systemBlockPath$BR
+systemBlockSite: $systemBlockSite$BR
+《/pre》
+《p》Note that depending on the settings of an index block, indexed data may or may not contain
+elements like 《code》last-modified《/code》. When an element is missing, the stored value of
+its corresponding variable will be the empty string.《/p》
 《/documentation》
 《macro id=“generatedCode”》
 *#
 ## generate macros that process rss item, system-block, system-file, system-symlink
 #set( $index_block_element_map = {
-    "chanwProcessRSSItem" :        [ "item",    "rssXML_ELEMENT_ITEM",               "rssItemVarElementMap" ],
-    "chanwProcessSystemBlock" :    [ "block",   "cascadeXML_ELEMENT_SYSTEM_BLOCK",   "systemBlockVarElementMap" ],
-    "chanwProcessSystemFile" :     [ "file",    "cascadeXML_ELEMENT_SYSTEM_FILE",    "systemFileVarElementMap" ],
-    "chanwProcessSystemSymlink" :  [ "symlink", "cascadeXML_ELEMENT_SYSTEM_SYMLINK", "systemSymlinkVarElementMap" ]
+    "chanwProcessRSSItem" :        [ "item",    "rssXML_ELEMENT_ITEM",               "rssItemVarElementMap",       "" ],
+    "chanwProcessSystemBlock" :    [ "block",   "cascadeXML_ELEMENT_SYSTEM_BLOCK",   "systemBlockVarElementMap",   "systemBlockDynamicMetadata" ],
+    "chanwProcessSystemFile" :     [ "file",    "cascadeXML_ELEMENT_SYSTEM_FILE",    "systemFileVarElementMap",    "systemFileDynamicMetadata" ],
+    "chanwProcessSystemSymlink" :  [ "symlink", "cascadeXML_ELEMENT_SYSTEM_SYMLINK", "systemSymlinkVarElementMap", "systemSymlinkDynamicMetadata" ],
+    "chanwProcessSystemPage" :     [ "page",    "cascadeXML_ELEMENT_SYSTEM_PAGE",    "systemPageVarElementMap",    "systemPageDynamicMetadata" ]
 } )
 
 #set( $indexBlockMapKeys = $index_block_element_map.keySet() )
@@ -92,7 +137,8 @@ There is code and a code template used to generate four macros: 《code》#chanw
     #set( $macro_list = $index_block_element_map[ $macro_name ] )
     #set( $chanwStatement = $index_block_code.replaceAll( "-macro_name-", $macro_name ).replaceAll(
         "-node_type-", $macro_list[ 0 ] ).replaceAll( "-element_name-", $macro_list[ 1 ] ).replaceAll(
-        "-map_name-", $macro_list[ 2 ] ) )
+        "-map_name-", $macro_list[ 2 ] ).replaceAll( "-dm_name-", $macro_list[ 3 ] ) )
+    
     #evaluate( $chanwStatement )
 #end
 #*
@@ -133,36 +179,6 @@ in a set of variables, and processes the dynamic fields, if there are any.《/p�
     #foreach( $child in $folderNode.Children )
         #if( $chanwFolderContainedAssets.contains( $child.name ) )
             #set( $void = $chanwSystemFolderChildren.add( $child ) )
-        #end
-    #end
-#end
-#*
-《/macro》
-《documentation》
-《code》#chanwProcessSystemPage( $pageNode )《/code》
-《p》Processes a 《code》system-page《/code》 object, stores values
-in a set of variables, and processes the dynamic fields, if there are any.《/p》
-《/documentation》
-《macro id=“chanwProcessSystemPage”》
-*#
-#macro( chanwProcessSystemPage $pageNode )
-    #if( !$pageNode )
-        The page element is not defined.$BR
-    #elseif( $pageNode.name != $cascadeXML_ELEMENT_SYSTEM_PAGE )
-        $pageNode.name is not a page element!!!$BR
-        #stop
-    #end
-    #chanwGetNodeValues( $pageNode $systemPageVarElementMap )
-    
-    #chanwGetNodeSets( $pageNode, { 
-        'systemPageDynamicMetadata':    $cascadeXML_ELEMENT_DYNAMIC_METADATA,
-        'systemPageSystemDataStructure':$cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE } )
-        
-    #set( $chanwDynamicMetatdataNameValuesMap  = {} )
-    
-    #if( $systemPageDynamicMetadata.size() > 0 )
-        #foreach( $dmd in $systemPageDynamicMetadata )
-            #chanwProcessDynamicData( $dmd )
         #end
     #end
 #end
