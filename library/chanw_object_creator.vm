@@ -285,6 +285,7 @@ $chanwGetMethodByClassNameMethodNameParamTypes.invoke( “Hello ”, “e” )
     #evaluate( $chanwSetVarValStatement )
 #end
 #*
+《/macro》
 《documentation》
 《code》#chanwGetStaticMethodByClassNameMethodNameWithoutParams( $chanwClassName $chanwMethodName )《/code》
 《p》Returns the static method of the class.《/p》
