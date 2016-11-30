@@ -8,6 +8,6 @@
     #set( $document = $contentRoot.getDocument() )
     
     #if( $document )
-        #processBlockChooser( $document )
+        #chanwProcessBlockChooser( $document )
     #end
 #end
