@@ -46,6 +46,7 @@
 #set( $COM_CASCADE_STRUCTURED_DATA_LIST_CLASS_NAME = "[Lcom.hannonhill.cascade.api.asset.common.StructuredDataNode;" )
 #set( $JAVA_LANG_INTEGER_CLASS_NAME             = 'java.lang.Integer' )
 #set( $JAVA_LANG_STRING_CLASS_NAME              = 'java.lang.String' )
+#set( $JAVA_LANG_CLASS_CLASS_NAME               = 'java.lang.Class' )
 #set( $JAVA_UTIL_ARRAY_LIST_CLASS_NAME          = 'java.util.ArrayList' )
 #set( $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME       = 'java.util.LinkedHashMap' )
 #set( $JAVA_UTIL_HASHMAP_CLASS_NAME             = 'java.util.HashMap' )
@@ -59,12 +60,16 @@
 #set( $E_SYSTEM_ASSET_LOCAL = "[" + "/system-asset:local]" )
 
 ## cascade element names
+#set( $cascadeXML_ELEMENT_AUTHOR                = 'author' )
 #set( $cascadeXML_ELEMENT_CREATED_BY            = 'created-by' )
 #set( $cascadeXML_ELEMENT_CREATED_ON            = 'created-on' )
+#set( $cascadeXML_ELEMENT_DESCRIPTION           = 'description' )
 #set( $cascadeXML_ELEMENT_DISPLAY_NAME          = 'display-name' )
 #set( $cascadeXML_ELEMENT_DYNAMIC_METADATA      = 'dynamic-metadata' )
+#set( $cascadeXML_ELEMENT_END_DATE              = 'end-date' )
 #set( $cascadeXML_ELEMENT_FILE_SIZE             = 'file-size' )
 #set( $cascadeXML_ELEMENT_IS_PUBLISHED          = 'is-published' )
+#set( $cascadeXML_ELEMENT_KEYWORDS              = 'keywords' )
 #set( $cascadeXML_ELEMENT_LAST_MODIFIED_BY      = 'last-modified-by' )
 #set( $cascadeXML_ELEMENT_LAST_MODIFIED         = 'last-modified' )
 #set( $cascadeXML_ELEMENT_LAST_PUBLISHED_BY     = 'last-published-by' )
@@ -73,6 +78,8 @@
 #set( $cascadeXML_ELEMENT_NAME                  = 'name' )
 #set( $cascadeXML_ELEMENT_PATH                  = 'path' )
 #set( $cascadeXML_ELEMENT_PAGE_XHTML            = 'page-xhtml' )
+#set( $cascadeXML_ELEMENT_PAGE_XHTML            = 'page-xhtml' )
+#set( $cascadeXML_ELEMENT_REVIEW_DATE           = 'review-date' )
 #set( $cascadeXML_ELEMENT_SITE                  = 'site' )
 #set( $cascadeXML_ELEMENT_START_DATE            = 'start-date' )
 #set( $cascadeXML_ELEMENT_SUMMARY               = 'summary' )
@@ -84,6 +91,7 @@
 #set( $cascadeXML_ELEMENT_SYSTEM_PAGE           = 'system-page' )
 #set( $cascadeXML_ELEMENT_SYSTEM_SYMLINK        = 'system-symlink' )
 #set( $cascadeXML_ELEMENT_SYSTEM_XML            = 'system-xml' )
+#set( $cascadeXML_ELEMENT_TEASER                = 'teaser' )
 #set( $cascadeXML_ELEMENT_TITLE                 = 'title' )
 #set( $chanwFolderContainedAssets = [ $cascadeXML_ELEMENT_SYSTEM_BLOCK, 
     $cascadeXML_ELEMENT_SYSTEM_FILE, $cascadeXML_ELEMENT_SYSTEM_FOLDER,
@@ -102,9 +110,227 @@
 #set( $CASCADE_API_BLOCK_TYPE     = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_BLOCK )
 #set( $CASCADE_API_FILE_TYPE      = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FILE )
 #set( $CASCADE_API_FOLDER_TYPE    = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FOLDER )
+#set( $CASCADE_API_FORMAT_TYPE    = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FORMAT )
 #set( $CASCADE_API_PAGE_TYPE      = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_PAGE )
 #set( $CASCADE_API_REFERENCE_TYPE = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_REFERENCE )
 #set( $CASCADE_API_SYMLINK_TYPE   = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_SYMLINK )
+
+## element to Cascade type map
+#set( $CASCADE_TYPE_ELEMENT_MAP = {
+    "system-block":  $CASCADE_API_BLOCK_TYPE,
+    "system-file":   $CASCADE_API_FILE_TYPE,
+    "system-folder": $CASCADE_API_FOLDER_TYPE,
+    "system-page":   $CASCADE_API_PAGE_TYPE,
+    "system-symlink":$CASCADE_API_SYMLINK_TYPE
+} )
+
+## Cascade API class strings
+#set( $CASCADE_API_DataBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
+#set( $CASCADE_API_FeedBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.FeedBlockAPIAdapter" )
+#set( $CASCADE_API_File_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.FileAPIAdapter" )
+#set( $CASCADE_API_Folder_CLASS_NAME       = "com.hannonhill.cascade.api.adapters.FolderAPIAdapter" )
+#set( $CASCADE_API_Page_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.PageAPIAdapter" )
+#set( $CASCADE_API_ScriptFormat_CLASS_NAME = "com.hannonhill.cascade.api.adapters.ScriptFormatAPIAdapter" )
+#set( $CASCADE_API_Symlink_CLASS_NAME      = "com.hannonhill.cascade.api.adapters.SymlinkAPIAdapter" )
+#set( $CASCADE_API_TextBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
+#set( $CASCADE_API_XMLBlock_CLASS_NAME     = "com.hannonhill.cascade.api.adapters.XMLBlockAPIAdapter" )
+
+## Cascade API Asset
+#set( $DataBlockPropertyMap = {
+    "DataBlockCreatedBy":             "CreatedBy",
+    "DataBlockCreatedOn":             "CreatedOn",
+	"DataBlockDataDefinitionPath":    "DataDefinitionPath",
+	"DataBlockFolderOrder":           "FolderOrder",
+	"DataBlockId":                    "Identifier.Id",
+	"DataBlockIdentifier":            "Identifier",
+	"DataBlockLastModified":          "LastModified",
+	"DataBlockLastModifiedBy":        "LastModifiedBy",
+	"DataBlockMetadata":              "Metadata",
+	"DataBlockName":                  "Name",
+	"DataBlockParentFolder":          "ParentFolder",
+	"DataBlockParentFolderIdentifier":"ParentFolderIdentifier",
+	"DataBlockPath":                  "Path",
+	"DataBlockSiteId":                "SiteId",
+	"DataBlockSiteName":              "SiteName",
+	"DataBlockSiteStructuredData":    "StructuredData",
+	"DataBlockType":                  "Identifier.Type",
+	"DataBlockXHTML":                 "XHTML",
+	"DataBlockXHTMLAsXMLElement":     "XHTMLAsXMLElement"
+} )
+
+#set( $FeedBlockPropertyMap = {
+    "FeedBlockCreatedBy":             "CreatedBy",
+	"FeedBlockCreatedOn":             "CreatedOn",
+	"FeedBlockFeed":                  "Feed",
+	"FeedBlockFeedURL":               "FeedURL",
+	"FeedBlockFolderOrder":           "FolderOrder",
+	"FeedBlockId":                    "Identifier.Id",
+	"FeedBlockIdentifier":            "Identifier",
+	"FeedBlockLastModified":          "LastModified",
+	"FeedBlockLastModifiedBy":        "LastModifiedBy",
+	"FeedBlockMetadata":              "Metadata",
+	"FeedBlockName":                  "Name",
+	"FeedBlockParentFolder":          "ParentFolder",
+	"FeedBlockParentFolderIdentifier":"ParentFolderIdentifier",
+	"FeedBlockPath":                  "Path",
+	"FeedBlockSiteId":                "SiteId",
+	"FeedBlockSiteName":              "SiteName",
+	"FeedBlockType":                  "Identifier.Type"
+} )
+
+## FileData, FileText are left out
+#set( $FilePropertyMap = {
+    "FileCreatedBy":             "CreatedBy",
+	"FileCreatedOn":             "CreatedOn",
+	"FileFileSize":              "FileSize",
+	"FileFolderOrder":           "FolderOrder",
+	"FileId":                    "Identifier.Id",
+	"FileIdentifier":            "Identifier",
+	"FileLastModified":          "LastModified",
+	"FileLastModifiedBy":        "LastModifiedBy",
+	"FileLastPublishedBy":       "LastPublishedBy",
+	"FileLastPublishedOn":       "LastPublishedOn",
+	"FileLlink":                 "Link",
+	"FileMetadata":              "Metadata",
+	"FileName":                  "Name",
+	"FileParentFolder":          "ParentFolder",
+	"FileParentFolderIdentifier":"ParentFolderIdentifier",
+	"FilePath":                  "Path",
+	"FileShouldBeIndexed":       "ShouldBeIndexed",
+	"FileShouldBePublished":     "ShouldBePublished",
+	"FileSiteId":                "SiteId",
+	"FileSiteName":              "SiteName",
+	"FileType":                  "Identifier.Type"
+} )
+
+#set( $FolderPropertyMap = {
+	"FolderChildren":              "Children",
+	"FolderChildrenIdentifiers":   "ChildrenIdentifiers",
+	"FolderChildrenSize":          "Children.size()",
+	"FolderCreatedBy":             "CreatedBy",
+	"FolderCreatedOn":             "CreatedOn",
+	"FolderFolderOrder":           "FolderOrder",
+	"FolderId":                    "Identifier.Id",
+	"FolderIdentifier":            "Identifier",
+	"FolderisNoWorkflowRequired":  "isNoWorkflowRequired()",
+	"FolderLastModified":          "LastModified",
+	"FolderLastModifiedBy":        "LastModifiedBy",
+	"FolderLink":                  "Link",
+	"FolderMetadata":              "Metadata",
+	"FolderName":                  "Name",
+	"FolderNoWorkflowRequired":    "NoWorkflowRequired",
+	"FolderParentFolder":          "ParentFolder",
+	"FolderParentFolderIdentifier":"ParentFolderIdentifier",
+	"FolderPath":                  "Path",
+	"FolderSiteId":                "SiteId",
+	"FolderSiteName":              "SiteName",
+	"FolderType":                  "Identifier.Type"
+} )
+
+#set( $PagePropertyMap = {
+	"PageCreatedBy":             "CreatedBy",
+	"PageCreatedOn":             "CreatedOn",
+	"PageDataDefinitionPath":    "DataDefinitionPath",
+	"PageFolderOrder":           "FolderOrder",
+	"PageId":                    "Identifier.Id",
+	"PageIdentifier":            "Identifier",
+	"PageLastModified":          "LastModified",
+	"PageLastModifiedBy":        "LastModifiedBy",
+	"PageLastPublishedBy":       "LastPublishedBy",
+	"PageLastPublishedOn":       "LastPublishedOn",
+	"PageLink":                  "Link",
+	"PageMetadata":              "Metadata",
+	"PageName":                  "Name",
+	"PageParentFolder":          "ParentFolder",
+	"PageParentFolderIdentifier":"ParentFolderIdentifier",
+	"PagePath":                  "Path",
+	"PageShouldBeIndexed":       "ShouldBeIndexed",
+	"PageShouldBePublished":     "ShouldBePublished",
+	"PageSiteId":                "SiteId",
+	"PageSiteName":              "SiteName",
+	"PageSiteStructuredData":    "StructuredData",
+	"PageType":                  "Identifier.Type",
+	"PageXHTML":                 "XHTML",
+	"PageXHTMLAsXMLElement":     "XHTMLAsXMLElement"
+} )
+
+#set( $ScriptFormatPropertyMap = {
+	"ScriptFormatCreatedBy":             "CreatedBy",
+	"ScriptFormatCreatedOn":             "CreatedOn",
+	"ScriptFormatFolderOrder":           "FolderOrder",
+	"ScriptFormatId":                    "Identifier.Id",
+	"ScriptFormatIdentifier":            "Identifier",
+	"ScriptFormatLastModified":          "LastModified",
+	"ScriptFormatLastModifiedBy":        "LastModifiedBy",
+	"ScriptFormatName":                  "Name",
+	"ScriptFormatParentFolder":          "ParentFolder",
+	"ScriptFormatParentFolderIdentifier":"ParentFolderIdentifier",
+	"ScriptFormatPath":                  "Path",
+	"ScriptFormatScript":                "Script",
+	"ScriptFormatSiteId":                "SiteId",
+	"ScriptFormatSiteName":              "SiteName",
+	"ScriptFormatType":                  "Identifier.Type"
+} )
+
+#set( $SymlinkPropertyMap = {
+    "SymlinkCreatedBy":             "CreatedBy",
+	"SymlinkCreatedOn":             "CreatedOn",
+	"SymlinkFolderOrder":           "FolderOrder",
+	"SymlinkId":                    "Identifier.Id",
+	"SymlinkIdentifier":            "Identifier",
+	"SymlinkLastModified":          "LastModified",
+	"SymlinkLastModifiedBy":        "LastModifiedBy",
+	"SymlinkLink":                  "Link",
+	"SymlinkMetadata":              "Metadata",
+	"SymlinkName":                  "Name",
+	"SymlinkParentFolder":          "ParentFolder",
+	"SymlinkParentFolderIdentifier":"ParentFolderIdentifier",
+	"SymlinkPath":                  "Path",
+	"SymlinkSiteId":                "SiteId",
+	"SymlinkSiteName":              "SiteName",
+	"SymlinkType":                  "Identifier.Type"
+} )
+
+#set( $TextBlockPropertyMap = {
+    "TextBlockCreatedBy":             "CreatedBy",
+	"TextBlockCreatedOn":             "CreatedOn",
+	"TextBlockFolderOrder":           "FolderOrder",
+	"TextBlockId":                    "Identifier.Id",
+	"TextBlockIdentifier":            "Identifier",
+	"TextBlockLastModified":          "LastModified",
+	"TextBlockLastModifiedBy":        "LastModifiedBy",
+	"TextBlockMetadata":              "Metadata",
+	"TextBlockName":                  "Name",
+	"TextBlockParentFolder":          "ParentFolder",
+	"TextBlockParentFolderIdentifier":"ParentFolderIdentifier",
+	"TextBlockPath":                  "Path",
+	"TextBlockSiteId":                "SiteId",
+	"TextBlockSiteName":              "SiteName",
+	"TextBlockText":                  "Text",
+	"TextBlockType":                  "Identifier.Type"
+} )
+
+#set( $XMLBlockPropertyMap = {
+    "XMLBlockCreatedBy":             "CreatedBy",
+	"XMLBlockCreatedOn":             "CreatedOn",
+	"XMLBlockFolderOrder":           "FolderOrder",
+	"XMLBlockId":                    "Identifier.Id",
+	"XMLBlockIdentifier":            "Identifier",
+	"XMLBlockLastModified":          "LastModified",
+	"XMLBlockLastModifiedBy":        "LastModifiedBy",
+	"XMLBlockMetadata":              "Metadata",
+	"XMLBlockName":                  "Name",
+	"XMLBlockParentFolder":          "ParentFolder",
+	"XMLBlockParentFolderIdentifier":"ParentFolderIdentifier",
+	"XMLBlockPath":                  "Path",
+	"XMLBlockSiteId":                "SiteId",
+	"XMLBlockSiteName":              "SiteName",
+	"XMLBlockType":                  "Identifier.Type",
+	"XMLBlockXML":                   "Identifier.XML",
+	"XMLBlockXMLAsXMLElement":       "XMLAsXMLElement"
+} )
+
+
 
 ## HTML element names, used in processing data definition blocks
 #* 'link', 'summary', 'title' are omitted from this list because they are used in Cascade.
@@ -163,16 +389,39 @@ is part of the HTML markups.
 
 #set( $systemBlockVarElementMap = {
         'systemBlockName':           $cascadeXML_ELEMENT_NAME,
+        'systemBlockTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemBlockSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemBlockAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemBlockTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemBlockKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemBlockDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemBlockStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemBlockEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemBlockReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
+        'systemBlockDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
         'systemBlockPath':           $cascadeXML_ELEMENT_PATH,
         'systemBlockSite':           $cascadeXML_ELEMENT_SITE,
         'systemBlockCreatedBy':      $cascadeXML_ELEMENT_CREATED_BY,
         'systemBlockCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
         'systemBlockLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
-        'systemBlockLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED
+        'systemBlockLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
+        'systemBlockDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA,
+        'systemBlockSystemDataStructure':$cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE
+
     } )
    
 #set( $systemFileVarElementMap = {
         'systemFileName':           $cascadeXML_ELEMENT_NAME,
+        'systemFileTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemFileSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemFileAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemFileTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemFileKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemFileDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemFileStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemFileEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemFileReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
+        'systemFileDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
         'systemFileIsPublished':    $cascadeXML_ELEMENT_IS_PUBLISHED,
         'systemFileLastPublishedOn':$cascadeXML_ELEMENT_LAST_PUBLISHED_ON,
         'systemFileLastPublishedBy':$cascadeXML_ELEMENT_LAST_PUBLISHED_BY,
@@ -183,15 +432,22 @@ is part of the HTML markups.
         'systemFileCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
         'systemFileLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
         'systemFileLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
-        'systemFileSize':           $cascadeXML_ELEMENT_FILE_SIZE
+        'systemFileSize':           $cascadeXML_ELEMENT_FILE_SIZE,
+        'systemFileDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA
     } )
 
 #set( $systemFolderVarElementMap = {
         'systemFolderName':           $cascadeXML_ELEMENT_NAME,
         'systemFolderIsPublished':    $cascadeXML_ELEMENT_IS_PUBLISHED,
-        'systemFolderLastPublishedOn':$cascadeXML_ELEMENT_LAST_PUBLISHED_ON,
-        'systemFolderLastPublishedBy':$cascadeXML_ELEMENT_LAST_PUBLISHED_BY,
         'systemFolderTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemFolderSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemFolderAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemFolderTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemFolderKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemFolderDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemFolderStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemFolderEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemFolderReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
         'systemFolderDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
         'systemFolderPath':           $cascadeXML_ELEMENT_PATH,
         'systemFolderSite':           $cascadeXML_ELEMENT_SITE,
@@ -199,17 +455,24 @@ is part of the HTML markups.
         'systemFolderCreatedBy':      $cascadeXML_ELEMENT_CREATED_BY,
         'systemFolderCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
         'systemFolderLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
-        'systemFolderLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED
+        'systemFolderLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
+        'systemFolderLastPublishedOn':$cascadeXML_ELEMENT_LAST_PUBLISHED_ON,
+        'systemFolderLastPublishedBy':$cascadeXML_ELEMENT_LAST_PUBLISHED_BY,
+        'systemFolderDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA
     } )
     
 #set( $systemPageVarElementMap = {
         'systemPageName':           $cascadeXML_ELEMENT_NAME,
         'systemPageIsPublished':    $cascadeXML_ELEMENT_IS_PUBLISHED,
-        'systemPageLastPublishedOn':$cascadeXML_ELEMENT_LAST_PUBLISHED_ON,
-        'systemPageLastPublishedBy':$cascadeXML_ELEMENT_LAST_PUBLISHED_BY,
         'systemPageTitle':          $cascadeXML_ELEMENT_TITLE,
         'systemPageSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemPageAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemPageTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemPageKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemPageDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
         'systemPageStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemPageEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemPageReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
         'systemPageDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
         'systemPagePath':           $cascadeXML_ELEMENT_PATH,
         'systemPageSite':           $cascadeXML_ELEMENT_SITE,
@@ -218,18 +481,34 @@ is part of the HTML markups.
         'systemPageCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
         'systemPageLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
         'systemPageLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
-        'systemPagePageXhtml':      $cascadeXML_ELEMENT_PAGE_XHTML
+        'systemPageLastPublishedOn':$cascadeXML_ELEMENT_LAST_PUBLISHED_ON,
+        'systemPageLastPublishedBy':$cascadeXML_ELEMENT_LAST_PUBLISHED_BY,
+        'systemPagePageXhtml':      $cascadeXML_ELEMENT_PAGE_XHTML,
+        'systemPageDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA,
+        'systemPageSystemDataStructure':$cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE
     } )
     
 #set( $systemSymlinkVarElementMap = {
         'systemSymlinkName':           $cascadeXML_ELEMENT_NAME,
+        'systemSymlinkTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemSymlinkSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemSymlinkAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemSymlinkTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemSymlinkKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemSymlinkDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemSymlinkStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemSymlinkEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemSymlinkReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
+        'systemSymlinkDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
         'systemSymlinkPath':           $cascadeXML_ELEMENT_PATH,
         'systemSymlinkSite':           $cascadeXML_ELEMENT_SITE,
         'systemSymlinkCreatedBy':      $cascadeXML_ELEMENT_CREATED_BY,
         'systemSymlinkCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
         'systemSymlinkLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
         'systemSymlinkLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
-        'systemSymlinkLink':           $cascadeXML_ELEMENT_LINK
+        'systemSymlinkLink':           $cascadeXML_ELEMENT_LINK,
+        'systemSymlinkDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA
+
     } )
 
 ## a prefix used in macro names
@@ -243,14 +522,16 @@ is part of the HTML markups.
     "formats/library/velocity/chanw_global_code_templates", $master_site_name ).getXMLAsXMLElement().getChild( "global-code-templates" ) )
 
 ## these are code templates used to generate code
-#set( $single_group_code    = $global_code_templates_code.getChild( "single-group" ).value )
-#set( $multi_group_code     = $global_code_templates_code.getChild( "multi-group" ).value )
-#set( $site_map_code        = $global_code_templates_code.getChild( "site-map" ).value )
-#set( $macro_foreach_code   = $global_code_templates_code.getChild( "generate-macro-foreach" ).value )
-#set( $index_block_code     = $global_code_templates_code.getChild( "index-block-macro" ).value )
-#set( $site_config_code     = $global_code_templates_code.getChild( "site-config" ).value )
-#set( $page_config_code     = $global_code_templates_code.getChild( "page-config" ).value )
-#set( $get_image_by_page_path_code = $global_code_templates_code.getChild( "get-image-by-page-path-code" ).value )
+#set( $single_group_code    = $global_code_templates_code.getChild( "single-group" ).Value )
+#set( $multi_group_code     = $global_code_templates_code.getChild( "multi-group" ).Value )
+#set( $site_map_code        = $global_code_templates_code.getChild( "site-map" ).Value )
+#set( $macro_foreach_code   = $global_code_templates_code.getChild( "generate-macro-foreach" ).Value )
+#set( $index_block_code     = $global_code_templates_code.getChild( "index-block-macro" ).Value )
+#set( $site_config_code     = $global_code_templates_code.getChild( "site-config" ).Value )
+#set( $page_config_code     = $global_code_templates_code.getChild( "page-config" ).Value )
+#set( $process_cascade_api_asset_code = $global_code_templates_code.getChild( "process-cascade-api-asset-code" ).Value )
+
+#set( $get_image_by_page_path_code = $global_code_templates_code.getChild( "get-image-by-page-path-code" ).Value )
 
 ## a list of names of variables associated with Velocity code
 #set( $chanwCodeList = [
