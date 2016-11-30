@@ -10,11 +10,24 @@ documentation, possibly with the source code.《/p》
 &#12298;, &#12299;, &#8220; and &#8221;.《/li》
 《li》No single quotes are used in annotation markups.《/li》
 《li》Annotation markups, after before transformed back to normal XML markups, are well-formed.《/li》
-《li》To display the documentation or code of a single macro, macros are surrounded by
-the 《code》macro《/code》 tags with id's, and the macro name is passed in.《/li》
+《li》To display the documentation or code of individual macros, the 《code》macro《/code》 tags
+in the macro annotations must have id's, and macro names must be passed in to macros like
+《code》#chanwDisplayMacroCode《/code》 and 《code》#chanwDisplayMacroDocumentation《/code》.《/li》
 《/ul》
 《p》Characters like 《code》<《/code》 and 《code》&《/code》 can be used in documentation because
 the contents of documentation go through 《code》$_EscapeTool.xml《/code》.《/p》
+《p》The map 《code》$chanwMacroNameDocumentationMap《/code》 is used to store macro-documentation
+element pairs. For example, after 《code》#chanwGetScriptFormatRootElement( "chanw_global_macros"
+"formats/library/velocity" "_common_assets" )《/code》 is executed, the map stores the following:《/p》
+《pre》
+{
+chanwBuildXMLContentRoot=[Element: <documentation />], 
+chanwCallJavaMethod=[Element: <documentation />], 
+chanwConvertToPascalCase=[Element: <documentation />], 
+chanwCreateDatabasePHPCode=[Element: <documentation />],
+etc.
+}
+《/pre》
 《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_global_macros' )
@@ -141,15 +154,30 @@ in an outer div element with an ID. Example:《/p》
 《/documentation》
 《macro id=“chanwDisplayHideVelocityCode”》
 *#
-#macro( chanwDisplayHideVelocityCode $code $id $create_id_div )
-    #set( $chanwCode = $_EscapeTool.xml( $code ).replaceAll( 
-        "-aa-", "&amp;&amp;" ) )
+#macro( chanwDisplayHideVelocityCode $code $id $create_id_div $output_h2 )
+    #if( $code.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
+        #set( $chanwCode = $_SerializerTool.serialize( $code, true ) )
+    #else
+        #set( $chanwCode = $_EscapeTool.xml( $code ).trim().replaceAll( 
+            "-aa-", "&amp;&amp;" ) )
+    #end
     
     #if( !$create_id_div )
     $S_H2$SOURCE_CODE$E_H2 $S_PRE$chanwCode$E_PRE
     #else
-        #set( $chanwStartDiv = '<div ' + 'id="' + $id + '">' )
-    $chanwStartDiv$S_H2$SOURCE_CODE4E_H2$S_PRE$chanwCode$E_PRE$E_DIV
+        #set( $chanwStartDiv = '<div id="' + $id + '">' )
+        
+        ## no pre for documentation
+        #if( $code.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
+            $chanwStartDiv$chanwCode$E_DIV
+        ## use pre for code
+        #else
+            #if( $output_h2 && ( $output_h2 == true || $output_h2 == "true" ) )
+                $chanwStartDiv$S_H2$SOURCE_CODE$E_H2$S_PRE$chanwCode$E_PRE$E_DIV
+            #else
+                $chanwStartDiv$S_PRE$chanwCode$E_PRE$E_DIV
+            #end
+        #end
     #end
 #end
 #*
@@ -272,7 +300,7 @@ $chanwGetMacroCode.Class.Name
 $_EscapeTool.xml( $chanwGetMacroCode )
 《/pre》
 《/documentation》
-《macro id=“chanwGetMacroDocumentation”》
+《macro id=“chanwGetMacroCode”》
 *#
 #macro( chanwGetMacroCode $format_name $folder_path $site_name $macro_name )
     ## reinitialize all global variables
