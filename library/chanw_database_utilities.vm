@@ -1,21 +1,346 @@
 #*
-This format defines utility macros to access the database.
-It must be used with the Java classes written for Upstate.
-
-Example:
-
-#chanwDisplayNumberOfRecords( "cxml_assetfactory" )
+《code》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines utility macros to access the Cascade database. At the end
+of the format using this library format, put in 《code》#chanwCleanUp《/code》 as the last
+line of the code.《/p》
+《/documentation》
 *#
-#import( 'formats/library/velocity/chanw_object_creator' )
-#chanwGetObjectByClassName( 'edu.upstate.chanw.db.CascadeDB' )
-
-#set( $db = $chanwGetObjectByClassName )
-
-#macro( chanwDisplayNumberOfRecords $table )
-    #set( $sql  = "select count(*) from $table " )
-    #set( $data = $db.getResultSet( $sql ) )
-
-    #if( $data.next() )
-$S_PRE$data.getString( 1 )$E_PRE
+#import( 'formats/library/velocity/chanw_library_import' )
+#*
+《documentation》
+《code》#chanwCheckResultSet( $rs )《/code》
+《p》Checks the variable 《code》$rs《/code》 to make sure that it is associated with a
+valid result set. This macro is used by other macros.《/p》
+《/documentation》
+《macro id=“chanwCheckResultSet”》
+*#
+#macro( chanwCheckResultSet $rs )
+    #chanwIsInstanceOf( $rs $JAVA_SQL_RESULT_SET_CLASS_NAME )
+    
+    #if( !$chanwIsInstanceOf )
+    A ResultSet object is required.
+    #stop
     #end
 #end
+#*
+《/macro》
+《documentation》
+《code》#chanwCheckStatement( $stmt )《/code》
+《p》Checks the variable 《code》$stmt《/code》 to make sure that it is associated with a
+valid statement. This macro is used by other macros.《/p》
+《/documentation》
+《macro id=“chanwCheckStatement”》
+*#
+#macro( chanwCheckStatement $stmt )
+    #chanwIsInstanceOf( $stmt $JAVA_SQL_STATEMENT_CLASS_NAME )
+    
+    #if( !$chanwIsInstanceOf )
+    A Statement object is required.
+    #stop
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwCleanUp《/code》
+《p》Cleans up the connection and statement objects.《/p》
+《/documentation》
+《macro id=“chanwCleanUp”》
+*#
+#macro( chanwCleanUp )
+    #if( $chanwConnection )
+        ##still open
+        $chanwConnection.close()
+    #end
+    
+    #if( $chanwGetDatabaseStatement )
+        $chanwGetDatabaseStatement.close()
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwCreateDatabasePHPCode( $data )《/code》
+《p》Creates PHP code containing a variable named 《code》$view《/code》,
+pointing to an array of values drawn from the result set 《code》$data《/code》.
+The first column of the view must be keys, and the view must have at least two
+columns. The resulting code is stored in 《code》$globalStringBuffer《/code》.
+To build a one-column list, use 《code》#chanwGetDatabaseList《/code》 instead. Example:《/p》
+《pre》
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#set( $sql  = "SELECT userName, email, fullName FROM cxml_user" )
+#chanwGetResultSet( $sql )
+#chanwCreateDatabasePHPCode( $chanwGetResultSet )
+$globalStringBuffer.toString()
+《/pre》
+《/documentation》
+《macro id=“chanwCreateDatabasePHPCode”》
+*#
+#macro( chanwCreateDatabasePHPCode $data )
+    #chanwCheckResultSet( $data )
+    
+    #if( $data.last() )
+        #set( $chanwLastRecordNumber = $data.Row )
+    #end
+
+    #set( $chanwColumnCount = $data.getMetaData().getColumnCount() )
+    $globalStringBuffer.setLength( 0 )
+    #set( $void = $globalStringBuffer.append( '$view=array(' ) )
+    
+    #if( $chanwLastRecordNumber > 0 )
+        #set( $void = $data.first() )
+        ## the code is formatted in this way to avoid too much space within foreach to avoid hanging
+        ## the first record
+        #foreach( $count in [ 1..$chanwColumnCount ] )##
+            #if( $count == 1 )#set(
+                $void = $globalStringBuffer.append( '"' ).append( $data.getString( $count ) ).append( '"=>array(' ) )##
+            #else#set( $void = $globalStringBuffer.append( '"' ).append( $data.getString( $count ) ).append( '"' ) )##
+                #if( $count == $chanwColumnCount )#set( $void = $globalStringBuffer.append( ")," ) )##
+                #else#set( $void = $globalStringBuffer.append( "," ) )##
+                #end##
+            #end##
+        #end##
+        
+        ## loop through all remaining records
+        #foreach( $i in [ 2..$chanwLastRecordNumber ] )#set( $void = $data.next() )
+            #foreach( $j in [ 1..$chanwColumnCount ] )#if( $j == 1 )#set(
+                  $void = $globalStringBuffer.append( '"' ).append( $data.getString( $j ) ).append( '"=>array(' ) )#else#set(
+                  $void = $globalStringBuffer.append( '"' ).append( $data.getString( $j ) ).append( '"' ) )#if( $j == $chanwColumnCount )#set(
+                  $void = $globalStringBuffer.append( ")," ) )#else#set(
+                  $void = $globalStringBuffer.append( "," ) )#end#end
+            #end##
+        #end##
+    #end##
+    
+    #set( $void = $globalStringBuffer.append(");") )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetDatabaseList( $listName $sql )《/code》
+《p》Creates a global variable out of the name 《code》$listName《/code》, and associates
+the global variable with a list of values drawn from the database. The SQL string
+associated with 《code》$sql《/code》 should be an SQL statement selecting a single value
+from a table. Example:《/p》
+《pre》
+#chanwGetDatabaseList( "upstateSiteName" "select name from cxml_site" )
+《/pre》
+《/documentation》
+《macro id=“chanwGetDatabaseList”》
+*#
+#macro( chanwGetDatabaseList $listName $sql )
+    #chanwCheckString( $listName "A name for a global variable is required" )
+    #chanwGetResultSet( $sql )
+    #set( $data = $chanwGetResultSet )
+    #set( $chanwStmt = '#set($' + $listName + '=[])' )
+    #evaluate( $chanwStmt )
+
+    #if( $data.next() )
+        ## the first record
+        #set( $void = $data.first() )
+        #set( $chanwStmt = '#set($void=$' + $listName +
+            '.add($data.getString( 1 ) ) )' )
+        #evaluate( $chanwStmt )
+    
+        ## loop through all other records
+        #foreach( $num in [ 1..$INTEGER_MAX_VALUE ] )
+            #if( $data.next() )
+                #set( $chanwStmt = '#set($void=$' + $listName +
+                    '.add( $data.getString( 1 ) ) )' )
+                #evaluate( $chanwStmt )
+            #else
+                #break
+            #end
+        #end
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetDatabaseStatement《/code》
+《p》Creates a 《code》Statement《/code》 object associated with the Cascade database.
+This macro is used by other macros.《/p》
+《/documentation》
+《macro id=“chanwGetDatabaseStatement”》
+*#
+#macro( chanwGetDatabaseStatement )
+    #set( $chanwGetDatabasStatement = "" )
+    #chanwGetObjectByClassName( "javax.naming.InitialContext" )
+    #set( $chanwContext    = $chanwGetObjectByClassName )
+    #set( $chanwDataSource = $chanwContext.lookup( "java:comp/env" ).lookup(
+        "jdbc/CascadeDS" ) )
+    #set( $chanwConnection = $chanwDataSource.Connection )
+    #set( $chanwGetDatabaseStatement = $chanwConnection.createStatement( 
+        $_FieldTool.in( "java.sql.ResultSet" ).TYPE_SCROLL_INSENSITIVE, 
+        $_FieldTool.in( "java.sql.ResultSet" ).CONCUR_READ_ONLY ) )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetHTMLTableFromSql( $sql )《/code》
+《p》Creates an XHTML table out of the result set associated with the SQL statement.
+The resulting table is stored in 《code》$chanwGetHTMLTableFromSql《/code》. Example:《/p》
+《pre》
+#set( $sql = "SELECT tablespace_name, table_name FROM all_tables " +
+             "WHERE tablespace_name LIKE 'C%' " +
+             "AND table_name like 'CXML_%' " +
+             "ORDER BY table_name" )
+#chanwGetHTMLTableFromSql( $sql )
+$chanwGetHTMLTableFromSql
+《/pre》
+《/documentation》
+《macro id=“chanwGetHTMLTableFromSql”》
+*#
+#macro( chanwGetHTMLTableFromSql $sql )
+    #if( !$chanwGetDatabasStatement )
+        #chanwGetDatabaseStatement()
+        #chanwCheckStatement( $chanwGetDatabaseStatement )
+    #end
+    
+    #chanwCheckString( $sql "An SQL string is required." )
+    #chanwGetResultSet( $sql )
+    $globalStringBuffer.setLength( 0 )
+    
+    #if( $chanwGetResultSet != "" )
+        #set( $chanwResultSetMetadata    = $chanwGetResultSet.MetaData )
+        #set( $chanwResultSetColumnCount = $chanwResultSetMetadata.ColumnCount )
+        
+        #set( $void = $globalStringBuffer.append(
+            "<table class='tcellspacing1 tcellpadding5' summary='Table'>" ) )
+        #set( $void = $globalStringBuffer.append(
+            "<tr class='bg1 text_white'>" ) )
+
+        #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+            #set( $void = $globalStringBuffer.append( "<th>" ) )
+            #set( $void = $globalStringBuffer.append(
+                $chanwResultSetMetadata.getColumnName( $col ) ) )
+            #set( $void = $globalStringBuffer.append( "</th>" ) )
+        #end
+
+        #set( $void = $globalStringBuffer.append( "</tr>" ) )
+        $chanwGetResultSet.beforeFirst()
+        
+        #foreach( $counter in [ 1..$INTEGER_MAX_VALUE ] )
+            #if( $chanwGetResultSet.next() )
+                #if( $counter % 2 == 0 )
+                    #set( $void = $globalStringBuffer.append( "<tr>" ) )
+                #else
+                    #set( $void = $globalStringBuffer.append(
+                        "<tr class='tablerow1'>" ) )
+                #end
+                
+                #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+                    #set( $void = $globalStringBuffer.append( "<td>" ) )
+                    #set( $void = $globalStringBuffer.append(
+                        $chanwGetResultSet.getString( $col ) ) )
+                    #set( $void = $globalStringBuffer.append( "</td>" ) )
+                #end
+                
+                #set( $void = $globalStringBuffer.append( "</tr>" ) )
+            #else
+                #break
+            #end
+        #end
+
+        #set( $void = $globalStringBuffer.append( "</table>" ) )
+    #end
+    #set( $chanwGetHTMLTableFromSql = $globalStringBuffer.toString() )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetNumberOfRecordsInResultSet( $rs )《/code》
+《p》Returns the number of records in the result set. The returned value is stored in 
+the global variable 《code》$chanwGetNumberOfRecordsInResultSet《/code》. Example:《/p》
+《pre》
+#set( $sql  = "SELECT userName, email, fullName FROM cxml_user" )
+#chanwGetResultSet( $sql )
+#chanwGetNumberOfRecordsInResultSet( $chanwGetResultSet )
+$chanwGetNumberOfRecordsInResultSet
+《/pre》
+《/documentation》
+《macro id=“chanwGetNumberOfRecordsInResultSet”》
+*#
+#macro( chanwGetNumberOfRecordsInResultSet $rs )
+    #chanwCheckResultSet( $rs )
+    #set( $chanwGetNumberOfRecordsInResultSet = 0 )
+
+    #if( $rs.next() )
+        $rs.beforeFirst()
+        
+        #foreach( $count in [ 1..$INTEGER_MAX_VALUE ] )
+            #if( $rs.next() )
+                #set( $chanwGetNumberOfRecordsInResultSet = $foreach.count )
+            #else
+                #break
+            #end
+        #end
+        ## move cursor back to the front
+        $rs.beforeFirst()
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetNumberOfRecordsInTable( $table )《/code》
+《p》Returns the number of records in the table. The returned value is stored in 
+the global variable 《code》$chanwGetNumberOfRecordsInTable《/code》. Example:《/p》
+《pre》
+#chanwGetNumberOfRecordsInTable( "CXML_ACLENTRY" )
+$chanwGetNumberOfRecordsInTable
+《/pre》
+《/documentation》
+《macro id=“chanwGetNumberOfRecordsInTable”》
+*#
+#macro( chanwGetNumberOfRecordsInTable $table )
+    #if( !$chanwGetDatabasStatement )
+        #chanwGetDatabaseStatement()
+        #chanwCheckStatement( $chanwGetDatabaseStatement )
+    #end
+    
+    #chanwCheckString( $table "A table name is required." )
+    
+    #set( $chanwSql       = "SELECT count(*) FROM $table " )
+    #set( $chanwResultSet = $chanwGetDatabaseStatement.executeQuery( $chanwSql ) )
+
+    #if( $chanwResultSet.next() )
+        #set( $chanwGetNumberOfRecordsInTable = $globalApacheMathTool.toNumber(
+            $chanwResultSet.getString( 1 ) ) )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetResultSet( $sql )《/code》
+《p》Returns the result set associated with the SQL statement. The result set is stored in
+《code》$chanwGetResultSet《/code》. Example:《/p》
+《pre》
+#chanwGetResultSet( "SELECT count(*) FROM CXML_ASSETFACTORY" )
+《/pre》
+《/documentation》
+《macro id=“chanwGetResultSet”》
+*#
+#macro( chanwGetResultSet $sql )
+    #if( !$chanwGetDatabasStatement )
+        #chanwGetDatabaseStatement()
+        #chanwCheckStatement( $chanwGetDatabaseStatement )
+    #end
+    
+    #chanwCheckString( $sql "An SQL string is required." )
+    
+    #set( $chanwGetResultSet = "" )
+    #set( $chanwGetResultSet = $chanwGetDatabaseStatement.executeQuery( $sql ) )
+    
+    #if( !$chanwGetResultSet )
+        No result set returned
+    #end
+#end
+#*
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
