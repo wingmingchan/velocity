@@ -396,7 +396,7 @@ $chanwGetStaticMethodByClassNameMethodNameWithoutParams.Class.Name
 《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheMathTool.vm“》MathTool examples《/a》《/li》
 《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tutorials/02%20numbers_strings_dates/number_and_array.vm“》Number and array examples《/a》《/li》
 《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheNumberTool.vm“》NumberTool examples《/a》《/li》
-《li》《a href=“NumberUtils examples“》https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheNumberUtils.vm《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheNumberUtils.vm“》NumberUtils examples《/a》《/li》
 《li》SAXBuilder example
 《ul》
 《li》《a href=“https://github.com/wingmingchan/php-cascade-ws-ns-examples/blob/master/xml_feed/index_block_xml.php“》A web service program to produce a feed, containing XML from an index block《/a》《/li》
