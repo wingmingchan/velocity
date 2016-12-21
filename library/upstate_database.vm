@@ -12,16 +12,15 @@ To use this format:
     $site
 #end
 *#
-#import( 'site://_common_assets/formats/library/velocity/chanw_object_creator' )
-#chanwGetObjectByClassName( 'edu.upstate.chanw.db.CascadeDB' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
 
-#set( $db           = $chanwGetObjectByClassName )
-#set( $maxNumber    = 500000 )
 #set( $list_sql_map = { "upstateSiteName":"select name from cxml_site", 
                         "upstateUserName":"select username from cxml_user"
                       } )
 
 #foreach( $key in $list_sql_map.keySet() )
     #set( $sql = $list_sql_map[ $key ] )
-    #chanwGetDatabaseList( $key )
+    #chanwGetDatabaseList( $key $sql )
 #end
+##$upstateSiteName
+#chanwCleanUp
