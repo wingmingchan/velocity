@@ -62,6 +62,25 @@ any string containing acceptable Java code. Examples:《/p》
 #*
 《/macro》
 《documentation》
+《code》#chanwCheckString( $str $msg )《/code》
+《p》Checks the variable 《code》$str《/code》 to ensure that it is a non-empty
+string, else outputs the message and terminates the execution. Example:《/p》
+《pre》
+#chanwCheckString( $input $message )
+《/pre》
+《/documentation》
+《macro id=“chanwCheckString”》
+*#
+#macro( chanwCheckString $str $msg )
+    #if( $str.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
+         $str == "" )
+        $msg
+        #stop
+    #end
+#end
+#*
+《/macro》
+《documentation》
 《code》#chanwConvertToPascalCase( $chanwMacroName $chanwDelimiter )《/code》
 《p》Converts a string, possibly with delimiters, into Pascal case. The
 《code》$chanwDelimiter《/code》 variable is treated as a marker
@@ -111,88 +130,6 @@ $chanwConvertToPascalCase
     #else
         #set( $chanwConvertToPascalCase = 
             $globalApacheWordUtils.capitalize( $chanwMacroName ) )
-    #end
-#end
-#*
-《/macro》
-《documentation》
-《code》#chanwCreateDatabasePHPCode( $data )《/code》
-《p》Creates PHP code containing a variable named 《code》$view《/code》,
-pointing to an array of values drawn from the result set 《code》$data《/code》.
-The first column of the view must be keys, and the view must have at least two
-columns. The resulting code is stored in 《code》$globalStringBuffer《/code》.
-For one-column views, use upstate_database instead. Example:《/p》
-《pre》
-#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
-#chanwGetObjectByClassName( 'edu.upstate.chanw.db.CascadeDB' )
-
-#set( $db   = $chanwGetObjectByClassName )
-#set( $sql  = “SELECT userName, email, fullName FROM cxml_user“ )
-#set( $data = $db.getResultSet( $sql ) )
-
-#chanwCreateDatabasePHPCode( $data )
-$globalStringBuffer.toString()
-《/pre》
-《/documentation》
-《macro id=“chanwCreateDatabasePHPCode”》
-*#
-#macro( chanwCreateDatabasePHPCode $data )
-    #if( !$data )
-    A result set is required.
-    #stop
-    #end
-
-    ## test the input data
-    #chanwIsInstanceOf( $data "java.sql.ResultSet" )
-    #if( !$chanwIsInstanceOf )
-    A result set is required.
-    #stop
-    #end
-
-    #set( $chanwColumnCount = $data.getMetaData().getColumnCount() )
-    $globalStringBuffer.setLength( 0 )
-    #set( $void = $globalStringBuffer.append( '$view=array(' ) )
-    
-    #if( $data.next() )
-        #set( $void = $data.first() )
-        
-        ## the first record
-        #foreach( $count in [ 1..$chanwColumnCount ] )
-            #if( $count == 1 )
-                #set( $void = $globalStringBuffer.append( '"' ).append(
-                    $data.getString( $count ) ).append( '"=>array(' ) )
-            #else
-                #set( $void = $globalStringBuffer.append( '"' ).append(
-                    $data.getString( $count ) ).append( '",' ) )
-            
-                #if( $count == $chanwColumnCount )
-                    #set( $void = $globalStringBuffer.append( ")," ) )
-                #end
-            #end
-        #end
-        
-        ## loop through all remaining records
-        #foreach( $num in [ 1..50000 ] )
-            #if( $data.next() )
-                #foreach( $count in [ 1..$chanwColumnCount ] )
-                    #if( $count == 1 )
-                        #set( $void = $globalStringBuffer.append( '"' ).append(
-                            $data.getString( $count ) ).append( '"=>array(' ) )
-                    #else
-                        #set( $void = $globalStringBuffer.append( '"' ).append(
-                            $data.getString( $count ) ).append( '",' ) )
-            
-                        #if( $count == $chanwColumnCount )
-                            #set( $void = $globalStringBuffer.append( ")," ) )
-                        #end
-                    #end
-                #end
-            #else
-                #break
-            #end
-        #end
-        
-        #set( $void = $globalStringBuffer.append(");") )
     #end
 #end
 #*
@@ -1119,6 +1056,48 @@ Example:《/p》
     #end
     
     #chanwSetVariable( $var $chanwValue )
+#end
+#*
+《/macro》
+《documentation》
+《code》thomaspeGetFeedPhoto $site $fileList《/code》
+《p》Returns a file name from a list of file names, such that the file name is
+the first name associated with an available file.
+Example: 《/p》
+《pre》
+#set( $regularFile = "images/case-study-square-text.jpg")
+#set( $smallerFile = "images/case-study-square.jpg" )
+#set( $defaultFile = "images/news-family.jpg" )
+## a list of file names
+#set( $fileList = [ $regularFile, $smallerFile, $defaultFile ] )
+#thomaspeGetFeedPhoto( "bioethics-in-brief" $fileList  )
+$thomaspeGetFeedPhoto
+《/pre》
+《/documentation》
+《macro id=“thomaspeGetFeedPhoto”》
+*#
+#macro( thomaspeGetFeedPhoto $site $thomaspeFiles )
+    #if( $site.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
+        $site == "" )
+        A site name is required.
+        #stop
+    #end
+
+    #if( !$thomaspeFiles ||
+        $thomaspeFiles.Class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME ||
+        $thomaspeFiles.size() < 1 )
+        A non-empty list of variable names is required.
+        #stop
+    #end
+    
+    #set( $thomaspeGetFeedPhoto = "" )
+    
+    #foreach( $file in $fileList )
+        #if( !$_PropertyTool.isNull( $_.locateFile( $file , $site ) ) )
+    	    #set( $thomaspeGetFeedPhoto = $file )
+    	    #break
+    	#end
+    #end
 #end
 #*
 《/macro》
