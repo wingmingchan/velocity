@@ -38,6 +38,9 @@
 ## strings for documentation use
 #set( $SOURCE_CODE = "The Source Code" )
 
+## number used in loops
+#set( $INTEGER_MAX_VALUE = 50000 )
+
 ## java class names used for comparison
 #set( $COM_CASCADE_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
 #set( $COM_CASCADE_METADATA_CLASS_NAME          = "com.hannonhill.cascade.api.adapters.MetadataAPIAdapter" )
@@ -50,6 +53,8 @@
 #set( $JAVA_UTIL_ARRAY_LIST_CLASS_NAME          = 'java.util.ArrayList' )
 #set( $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME       = 'java.util.LinkedHashMap' )
 #set( $JAVA_UTIL_HASHMAP_CLASS_NAME             = 'java.util.HashMap' )
+#set( $JAVA_SQL_STATEMENT_CLASS_NAME            = 'java.sql.Statement' )
+#set( $JAVA_SQL_RESULT_SET_CLASS_NAME           = 'java.sql.ResultSet' )
 #set( $ORG_JDOM_DOCUMENT_CLASS_NAME             = 'org.jdom.Document' )
 #set( $ORG_JDOM_ELEMENT_CLASS_NAME              = 'org.jdom.Element' )
 
