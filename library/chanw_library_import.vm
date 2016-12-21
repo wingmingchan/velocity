@@ -10,6 +10,7 @@ Import this single format to access all library resources.
 #import( 'formats/library/velocity/chanw_process_index_block' )
 #import( 'formats/library/velocity/chanw_process_xml' )
 #import( 'formats/library/velocity/chanw_process_cascade_api' )
+#import( 'formats/library/velocity/chanw_database_utilities' )
 
 #*
 Optional:
