@@ -3,16 +3,16 @@
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines utility macros to access the Cascade database. At the end
-of the format using this library format, put in 《code》#chanwCleanUp《/code》 as the last
-line of the code.《/p》
+of the format using this library format, put in 《code》#chanwCleanUp《/code》
+as the last line of the code.《/p》
 《/documentation》
 *#
 #import( 'formats/library/velocity/chanw_library_import' )
 #*
 《documentation》
 《code》#chanwCheckResultSet( $rs )《/code》
-《p》Checks the variable 《code》$rs《/code》 to make sure that it is associated with a
-valid result set. This macro is used by other macros.《/p》
+《p》Checks the variable 《code》$rs《/code》 to make sure that it is associated
+with a valid result set. This macro is used by other macros.《/p》
 《/documentation》
 《macro id=“chanwCheckResultSet”》
 *#
@@ -28,8 +28,8 @@ valid result set. This macro is used by other macros.《/p》
 《/macro》
 《documentation》
 《code》#chanwCheckStatement( $stmt )《/code》
-《p》Checks the variable 《code》$stmt《/code》 to make sure that it is associated with a
-valid statement. This macro is used by other macros.《/p》
+《p》Checks the variable 《code》$stmt《/code》 to make sure that it is associated
+with a valid statement. This macro is used by other macros.《/p》
 《/documentation》
 《macro id=“chanwCheckStatement”》
 *#
@@ -67,7 +67,8 @@ valid statement. This macro is used by other macros.《/p》
 pointing to an array of values drawn from the result set 《code》$data《/code》.
 The first column of the view must be keys, and the view must have at least two
 columns. The resulting code is stored in 《code》$globalStringBuffer《/code》.
-To build a one-column list, use 《code》#chanwGetDatabaseList《/code》 instead. Example:《/p》
+To build a one-column list, use 《code》#chanwGetDatabaseList《/code》 instead.
+Example:《/p》
 《pre》
 #import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
 
@@ -92,12 +93,15 @@ $globalStringBuffer.toString()
     
     #if( $chanwLastRecordNumber > 0 )
         #set( $void = $data.first() )
-        ## the code is formatted in this way to avoid too much space within foreach to avoid hanging
+        ## the code is formatted in this way to avoid too much space within 
+        ## foreach to avoid hanging
         ## the first record
         #foreach( $count in [ 1..$chanwColumnCount ] )##
             #if( $count == 1 )#set(
-                $void = $globalStringBuffer.append( '"' ).append( $data.getString( $count ) ).append( '"=>array(' ) )##
-            #else#set( $void = $globalStringBuffer.append( '"' ).append( $data.getString( $count ) ).append( '"' ) )##
+                $void = $globalStringBuffer.append( '"' ).append( $data.getString(##
+                $count ) ).append( '"=>array(' ) )##
+            #else#set( $void = $globalStringBuffer.append( '"' ).append(##
+                $data.getString( $count ) ).append( '"' ) )##
                 #if( $count == $chanwColumnCount )#set( $void = $globalStringBuffer.append( ")," ) )##
                 #else#set( $void = $globalStringBuffer.append( "," ) )##
                 #end##
@@ -105,15 +109,23 @@ $globalStringBuffer.toString()
         #end##
         
         ## loop through all remaining records
-        #foreach( $i in [ 2..$chanwLastRecordNumber ] )#set( $void = $data.next() )
-            #foreach( $j in [ 1..$chanwColumnCount ] )#if( $j == 1 )#set(
-                  $void = $globalStringBuffer.append( '"' ).append( $data.getString( $j ) ).append( '"=>array(' ) )#else#set(
-                  $void = $globalStringBuffer.append( '"' ).append( $data.getString( $j ) ).append( '"' ) )#if( $j == $chanwColumnCount )#set(
-                  $void = $globalStringBuffer.append( ")," ) )#else#set(
-                  $void = $globalStringBuffer.append( "," ) )#end#end
-            #end##
-        #end##
-    #end##
+#foreach( $i in [ 2..$chanwLastRecordNumber ] )##
+#set( $void = $data.next() )##
+#foreach( $j in [ 1..$chanwColumnCount ] )##
+#if( $j == 1 )#set( $void = $globalStringBuffer.append( '"' ).append(##
+$data.getString( $j ) ).append( '"=>array(' ) )##
+#else##
+#set( $void = $globalStringBuffer.append( '"' ).append(##
+$data.getString( $j ) ).append( '"' ) )##
+#if( $j == $chanwColumnCount )##
+#set( $void = $globalStringBuffer.append( ")," ) )##
+#else##
+#set( $void = $globalStringBuffer.append( "," ) )##
+#end##
+#end##
+#end##
+#end##
+#end##
     
     #set( $void = $globalStringBuffer.append(");") )
 #end
