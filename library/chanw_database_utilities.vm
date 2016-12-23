@@ -173,8 +173,9 @@ from a table. Example:《/p》
 《/macro》
 《documentation》
 《code》#chanwGetDatabaseStatement《/code》
-《p》Creates a 《code》Statement《/code》 object associated with the Cascade database.
-This macro is used by other macros.《/p》
+《p》Creates a 《code》DatabaseMetaData《/code》 object named 《code》$chanwMetaData《/code》
+and a 《code》Statement《/code》 object named 《code》$chanwGetDatabaseStatement《/code》
+associated with the Cascade database. This macro is used by other macros.《/p》
 《/documentation》
 《macro id=“chanwGetDatabaseStatement”》
 *#
@@ -185,9 +186,66 @@ This macro is used by other macros.《/p》
     #set( $chanwDataSource = $chanwContext.lookup( "java:comp/env" ).lookup(
         "jdbc/CascadeDS" ) )
     #set( $chanwConnection = $chanwDataSource.Connection )
+    #set( $chanwMetaData   = $chanwConnection.MetaData )
     #set( $chanwGetDatabaseStatement = $chanwConnection.createStatement( 
         $_FieldTool.in( "java.sql.ResultSet" ).TYPE_SCROLL_INSENSITIVE, 
         $_FieldTool.in( "java.sql.ResultSet" ).CONCUR_READ_ONLY ) )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetHTMLTableFromResultSet( $rs )《/code》
+《p》Creates an XHTML table out of the result set. The resulting table is stored
+in 《code》$globalStringBuffer《/code》. This macro is used by
+《code》#chanwGetHTMLTableFromSql《/code》.《/p》
+《/documentation》
+《macro id=“chanwGetHTMLTableFromResultSet”》
+*#
+#macro( chanwGetHTMLTableFromResultSet $rs )
+    #chanwCheckResultSet( $rs )
+    $globalStringBuffer.setLength( 0 )
+    
+    #set( $chanwResultSetMetadata    = $rs.MetaData )
+    #set( $chanwResultSetColumnCount = $chanwResultSetMetadata.ColumnCount )
+        
+    #set( $void = $globalStringBuffer.append(
+        "<table class='tcellspacing1 tcellpadding5' summary='Table'>" ) )
+    #set( $void = $globalStringBuffer.append(
+        "<tr class='bg1 text_white'>" ) )
+
+    #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+        #set( $void = $globalStringBuffer.append( "<th>" ) )
+        #set( $void = $globalStringBuffer.append(
+            $chanwResultSetMetadata.getColumnName( $col ) ) )
+        #set( $void = $globalStringBuffer.append( "</th>" ) )
+    #end
+
+    #set( $void = $globalStringBuffer.append( "</tr>" ) )
+    $rs.beforeFirst()
+        
+    #foreach( $counter in [ 1..$INTEGER_MAX_VALUE ] )
+        #if( $rs.next() )
+            #if( $counter % 2 == 0 )
+                #set( $void = $globalStringBuffer.append( "<tr>" ) )
+            #else
+                #set( $void = $globalStringBuffer.append(
+                    "<tr class='tablerow1'>" ) )
+            #end
+                
+            #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+                #set( $void = $globalStringBuffer.append( "<td>" ) )
+                #set( $void = $globalStringBuffer.append(
+                    $rs.getString( $col ) ) )
+                #set( $void = $globalStringBuffer.append( "</td>" ) )
+            #end
+                
+            #set( $void = $globalStringBuffer.append( "</tr>" ) )
+        #else
+            #break
+        #end
+    #end
+
+    #set( $void = $globalStringBuffer.append( "</table>" ) )
 #end
 #*
 《/macro》
@@ -214,52 +272,64 @@ $chanwGetHTMLTableFromSql
     
     #chanwCheckString( $sql "An SQL string is required." )
     #chanwGetResultSet( $sql )
-    $globalStringBuffer.setLength( 0 )
     
     #if( $chanwGetResultSet != "" )
-        #set( $chanwResultSetMetadata    = $chanwGetResultSet.MetaData )
-        #set( $chanwResultSetColumnCount = $chanwResultSetMetadata.ColumnCount )
-        
-        #set( $void = $globalStringBuffer.append(
-            "<table class='tcellspacing1 tcellpadding5' summary='Table'>" ) )
-        #set( $void = $globalStringBuffer.append(
-            "<tr class='bg1 text_white'>" ) )
-
-        #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
-            #set( $void = $globalStringBuffer.append( "<th>" ) )
-            #set( $void = $globalStringBuffer.append(
-                $chanwResultSetMetadata.getColumnName( $col ) ) )
-            #set( $void = $globalStringBuffer.append( "</th>" ) )
-        #end
-
-        #set( $void = $globalStringBuffer.append( "</tr>" ) )
-        $chanwGetResultSet.beforeFirst()
-        
-        #foreach( $counter in [ 1..$INTEGER_MAX_VALUE ] )
-            #if( $chanwGetResultSet.next() )
-                #if( $counter % 2 == 0 )
-                    #set( $void = $globalStringBuffer.append( "<tr>" ) )
-                #else
-                    #set( $void = $globalStringBuffer.append(
-                        "<tr class='tablerow1'>" ) )
-                #end
-                
-                #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
-                    #set( $void = $globalStringBuffer.append( "<td>" ) )
-                    #set( $void = $globalStringBuffer.append(
-                        $chanwGetResultSet.getString( $col ) ) )
-                    #set( $void = $globalStringBuffer.append( "</td>" ) )
-                #end
-                
-                #set( $void = $globalStringBuffer.append( "</tr>" ) )
-            #else
-                #break
-            #end
-        #end
-
-        #set( $void = $globalStringBuffer.append( "</table>" ) )
+        #chanwGetHTMLTableFromResultSet( $chanwGetResultSet )
     #end
     #set( $chanwGetHTMLTableFromSql = $globalStringBuffer.toString() )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetMetaDataRS( $table )《/code》
+《p》Creates a 《code》ResultSet《/code》 object named 《code》$chanwGetMetaDataRS《/code》
+associated with the Cascade database. This macro is used by other macros.《/p》
+《p》Using the 《code》$chanwGetMetaDataRS《/code》 object:《/p》
+《pre》
+#set( $metaData = $chanwGetMetaDataRS.MetaData )
+
+#foreach( $col in [ 1..$columnCount ] )
+    $metaData.getColumnLabel( $col )
+#end
+《/pre》
+《p》This outputs:《/p》
+《pre》
+    TABLE_CAT
+    TABLE_SCHEM
+    TABLE_NAME
+    COLUMN_NAME
+    DATA_TYPE
+    TYPE_NAME
+    COLUMN_SIZE
+    BUFFER_LENGTH
+    DECIMAL_DIGITS
+    NUM_PREC_RADIX
+    NULLABLE
+    REMARKS
+    COLUMN_DEF
+    SQL_DATA_TYPE
+    SQL_DATETIME_SUB
+    CHAR_OCTET_LENGTH
+    ORDINAL_POSITION
+    IS_NULLABLE
+    SCOPE_CATALOG
+    SCOPE_SCHEMA
+    SCOPE_TABLE
+    SOURCE_DATA_TYPE
+    IS_AUTOINCREMENT
+《/pre》
+《p》These column labels can be used to retrieve values from 《code》$chanwGetMetaDataRS《/code》.
+See 《code》#chanwGetTableColumnNames《/code》 for example.《/p》
+《/documentation》
+《macro id=“chanwGetMetaDataRS”》
+*#
+#macro( chanwGetMetaDataRS $table )
+    #if( !$chanwMetaData )
+        Invoke chanwGetDatabaseStatement first.
+        #stop
+    #end
+    
+    #set( $chanwGetMetaDataRS = $chanwMetaData.getColumns( null, null, $table, null ) )
 #end
 #*
 《/macro》
@@ -348,6 +418,33 @@ $chanwGetNumberOfRecordsInTable
     
     #if( !$chanwGetResultSet )
         No result set returned
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetTableColumnNames( $table )《/code》
+《p》Returns a list of column names of the table. Note that the table name must
+in uppercase like "CXML_XML".《/p》
+《pre》
+#chanwGetTableColumnNames( "CXML_SITE" )
+$chanwGetTableColumnNames
+《/pre》
+《/documentation》
+《macro id=“chanwGetTableColumnNames”》
+*#
+#macro( chanwGetTableColumnNames $table )
+    #chanwGetDatabaseStatement
+    #chanwGetMetaDataRS( $table )
+    #set( $chanwGetTableColumnNames = [] )
+
+    #foreach( $row in [ 1..500 ] )
+        #if( $chanwGetMetaDataRS.next() )
+            #set( $void = $chanwGetTableColumnNames.add(
+                $chanwGetMetaDataRS.getString( "COLUMN_NAME" ) ) )
+        #else
+            #break
+        #end
     #end
 #end
 #*
