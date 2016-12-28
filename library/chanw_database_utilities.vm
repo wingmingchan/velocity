@@ -7,8 +7,32 @@ of the format using this library format, put in 《code》#chanwCleanUp《/code�
 as the last line of the code.《/p》
 《/documentation》
 *#
-#import( 'formats/library/velocity/chanw_library_import' )
+#import( 'formats/library/velocity/chanw_global_macros' )
 #*
+《global-variables》
+*#
+#set( $chanwDatabaseUtilitiesGlobalVariables = [ 
+    "chanwColumnCount",
+    "chanwConnection",
+    "chanwContext",
+    "chanwData",
+    "chanwDataSource",
+    "chanwGetDatabasStatement",
+    "chanwGetHTMLTableFromSql",
+    "chanwLastRecordNumber",
+    "chanwGetMetaDataRS",
+    "chanwGetNumberOfRecordsInResultSet",
+    "chanwGetNumberOfRecordsInTable",
+    "chanwGetResultSet",
+    "chanwGetTableColumnNames",
+    "chanwMetaData",
+    "chanwResultSet",
+    "chanwResultSetMetadata",
+    "chanwResultSetColumnCount",
+    "chanwSql"
+] )
+#*
+《/global-variables》
 《documentation》
 《code》#chanwCheckResultSet( $rs )《/code》
 《p》Checks the variable 《code》$rs《/code》 to make sure that it is associated
@@ -146,22 +170,22 @@ from a table. Example:《/p》
 #macro( chanwGetDatabaseList $listName $sql )
     #chanwCheckString( $listName "A name for a global variable is required" )
     #chanwGetResultSet( $sql )
-    #set( $data = $chanwGetResultSet )
+    #set( $chanwData = $chanwGetResultSet )
     #set( $chanwStmt = '#set($' + $listName + '=[])' )
     #evaluate( $chanwStmt )
 
-    #if( $data.next() )
+    #if( $chanwData.next() )
         ## the first record
-        #set( $void = $data.first() )
+        #set( $void = $chanwData.first() )
         #set( $chanwStmt = '#set($void=$' + $listName +
-            '.add($data.getString( 1 ) ) )' )
+            '.add($chanwData.getString( 1 ) ) )' )
         #evaluate( $chanwStmt )
     
         ## loop through all other records
         #foreach( $num in [ 1..$INTEGER_MAX_VALUE ] )
-            #if( $data.next() )
+            #if( $chanwData.next() )
                 #set( $chanwStmt = '#set($void=$' + $listName +
-                    '.add( $data.getString( 1 ) ) )' )
+                    '.add( $chanwData.getString( 1 ) ) )' )
                 #evaluate( $chanwStmt )
             #else
                 #break
