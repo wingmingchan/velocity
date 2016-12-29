@@ -8,6 +8,40 @@ when using the LocatorTool.《/p》
 *#
 #import( '/formats/library/velocity/chanw_global_macros' )
 #*
+《global-variables》
+*#
+#set( $chanwProcessCascadeApiGlobalVariables = [
+    "chanwAsset",
+    "chanwAssetLink",
+    "chanwAssetPath",
+    "chanwAssetPathSegments",
+    "chanwAssetSiteId",
+    "chanwAssetSiteName",
+    "chanwAssetType",
+    "chanwCascadeAssetList",
+    "chanwChildren",
+    "chanwCurrent",
+    "chanwDFS",
+    "chanwGetCascadeAPIAssetProperties",
+    "chanwGetDynamicFieldsData",
+    "chanwGetMetadataData",
+    "chanwGetPageBlockStructuredDataNodeByIdArray",
+    "chanwGetStructuredDataNodeData",
+    "chanwInvokeQuery",
+    "chanwNext",
+    "chanwNextInt",
+    "chanwQuery",
+    "chanwSdns",
+    "chanwStmt",
+    "chanwTextNodeOptions",
+    "chanwTextSize",
+    "chanwTextValue",
+    "chanwTextValueAsXMLElement",
+    "chanwTextValues",
+    "chanwValue"
+] )
+#*
+《/global-variables》
 《documentation》
 《code》chanwDisplayCascadeAPIAsset( $map )《/code》
 《p》Displays the properties of an asset. Possible values for the map parameter are:
@@ -17,7 +51,8 @@ when using the LocatorTool.《/p》
 《code》$ScriptFormatPropertyMap《/code》, 《code》$SymlinkPropertyMap《/code》,
 《code》$TextBlockPropertyMap《/code》, and 《code》$XMLBlockPropertyMap《/code》.《/p》
 《pre》
-#set( $block = $_.locateBlock( "_cascade/blocks/data/api-AssetOperationHandlerService", "cascade-admin" ) )
+#set( $block = $_.locateBlock(
+    "_cascade/blocks/data/api-AssetOperationHandlerService", "cascade-admin" ) )
 #chanwProcessDataBlock( $block )
 #chanwDisplayCascadeAPIAsset( $DataBlockPropertyMap )
 《/pre》
@@ -65,9 +100,10 @@ $key: #evaluate( "$$key" )$BR
 《/macro》
 《documentation》
 《code》chanwGetCascadeAPIAssetProperties( $assetType )《/code》
-《p》Returns the key set of the map associated with the type 《code》$assetType《/code》.
-This gives the set of names of global variables associated with the asset type. Possible
-values for 《code》$assetType《/code》 are defined in the list named 《code》$chanw_cascade_asset_list《/code》.《/p》
+《p》Returns the key set of the map associated with the type
+《code》$assetType《/code》. This gives the set of names of global variables
+associated with the asset type. Possible values for 《code》$assetType《/code》
+are defined in the list named 《code》$chanwCascadeAssetList《/code》.《/p》
 《pre》
 #chanwGetCascadeAPIAssetProperties( "Page" )
 $chanwGetCascadeAPIAssetProperties
@@ -106,7 +142,7 @@ PageXHTMLAsXMLElement
 *#
 
 #macro( chanwGetCascadeAPIAssetProperties $assetType )
-    #if( !$chanw_cascade_asset_list.contains( $assetType ) )
+    #if( !$chanwCascadeAssetList.contains( $assetType ) )
         $assetType is not a supported type.$BR
         #stop
     #end
@@ -389,10 +425,10 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
 #macro( chanwRecurseGroup $group_node )
     Group identifier: $group_node.Identifier$BR 
             
-    #set( $children = $group_node.Children )
+    #set( $chanwChildren = $group_node.Children )
       
-    #if( $children.size() > 0 )      
-        #chanwRecurseNodes( $children )
+    #if( $chanwChildren.size() > 0 )      
+        #chanwRecurseNodes( $chanwChildren )
     #end
 #end
 #*
@@ -689,7 +725,7 @@ like 《code》#chanwProcessDataBlock《/code》.《/p》
 《/documentation》
 《macro id=“generatedCode”》
 *#
-#set( $chanw_cascade_asset_list = [
+#set( $chanwCascadeAssetList = [
     "DataBlock",
     "FeedBlock",
     "File",
@@ -701,7 +737,7 @@ like 《code》#chanwProcessDataBlock《/code》.《/p》
     "XMLBlock"
 ] )
 
-#foreach( $asset in $chanw_cascade_asset_list )
+#foreach( $asset in $chanwCascadeAssetList )
     #set( $chanwStmt = $process_cascade_api_asset_code.replaceAll(
         '-asset_type-', $asset ) )
     #evaluate( $chanwStmt )
@@ -709,8 +745,10 @@ like 《code》#chanwProcessDataBlock《/code》.《/p》
 #*
 《/macro》
 《documentation》
-《code》#chanwInvokeQuery( $type $link $assets $hasMetadata $maxResults $sortBy $direction $siteName $indexablePublishable )《/code》
-《p》Creates a 《code》$query《/code》 object, sets the parameters, and executes the query. Parameters:《/p》
+《code》#chanwInvokeQuery( $type $link $assets $hasMetadata $maxResults $sortBy
+$direction $siteName $indexablePublishable )《/code》
+《p》Creates a 《code》$query《/code》 object, sets the parameters, and executes
+the query. Parameters:《/p》
 《pre》
  $type: “MetadataSet“ or “ContentType“
  $link: e.g. “Blog“, “site://common/Standard Page“
