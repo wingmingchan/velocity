@@ -47,6 +47,20 @@ true
 #import( 'formats/library/velocity/chanw_global_values' )
 #import( 'formats/library/velocity/chanw_global_macros' )
 #*
+《global-variables》
+*#
+#set( $chanwProcessIndexBlockGlobalVariables = [
+    "chanwDynamicMetatdataNameValuesList",
+    "chanwDynamicMetatdataNameValuesMap",
+    "chanwDynamicMetatdataValues",
+    "chanwMacroList",
+    "chanwStmt",
+    "chanwSystemFolderChildren",
+    "indexBlockElementMap",
+    "indexBlockMapKeys"
+] )
+#*
+《/global-variables》
 《documentation》
 《code》#chanwProcessDynamicData( $dynamicDataNode )《/code》
 《p》Processes the dynamic fields of the metadata and stores the name-value-list pairs in
@@ -81,7 +95,7 @@ a variable named 《code》$chanwDynamicMetatdataNameValuesList《/code》.《/p
 There is code and a code template used to generate four macros: 《code》#chanwProcessRSSItem《/code》,
 《code》#chanwProcessSystemBlock《/code》, 《code》#chanwProcessSystemFile《/code》, and 《code》#chanwProcessSystemSymlink《/code》.
 《p》The four macros generated each creates a set of global variables. The variable names are defined in
-《code》chanw_global_values《/code》. For example, the global variables associted with 《code》#chanwProcessSystemBlock《/code》
+《code》chanw_global_values《/code》. For example, the global variables associated with 《code》#chanwProcessSystemBlock《/code》
 are defined as:《/p》
 《pre》
 #set( $systemBlockVarElementMap = {
@@ -123,7 +137,7 @@ its corresponding variable will be the empty string.《/p》
 《macro id=“generatedCode”》
 *#
 ## generate macros that process rss item, system-block, system-file, system-symlink
-#set( $index_block_element_map = {
+#set( $indexBlockElementMap = {
     "chanwProcessRSSItem" :        [ "item",    "rssXML_ELEMENT_ITEM",               "rssItemVarElementMap",       "" ],
     "chanwProcessSystemBlock" :    [ "block",   "cascadeXML_ELEMENT_SYSTEM_BLOCK",   "systemBlockVarElementMap",   "systemBlockDynamicMetadata" ],
     "chanwProcessSystemFile" :     [ "file",    "cascadeXML_ELEMENT_SYSTEM_FILE",    "systemFileVarElementMap",    "systemFileDynamicMetadata" ],
@@ -131,15 +145,15 @@ its corresponding variable will be the empty string.《/p》
     "chanwProcessSystemPage" :     [ "page",    "cascadeXML_ELEMENT_SYSTEM_PAGE",    "systemPageVarElementMap",    "systemPageDynamicMetadata" ]
 } )
 
-#set( $indexBlockMapKeys = $index_block_element_map.keySet() )
+#set( $indexBlockMapKeys = $indexBlockElementMap.keySet() )
 
-#foreach( $macro_name in $indexBlockMapKeys )
-    #set( $macro_list = $index_block_element_map[ $macro_name ] )
-    #set( $chanwStatement = $index_block_code.replaceAll( "-macro_name-", $macro_name ).replaceAll(
-        "-node_type-", $macro_list[ 0 ] ).replaceAll( "-element_name-", $macro_list[ 1 ] ).replaceAll(
-        "-map_name-", $macro_list[ 2 ] ).replaceAll( "-dm_name-", $macro_list[ 3 ] ) )
+#foreach( $macroName in $indexBlockMapKeys )
+    #set( $chanwMacroList = $indexBlockElementMap[ $macroName ] )
+    #set( $chanwStmt = $index_block_code.replaceAll( "-macro_name-", $macroName ).replaceAll(
+        "-node_type-", $chanwMacroList[ 0 ] ).replaceAll( "-element_name-", $chanwMacroList[ 1 ] ).replaceAll(
+        "-map_name-", $chanwMacroList[ 2 ] ).replaceAll( "-dm_name-", $chanwMacroList[ 3 ] ) )
     
-    #evaluate( $chanwStatement )
+    #evaluate( $chanwStmt )
 #end
 #*
 《/macro》
