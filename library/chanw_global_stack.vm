@@ -28,6 +28,13 @@
 #*
 《global-variables》
 *#
+#set( $chanwGlobalStackGlobalVariables = [
+    "chanwEmptyGlobalStack",
+    "chanwPeekGlobalStack",
+    "chanwPopGlobalStack",
+    "chanwPushGlobalStack",
+    "chanwSizeGlobalStack"
+] )
 #set( $chanwSTACK_DATA  = "data" )
 #set( $chanwGlobalStack = {} )
 #*
