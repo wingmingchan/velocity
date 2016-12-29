@@ -7,7 +7,80 @@
 *#
 #import( 'formats/library/velocity/chanw_global_values' )
 #*
-《documentation》
+《global-variables》
+*#
+#set( $chanwGlobalMacrosGlobalVariables = [
+    "chanwBlockName",
+    "chanwBuildXMLContentRoot",
+    "chanwCascadeType",
+    "chanwChildName",
+    "chanwChildNode",
+    "chanwChildNodes",
+    "chanwChildPath",
+    "chanwConstructor",
+    "chanwContentChildren",
+    "chanwDynamicMetadata",
+    "chanwCode",
+    "chanCodeStmt",
+    "chanwConvertToPascalCase",
+    "chanwCountList",
+    "chanwData",
+    "chanwDelimiter",
+    "chanwEndIndex",
+    "chanwFirstChild",
+    "chanwFolderAPI",
+    "chanwFolderAPIChildren",
+    "chanwGetCascadeObjectFromElement",
+    "chanwGetFolderContainedAssetName",
+    "chanwGetListRandomized",
+    "chanwGetListReversed",
+    "chanwGetMapKeyValueReversed",
+    "chanwGetParamListAsStrings",
+    "chanwGetParamListAsValues",
+    "chanwGrandChildNodes",
+    "chanwIndex",
+    "chanwIsDisplay",
+    "chanwIsInstanceOf",
+    "chanwKey",
+    "chanwKeySet",
+    "chanwLastIndex",
+    "chanwLastIndexOfSlash",
+    "chanwListChildren",
+    "chanwLocateAsset",
+    "chanwLoop",
+    "chanwMacro",
+    "chanwMacroName",
+    "chanwMacros",
+    "chanwMapPairs",
+    "chanwMax",
+    "chanwNameNodesMap",
+    "chanwNext",
+    "chanwNodeSet",
+    "chanwNodeValue",
+    "chanwParams",
+    "chanwParamsChildren",
+    "chanwParamsNodes",
+    "chanwPath",
+    "chanwPaths",
+    "chanwPathSegments",
+    "chanwRedirect",
+    "chanwScripts",
+    "chanwSetVarValStatement",
+    "chanwSize",
+    "chanwStmt",
+    "chanwStringReader",
+    "chanwSuperclasses",
+    "chanwTemp",
+    "chanwType",
+    "chanwValue",
+    "thomaspeGetFeedPhoto",
+    "thomaspeGetSrcSetCode",
+    "thomaspeImageOptionsFound",
+    "thomaspeNewImagePath"
+] )
+#*
+《/global-variables》
+
 《code》#chanwBuildXMLContentRoot( $xml_string )《/code》
 《p》Creates an 《code》org.jdom.Element《/code》 object out of an XML string.
 The variable 《code》$xml_string《/code》 should contain a valid XML string
@@ -30,13 +103,13 @@ stored in the global variable
     
     ## create the string reader object
     #chanwGetConstructorByClassNameParamSize( 'java.io.StringReader' 1 )
-    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
-    #set( $stringReader     = $chanwConstructor.newInstance( $xmlString ) )
+    #set( $chanwConstructor  = $chanwGetConstructorByClassNameParamSize )
+    #set( $chanwStringReader = $chanwConstructor.newInstance( $xmlString ) )
     #set( $chanwBuildXMLContentRoot = "" )
     ## read the XML string, pass it into the sax builder, create XML tree, and
     ## return the object
     #set( $chanwBuildXMLContentRoot = 
-        $globalSAXBuilder.build( $stringReader ).RootElement )
+        $globalSAXBuilder.build( $chanwStringReader ).RootElement )
 #end
 #*
 《/macro》
@@ -194,31 +267,31 @@ is used by upstate_database. Example from upstate_database:《/p》
                         “upstateUserName“:“select username from cxml_user“
                       } )
 
-#foreach( $key in $list_sql_map.keySet() )
-    #set( $sql = $list_sql_map[ $key ] )
-    #chanwGetDatabaseList( $key )
+#foreach( $chanwKey in $list_sql_map.keySet() )
+    #set( $sql = $list_sql_map[ $chanwKey ] )
+    #chanwGetDatabaseList( $chanwKey )
 #end
 《/pre》
 《/documentation》
 《macro id=“chanwGetDatabaseList”》
 *#
 #macro( chanwGetDatabaseList $listName )
-    #set( $data = $db.getResultSet( $sql ) )
+    #set( $chanwData = $db.getResultSet( $sql ) )
     #set( $chanwStmt = '#set($' + $listName + '=[])' )
     #evaluate( $chanwStmt )
 
-    #if( $data.next() )
+    #if( $chanwData.next() )
         ## the first record
-        #set( $void = $data.first() )
+        #set( $void = $chanwData.first() )
         #set( $chanwStmt = '#set($void=$' + $listName +
-            '.add($data.getString( 1 ) ) )' )
+            '.add($chanwData.getString( 1 ) ) )' )
         #evaluate( $chanwStmt )
     
         ## loop through all other records
         #foreach( $num in [ 1..$maxNumber ] )
-            #if( $data.next() )
+            #if( $chanwData.next() )
                 #set( $chanwStmt = '#set($void=$' + $listName +
-                    '.add( $data.getString( 1 ) ) )' )
+                    '.add( $chanwData.getString( 1 ) ) )' )
                 #evaluate( $chanwStmt )
             #else
                 #break
@@ -278,8 +351,8 @@ $chanwGetFolderContainedAssetName
     
     #set( $chanwGetFolderContainedAssetName = "" )
     #set( $chanwPathSegments = $asset.Identifier.Path.PathSegments )
-    #set( $lastIndex = $chanwPathSegments.size() - 1 )
-    #set( $chanwGetFolderContainedAssetName = $chanwPathSegments.get( $lastIndex ) )
+    #set( $chanwLastIndex = $chanwPathSegments.size() - 1 )
+    #set( $chanwGetFolderContainedAssetName = $chanwPathSegments.get( $chanwLastIndex ) )
 #end 
 #*
 《/macro》
@@ -365,9 +438,9 @@ $chanwGetMapKeyValueReversed
         $chanwMap.Class.Name == $JAVA_UTIL_HASHMAP_CLASS_NAME )
         && $chanwMap.size() > 0 )
         #set( $chanwKeySet = $chanwMap.keySet() )
-        #foreach( $key in $chanwKeySet )
+        #foreach( $chanwKey in $chanwKeySet )
             #set( $void = $chanwGetMapKeyValueReversed.put(
-                $chanwMap.get( $key ), $key ) )
+                $chanwMap.get( $chanwKey ), $chanwKey ) )
         #end
     #end
 #end    
@@ -514,23 +587,23 @@ should be in a list. Example:《/p》
 *#
 #macro( chanwInvokeMacro $chanwMacroName $chanwMacroParams )
     #if( $chanwMacroName.class.name == $JAVA_LANG_STRING_CLASS_NAME )
-        #set( $chanwStatement = "#$chanwMacroName(" )
+        #set( $chanwStmt = "#$chanwMacroName(" )
     
         #if( $chanwMacroParams.class.name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
             #if( $chanwMacroParams.size() > 0 )
                 #foreach( $chanwMacroParam in $chanwMacroParams )
                     #if( $chanwMacroParam.class.name ==
                         $JAVA_LANG_STRING_CLASS_NAME )
-                        #set( $chanwStatement =
-                            $chanwStatement + "$" + $chanwMacroParam + " " )
+                        #set( $chanwStmt =
+                            $chanwStmt + "$" + $chanwMacroParam + " " )
                     #end
                 #end
             #end
         #end
     
-        #set( $chanwStatement = $chanwStatement.trim() )
-        #set( $chanwStatement = $chanwStatement + ")" )
-        #evaluate( $chanwStatement )
+        #set( $chanwStmt = $chanwStmt.trim() )
+        #set( $chanwStmt = $chanwStmt + ")" )
+        #evaluate( $chanwStmt )
     #end
 #end
 #*
@@ -668,19 +741,19 @@ element.《/p》
 #macro( chanwProcessBlockChooser $content )
     ## switch between Docuement and Element
     #if( $content.class.name == $ORG_JDOM_DOCUMENT_CLASS_NAME )
-        #set( $contentChildren = $content.getContent() )
+        #set( $chanwContentChildren = $content.getContent() )
     #else
-        #set( $contentChildren = $content.getChildren() )
+        #set( $chanwContentChildren = $content.getChildren() )
     #end
     
     ## plain text or code
-    #if( $contentChildren.size() == 0 )
+    #if( $chanwContentChildren.size() == 0 )
         $_SerializerTool.serialize( $content, true )
     ## at least one child
-    #elseif( $contentChildren.size() > 0 )
+    #elseif( $chanwContentChildren.size() > 0 )
         ## create a global variable storing the first child
         ## normally the root element
-        #set( $chanwFirstChild = $contentChildren.get( 0 ) )
+        #set( $chanwFirstChild = $chanwContentChildren.get( 0 ) )
         #set( $chanwChildName  = $chanwFirstChild.name )
         #set( $chanwChildPath  = $content.getParent().getChild( 'path' ).value )
         #set( $chanwBlockName  = $chanwChildPath )
@@ -791,99 +864,99 @@ This macro is used by 《code》#chanwProcessBlockChooser《/code》.《/p》
 #*
 《/macro》
 《documentation》
-《code》#chanwProcessParams( $chanwStatement $params )《/code》
+《code》#chanwProcessParams( $chanwStmt $params )《/code》
 《p》Creates the param lists as a string and attaches it to the statement passed
-in. Note that the global variable 《code》$chanwStatement《/code》 is passed in.
+in. Note that the global variable 《code》$chanwStmt《/code》 is passed in.
 This macro is used by 《code》#chanwProcessScript《/code》.《/p》
 《/documentation》
 《macro id=“chanwProcessParams”》
 *#
-#macro( chanwProcessParams $chanwStatement $params )
-    #set( $paramsChildren = $params.getChildren() )
+#macro( chanwProcessParams $chanwStmt $params )
+    #set( $chanwParamsChildren = $params.getChildren() )
                 
-    #if( $paramsChildren.size() > 0 )
-        #set( $chanwStatement = $chanwStatement + "(" )
+    #if( $chanwParamsChildren.size() > 0 )
+        #set( $chanwStmt = $chanwStmt + "(" )
 
-        #foreach( $child in $paramsChildren )
+        #foreach( $child in $chanwParamsChildren )
             #if( $child.Name == "param" )
                 #if( $child.Value.trim() != "" )
-                    #set( $chanwStatement = $chanwStatement + "'" +
+                    #set( $chanwStmt = $chanwStmt + "'" +
                         $child.Value.trim() + "' " )
                 #end
             #elseif( $child.Name == "variable" )
                 #if( $child.Value.trim() != "" )
-                    #set( $chanwStatement = $chanwStatement + "$" +
+                    #set( $chanwStmt = $chanwStmt + "$" +
                         $child.Value.trim() + " " )
                 #end
             #elseif( $child.Name == "list" )
                 #set( $chanwListChildren = $child.getChildren() )
         
                 #if( $chanwListChildren.size() > 0 )
-                    #set( $chanwStatement = $chanwStatement + "[" )
+                    #set( $chanwStmt = $chanwStmt + "[" )
 
                     #foreach( $list_child in $chanwListChildren )
                         #if( $list_child.Name == "param" )
                             #if( $list_child.Value.trim() != "" )
-                                #set( $chanwStatement = $chanwStatement + "'" +
+                                #set( $chanwStmt = $chanwStmt + "'" +
                                     $list_child.Value.trim() + "', " )
                             #end
                         #elseif( $list_child.Name == "variable" )
                             #if( $list_child.Value.trim() != "" )
-                                #set( $chanwStatement = $chanwStatement + "$" +
+                                #set( $chanwStmt = $chanwStmt + "$" +
                                     $list_child.Value.trim() + ", " )
                             #end
                         #end
                     #end
             
                     ## remove last comma
-                    #set( $chanwStatement = $chanwStatement.trim() )
+                    #set( $chanwStmt = $chanwStmt.trim() )
                 
-                    #if( $chanwStatement.endsWith( "," ) )
-                        #set( $end_index = $chanwStatement.length() - 1 )
-                        #set( $chanwStatement = $chanwStatement.substring(
-                            0, $end_index ) )
+                    #if( $chanwStmt.endsWith( "," ) )
+                        #set( $chanwEndIndex = $chanwStmt.length() - 1 )
+                        #set( $chanwStmt = $chanwStmt.substring(
+                            0, $chanwEndIndex ) )
                     #end
                     
-                    #set( $chanwStatement = " " + $chanwStatement + "]" )
+                    #set( $chanwStmt = " " + $chanwStmt + "]" )
                 #end
             #elseif( $child.Name == "map" )
                 #set( $chanwMapPairs = $child.getChildren() )
         
                 #if( $chanwMapPairs.size() > 0 )
-                    #set( $chanwStatement = $chanwStatement + "{" )
+                    #set( $chanwStmt = $chanwStmt + "{" )
             
                     #foreach( $map_pair in $chanwMapPairs )
-                        #set( $key = $map_pair.getChild( "key" ) )
-                        #set( $value = $map_pair.getChild( "value" ) )
+                        #set( $chanwKey = $map_pair.getChild( "key" ) )
+                        #set( $chanwValue = $map_pair.getChild( "value" ) )
                 
-                        #if( $key )
-                            #set( $key = $key.Value.trim() )
+                        #if( $chanwKey )
+                            #set( $chanwKey = $chanwKey.Value.trim() )
                         #end
                     
-                        #if( $value )
-                            #set( $value = $value.Value.trim() )
+                        #if( $chanwValue )
+                            #set( $chanwValue = $chanwValue.Value.trim() )
                         #end
                 
-                        #if( $key != "" && $value != "" )
-                            #set( $chanwStatement = $chanwStatement +
-                                "'$key':'$value'," )
+                        #if( $chanwKey != "" && $chanwValue != "" )
+                            #set( $chanwStmt = $chanwStmt +
+                                "'$chanwKey':'$chanwValue'," )
                         #end
                     #end
                     ## remove last comma
-                    #set( $chanwStatement = $chanwStatement.trim() )
+                    #set( $chanwStmt = $chanwStmt.trim() )
                 
-                    #if( $chanwStatement.endsWith( "," ) )
-                        #set( $end_index = $chanwStatement.length() - 1 )
-                        #set( $chanwStatement = $chanwStatement.substring(
-                            0, $end_index ) )
+                    #if( $chanwStmt.endsWith( "," ) )
+                        #set( $chanwEndIndex = $chanwStmt.length() - 1 )
+                        #set( $chanwStmt = $chanwStmt.substring(
+                            0, $chanwEndIndex ) )
                     #end
                     
-                    #set( $chanwStatement = " " + $chanwStatement + "}" )
+                    #set( $chanwStmt = " " + $chanwStmt + "}" )
                 #end
             #end
         #end
 
-        #set( $chanwStatement = $chanwStatement + ")" )
+        #set( $chanwStmt = $chanwStmt + ")" )
     #end
 #end
 #*
@@ -916,8 +989,8 @@ Code inside cannot contain 《code》<《/code》, 《code》>《/code》 and
     #if( $chanwCode )
         #set( $chanCodeStmt = $chanwCode.Value.replaceAll( 
             '&lt;', '<' ).replaceAll(
-    		'&gt;', '>' ).replaceAll(
-    		'-aa-', '&&' ) )
+            '&gt;', '>' ).replaceAll(
+        	'-aa-', '&&' ) )
     	#evaluate( $chanCodeStmt )
     #end
 
@@ -941,21 +1014,21 @@ Code inside cannot contain 《code》<《/code》, 《code》>《/code》 and
             
                     ## make the path optional
                     #if( $chanwPath != "" )
-                        #set( $chanwStatement = "#" + "import('$chanwPath')" )
-                        #evaluate( $chanwStatement )
+                        #set( $chanwStmt = "#" + "import('$chanwPath')" )
+                        #evaluate( $chanwStmt )
                     #end
                 #end
             #end
             
-            #set( $chanwStatement = "" )
+            #set( $chanwStmt = "" )
             #set( $chanwMacros = $script.getChildren( "macro" ) )
             
             ## second, invoke each macro
             #if( $chanwMacros.size() > 0 )
                 #foreach( $macro in $chanwMacros )
                     #set( $chanwMacro = $macro.getChild( "name" ).Value.trim() )
-                    #set( $chanwStatement = "" )
-                    #set( $chanwStatement = "#" + $chanwMacro )
+                    #set( $chanwStmt = "" )
+                    #set( $chanwStmt = "#" + $chanwMacro )
                     
                     #if( $chanwRedirect == "" )
                         #set( $chanwParams = $macro.getChild( "params" ) )
@@ -963,28 +1036,28 @@ Code inside cannot contain 《code》<《/code》, 《code》>《/code》 and
             
                         #if( !$_PropertyTool.isNull( $chanwParams ) )
                             ## pass in the global statement
-                            #chanwProcessParams( $chanwStatement $chanwParams )
-                            #evaluate( $chanwStatement )
+                            #chanwProcessParams( $chanwStmt $chanwParams )
+                            #evaluate( $chanwStmt )
                         #elseif( !$_PropertyTool.isNull( $chanwLoop ) )
                             #set( $chanwParamsNodes = $chanwLoop.getChildren( "params" ) )
                             
                             #if( $chanwParamsNodes && $chanwParamsNodes.size() > 0 )
                                 #foreach( $chanwParamsNode in $chanwParamsNodes )
-                                    #set( $chanwStatement = "" )
-                                    #set( $chanwStatement = "#" + $chanwMacro )
-                                    #chanwProcessParams( $chanwStatement $chanwParamsNode )
-                                    ##$chanwStatement
-                                    #evaluate( $chanwStatement )
+                                    #set( $chanwStmt = "" )
+                                    #set( $chanwStmt = "#" + $chanwMacro )
+                                    #chanwProcessParams( $chanwStmt $chanwParamsNode )
+                                    ##$chanwStmt
+                                    #evaluate( $chanwStmt )
                                 #end
                             #end
                         #end
                     #else
-                        #set( $chanwStatement = $chanwStatement + "(" )
-                        #set( $chanwStatement = $chanwStatement + "$" + "chanwFirstChild" )
-                        #set( $chanwStatement = $chanwStatement + ")" )
-                        #evaluate( $chanwStatement )
+                        #set( $chanwStmt = $chanwStmt + "(" )
+                        #set( $chanwStmt = $chanwStmt + "$" + "chanwFirstChild" )
+                        #set( $chanwStmt = $chanwStmt + ")" )
+                        #evaluate( $chanwStmt )
                     #end
-                    ##$chanwStatement
+                    ##$chanwStmt
                 #end
             #end
         #end
@@ -1032,25 +1105,25 @@ Example:《/p》
         #stop
     #end
     
-    #set( $size = $list.size() )
+    #set( $chanwSize = $list.size() )
     
-    #if( $size == 0 )
+    #if( $chanwSize == 0 )
         Empty list!!!$BR 
         #stop
     #end
     
     #set( $chanwValue = "" ) ## empty string, the last resort
     
-    #foreach( $num in [ 1..$size ] )
-        #set( $index = $num - 1 )
+    #foreach( $num in [ 1..$chanwSize ] )
+        #set( $chanwIndex = $num - 1 )
         
-        #if( $list[ $index ].class.name != $JAVA_LANG_STRING_CLASS_NAME )
+        #if( $list[ $chanwIndex ].class.name != $JAVA_LANG_STRING_CLASS_NAME )
             Not a String!!!$BR 
             #stop
         #end
         
-        #if( $list[ $index ].trim() != "" )
-            #set( $chanwValue = $list[ $index ].trim() )
+        #if( $list[ $chanwIndex ].trim() != "" )
+            #set( $chanwValue = $list[ $chanwIndex ].trim() )
             #break
         #end
     #end
