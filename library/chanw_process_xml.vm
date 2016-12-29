@@ -9,13 +9,36 @@ by an index block.《/p》
 《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_global_values' )
+#*
+《global-variables》
+*#
+#set( $chanwProcessXmlGlobalVariables = [
+    "chanwChildKey",
+    "chanwChildPath",
+    "chanwCurrentNodePath",
+    "chanwFirstSlashPos",
+    "chanwIsContent",
+    "chanwIsWYSIWYG",
+    "chanwNodeInfoMap",
+    "chanwNodePath",
+    "chanwNodes",
+    "chanwNodeValue",
+    "chanwParentNode",
+    "chanwParentPath",
+    "chanwSize",
+    "chanwTempChildKey",
+    "chanwTextNodePath",
+    "chanwTextNodeValue",
+    "chanwWithWysiwygIds",
+    "chanwWYSIWYGValue",
+    "chanwXmlString",
+    "chanwXmlXPathTextMap"
+] )
+#*
+《/global-variables》
+*#
 ## clean up the data structures
 #chanwCleanUpMaps
-#*
-#set( $page_sdd = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page/system-data-structure" ) )
-#chanwProcessSystemDataStructure( $page_sdd )
-#chanwDisplayMapKeyValuePairs( $chanwXmlXPathTextMap true )
-*#
 #*
 《documentation》
 《code》#chanwProcessSystemDataStructure( $element $wysiwyg_ids )《/code》
@@ -32,7 +55,7 @@ WYSISYG fields in a data definition《/li》
 #chanwProcessSystemDataStructure( $contentRoot [ 'wysiwyg' ] )
 $chanwXmlXPathTextMap
 
-#set( $nodes = $contentRoot.getChildren( "multiple-first" ) )
+#set( $chanwNodes = $contentRoot.getChildren( "multiple-first" ) )
 
 #foreach( $node in $node )
     #set( $key = "system-data-structure/multiple-first[" + $foreach.count + "]" )
@@ -155,13 +178,13 @@ Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use
                     ## create the path for current child
                     #set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
                     ## select all children bearing the same name
-                    #set( $nodes = $_XPathTool.selectNodes( $child.getParent(), $child.Name ) )
+                    #set( $chanwNodes = $_XPathTool.selectNodes( $child.getParent(), $child.Name ) )
             
                     ## multiple nodes
-                    #if( $nodes.size() > 1 )
+                    #if( $chanwNodes.size() > 1 )
                         #set( $chanwSize = 0 )
                     
-                        #foreach( $n in $nodes )
+                        #foreach( $n in $chanwNodes )
                             #if( $chanwNodeInfoMap.containsKey( $n ) ) ## already processed
                                 #break
                             #end
@@ -292,8 +315,8 @@ parameter.《/p》
                 #if( $chanwFirstSlashPos < 1 )
                     ## nothing to do
                 #else
-                    #set( $tempKey = $key.substring( $chanwFirstSlashPos ) )
-                    $tempKey$BR
+                    #set( $$chanwTempKey = $key.substring( $chanwFirstSlashPos ) )
+                    $$chanwTempKey$BR
                 #end
             #elseif( $key.Class.Name == $JAVA_LANG_STRING_CLASS_NAME )
                 $key$BR
@@ -328,8 +351,8 @@ parameter.《/p》
                 #if( $chanwFirstSlashPos < 1 )
                     ## nothing to do
                 #else
-                    #set( $tempKey = $key.substring( $chanwFirstSlashPos ) )
-                    $tempKey: $map.get( $key )$BR
+                    #set( $$chanwTempKey = $key.substring( $chanwFirstSlashPos ) )
+                    $$chanwTempKey: $map.get( $key )$BR
                 #end
             #else
                 $key: $map.get( $key )$BR
@@ -350,9 +373,9 @@ parameter.《/p》
 《/documentation》
 《macro id=“chanwShowXml”》
 *#
-#macro( chanwShowXml $block_xml $with_pre $with_newline )
-#set( $chanwXmlString = $_SerializerTool.serialize( $block_xml, false ) )
-#chanwShowXmlString( $chanwXmlString $with_pre $with_newline )
+#macro( chanwShowXml $blockXml $withPre $withNewline )
+#set( $chanwXmlString = $_SerializerTool.serialize( $blockXml, false ) )
+#chanwShowXmlString( $chanwXmlString $withPre $withNewline )
 #end
 #*
 《/macro》
@@ -365,15 +388,15 @@ parameter.《/p》
 《/documentation》
 《macro id=“chanwShowXmlString”》
 *#
-#macro( chanwShowXmlString $xml_string $with_pre $with_newline )
-#if( $with_pre )$S_PRE#end##
-#if( $with_newline )
-#set( $chanwXmlString = $xml_string.replaceAll( "<", "$NEWLINE&lt;" ) )##
+#macro( chanwShowXmlString $xmlString $withPre $withNewline )
+#if( $withPre )$S_PRE#end##
+#if( $withNewline )
+#set( $chanwXmlString = $xmlString.replaceAll( "<", "$NEWLINE&lt;" ) )##
 #else
-#set( $chanwXmlString = $xml_string.replaceAll( "<", "&lt;" ) )##
+#set( $chanwXmlString = $xmlString.replaceAll( "<", "&lt;" ) )##
 #end##
 $chanwXmlString
-#if( $with_pre )$E_PRE#end
+#if( $withPre )$E_PRE#end
 #end
 #*
 《/macro》
