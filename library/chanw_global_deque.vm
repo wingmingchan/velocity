@@ -89,7 +89,18 @@ $E_PRE
 #*
 《global-variables》
 *#
-#set( $chanwGlobalDequeGlobalVariables = [] )
+#set( $chanwGlobalDequeGlobalVariables = [
+    "chanwAddFirstGlobalDeque",
+    "chanwAddLastGlobalDeque",
+    "chanwConstructor",
+    "chanwData",
+    "chanwEmptyGlobalDeque",
+    "chanwPeekFirstGlobalDeque",
+    "chanwPeekLastGlobalDeque",
+    "chanwSizeGlobalDeque",
+    "chanwTakeFirstGlobalDeque",
+    "chanwTakeLastGlobalDeque"
+] )
 #set( $chanwDEQUE_DATA  = "data" )
 #set( $chanwDEQUE_SIZE  = 500 )
 #set( $chanwGlobalDeque = {} )
