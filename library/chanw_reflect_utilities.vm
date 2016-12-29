@@ -3,7 +3,8 @@
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format provides utility macros for reflection.
-The 《code》#chanwDisplayClassAPI《/code》 macro can accept three params, the second and third are optional. Example:《/p》
+The 《code》#chanwDisplayClassAPI《/code》 macro can accept three params,
+the second and third are optional. Example:《/p》
 《pre》
 #chanwDisplayClassAPI( "java.lang.Math", "h3", "true" ) ## pass in a class name
 #chanwDisplayClassAPI( $_, "h3", "true" )               ## pass in an object
@@ -14,9 +15,30 @@ The 《code》#chanwDisplayClassAPI《/code》 macro can accept three params, th
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
 #*
+《global-variables》
+*#
+#set( $chanwReflectUtilitiesGlobalVariables = [
+    "chanwClassObj",
+    "chanwClassString",
+    "chanwConstructors",
+    "chanwHeading",
+    "chanwIndex",
+    "chanwMethods",
+    "chanwModifier",
+    "chanwObjString",
+    "chanwObjType",
+    "chanwParamTypes",
+    "chanwParamTypesString",
+    "chanwReturnType",
+    "chanwSuffix",
+    "chanwWithH2"
+] )
+#*
+《/global-variables》
 《documentation》
 《code》#chanwDisplayClassAPI( $obj $heading $withH2 )《/code》
-《p》Displays essential information of a class, including a list of constructors and methods. Use this macro
+《p》Displays essential information of a class, including a list of constructors
+and methods. Use this macro
 as the entry point to this library format.《/p》
 《/documentation》
 《macro id=“chanwDisplayClassAPI”》
@@ -50,24 +72,24 @@ as the entry point to this library format.《/p》
 《macro id=“chanwDisplayObjClass”》
 *#
 #macro( chanwDisplayObjClass $obj $heading $withH2 )
-    #set( $objString = "" )
-    #set( $objType = $obj.Class.Name )
+    #set( $chanwObjString = "" )
+    #set( $chanwObjType = $obj.Class.Name )
  
-    #if( $objType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
-        #set( $objString = $obj )
-    #elseif( $objType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
-        #set( $objString = $obj.Name )
+    #if( $chanwObjType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
+        #set( $chanwObjString = $obj )
+    #elseif( $chanwObjType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
+        #set( $chanwObjString = $obj.Name )
     #else                                              ## obj of other types
-        #set( $objString = $obj.Class.Name )
+        #set( $chanwObjString = $obj.Class.Name )
     #end
     
     #set( $chanwSuffix = "" )
-    #set( $chanwClassString = $objString )
+    #set( $chanwClassString = $chanwObjString )
     
-    #if( $objString.indexOf( "," ) > -1 )
-        #set( $chanwIndex = $objString.indexOf( "," ) )
-        #set( $chanwClassString = $objString.substring( 0, $chanwIndex ) )
-        #set( $chanwSuffix = $objString.substring( $chanwIndex ) )
+    #if( $chanwObjString.indexOf( "," ) > -1 )
+        #set( $chanwIndex = $chanwObjString.indexOf( "," ) )
+        #set( $chanwClassString = $chanwObjString.substring( 0, $chanwIndex ) )
+        #set( $chanwSuffix = $chanwObjString.substring( $chanwIndex ) )
         #set( $chanwSuffix = $chanwSuffix.substring( 1 ) ) ## remove comma
         #set( $chanwSuffix = "&lt;" + $chanwSuffix + "&gt;" )
     #end
@@ -89,23 +111,23 @@ as the entry point to this library format.《/p》
 《macro id=“chanwDisplayConstructors”》
 *#
 #macro( chanwDisplayConstructors $obj $heading )
-    #set( $objType = $obj.Class.Name )
+    #set( $chanwObjType = $obj.Class.Name )
     
-    #if( $objType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
+    #if( $chanwObjType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
         #set( $chanwClassObj = $_PropertyTool.class.forName( $obj ) )
-    #elseif( $objType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
+    #elseif( $chanwObjType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
         #set( $chanwClassObj = $obj )
     #else                                              ## obj of other types
         #set( $chanwClassObj = $obj.Class )
     #end
     
     #if( $chanwClassObj )
-        #set( $constructors = $chanwClassObj.getConstructors() )
+        #set( $chanwConstructors = $chanwClassObj.getConstructors() )
         
-        #if( $constructors && $constructors.size() > 0 )
+        #if( $chanwConstructors && $chanwConstructors.size() > 0 )
             <$heading>Constructors</$heading>
             $S_UL
-            #foreach( $constructor in $constructors )
+            #foreach( $constructor in $chanwConstructors )
                 $S_LI## print modifiers
                 $_.class.forName( "java.lang.reflect.Modifier" ).getMethod( 
                     "toString", $_FieldTool.in( 
@@ -114,26 +136,28 @@ as the entry point to this library format.《/p》
                 $constructor.Name
                     
                 #set( $chanwParamTypes = $constructor.getGenericParameterTypes() )
-                #set( $paramTypesString = "( " )
+                #set( $chanwParamTypesString = "( " )
 
                 #if( $chanwParamTypes && $chanwParamTypes.size() > 0 )
                     #foreach( $chanwParamType in $chanwParamTypes )
                         #if( $chanwParamType.Name )
-                            #set( $paramTypesString = $paramTypesString + $chanwParamType.Name )
+                            #set( $chanwParamTypesString = $chanwParamTypesString + 
+                                $chanwParamType.Name )
                         #elseif( $chanwParamType.getTypeName() )
-                            #set( $paramTypesString = $paramTypesString + $chanwParamType.getTypeName().replaceAll( "<", "&lt;" ) )
+                            #set( $chanwParamTypesString = $chanwParamTypesString + 
+                                $chanwParamType.getTypeName().replaceAll( "<", "&lt;" ) )
                         #end
                         
                         #if( $foreach.count < $chanwParamTypes.size() )
-                            #set( $paramTypesString = $paramTypesString + ", " )
+                            #set( $chanwParamTypesString = $chanwParamTypesString + ", " )
                         #end
                         
                     #end
                 #end
                 
-                #set( $paramTypesString = $paramTypesString + " )" )
-                #set( $paramTypesString = $paramTypesString.trim() )
-                $paramTypesString$E_LI
+                #set( $chanwParamTypesString = $chanwParamTypesString + " )" )
+                #set( $chanwParamTypesString = $chanwParamTypesString.trim() )
+                $chanwParamTypesString$E_LI
             #end
             $E_UL
         #else
@@ -152,53 +176,57 @@ as the entry point to this library format.《/p》
 《macro id=“chanwDisplayMethods”》
 *#
 #macro( chanwDisplayMethods $obj $heading )
-    #set( $objType = $obj.Class.Name )
+    #set( $chanwObjType = $obj.Class.Name )
     
-    #if( $objType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
+    #if( $chanwObjType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
         #set( $chanwClassObj = $_PropertyTool.class.forName( $obj ) )
-    #elseif( $objType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
+    #elseif( $chanwObjType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
         #set( $chanwClassObj = $obj )
     #else                                              ## obj of other types
         #set( $chanwClassObj = $obj.Class )
     #end
     
     #if( $chanwClassObj )
-        #set( $methods = $chanwClassObj.getDeclaredMethods() )
+        #set( $chanwMethods = $chanwClassObj.getDeclaredMethods() )
         
-        #if( $methods && $methods.size() > 0 )
+        #if( $chanwMethods && $chanwMethods.size() > 0 )
             <$heading>Methods</$heading>
             $S_UL
-            #foreach( $method in $methods )
+            #foreach( $method in $chanwMethods )
                 $S_LI
                 #set( $chanwModifier = $_.class.forName( "java.lang.reflect.Modifier" ).getMethod( 
                     "toString", $_FieldTool.in( 
                     "java.lang.Integer" ).TYPE ).invoke( 
                     null, $method.getModifiers() ) )
                     
-                    #set( $chanwReturnType = $method.getGenericReturnType().getTypeName().replaceAll( "<", "&lt;" ).trim() )
+                    #set( $chanwReturnType = 
+                        $method.getGenericReturnType().getTypeName().replaceAll(
+                            "<", "&lt;" ).trim() )
                     
                     
                     #set( $chanwParamTypes = $method.getGenericParameterTypes() )
-                    #set( $paramTypesString = $chanwModifier + " " + $chanwReturnType + " " + $method.Name.trim() + "( " )
+                    #set( $chanwParamTypesString = $chanwModifier + " " + 
+                         $chanwReturnType + " " + $method.Name.trim() + "( " )
                     
                     #if( $chanwParamTypes && $chanwParamTypes.size() > 0 )
                         #foreach( $chanwParamType in $chanwParamTypes )
                             #if( $chanwParamType.Name )
-                                #set( $paramTypesString = $paramTypesString + $chanwParamType.Name )
+                                #set( $chanwParamTypesString = $chanwParamTypesString + $chanwParamType.Name )
                             #elseif( $chanwParamType.getTypeName() )
-                                #set( $paramTypesString = $paramTypesString + $chanwParamType.getTypeName().replaceAll( "<", "&lt;" ) )
+                                #set( $chanwParamTypesString = $chanwParamTypesString + 
+                                    $chanwParamType.getTypeName().replaceAll( "<", "&lt;" ) )
                             #end
                             
                             #if( $foreach.count < $chanwParamTypes.size() )
-                                #set( $paramTypesString = $paramTypesString + ", " )
+                                #set( $chanwParamTypesString = $chanwParamTypesString + ", " )
                             #end
                         #end
                     #end
                     
-                    #set( $paramTypesString = $paramTypesString + " )" )
-                    #set( $paramTypesString = " " + $paramTypesString.trim() )
-                    #set( $paramTypesString = $paramTypesString.replaceAll( " \(", "(" ) )
-                     $paramTypesString
+                    #set( $chanwParamTypesString = $chanwParamTypesString + " )" )
+                    #set( $chanwParamTypesString = " " + $chanwParamTypesString.trim() )
+                    #set( $chanwParamTypesString = $chanwParamTypesString.replaceAll( " \(", "(" ) )
+                     $chanwParamTypesString
                 $E_LI
             #end
             $E_UL
@@ -216,24 +244,25 @@ as the entry point to this library format.《/p》
 《macro id=“chanwDisplayFields”》
 *#
 #macro( chanwDisplayFields $obj $heading )
-    #set( $objType = $obj.Class.Name )
+    #set( $chanwObjType = $obj.Class.Name )
     
-    #if( $objType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
+    #if( $chanwObjType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
         #set( $chanwClassObj = $_PropertyTool.class.forName( $obj ) )
-    #elseif( $objType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
+    #elseif( $chanwObjType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
         #set( $chanwClassObj = $obj )
     #else                                              ## obj of other types
         #set( $chanwClassObj = $obj.Class )
     #end
     
     #if( $chanwClassObj )
-        #set( $fields = $chanwClassObj.getFields() )
+        #set( $chanwFields = $chanwClassObj.getFields() )
         
-        #if( $fields && $fields.size() > 0 )
+        #if( $chanwFields && $chanwFields.size() > 0 )
             <$heading>Fields</$heading>
             $S_UL
-            #foreach( $field in $fields )
-                $S_LI$field.getName().replaceAll( '&', '&amp;' ): $_EscapeTool.xml( $field.get( null ) )$E_LI
+            #foreach( $field in $chanwFields )
+                $S_LI$field.getName().replaceAll( '&', '&amp;' ):
+                $_EscapeTool.xml( $field.get( null ) )$E_LI
             #end
             $E_UL
         #else
@@ -250,21 +279,21 @@ as the entry point to this library format.《/p》
 《macro id=“chanwDisplaySuperClass”》
 *#
 #macro( chanwDisplaySuperClass $obj $heading )
-    #set( $objType = $obj.Class.Name )
+    #set( $chanwObjType = $obj.Class.Name )
     
-    #if( $objType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
+    #if( $chanwObjType == $JAVA_LANG_STRING_CLASS_NAME )    ## class name
         #set( $chanwClassObj = $_PropertyTool.class.forName( $obj ) )
-    #elseif( $objType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
+    #elseif( $chanwObjType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
         #set( $chanwClassObj = $obj )
     #else                                              ## obj of other types
         #set( $chanwClassObj = $obj.Class )
     #end
       
     #if( $chanwClassObj )
-        #set( $parent = $chanwClassObj.getGenericSuperclass() )
+        #set( $chanwParent = $chanwClassObj.getGenericSuperclass() )
         
-        #if( $parent )
-        <$heading>Parent Class</$heading>$S_P$parent.toString().replaceAll( "<", "&lt;" )$E_P
+        #if( $chanwParent )
+        <$heading>Parent Class</$heading>$S_P$chanwParent.toString().replaceAll( "<", "&lt;" )$E_P
         #end
     #end
 #end
