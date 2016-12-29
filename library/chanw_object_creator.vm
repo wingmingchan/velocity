@@ -8,7 +8,28 @@ a whole set of global utility objects.《/p》
 《/documentation》
 《global-variables》
 *#
-#set( $chanwObjectCreatorGlobalVariables = [] )
+#set( $chanwObjectCreatorGlobalVariables = [
+    "chanwClassObj",
+    "chanwClassStaticMethodMap",
+    "chanwClassStaticMethodMapKeySet",
+    "chanwConstructor",
+    "chanwConstructors",
+    "chanwFieldObj",
+    "chanwGetConstantValueByClassNameConstantName",
+    "chanwGetConstructorByClassNameParamSize",
+    "chanwGetConstructorByClassNameParamTypeArray",
+    "chanwGetMethodByClassNameMethodNameParamTypes",
+    "chanwGetObjectByClassName",
+    "chanwGetStaticMethodByClassNameMethodNameWithoutParams",
+    "chanwParamListString",
+    "chanwParamsMatched",
+    "chanwParamTypes",
+    "chanwSetVarValStatement",
+    "chanwStmt",
+    "chanwToolKeys",
+    "chanwTools",
+    "chanwValue"
+] )
 #*
 《/global-variables》
 《documentation》
@@ -71,10 +92,10 @@ a whole set of global utility objects.《/p》
     ## get all constructors
     #set( $chanwGetConstructorByClassNameParamSize = "" )
     #set( $chanwClassObj = $_PropertyTool.class.forName( $chanwClassName ) )
-    #set( $constructors  = $chanwClassObj.getConstructors() )
+    #set( $chanwConstructors  = $chanwClassObj.getConstructors() )
   
     ## find the one with the right param size
-    #foreach( $constructor in $constructors )
+    #foreach( $constructor in $chanwConstructors )
         ## found
         #if( $constructor.getParameterTypes().size() == $chanwParamSize )
             #set( $chanwGetConstructorByClassNameParamSize = $constructor )
@@ -115,23 +136,23 @@ a whole set of global utility objects.《/p》
     ## get all constructors
     #set( $chanwGetConstructorByClassNameParamTypeArray = "" )
     #set( $chanwClassObj = $_PropertyTool.class.forName( $chanwClassName ) )
-    #set( $constructors  = $chanwClassObj.getConstructors() )
+    #set( $chanwConstructors  = $chanwClassObj.getConstructors() )
   
-    #foreach( $constructor in $constructors )
-        #set( $params_matched = true )
-        #set( $param_types    = $constructor.getParameterTypes() )
+    #foreach( $constructor in $chanwConstructors )
+        #set( $chanwParamsMatched = true )
+        #set( $chanwParamTypes    = $constructor.getParameterTypes() )
 
         ## match the size
-        #if( $param_types.size() == $chanwTypeArray.size() )
+        #if( $chanwParamTypes.size() == $chanwTypeArray.size() )
             ## match the types
-            #foreach( $type in $param_types )
+            #foreach( $type in $chanwParamTypes )
                 #if( !$type.getName().equals( $chanwTypeArray[ $foreach.index ] ) )
-                    #set( $params_matched = false )
+                    #set( $chanwParamsMatched = false )
                 #end
             #end
             
             ## found
-            #if( $params_matched )
+            #if( $chanwParamsMatched )
                 #set( $chanwGetConstructorByClassNameParamTypeArray = $constructor )
                 #break
             #end
