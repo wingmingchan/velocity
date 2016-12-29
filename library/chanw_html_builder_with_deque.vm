@@ -26,6 +26,20 @@ When using these macros, do it inside out, layer by layer.《/p》
 #import( '/formats/library/velocity/chanw_global_values' )
 #import( '/formats/library/velocity/chanw_global_deque' )
 #*
+《global-variables》
+*#
+#set( $chanwHtmlBuilderWithDequeGlobalVariables = [
+    "chanwAttrs",
+    "chanwCreateEmptyElement",
+    "chanwElement",
+    "chanwElementName",
+    "chanwEmpty",
+    "chanwEmptyDequeGetElement",
+    "chanwEndTag",
+    "chanwStartTag"
+] )
+#*
+《/global-variables》
 《documentation》
 《code》#chanwCreateElementWithText( $chanwMap $chanwText )《/code》
 《p》Returns an HTML element with text.《/p》
