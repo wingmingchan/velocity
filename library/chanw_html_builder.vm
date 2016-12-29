@@ -7,6 +7,19 @@
 *#
 #import( '/formats/library/velocity/chanw_global_values' )
 #*
+《global-variables》
+*#
+#set( $chanwHtmlBuilderGlobalVariables = [
+    "chanwClassesTrimmed",
+    "chanwCreateElementWithAttrsText",
+    "chanwCreateElementWithIdClassesMacroGlobal",
+    "chanwCreateElementWithIdClassesText",
+    "chanwIdTrimmed",
+    "chanwResultString",
+    "chanwStartTag"
+] )
+#*
+《/global-variables》
 《documentation》
 《code》#chanwCreatePreWithText( $text )《/code》
 《p》Creates a pre element wrapping up a string.《/p》
@@ -21,73 +34,69 @@ $E_PRE
 #*
 《/macro》
 《documentation》
-《code》#chanwCreateElementWithIdClassesText( $chanw_element $chanw_id $chanw_classes $chanw_text )《/code》
+《code》#chanwCreateElementWithIdClassesText( $chanwElement $chanwId $chanwClasses $chanwText )《/code》
 《p》Creates an element by passing in the element name, an id (or empty string),
 a string of CSS classes (or empty string), and the text of the element.《/p》
 《/documentation》
 《macro id=“chanwCreateElementWithIdClassesText”》
 *#
-#macro( chanwCreateElementWithIdClassesText $chanw_element $chanw_id $chanw_classes $chanw_text )
-    #set( $chanw_start_tag       = "<$chanw_element" )
-    #set( $chanw_id_trimmed      = $chanw_id.trim() )
-    #set( $chanw_classes_trimmed = $chanw_classes.trim() )
+#macro( chanwCreateElementWithIdClassesText $chanwElement $chanwId $chanwClasses $chanwText )
+    #set( $chanwStartTag       = "<$chanwElement" )
+    #set( $chanwIdTrimmed      = $chanwId.trim() )
+    #set( $chanwClassesTrimmed = $chanwClasses.trim() )
     
     ## add non-empty id
-    #if( $chanw_id_trimmed != "" )
-        #set( $chanw_start_tag = $chanw_start_tag + " id='$chanw_id_trimmed'" )
+    #if( $chanwIdTrimmed != "" )
+        #set( $chanwStartTag = $chanwStartTag + " id='$chanwIdTrimmed'" )
     #end
     ## add non-empty classes
-    #if( $chanw_classes_trimmed != "" )
-        #set( $chanw_start_tag = $chanw_start_tag + " class='$chanw_classes_trimmed'" )
+    #if( $chanwClassesTrimmed != "" )
+        #set( $chanwStartTag = $chanwStartTag + " class='$chanwClassesTrimmed'" )
     #end
       
     #set( $chanwCreateElementWithIdClassesText = 
-        $chanw_start_tag + ">" + $chanw_text + "</$chanw_element>" )
+        $chanwStartTag + ">" + $chanwText + "</$chanwElement>" )
 #end
 #*
 《/macro》
 《documentation》
-《code》#chanwCreateElementWithIdClassesMacroGlobal(  $chanw_element $chanw_id $chanw_classes $chanw_code $chanw_global_var )《/code》
+《code》#chanwCreateElementWithIdClassesMacroGlobal(  $chanwElement $chanwId $chanwClasses $chanw_code $chanw_global_var )《/code》
 《p》Creates an element by passing in the element name, an id (or empty string),
 a string of CSS classes (or empty string), a string containing Velocity code (call to a macro) to be evaluated, and the corresponding global variable.《/p》
 《/documentation》
 《macro id=“chanwCreateElementWithIdClassesMacroGlobal”》
 *#
-
-#* 
-
-*#
 #macro( chanwCreateElementWithIdClassesMacroGlobal 
-    $chanw_element $chanw_id $chanw_classes $chanw_code $chanw_global_var )
-    #evaluate( $chanw_code )
-    #set( $chanw_result_string = $chanw_global_var )
-    #chanwCreateElementWithIdClassesText( $chanw_element $chanw_id $chanw_classes $chanw_result_string )
+    $chanwElement $chanwId $chanwClasses $chanwCode $chanwGlobalVar )
+    #evaluate( $chanwCode )
+    #set( $chanwResultString = $chanwGlobalVar )
+    #chanwCreateElementWithIdClassesText( $chanwElement $chanwId $chanwClasses $chanwResultString )
     #set( $chanwCreateElementWithIdClassesMacroGlobal = 
         $chanwCreateElementWithIdClassesText )
 #end
 #*
 《/macro》
 《documentation》
-《code》#chanwCreateElementWithAttrsText( $chanw_element $chanw_map $chanw_text )《/code》
+《code》#chanwCreateElementWithAttrsText( $chanwElement $chanwMap $chanwText )《/code》
 《p》Creates an element by passing in the element name, a map containing attribute names and values, and the text of the element.《/p》
 《/documentation》
 《macro id=“chanwCreateElementWithAttrsText”》
 *#
-#macro( chanwCreateElementWithAttrsText $chanw_element $chanw_map $chanw_text )
-    #set( $chanw_start_tag = "<$chanw_element" )
-    #set( $chanw_keys = $chanw_map.keySet() )
+#macro( chanwCreateElementWithAttrsText $chanwElement $chanwMap $chanwText )
+    #set( $chanwStartTag = "<$chanwElement" )
+    #set( $chanwKeys = $chanwMap.keySet() )
     
-    #foreach( $chanw_key in $chanw_keys )
-        #set( $chanw_value = $chanw_map.get( $chanw_key ) )
-        #set( $chanw_value = $chanw_value.trim() )
+    #foreach( $chanwKey in $chanwKeys )
+        #set( $chanwValue = $chanwMap.get( $chanwKey ) )
+        #set( $chanwValue = $chanwValue.trim() )
        
-        #if( $chanw_value != "" )
-            #set( $chanw_start_tag = $chanw_start_tag + " $chanw_key='$chanw_value'" )
+        #if( $chanwValue != "" )
+            #set( $chanwStartTag = $chanwStartTag + " $chanwKey='$chanwValue'" )
         #end
     #end
    
-    #set( $chanwCreateElementWithAttrsText = $chanw_start_tag + ">" + 
-        $chanw_text + "</$chanw_element>" )
+    #set( $chanwCreateElementWithAttrsText = $chanwStartTag + ">" + 
+        $chanwText + "</$chanwElement>" )
 #end
 #*
 《/macro》
