@@ -2,85 +2,59 @@
 《code》
 《documentation id=“top”》
 《h2》Introduction《/h2》
-《p》This format defines a global deque. Example:《/p》
+《p》This format defines a global queue. Example:《/p》
 《pre》
-#import( 'site://_common_assets/formats/library/velocity/chanw_global_deque' )
+#import( 'site://_common_assets/formats/library/velocity/chanw_global_queue' )
 
-#set( $deque = $chanwGlobalDeque )
-#chanwAddLastGlobalDeque( $deque "1" )
-#chanwAddLastGlobalDeque( $deque "2" )
-#chanwAddLastGlobalDeque( $deque "3" ) ## 1,2,3 in that order
+#set( $queue = $chanwGlobalQueue )
+#chanwEnqueueGlobalQueue( $queue $_ )
+#chanwEnqueueGlobalQueue( $queue $_PropertyTool )
+#chanwEnqueueGlobalQueue( $queue $_XPathTool )
+##chanwEnqueueGlobalQueue( $queue $blah )
 
-#chanwSizeGlobalDeque( $deque )
-#set( $size = $chanwSizeGlobalDeque ) 
+#chanwSizeGlobalQueue( $queue )
+#set( $size = $chanwSizeGlobalQueue )
 $S_PRE
 
 Current size: $size$BR
 #foreach( $num in [1..10] )
-#chanwEmptyGlobalDeque( $deque )
-#set( $empty = $chanwEmptyGlobalDeque )
-#if( !$empty )
-#chanwTakeFirstGlobalDeque( $deque )
-#set( $item = $chanwTakeFirstGlobalDeque )
-$item.Class.Name $item
+#chanwSizeGlobalQueue( $queue )
+#set( $size = $chanwSizeGlobalQueue )
+#if( $size > 0 )
+#chanwDequeueGlobalQueue( $queue )
+#set( $item = $chanwDequeueGlobalQueue )
+$item.Class.Name
 #else#break#end
 #end
 $E_PRE
 
-Use deque as a stack
-#foreach( $num in [1..10] )
-#chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
-#end
+#chanwClearGlobalQueue( $queue )
 
+#chanwSizeGlobalQueue( $queue )
+#set( $size = $chanwSizeGlobalQueue )
 $S_PRE
-#foreach( $num in [1..10] )
-#chanwEmptyGlobalDeque( $deque )
-#set( $empty = $chanwEmptyGlobalDeque )
-#if( !$empty )
-#chanwTakeFirstGlobalDeque( $deque )
-#set( $item = $chanwTakeFirstGlobalDeque )
-$item.Class.Name $item
-#else#break#end
-#end
+
+Current size: $size$BR
 $E_PRE
 
-Use deque as a queue
-#foreach( $num in [1..10] )
-#chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
+#foreach( $num in [1..1000] )
+    #chanwRemainingCapacityGlobalQueue( $queue )
+    #set( $remainingCapacity = $chanwRemainingCapacityGlobalQueue )
+    
+    #set( $item = $_ )
+    
+    #if( $remainingCapacity > 0 && !$_PropertyTool.isNull( $item ) )
+        #chanwEnqueueGlobalQueue( $queue $item )
+    #else
+        #break
+    #end
 #end
 
+#chanwSizeGlobalQueue( $queue )
+#set( $size = $chanwSizeGlobalQueue )
 $S_PRE
-#foreach( $num in [1..10] )
-#chanwEmptyGlobalDeque( $deque )
-#set( $empty = $chanwEmptyGlobalDeque )
-#if( !$empty )
-#chanwTakeLastGlobalDeque( $deque )
-#set( $item = $chanwTakeLastGlobalDeque )
-$item.Class.Name $item
-#else#break#end
-#end
-$E_PRE
 
-Use deque as a deque
-#foreach( $num in [1..10] )
-#chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
-#end
-
-$S_PRE
-#foreach( $num in [1..10] )
-#set( $empty = $chanwEmptyGlobalDeque )
-#if( !$empty )
-#if( $num % 2 == 1 )
-#chanwTakeLastGlobalDeque( $deque )
-#set( $item = $chanwTakeLastGlobalDeque )
-$item.Class.Name $item
-#else
-#chanwTakeFirstGlobalDeque( $deque )
-#set( $item = $chanwTakeFirstGlobalDeque )
-$item.Class.Name $item
-#end        
-#else#break#end
-#end
+Current size: $size$BR
 $E_PRE
 《/pre》
 《/documentation》
@@ -89,165 +63,125 @@ $E_PRE
 #*
 《global-variables》
 *#
-#set( $chanwGlobalDequeGlobalVariables = [
-    "chanwAddFirstGlobalDeque",
-    "chanwAddLastGlobalDeque",
+#set( $chanwGlobalQueueGlobalVariables = [
     "chanwConstructor",
     "chanwData",
-    "chanwEmptyGlobalDeque",
-    "chanwPeekFirstGlobalDeque",
-    "chanwPeekLastGlobalDeque",
-    "chanwSizeGlobalDeque",
-    "chanwTakeFirstGlobalDeque",
-    "chanwTakeLastGlobalDeque"
+    "chanwDequeueGlobalQueue",
+    "chanwEnqueueResult",
+    "chanwPeekGlobalQueue",
+    "chanwRemainingCapacityGlobalQueue",
+    "chanwSizeGlobalQueue"
 ] )
-#set( $chanwDEQUE_DATA  = "data" )
-#set( $chanwDEQUE_SIZE  = 500 )
-#set( $chanwGlobalDeque = {} )
+#set( $chanwQUEUE_DATA  = "data" )
+#set( $chanwQUEUE_SIZE  = 500 )
+#set( $chanwGlobalQueue = {} )
 #*
 《/global-variables》
 《documentation》
-《code》#chanwInitializeGlobalDeque( $chanwGlobalDeque )《/code》
-《p》Initializes the deque.《/p》
+《code》#chanwInitializeGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Initializes the queue.《/p》
 《/documentation》
-《macro id=“chanwInitializeGlobalDeque”》
+《macro id=“chanwInitializeGlobalQueue”》
 *#
-#macro( chanwInitializeGlobalDeque $chanwGlobalDeque )
-    #chanwGetConstructorByClassNameParamTypeArray( "java.util.concurrent.LinkedBlockingDeque", ["int"] )
-    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamTypeArray )
-    #set( $chanwData = $constructor.newInstance( $chanwDEQUE_SIZE ) )
-    
-    #set( $dummy = $chanwGlobalDeque.put( $chanwDEQUE_DATA, $data ) )
+#macro( chanwInitializeGlobalQueue $chanwGlobalQueue )
+    #chanwGetConstructorByClassNameParamSize( "java.util.concurrent.ArrayBlockingQueue", 1 )
+    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
+    #set( $chanwData = $chanwConstructor.newInstance( $chanwQUEUE_SIZE ) )
+    #set( $dummy = $chanwGlobalQueue.put( $chanwQUEUE_DATA, $chanwData ) )
 #end
 #*
 《/macro》
 《documentation》
-《code》#chanwAddFirstGlobalDeque( $chanwGlobalDeque $value )《/code》
-《p》Adds the value to the front of the deque.《/p》
+《code》#chanwEnqueueGlobalQueue( $chanwGlobalQueue $value )《/code》
+《p》Enqueues the value.《/p》
 《/documentation》
-《macro id=“chanwAddFirstGlobalDeque”》
+《macro id=“chanwEnqueueGlobalQueue”》
 *#
-#macro( chanwAddFirstGlobalDeque $chanwGlobalDeque $value )
+#macro( chanwEnqueueGlobalQueue $chanwGlobalQueue $value )
     #if( $_PropertyTool.isNull( $value ) )
 Null not allow
         #stop
     #end
     
-    #set( $chanwAddFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addFirst( $value ) )
-#end
-#*
-《/macro》
-《documentation》
-《code》#chanwAddLastGlobalDeque( $chanwGlobalDeque $value )《/code》
-《p》Adds the value to the back of the deque.《/p》
-《/documentation》
-《macro id=“chanwAddLastGlobalDeque”》
-*#
-#macro( chanwAddLastGlobalDeque $chanwGlobalDeque $value )
-    #if( $_PropertyTool.isNull( $value ) )
-Null not allow
+    #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() >= $chanwQUEUE_SIZE )
+Queue is full
         #stop
     #end
     
-    #set( $chanwAddLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addLast( $value ) )
-#end
-#*
-《/macro》
-《documentation》
-《code》#chanwClearGlobalDeque( $chanwGlobalDeque )《/code》
-《p》Clears the deque of all the data.《/p》
-《/documentation》
-《macro id=“chanwClearGlobalDeque”》
-*#
-#macro( chanwClearGlobalDeque $chanwGlobalDeque )
-    $chanwGlobalDeque.get( $chanwDEQUE_DATA ).clear()
-#end
-#*
-《/macro》
-《documentation》
-《code》#chanwPeekFirstGlobalDeque( $chanwGlobalDeque )《/code》
-《p》Retrieves the value in the front without removing it.《/p》
-《/documentation》
-《macro id=“chanwPeekFirstGlobalDeque”》
-*#
-#macro( chanwPeekFirstGlobalDeque $chanwGlobalDeque )
-    #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
-Deque is empty
-    #else
-        #set( $chanwPeekFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).peekFirst() )
+    #set( $chanwEnqueueResult = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).add( $value ) )
+    
+    #if( !$chanwEnqueueResult )
+Failed to enqueue
+        #stop
     #end
 #end
 #*
 《/macro》
 《documentation》
-《code》#chanwPeekLastGlobalDeque( $chanwGlobalDeque )《/code》
-《p》Retrieves the value in the back without removing it.《/p》
+《code》#chanwDequeueGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Dequeus and returns the value.《/p》
 《/documentation》
-《macro id=“chanwPeekLastGlobalDeque”》
+《macro id=“chanwDequeueGlobalQueue”》
 *#
-#macro( chanwPeekLastGlobalDeque $chanwGlobalDeque )
-    #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
-Deque is empty
+#macro( chanwDequeueGlobalQueue $chanwGlobalQueue )
+    #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() > 0 )
+        #set( $chanwDequeueGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).take() )
     #else
-        #set( $chanwPeekLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).peekLast() )
+The queue is empty
     #end
 #end
 #*
 《/macro》
 《documentation》
-《code》#chanwSizeGlobalDeque( $chanwGlobalDeque )《/code》
-《p》Returns the size of the deque (the number of items stored).《/p》
+《code》#chanwSizeGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Returns the size of the queue (the number of items stored).《/p》
 《/documentation》
-《macro id=“chanwSizeGlobalDeque”》
+《macro id=“chanwSizeGlobalQueue”》
 *#
-#macro( chanwSizeGlobalDeque $chanwGlobalDeque )
-    #set( $chanwSizeGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).size() )
+#macro( chanwSizeGlobalQueue $chanwGlobalQueue )
+    #set( $chanwSizeGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() )
 #end
 #*
 《/macro》
 《documentation》
-《code》#chanwTakeFirstGlobalDeque( $chanwGlobalDeque )《/code》
-《p》Removes the value from the front.《/p》
+《code》#chanwRemainingCapacityGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Returns the remaining capacity of the queue.《/p》
 《/documentation》
-《macro id=“chanwTakeFirstGlobalDeque”》
+《macro id=“chanwRemainingCapacityGlobalQueue”》
 *#
-#macro( chanwTakeFirstGlobalDeque $chanwGlobalDeque )
-    #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
-Deque is empty
+#macro( chanwRemainingCapacityGlobalQueue $chanwGlobalQueue )
+    #set( $chanwRemainingCapacityGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).remainingCapacity() )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwClearGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Clears the queue.《/p》
+《/documentation》
+《macro id=“chanwClearGlobalQueue”》
+*#
+#macro( chanwClearGlobalQueue $chanwGlobalQueue )
+    $chanwGlobalQueue.get( $chanwQUEUE_DATA ).clear()
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwPeekGlobalQueue( $chanwGlobalQueue )《/code》
+《p》Returns the value without dequeing.《/p》
+《/documentation》
+《macro id=“chanwPeekGlobalQueue”》
+*#
+#macro( chanwPeekGlobalQueue $chanwGlobalQueue )
+    #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() > 0 )
+        #set( $chanwPeekGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).peek() )
     #else
-        #set( $chanwTakeFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).takeFirst() )
+The queue is empty
     #end
 #end
 #*
 《/macro》
-《documentation》
-《code》#chanwTakeLastGlobalDeque( $chanwGlobalDeque )《/code》
-《p》Removes the value from the back.《/p》
-《/documentation》
-《macro id=“chanwTakeLastGlobalDeque”》
 *#
-#macro( chanwTakeLastGlobalDeque $chanwGlobalDeque )
-    #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
-Deque is empty
-    #else
-        #set( $chanwTakeLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).takeLast() )
-    #end
-#end
-#*
-《/macro》
-《documentation》
-《code》#chanwEmptyGlobalDeque( $chanwGlobalDeque )《/code》
-《p》Returns a boolean, indicating whether the deque is empty.《/p》
-《/documentation》
-《macro id=“chanwEmptyGlobalDeque”》
-*#
-#macro( chanwEmptyGlobalDeque $chanwGlobalDeque )
-    #set( $chanwEmptyGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).size() == 0 )
-#end
-#*
-《/macro》
-*#
-#chanwInitializeGlobalDeque( $chanwGlobalDeque )
+#chanwInitializeGlobalQueue( $chanwGlobalQueue )
 #*
 《documentation id=“bottom”》
 《/documentation》
