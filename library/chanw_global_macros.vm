@@ -1,5 +1,12 @@
 #*
 《code》
+《copyright》
+Authur: Wing Ming Chan, Peter Thomas
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
+MIT Licensed
+Modification history:
+1/4/2017 Added #chanwProcessDDBlockWithMacro.
+《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines global macros used throughout the library.《/p》
@@ -80,7 +87,7 @@
 ] )
 #*
 《/global-variables》
-
+《documentation》
 《code》#chanwBuildXMLContentRoot( $xml_string )《/code》
 《p》Creates an 《code》org.jdom.Element《/code》 object out of an XML string.
 The variable 《code》$xml_string《/code》 should contain a valid XML string
@@ -767,8 +774,10 @@ element.《/p》
                 $chanwLastIndexOfSlash ) )
         #end
         
+        #if( $chanwBlockName.endsWith( 'dd-macro' ) )
+            #chanwInvokeMacro( "chanwProcessDDBlockWithMacro" [ "chanwFirstChild" ] )
         ## macro blocks
-        #if( $chanwBlockName.endsWith( 'Macro' ) ||
+        #elseif( $chanwBlockName.endsWith( 'Macro' ) ||
             $chanwBlockName.endsWith( 'macro' ) )
             #chanwInvokeMacro( "chanwProcessBlockWithMacro" [ "chanwFirstChild" ] )
         ## text blocks
@@ -846,6 +855,21 @@ into a macro name. This macro is used by 《code》#chanwProcessBlockChooser《/
     #else
         Cannot process the data definition block.$BR
     #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwProcessDDBlockWithMacro( $systemDataStructure )《/code》
+《p》Processes a data definition block with macro name. The macro name should
+be contained in a field named 《code》macro《/code》, which should be a root
+field. This macro is used by 《code》#chanwProcessBlockChooser《/code》.《/p》
+《/documentation》
+《macro id=“chanwProcessDDBlockWithMacro”》
+*#
+#macro( chanwProcessDDBlockWithMacro $systemDataStructure )
+    #set( $chanwMacroName = "processUnknown" )
+    #set( $chanwMacroName = $systemDataStructure.getChild( 'macro' ).Value )
+    #chanwInvokeMacro( $chanwMacroName [ "systemDataStructure" ] )
 #end
 #*
 《/macro》
