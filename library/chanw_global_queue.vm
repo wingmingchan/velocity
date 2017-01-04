@@ -1,5 +1,11 @@
 #*
 《code》
+《copyright》
+Authur: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines a global queue. Example:《/p》
@@ -86,8 +92,8 @@ $E_PRE
 #macro( chanwInitializeGlobalQueue $chanwGlobalQueue )
     #chanwGetConstructorByClassNameParamSize( "java.util.concurrent.ArrayBlockingQueue", 1 )
     #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
-    #set( $chanwData = $chanwConstructor.newInstance( $chanwQUEUE_SIZE ) )
-    #set( $dummy = $chanwGlobalQueue.put( $chanwQUEUE_DATA, $chanwData ) )
+    #set( $chanwData        = $chanwConstructor.newInstance( $chanwQUEUE_SIZE ) )
+    #set( $dummy            = $chanwGlobalQueue.put( $chanwQUEUE_DATA, $chanwData ) )
 #end
 #*
 《/macro》
