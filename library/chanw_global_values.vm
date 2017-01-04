@@ -1,5 +1,11 @@
 #*
 《code》
+《copyright》
+Authur: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines global values used throughout the entire library.《/p》
@@ -8,6 +14,7 @@
 #set( $master_site_name = "_common_assets" )
 
 #import( 'formats/library/velocity/chanw_object_creator' )
+#import( 'formats/library/velocity/chanw_display_velocity_code' )
 
 ## special characters
 #define( $chanwDOUBLE_HASH )$_EscapeTool.getH()$_EscapeTool.getH()#end
@@ -535,7 +542,6 @@ is part of the HTML markups.
 #set( $site_config_code     = $global_code_templates_code.getChild( "site-config" ).Value )
 #set( $page_config_code     = $global_code_templates_code.getChild( "page-config" ).Value )
 #set( $process_cascade_api_asset_code = $global_code_templates_code.getChild( "process-cascade-api-asset-code" ).Value )
-
 #set( $get_image_by_page_path_code = $global_code_templates_code.getChild( "get-image-by-page-path-code" ).Value )
 
 ## a list of names of variables associated with Velocity code
