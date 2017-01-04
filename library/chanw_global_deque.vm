@@ -1,5 +1,11 @@
 #*
 《code》
+《copyright》
+Authur: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines a global deque. Example:《/p》
@@ -113,11 +119,10 @@ $E_PRE
 《macro id=“chanwInitializeGlobalDeque”》
 *#
 #macro( chanwInitializeGlobalDeque $chanwGlobalDeque )
-    #chanwGetConstructorByClassNameParamTypeArray( "java.util.concurrent.LinkedBlockingDeque", ["int"] )
+    #chanwGetConstructorByClassNameParamTypeArray( "java.util.concurrent.LinkedBlockingDeque", [ "int" ] )
     #set( $chanwConstructor = $chanwGetConstructorByClassNameParamTypeArray )
-    #set( $chanwData = $constructor.newInstance( $chanwDEQUE_SIZE ) )
-    
-    #set( $dummy = $chanwGlobalDeque.put( $chanwDEQUE_DATA, $data ) )
+    #set( $chanwData        = $constructor.newInstance( $chanwDEQUE_SIZE ) )
+    #set( $dummy            = $chanwGlobalDeque.put( $chanwDEQUE_DATA, $data ) )
 #end
 #*
 《/macro》
