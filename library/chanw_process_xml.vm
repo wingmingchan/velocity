@@ -1,5 +1,11 @@
 #*
 《code》
+《copyright》
+Authur: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+《/copyright》
 《documentation id=“top”》
 《p》This format defines macros to process XML.
 Use this format to process any 《code》system-data-structure《/code》 element or
