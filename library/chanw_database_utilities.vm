@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+1/9/2017 Added #chanwGetAllTableNames
 《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
@@ -23,6 +24,9 @@ as the last line of the code.《/p》
     "chanwContext",
     "chanwData",
     "chanwDataSource",
+    "chanwDBMetadata",
+    "chanwDBMetadataRS",
+    "chanwGetAllTableNames",
     "chanwGetDatabasStatement",
     "chanwGetHTMLTableFromSql",
     "chanwLastRecordNumber",
@@ -158,6 +162,67 @@ $data.getString( $j ) ).append( '"' ) )##
 #end##
     
     #set( $void = $globalStringBuffer.append(");") )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetAllTableNames《/code》
+《p》Creates a global variable name 《code》$chanwGetAllTableNames《/code》, which
+stores all table names. Example:《/p》
+《pre》
+#chanwGetAllTableNames
+$chanwGetAllTableNames
+《/pre》
+《/documentation》
+《macro id=“chanwGetAllTableNames”》
+*#
+#macro( chanwGetAllTableNames )
+    #if( !$chanwConnection || $chanwConnection.isClosed() )
+        #chanwGetDatabaseStatement
+    #end
+    
+    #set( $chanwDBMetadata    = $chanwConnection.getMetaData() )
+    #set( $chanwDBMetadataRS  = $chanwDBMetadata.getTables( null, null, "%", null ) )
+    #set( $chanwGetAllTableNames = [] )
+
+    #if( $chanwDBMetadataRS.next() )
+        #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
+            #set( $void = $chanwGetAllTableNames.add( $chanwDBMetadataRS.getString( 3 ) ) )
+        #end
+        
+        #foreach( $num in [ 1..500 ] )
+            #if( $chanwDBMetadataRS.next() )
+                #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
+                    #set( $void = $chanwGetAllTableNames.add( $chanwDBMetadataRS.getString( 3 ) ) )
+                #end
+            #else
+                #break
+            #end
+        #end
+    #end
+   
+    ## Oracle
+    #if( $chanwGetAllTableNames.size() == 0 )
+        #set( $chanwSql = "SELECT tablespace_name, table_name FROM all_tables " +
+             "WHERE tablespace_name LIKE 'C%' " +
+             "AND table_name like 'CXML_%' " +
+             "ORDER BY table_name" )
+        
+        #chanwGetResultSet( $chanwSql )
+
+        #if( $chanwGetResultSet.next() )
+            #set( $void = $chanwGetAllTableNames.add( $chanwGetResultSet.getString( 2 ) ) )
+
+        
+            #foreach( $num in [ 1..500 ] )
+                #if( $chanwGetResultSet.next() )
+                    #set( $void = $chanwGetAllTableNames.add( $chanwGetResultSet.getString( 2 ) ) )
+                #else
+                    #break
+                #end
+            #end
+        #end
+    #end
 #end
 #*
 《/macro》
