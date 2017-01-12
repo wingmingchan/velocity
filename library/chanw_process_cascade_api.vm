@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+1/12/2017 Fixed a bug.
 《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
@@ -388,7 +389,7 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
     #if( $node.isAsset() )
         #set( $chanwAsset = $node.Asset )
         #set( $chanwAssetType = $node.Asset.Identifier.Type )
-        #set( $chanwAssetPath = $node.Asset.Link )
+        #set( $chanwAssetLink = $node.Asset.Link )
         #set( $chanwAssetPath = $node.Asset.Path )
         #set( $chanwAssetSiteId = $node.Asset.SiteId )
         #set( $chanwAssetSiteName = $node.Asset.SiteName )
