@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+1/12/2017 Added more code for Oracle
 1/9/2017 Added #chanwGetAllTableNames
 《/copyright》
 《documentation id=“top”》
@@ -187,13 +188,15 @@ $chanwGetAllTableNames
 
     #if( $chanwDBMetadataRS.next() )
         #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
-            #set( $void = $chanwGetAllTableNames.add( $chanwDBMetadataRS.getString( 3 ) ) )
+            #set( $chanwTableName = '"' + $chanwDBMetadataRS.getString( 3 ).toLowerCase() + '"' )
+            #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
         #end
         
         #foreach( $num in [ 1..500 ] )
             #if( $chanwDBMetadataRS.next() )
                 #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
-                    #set( $void = $chanwGetAllTableNames.add( $chanwDBMetadataRS.getString( 3 ) ) )
+                    #set( $chanwTableName = '"' + $chanwDBMetadataRS.getString( 3 ).toLowerCase() + '"' )
+                    #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
                 #end
             #else
                 #break
@@ -211,12 +214,13 @@ $chanwGetAllTableNames
         #chanwGetResultSet( $chanwSql )
 
         #if( $chanwGetResultSet.next() )
-            #set( $void = $chanwGetAllTableNames.add( $chanwGetResultSet.getString( 2 ) ) )
-
+            #set( $chanwTableName = '"' + $chanwGetResultSet.getString( 2 ).toLowerCase() + '"' )
+            #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
         
             #foreach( $num in [ 1..500 ] )
                 #if( $chanwGetResultSet.next() )
-                    #set( $void = $chanwGetAllTableNames.add( $chanwGetResultSet.getString( 2 ) ) )
+                    #set( $chanwTableName = '"' + $chanwGetResultSet.getString( 2 ).toLowerCase() + '"' )
+                    #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
                 #else
                     #break
                 #end
@@ -424,7 +428,7 @@ See 《code》#chanwGetTableColumnNames《/code》 for example.《/p》
         #stop
     #end
     
-    #set( $chanwGetMetaDataRS = $chanwMetaData.getColumns( null, null, $table, null ) )
+    #set( $chanwGetMetaDataRS = $chanwMetaData.getColumns( null, null, $table, "%" ) )
 #end
 #*
 《/macro》
@@ -535,10 +539,22 @@ $chanwGetTableColumnNames
 
     #foreach( $row in [ 1..500 ] )
         #if( $chanwGetMetaDataRS.next() )
-            #set( $void = $chanwGetTableColumnNames.add(
-                $chanwGetMetaDataRS.getString( "COLUMN_NAME" ) ) )
+            #set( $chanwColumnName = '"' + $chanwGetMetaDataRS.getString( "COLUMN_NAME" ).toLowerCase() + '"' )
+            #set( $void = $chanwGetTableColumnNames.add( $chanwColumnName ) )
         #else
             #break
+        #end
+    #end
+    
+    #if( $chanwGetTableColumnNames.size() == 0 )
+        #set( $chanwSql = "select * from $table where 1 = 0" )
+        #chanwGetResultSet( $chanwSql )
+        #set( $chanwResultSetMetadata = $chanwGetResultSet.getMetaData() )
+        #set( $chanwResultSetMetadataColumnCount = $chanwResultSetMetadata.getColumnCount() )
+        
+        #foreach( $num in [ 1..$chanwResultSetMetadataColumnCount ] )
+            #set( $chanwColumnName = '"' + $chanwResultSetMetadata.getColumnLabel( $num ).toLowerCase() + '"' )
+            #set( $void = $chanwGetTableColumnNames.add( $chanwColumnName ) )
         #end
     #end
 #end
