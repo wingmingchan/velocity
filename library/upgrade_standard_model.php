@@ -1,4 +1,5 @@
 <?php
+$start_time = time();
 $site_name = "_common_assets_barebone"; // name of the site to be upgraded
 //$site_name = "_common_assets"; // name of the site to be upgraded
 $source    = "http://www.upstate.edu/cascade-admin/standard-model/source/";
@@ -10,11 +11,6 @@ and updates all library formats and xml blocks.
 
 require_once('auth_tutorial7.php');
 
-// to prevent time-out
-set_time_limit( 10000 );
-// to prevent using up memory when traversing a large site
-ini_set( 'memory_limit', '2048M' );
-
 use cascade_ws_AOHS      as aohs;
 use cascade_ws_constants as c;
 use cascade_ws_asset     as a;
@@ -24,6 +20,8 @@ use cascade_ws_exception as e;
 
 try
 {
+	u\DebugUtility::setTimeSpaceLimits();
+
     // folder paths
     $formats_folder = $cascade->getAsset(
         a\Folder::TYPE, "formats", $site_name
@@ -125,14 +123,18 @@ try
         $source_path = $source . $library_format_name . ".xml";
         pushSource( $site_name, $format, $source_path );
     }
+    
+    u\DebugUtility::outputDuration( $start_time );
 }
-catch( \Exception $e ) 
+catch( \Exception $e )
 {
-    echo S_PRE . $e . E_PRE; 
-} 
-catch( \Error $er ) 
+    echo S_PRE . $e . E_PRE;
+    u\DebugUtility::outputDuration( $start_time );
+}
+catch( \Error $er )
 {
-    echo S_PRE . $er . E_PRE; 
+    echo S_PRE . $er . E_PRE;
+    u\DebugUtility::outputDuration( $start_time );
 }
 
 function pushSource( $site_name, $asset, $source_path )
