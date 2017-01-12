@@ -20,7 +20,7 @@ use cascade_ws_exception as e;
 
 try
 {
-	u\DebugUtility::setTimeSpaceLimits();
+    u\DebugUtility::setTimeSpaceLimits();
 
     // folder paths
     $formats_folder = $cascade->getAsset(
