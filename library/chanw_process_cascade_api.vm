@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+1/20/2017 Added #chanwLocateAssetInAncestorFolder.
 1/12/2017 Fixed a bug.
 《/copyright》
 《documentation id=“top”》
@@ -29,12 +30,15 @@ when using the LocatorTool.《/p》
     "chanwChildren",
     "chanwCurrent",
     "chanwDFS",
+    "$chanwFolder",
+    "chanwFolderParentPath",
     "chanwGetCascadeAPIAssetProperties",
     "chanwGetDynamicFieldsData",
     "chanwGetMetadataData",
     "chanwGetPageBlockStructuredDataNodeByIdArray",
     "chanwGetStructuredDataNodeData",
     "chanwInvokeQuery",
+    "chanwLocateAssetInAncestorFolder",
     "chanwNext",
     "chanwNextInt",
     "chanwQuery",
@@ -147,7 +151,6 @@ PageXHTMLAsXMLElement
 《/documentation》
 《macro id=“chanwGetCascadeAPIAssetProperties”》
 *#
-
 #macro( chanwGetCascadeAPIAssetProperties $assetType )
     #if( !$chanwCascadeAssetList.contains( $assetType ) )
         $assetType is not a supported type.$BR
@@ -420,6 +423,51 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextValues", $chanwTextValues ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextNodeOptions", $chanwTextNodeOptions ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextValueAsXMLElement", $chanwTextValueAsXMLElement ) )
+#end
+
+
+#*
+《/macro》
+《documentation》
+《code》#chanwLocateAssetInAncestorFolder( $folder_path $site_name $type $name《/code》
+《p》Locates the asset by matching the type and name, starting from the supplied folder path.
+If the asset cannot be found, then look for the asset in the grandparent folder, and so on.《/p》
+《p》Examples:《/p》
+《pre》
+#chanwLocateAssetInAncestorFolder( 
+    $currentPage.ParentFolder.Path $currentPageSiteName "block" "_site-info" )
+$chanwLocateAssetInAncestorFolder.Name
+《/pre》
+《/documentation》
+《macro id=“chanwLocateAssetInAncestorFolder”》
+*#
+#macro( chanwLocateAssetInAncestorFolder $folder_path $site_name $type $name )
+    #set( $chanwLocateAssetInAncestorFolder = "" )
+    #set( $chanwFolder = $_.locateFolder( $folder_path, $site_name ) )
+
+    #if( $chanwFolder )
+        #set( $chanwChildren = $chanwFolder.Children )
+        
+        #foreach( $child in $chanwChildren )
+            #if( $child.Identifier.Type == $type && $child.Name == $name )
+                #set( $chanwLocateAssetInAncestorFolder = $child )
+                #break
+            #end
+        #end
+        
+        #set( $chanwFolderParentPath = "" )
+        
+        #if( $chanwLocateAssetInAncestorFolder == "" )
+            #set( $chanwFolderParentPath = 
+                $chanwFolder.ParentFolderIdentifier.Path.PathAsString )
+
+            ## recursive call
+            #if( $chanwFolderParentPath != "" )
+                #chanwLocateAssetInAncestorFolder(
+                    $chanwFolderParentPath $site_name $type $name )
+            #end
+        #end
+    #end
 #end
 #*
 《/macro》
