@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+2/1/2017 Added more date and calendar variables.
 《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
@@ -151,7 +152,7 @@ Modification history:
 #set( $DataBlockPropertyMap = {
     "DataBlockCreatedBy":             "CreatedBy",
     "DataBlockCreatedOn":             "CreatedOn",
-	"DataBlockDataDefinitionPath":    "DataDefinitionPath",
+    "DataBlockDataDefinitionPath":    "DataDefinitionPath",
 	"DataBlockFolderOrder":           "FolderOrder",
 	"DataBlockId":                    "Identifier.Id",
 	"DataBlockIdentifier":            "Identifier",
@@ -368,6 +369,7 @@ is part of the HTML markups.
 ] )
 
 ## date and calendar
+## fields
 #set( $chanwYearField     = $_FieldTool.in( 'java.util.Calendar' ).YEAR )
 #set( $chanwMonthField    = $_FieldTool.in( 'java.util.Calendar' ).MONTH )
 #set( $chanwDayField      = $_FieldTool.in( 'java.util.Calendar' ).DATE )
@@ -376,7 +378,10 @@ is part of the HTML markups.
 #set( $chanwSecondField   = $_FieldTool.in( 'java.util.Calendar' ).SECOND )
 #set( $chanwAmPmField     = $_FieldTool.in( 'java.util.Calendar' ).AM_PM )
 
+## today
 #set( $chanwTodayDateObject          = $_DateTool.getSystemDate() )
+#set( $chanwShortField = $_FieldTool.in( $chanwTodayDateObject ).SHORT )
+#set( $chanwLongField  = $_FieldTool.in( $chanwTodayDateObject ).LONG )
 #set( $chanwCalendarObject           = $_DateTool.getCalendar() )
 #set( $chanwCurrentTimestampLong     = $_DateTool.getSystemTime() )
 #set( $chanwCurrentTimestampString   = "" + $_DateTool.getSystemTime() )
@@ -387,9 +392,54 @@ is part of the HTML markups.
 #set( $chanwCurrentMinuteInt         = $_DateTool.getValue( $chanwMinuteField, $chanwTodayDateObject ) )
 #set( $chanwCurrentSecondInt         = $_DateTool.getValue( $chanwSecondField, $chanwTodayDateObject ) )
 #set( $chanwCurrentAmPmString        = $_DateTool.getValue( $chanwAmPmField, $chanwTodayDateObject ) )
+#set( $chanwCurrentDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwTodayDateObject ) )
+#set( $chanwCurrentDayOfWeekShortString = $_DateTool.format( "EEE", $chanwTodayDateObject ) )
+#set( $chanwCurrentMonthLongString   = $_DateTool.format( "MMMMM", $chanwTodayDateObject ) )
+#set( $chanwCurrentMonthMediumString = $_DateTool.format( "MMM", $chanwTodayDateObject ) )
 
-#set( $chanwCurrentMonthLongString   = $_DateTool.format( "MMMMM", $_DateTool.getSystemDate() ) )
-#set( $chanwCurrentMonthMediumString = $_DateTool.format( "MMM", $_DateTool.getSystemDate() ) )
+## yesterday
+#set( $chanwYesterdayCalObject = $chanwCalendarObject.clone() )
+$chanwYesterdayCalObject.add( $chanwDayField, -1 )
+#set( $chanwYesterdayDateObject = $_DateTool.toDate( $chanwYesterdayCalObject ) )
+#set( $chanwYesterdayInt = $chanwYesterdayCalObject.get( $chanwDayField ) )
+#set( $chanwYesterdayDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwYesterdayDateObject ) )
+#set( $chanwYesterdayDayOfWeekShortString = $_DateTool.format( "EEE", $chanwYesterdayDateObject ) )
+
+## tomorrow
+#set( $chanwTomorrowCalObject  = $chanwCalendarObject.clone() )
+$chanwTomorrowCalObject.add( $chanwDayField, 1 )
+#set( $chanwTomorrowDateObject = $_DateTool.toDate( $chanwTomorrowCalObject ) )
+#set( $chanwTomorrowInt = $chanwTomorrowCalObject.get( $chanwDayField ) )
+#set( $chanwTomorrowDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwTomorrowDateObject ) )
+#set( $chanwTomorrowDayOfWeekShortString = $_DateTool.format( "EEE", $chanwTomorrowDateObject ) )
+
+## last month
+#set( $chanwLastMonthCalObject = $chanwCalendarObject.clone() )
+$chanwLastMonthCalObject.add( $chanwMonthField, -1 )
+#set( $chanwLastMonthDateObject = $_DateTool.toDate( $chanwLastMonthCalObject ) )
+#set( $chanwLastMonthInt = $chanwLastMonthCalObject.get( $chanwMonthField ) )
+#set( $chanwLastMonthLongString  = $_DateTool.format( "MMMMM", $chanwLastMonthDateObject ) )
+#set( $chanwLastMonthShortString = $_DateTool.format( "MMM", $chanwLastMonthDateObject ) )
+
+## next month
+#set( $chanwNextMonthCalObject = $chanwCalendarObject.clone() )
+$chanwNextMonthCalObject.add( $chanwMonthField, 1 )
+#set( $chanwNextMonthDateObject = $_DateTool.toDate( $chanwNextMonthCalObject ) )
+#set( $chanwNextMonthInt = $chanwNextMonthCalObject.get( $chanwMonthField ) )
+#set( $chanwNextMonthLongString  = $_DateTool.format( "MMMMM", $chanwNextMonthDateObject ) )
+#set( $chanwNextMonthShortString = $_DateTool.format( "MMM", $chanwNextMonthDateObject ) )
+
+## last year
+#set( $chanwLastYearCalObject  = $chanwCalendarObject.clone() )
+$chanwLastYearCalObject.add( $chanwYearField, -1 )
+#set( $chanwLastYearDateObject = $_DateTool.toDate( $chanwLastYearCalObject ) )
+#set( $chanwLastYearInt = $chanwCurrentYearInt - 1 )
+
+## next year
+#set( $chanwNextYearCalObject  = $chanwCalendarObject.clone() )
+$chanwNextYearCalObject.add( $chanwYearField, 1 )
+#set( $chanwNextYearDateObject = $_DateTool.toDate( $chanwNextYearCalObject ) )
+#set( $chanwNextYearInt = $chanwCurrentYearInt + 1 )
 
 #set( $rssItemVarElementMap = {
         'rssItemGuid':       $rssXML_ELEMENT_GUID,
