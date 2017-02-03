@@ -1,4 +1,7 @@
 # Velocity
+
+Library last modified: 2/1/2017 12:00 PM.
+
 A reusable library in Velocity for Cascade with examples. This is the code base I use to implement our <a href="https://github.com/wingmingchan/RWD2">RWD2</a>. To download the implementation of the Standard Model, go to RWD2.
 
 A note about filenames. All files whose filenames with a "chanw_" prefix contain code reusable by anyone. Those with the "upstate_" prefix contain business logic specific to Upstate.
