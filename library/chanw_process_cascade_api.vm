@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+2/4/2017 Add #chanwIsAncestorOf and chanwIsDescendentOf.
 1/20/2017 Added #chanwLocateAssetInAncestorFolder.
 1/12/2017 Fixed a bug.
 《/copyright》
@@ -31,6 +32,8 @@ when using the LocatorTool.《/p》
     "chanwCurrent",
     "chanwDFS",
     "$chanwFolder",
+    "chanwFolderContainedAssetPath",
+    "chanwFolderPath",
     "chanwFolderParentPath",
     "chanwGetCascadeAPIAssetProperties",
     "chanwGetDynamicFieldsData",
@@ -38,6 +41,8 @@ when using the LocatorTool.《/p》
     "chanwGetPageBlockStructuredDataNodeByIdArray",
     "chanwGetStructuredDataNodeData",
     "chanwInvokeQuery",
+    "chanwIsAncestorOf",
+    "chanwIsDescendentOf",
     "chanwLocateAssetInAncestorFolder",
     "chanwNext",
     "chanwNextInt",
@@ -424,12 +429,73 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextNodeOptions", $chanwTextNodeOptions ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextValueAsXMLElement", $chanwTextValueAsXMLElement ) )
 #end
-
-
 #*
 《/macro》
 《documentation》
-《code》#chanwLocateAssetInAncestorFolder( $folder_path $site_name $type $name《/code》
+《code》#chanwIsAncestorOf( $folder $folderContainedAsset )《/code》
+《p》Returns a boolean, indicating whether the folder is an ancestor of the folder contained asset.《/p》
+《p》Examples:《/p》
+《pre》
+#set( $folder = $_.locateFolder( "web-services", "cascade-admin" ) )
+#set( $page = $_.locatePage( "/formats/velocity/api-documentation/com-hannonhill-cascade-api-adapters/index-block-api-adapter", "cascade-admin" ) )
+#chanwIsAncestorOf( $folder $page )
+$chanwIsAncestorOf
+《/pre》
+《/documentation》
+《macro id=“chanwIsAncestorOf”》
+*#
+#macro( chanwIsAncestorOf $folder $folderContainedAsset )
+    #if( !$folder || $folder.Class.Name != "com.hannonhill.cascade.api.adapters.FolderAPIAdapter" )
+        No folder supplied.
+        #stop
+    #elseif( !$folderContainedAsset )
+        No folder contained asset is supplied.
+        #stop
+    #end
+    
+    #chanwIsInstanceOf( $folderContainedAsset "com.hannonhill.cascade.api.adapters.FolderContainedAssetAPIAdapter" )
+    
+    #if( !$chanwIsInstanceOf )
+        No folder contained asset supplied.
+        #stop
+    #end
+
+    ## make sure that the folder path starts with /
+    #set( $chanwFolderPath = "/" + $folder.Path + "/" )
+    #set( $chanwFolderContainedAssetPath = "/" + $folderContainedAsset.Path )
+    
+    #if( $folder.SiteName != $folderContainedAsset.SiteName ) ## different site, false
+        #set( $chanwIsAncestorOf = false )
+    #elseif( $folder.Path == "/" ) ## base folder, true
+        #set( $chanwIsAncestorOf = true )
+    #else
+        #set( $chanwIsAncestorOf = $chanwFolderContainedAssetPath.contains( $chanwFolderPath ) )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwIsDescendentOf( $folder $folderContainedAsset )《/code》
+《p》Returns a boolean, indicating whether the folder contained asset is a descendent of the folder.
+This macro invokes 《code》#chanwIsAncestorOf《/code》.《/p》
+《p》Examples:《/p》
+《pre》
+#set( $folder = $_.locateFolder( "formats", "cascade-admin" ) )
+#set( $page = $_.locatePage( "/formats/velocity/api-documentation/com-hannonhill-cascade-api-adapters/index-block-api-adapter", "cascade-admin" ) )
+#chanwIsDescendentOf( $folder $page )
+$chanwIsDescendentOf
+《/pre》
+《/documentation》
+《macro id=“chanwIsDescendentOf”》
+*#
+#macro( chanwIsDescendentOf $folder $folderContainedAsset )
+    #chanwIsAncestorOf( $folder $folderContainedAsset )
+    #set( $chanwIsDescendentOf = $chanwIsAncestorOf )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwLocateAssetInAncestorFolder( $folder_path $site_name $type $name )《/code》
 《p》Locates the asset by matching the type and name, starting from the supplied folder path.
 If the asset cannot be found, then look for the asset in the grandparent folder, and so on.《/p》
 《p》Examples:《/p》
