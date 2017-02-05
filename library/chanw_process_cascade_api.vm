@@ -41,6 +41,7 @@ when using the LocatorTool.《/p》
     "chanwGetMetadataData",
     "chanwGetPageBlockStructuredDataNodeByIdArray",
     "chanwGetStructuredDataNodeData",
+    "chanwImportScript",
     "chanwInvokeQuery",
     "chanwIsAncestorOf",
     "chanwIsDescendentOf",
@@ -455,18 +456,18 @@ Import failed.
     #if( $chanwLocateAsset != "" )
         #set( $chanwFolderPath = $folderPath )
     	
-		#if( !$chanwFolderPath.startsWith( "/" ) )
-			#set( $chanwFolderPath = "/" + $chanwFolderPath )
-		#end
+        #if( !$chanwFolderPath.startsWith( "/" ) )
+            #set( $chanwFolderPath = "/" + $chanwFolderPath )
+        #end
 		
-		#if( !$chanwFolderPath.endsWith( "/" ) )
-			#set( $chanwFolderPath = $chanwFolderPath + "/" )
-		#end
+        #if( !$chanwFolderPath.endsWith( "/" ) )
+            #set( $chanwFolderPath = $chanwFolderPath + "/" )
+        #end
 		
-		#set( $chanwScriptPath = "site://" + $siteName + $chanwFolderPath + $scriptName )
+        #set( $chanwScriptPath = "site://" + $siteName + $chanwFolderPath + $scriptName )
         #import( $chanwScriptPath )
         #set( $chanwImportScript = true )
-	#end
+    #end
 #end
 #*
 《/macro》
