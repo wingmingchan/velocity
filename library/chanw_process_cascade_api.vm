@@ -32,7 +32,7 @@ when using the LocatorTool.《/p》
     "chanwChildren",
     "chanwCurrent",
     "chanwDFS",
-    "$chanwFolder",
+    "chanwFolder",
     "chanwFolderContainedAssetPath",
     "chanwFolderPath",
     "chanwFolderParentPath",
