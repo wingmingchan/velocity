@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+2/5/2017 Added #chanwImportScript.
 2/4/2017 Added #chanwIsAncestorOf and chanwIsDescendentOf.
 1/20/2017 Added #chanwLocateAssetInAncestorFolder.
 1/12/2017 Fixed a bug.
@@ -428,6 +429,44 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextValues", $chanwTextValues ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextNodeOptions", $chanwTextNodeOptions ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextValueAsXMLElement", $chanwTextValueAsXMLElement ) )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwImportScript( $folderPath $siteName $scriptName )《/code》
+《p》Returns a boolean, indicating whether the script format is imported successfully.《/p》
+《p》Examples:《/p》
+《pre》
+#chanwImportScript( "/" "cascade-admin" "setup" )
+
+#if( $chanwImportScript )
+Imported sucessfully.
+#else
+Import failed.
+#end
+《/pre》
+《/documentation》
+《macro id=“chanwImportScript”》
+*#
+#macro( chanwImportScript $folderPath $siteName $scriptName )
+    #set( $chanwImportScript = false )
+    #chanwLocateAsset( $folderPath $siteName $scriptName )
+    
+    #if( $chanwLocateAsset != "" )
+        #set( $chanwFolderPath = $folderPath )
+    	
+		#if( !$chanwFolderPath.startsWith( "/" ) )
+			#set( $chanwFolderPath = "/" + $chanwFolderPath )
+		#end
+		
+		#if( !$chanwFolderPath.endsWith( "/" ) )
+			#set( $chanwFolderPath = $chanwFolderPath + "/" )
+		#end
+		
+		#set( $chanwScriptPath = "site://" + $siteName + $chanwFolderPath + $scriptName )
+        #import( $chanwScriptPath )
+        #set( $chanwImportScript = true )
+	#end
 #end
 #*
 《/macro》
