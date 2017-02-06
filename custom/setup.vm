@@ -1,0 +1,27 @@
+## url to be inserted in <link>
+#set( $upstateLocalStylesheetUrl = "http://www.upstate.edu/cascade-admin/_extra/style.css" )
+## site title string used in <div id="site-title">$upstateSiteTitle</div>
+#set( $upstateSiteTitle = "Cascade Administration" )
+## paths to be used in href or #import
+#set( $upstateSiteLogoPath      = "site://cascade-admin/images/logo.jpg" )
+#set( $upstateSiteNavPath       = "site://cascade-admin/_cascade/formats/site-nav" )
+#set( $upstateSiteHeaderPath    = "site://cascade-admin/_cascade/formats/header" )
+#set( $upstateSiteGoogleTagPath = "site://cascade-admin/_cascade/formats/google-tag" )
+
+## lists of pages that require special treatment
+#set( $upstatePagesWithoutBreadcrumbs = [
+    "index",
+    "web-services/api/asset-classes/index"
+] )
+
+#set( $upstatePagesWithNarrowRightColumn = [
+    "web-services/api/asset-classes/data-definition"
+] )
+
+#set( $upstatePagesWithWideRightColumn = [
+    "web-services/api/asset-classes/data-definition"
+] )
+
+#set( $upstatePagesWithLeftNav = [
+    "web-services/api/asset-classes/data-definition"
+] )
