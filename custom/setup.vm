@@ -33,5 +33,12 @@
 ##evaluate( "$${namespace}LocalStylesheetUrl" )
 ##evaluate( "$${namespace}PagesWithoutBreadcrumbs" )
 
+## different ways to bring back a global variable like $upstateSiteTitle
+## with the namespace embedded in the name
 #chanwReviveGlobalVariable( "SiteTitle" $namespace )
+## or
+##evaluate( '#chanwReviveGlobalVariable( "${namespace}SiteTitle" )' )
+## or
+##set( $varName = "${namespace}SiteTitle" )
+##chanwInvokeMacro( "chanwReviveGlobalVariable" [ "varName" ] )
 $chanwReviveGlobalVariable ## output Cascade Administration
