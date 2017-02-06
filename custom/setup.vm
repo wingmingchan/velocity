@@ -1,3 +1,7 @@
+#*
+This format can be placed in the base folder of a site
+to control site configuration.
+*#
 #import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
 
 #if( !$namespace )
