@@ -1,31 +1,37 @@
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+#if( !$namespace )
+    #set( $namespace = "upstate" )
+#end
+
 ## url to be inserted in <link>
-#set( $upstateLocalStylesheetUrl = "http://www.upstate.edu/cascade-admin/_extra/style.css" )
+#chanwSetVariable( "${namespace}LocalStylesheetUrl" "http://www.upstate.edu/cascade-admin/_extra/style.css" )
 ## url to wrap around site title
-#set( $upstateSiteUrl   = $currentPage.Site.Url + "/index" )
+#chanwSetVariable( "${namespace}SiteUrl" "/cascade-admin/index" )
 ## site title string used in <div id="site-title"><a href="${upstateSiteUrl}">$upstateSiteTitle</a></div>
-#set( $upstateSiteTitle = "Cascade Administration" )
+#chanwSetVariable( "${namespace}SiteTitle" "Cascade Administration" )
+
 ## paths to be used in href or #import
-#set( $upstateSiteLogoPath      = "site://cascade-admin/images/logo.jpg" )
-#set( $upstateSiteNavPath       = "site://cascade-admin/_cascade/formats/site-nav" )
-#set( $upstateSiteHeaderPath    = "site://cascade-admin/_cascade/formats/header" )
-#set( $upstateSiteGoogleTagPath = "site://cascade-admin/_cascade/formats/google-tag" )
+#chanwSetVariable( "${namespace}SiteLogoPath" "site://cascade-admin/images/logo.jpg" )
+#chanwSetVariable( "${namespace}SiteNavPath" "site://cascade-admin/_cascade/formats/site-nav" )
+#chanwSetVariable( "${namespace}SiteHeaderPath" "site://cascade-admin/_cascade/formats/header" )
+#chanwSetVariable( "${namespace}SiteGoogleTagPath" "site://cascade-admin/_cascade/formats/google-tag" )
+
 ## code to be evaulated
-#set( $upstateFolderNavCode     = "#" + "processFolderNav($" + "contentRoot)" )
+#chanwSetVariable( "${namespace}FolderNavCode" '#processFolderNav($contentRoot)' )
 
 ## lists of pages that require special treatment
-#set( $upstatePagesWithoutBreadcrumbs = [
+#chanwSetVariable( "${namespace}PagesWithoutBreadcrumbs" [
     "index",
     "web-services/api/asset-classes/index"
 ] )
-
-#set( $upstatePagesWithNarrowRightColumn = [
+#chanwSetVariable( "${namespace}PagesWithNarrowRightColumn" [
     "web-services/api/asset-classes/data-definition"
 ] )
 
-#set( $upstatePagesWithWideRightColumn = [
-    "web-services/api/asset-classes/data-definition"
-] )
+##evaluate( "$${namespace}SiteTitle" )
+##evaluate( "$${namespace}LocalStylesheetUrl" )
+##evaluate( "$${namespace}PagesWithoutBreadcrumbs" )
 
-#set( $upstatePagesWithLeftNav = [
-    "web-services/api/asset-classes/data-definition"
-] )
+#chanwReviveGlobalVariable( "SiteTitle" $namespace )
+$chanwReviveGlobalVariable ## output Cascade Administration
