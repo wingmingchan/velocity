@@ -1,10 +1,11 @@
 #*
 《code》
 《copyright》
-Authors: Wing Ming Chan, Peter Thomas
+Authur: Wing Ming Chan, Peter Thomas
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
+2/6/2017 Added #chanwReviveGlobalVariable.
 1/4/2017 Added #chanwProcessDDBlockWithMacro.
 《/copyright》
 《documentation id=“top”》
@@ -12,7 +13,7 @@ Modification history:
 《p》This format defines global macros used throughout the library.《/p》
 《/documentation》
 *#
-#import( 'formats/library/velocity/chanw_global_values' )
+#import( '/formats/library/velocity/chanw_global_values' )
 #*
 《global-variables》
 *#
@@ -44,6 +45,7 @@ Modification history:
     "chanwGetMapKeyValueReversed",
     "chanwGetParamListAsStrings",
     "chanwGetParamListAsValues",
+    "chanwGlobalVarName",
     "chanwGrandChildNodes",
     "chanwIndex",
     "chanwIsDisplay",
@@ -71,6 +73,7 @@ Modification history:
     "chanwPaths",
     "chanwPathSegments",
     "chanwRedirect",
+    "chanwReviveGlobalVariable",
     "chanwScripts",
     "chanwSetVarValStatement",
     "chanwSize",
@@ -690,7 +693,7 @@ $chanwIsInstanceOf$BR   ## output false
 *#
 #macro ( chanwLocateAsset $folderPath $siteName $assetName )
     #if( !$folderPath || !$siteName || !$assetName )
-    Three non-empty strings are required: folder path, site name, and asset name.
+    Three non-empty strings are required: folder path, site name, and asset name here.
     #stop
     #end
     
@@ -698,7 +701,7 @@ $chanwIsInstanceOf$BR   ## output false
         $folderPath == "" || $siteName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
         $siteName == "" || $assetName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
         $assetName == "" )
-    Three non-empty strings are required: folder path, site name, and asset name.
+    Three non-empty strings are required: folder path, site name, and asset name there.
     #stop
     #end
 
@@ -730,7 +733,7 @@ $chanwIsInstanceOf$BR   ## output false
         
         ## not found
         #if( $chanwLocateAsset == "" )
-        Cannot locate the asset.$BR
+        ##Cannot locate the asset.$BR
         #end
     #end
 #end
@@ -1109,6 +1112,28 @@ The list passed in should be variable names without the dollar signs. Example:�
             #chanwSetVariable( $var "" )
         #end
     #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwReviveGlobalVariable( $globalVarName $namespace )《/code》
+《p》Accepting a global variable name, and possibly a namespace, stores the value
+of the global varaible in 《code》$chanwReviveGlobalVariable《/code》. Example:《/p》
+《pre》
+#chanwReviveGlobalVariable( "SiteTitle" $namespace )
+$chanwReviveGlobalVariable
+《/pre》
+《/documentation》
+《macro id=“chanwReviveGlobalVariable”》
+*#
+#macro( chanwReviveGlobalVariable $globalVarName $namespace )
+    #set( $chanwGlobalVarName = $globalVarName )
+    
+    #if( $namespace.Class.Name == $JAVA_LANG_STRING_CLASS_NAME && $namespace != "" )
+        #set( $chanwGlobalVarName = $namespace + $globalVarName )
+    #end
+    #set( $chanwStmt = '#' + 'set($chanwReviveGlobalVariable=' + "$$chanwGlobalVarName" + ')' )
+    #evaluate( $chanwStmt )
 #end
 #*
 《/macro》
