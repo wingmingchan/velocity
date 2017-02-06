@@ -1,37 +1,30 @@
-#*
-This format can be placed in the base folder of a site
-to control site configuration.
-*#
 #import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
 
 #if( !$namespace )
     #set( $namespace = "upstate" )
 #end
 
-## url to be inserted in <link>
-#chanwSetVariable( "${namespace}LocalStylesheetUrl" "http://www.upstate.edu/cascade-admin/_extra/style.css" )
-## url to wrap around site title
-#chanwSetVariable( "${namespace}SiteUrl" "/cascade-admin/index" )
-## site title string used in <div id="site-title"><a href="${upstateSiteUrl}">$upstateSiteTitle</a></div>
-#chanwSetVariable( "${namespace}SiteTitle" "Cascade Administration" )
+#set( $siteParamMap = {
+    "LocalStylesheetUrl" : "http://www.upstate.edu/cascade-admin/_extra/style.css",
+    "SiteUrl" :            "/cascade-admin/index",
+    "SiteTitle" :          "Cascade Administration",
+    "SiteLogoPath" :       "site://cascade-admin/images/logo.jpg",
+    "SiteNavPath" :        "site://cascade-admin/_cascade/formats/site-nav",
+    "SiteHeaderPath" :     "site://cascade-admin/_cascade/formats/header",
+    "SiteGoogleTagPath" :  "site://cascade-admin/_cascade/formats/google-tag",
+    "FolderNavCode" :      '#processFolderNav($contentRoot)',
+    "PagesWithoutBreadcrumbs" : [ 
+        "index",
+        "web-services/api/asset-classes/index"
+    ],
+    "PagesWithNarrowRightColumn" : [
+        "web-services/api/asset-classes/data-definition"
+    ]
+} )
 
-## paths to be used in href or #import
-#chanwSetVariable( "${namespace}SiteLogoPath" "site://cascade-admin/images/logo.jpg" )
-#chanwSetVariable( "${namespace}SiteNavPath" "site://cascade-admin/_cascade/formats/site-nav" )
-#chanwSetVariable( "${namespace}SiteHeaderPath" "site://cascade-admin/_cascade/formats/header" )
-#chanwSetVariable( "${namespace}SiteGoogleTagPath" "site://cascade-admin/_cascade/formats/google-tag" )
-
-## code to be evaulated
-#chanwSetVariable( "${namespace}FolderNavCode" '#processFolderNav($contentRoot)' )
-
-## lists of pages that require special treatment
-#chanwSetVariable( "${namespace}PagesWithoutBreadcrumbs" [
-    "index",
-    "web-services/api/asset-classes/index"
-] )
-#chanwSetVariable( "${namespace}PagesWithNarrowRightColumn" [
-    "web-services/api/asset-classes/data-definition"
-] )
+#foreach( $key in $siteParamMap.keySet() )
+    #chanwSetVariable( "${namespace}$key" $siteParamMap[ $key ] )
+#end
 
 ## just output the values of global variables
 ##evaluate( "$${namespace}SiteTitle" )
@@ -49,3 +42,4 @@ to control site configuration.
 ## or
 ##chanwInvokeMacro( "chanwReviveGlobalVariable" [ "varName" ] )
 $chanwReviveGlobalVariable ## output Cascade Administration
+$upstatePagesWithNarrowRightColumn
