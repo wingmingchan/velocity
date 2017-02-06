@@ -1,0 +1,34 @@
+#set( $base_folder = $_.locateFolder( "/", $currentPageSiteName ) )
+#set( $children = $base_folder.Children )
+
+## the logic here assumes that all indexable assets are ordered before
+## non-indexable asset; hence we can stop when the first non-indexable
+## asset is encountered
+## alternative: process all assets, and do nothing for non-indexable assets
+## it is also assumed that all assets have display names
+<ul class="nav navbar-nav navbar-right">
+#foreach( $child in $children )##
+    #if( !$child.ShouldBeIndexed )##
+        #break##
+    #elseif( $child.Identifier.Type == "folder" )
+        #set( $folderDisplayName = $_EscapeTool.xml( $child.Metadata.DisplayName ) )
+<li><a class="dropdown-toggle" data-toggle="dropdown" href="#" name="${folderDisplayName}">$folderDisplayName<b class="caret"> </b></a>
+        #set( $grandchildren = $child.Children )
+<ul class="dropdown-menu">
+        #foreach( $grandchild in $grandchildren )
+            #if( !$grandchild.ShouldBeIndexed )
+                #break
+            #elseif( $grandchild.Name == "index" )
+                ## do nothing
+            #elseif( $grandchild.Identifier.Type == "page" )
+<li><a href="${grandchild.Link}">$_EscapeTool.xml( $grandchild.Metadata.DisplayName )</a></li>
+            #elseif( $grandchild.Identifier.Type == "symlink" )
+                ## do something with symlinks here
+            #else ## folders
+<li><a href="${grandchild.Link}/index">$_EscapeTool.xml( $grandchild.Metadata.DisplayName )</a></li>
+            #end
+        #end
+</ul></li>
+    #end
+#end
+</ul>
