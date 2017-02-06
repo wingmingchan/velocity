@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+2/6/2017 Fixed an error in documentation of chanwSetVariable.
 《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
@@ -277,7 +278,7 @@ $chanwGetMethodByClassNameMethodNameParamTypes.invoke( “Hello ”, “e” )
 #*
 《/macro》
 《documentation》
-《code》#chanwSetVariable( $chanwClassName $var $val )《/code》
+《code》#chanwSetVariable( $var $val )《/code》
 《p》Dynamically turns 《code》$var《/code》 into a variable assigned with the value
 《code》$val《/code》. The value of 《code》$var《/code》 should be a variable name without the dollar sign.《/p》
 《pre》
