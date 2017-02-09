@@ -1,3 +1,4 @@
+<div class="collapse navbar-collapse col-sm-8">
 #set( $base_folder = $_.locateFolder( "/", $currentPageSiteName ) )
 #set( $children = $base_folder.Children )
 
@@ -32,3 +33,4 @@
     #end
 #end
 </ul>
+</div>
