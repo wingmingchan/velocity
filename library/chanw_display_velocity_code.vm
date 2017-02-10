@@ -15,7 +15,7 @@ documentation, possibly with the source code.《/p》
 《li》Annotation markups inside comments always use the four special unicode
 characters: &#12298;, &#12299;, &#8220; and &#8221;.《/li》
 《li》No single quotes are used in annotation markups.《/li》
-《li》Annotation markups, after before transformed back to normal XML markups,
+《li》Annotation markups, after being transformed back to normal XML markups,
 are well-formed.《/li》
 《li》To display the documentation or code of individual macros, the
 《code》macro《/code》 tags in the macro annotations must have id's, and macro
