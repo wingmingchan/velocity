@@ -194,8 +194,8 @@ $chanwGetMetadataData
 《/documentation》
 《macro id=“chanwGetMetadataData”》
 *#
-#macro( chanwGetMetadataData $chanwMetadata )
-    #if( $chanwMetadata.class.name != $COM_CASCADE_METADATA_CLASS_NAME )
+#macro( chanwGetMetadataData $metadata )
+    #if( $metadata.Class.Name != $COM_CASCADE_METADATA_CLASS_NAME )
         Not a metadata.
         #stop
     #end
@@ -216,19 +216,19 @@ $chanwGetMetadataData
     } )
     
     #set( $chanwGetDynamicFieldsData = {} )
-    #set( $chanwGetMetadataData[ "DisplayName" ]   = $chanwMetadata.DisplayName )
-    #set( $chanwGetMetadataData[ "Description" ]   = $chanwMetadata.Description )
-    #set( $chanwGetMetadataData[ "Title" ]         = $chanwMetadata.Title )
-    #set( $chanwGetMetadataData[ "Summary" ]       = $chanwMetadata.Summary )
-    #set( $chanwGetMetadataData[ "Teaser" ]        = $chanwMetadata.Teaser )
-    #set( $chanwGetMetadataData[ "Keywords" ]      = $chanwMetadata.Keywords )
-    #set( $chanwGetMetadataData[ "Author" ]        = $chanwMetadata.Author )
-    #set( $chanwGetMetadataData[ "ReviewDate" ]    = $chanwMetadata.ReviewDate )
-    #set( $chanwGetMetadataData[ "StartDate" ]     = $chanwMetadata.StartDate )
-    #set( $chanwGetMetadataData[ "EndDate" ]       = $chanwMetadata.EndDate  )
-    #set( $chanwGetMetadataData[ "DynamicFields" ] = $chanwMetadata.DynamicFields )
+    #set( $chanwGetMetadataData[ "DisplayName" ]   = $metadata.DisplayName )
+    #set( $chanwGetMetadataData[ "Description" ]   = $metadata.Description )
+    #set( $chanwGetMetadataData[ "Title" ]         = $metadata.Title )
+    #set( $chanwGetMetadataData[ "Summary" ]       = $metadata.Summary )
+    #set( $chanwGetMetadataData[ "Teaser" ]        = $metadata.Teaser )
+    #set( $chanwGetMetadataData[ "Keywords" ]      = $metadata.Keywords )
+    #set( $chanwGetMetadataData[ "Author" ]        = $metadata.Author )
+    #set( $chanwGetMetadataData[ "ReviewDate" ]    = $metadata.ReviewDate )
+    #set( $chanwGetMetadataData[ "StartDate" ]     = $metadata.StartDate )
+    #set( $chanwGetMetadataData[ "EndDate" ]       = $metadata.EndDate  )
+    #set( $chanwGetMetadataData[ "DynamicFields" ] = $metadata.DynamicFields )
     
-    #set( $chanwDFS = $chanwMetadata.DynamicFields )
+    #set( $chanwDFS = $metadata.DynamicFields )
     
     #if( $chanwDFS.size() > 0 )
         #foreach( $chanwDF in $chanwDFS )
@@ -435,15 +435,16 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
 《/macro》
 《documentation》
 《code》#chanwImportScript( $folderPath $siteName $scriptName )《/code》
-《p》Returns a boolean, indicating whether the script format is imported successfully.《/p》
+《p》Returns a boolean, indicating whether the script format is imported successfully.
+《code》$folderPath《/code》 should be the path string of the parent folder containing the format.《/p》
 《p》Examples:《/p》
 《pre》
+## look for the setup format in the Base Folder of a site
 #chanwImportScript( "/" "cascade-admin" "setup" )
 
-#if( $chanwImportScript )
-Imported sucessfully.
-#else
-Import failed.
+#if( !$chanwImportScript || !$upstateSiteTitle || $upstateSiteTitle == "" )
+    ## if not defined in a site, supply a default value
+    #set( $upstateSiteTitle = "Cascade Administration" )
 #end
 《/pre》
 《/documentation》
@@ -535,21 +536,22 @@ $chanwIsDescendentOf
 #*
 《/macro》
 《documentation》
-《code》#chanwLocateAssetInAncestorFolder( $folder_path $site_name $type $name )《/code》
+《code》#chanwLocateAssetInAncestorFolder( $folderPath $siteName $type $name )《/code》
 《p》Locates the asset by matching the type and name, starting from the supplied folder path.
+《code》$folderPath《/code》 should be the path string of a folder containing the asset.
 If the asset cannot be found, then look for the asset in the grandparent folder, and so on.《/p》
 《p》Examples:《/p》
 《pre》
-#chanwLocateAssetInAncestorFolder( 
+#chanwLocateAssetInAncestorFolder(
     $currentPage.ParentFolder.Path $currentPageSiteName "block" "_site-info" )
 $chanwLocateAssetInAncestorFolder.Name
 《/pre》
 《/documentation》
 《macro id=“chanwLocateAssetInAncestorFolder”》
 *#
-#macro( chanwLocateAssetInAncestorFolder $folder_path $site_name $type $name )
+#macro( chanwLocateAssetInAncestorFolder $folderPath $siteName $type $name )
     #set( $chanwLocateAssetInAncestorFolder = "" )
-    #set( $chanwFolder = $_.locateFolder( $folder_path, $site_name ) )
+    #set( $chanwFolder = $_.locateFolder( $folderPath, $siteName ) )
 
     #if( $chanwFolder )
         #set( $chanwChildren = $chanwFolder.Children )
@@ -570,7 +572,7 @@ $chanwLocateAssetInAncestorFolder.Name
             ## recursive call
             #if( $chanwFolderParentPath != "" )
                 #chanwLocateAssetInAncestorFolder(
-                    $chanwFolderParentPath $site_name $type $name )
+                    $chanwFolderParentPath $siteName $type $name )
             #end
         #end
     #end
