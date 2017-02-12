@@ -1,0 +1,204 @@
+<!--#protect-top<!DOCTYPE html>#protect-top-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+#import( 'site://_common_assets_wing/formats/library/velocity/chanw_library_import' )
+## the default master setup
+#chanwImportScript( "formats/data" "_common_assets_wing" "master-setup" )
+## the site setup
+#chanwImportScript( "/" $currentPageSiteName "setup" )
+#import( $hannonHillPrcessBlock )
+		<title>#import( "formats/data/system-page-title" ) Hannon Hill Corp.</title>
+#import( $hannonHillLink )
+		<div id="show-page-level-override"></div>
+	</head>
+	<body data-offset="100" data-spy="scroll" data-target=".navbar-collapse">
+#import( $hannonHillGoogle )
+#import( $hannonHillNavDemo )
+
+#*
+There are two system-page elements with the current attribute. However, the one that is NOT
+a child of calling-page is needed to generate the breadcrumb. It can have system-folder elements
+as ancestors.
+*#
+## for a root-level page, there is no current folder
+#set( $page = $_XPathTool.selectSingleNode( $contentRoot, "//system-folder[@current]/system-page[@current]" ) )
+## root-level pages
+#if( $_PropertyTool.isNull( $page ) )
+    #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "//system-page[@current]" ) )
+#end
+
+#processPageConfigurations
+#processPageSystemDataStructure
+
+#import( $hannonHillContact )
+#import( $hannonHillFooter )
+#import( $hannonHillScript )
+	</body>
+</html>
+
+#macro( processGroup $group $chooser_name )
+    #set( $upstateBlocks = $group.getChildren( $chooser_name ) )
+    
+    #foreach( $block in $upstateBlocks )
+        #set( $block_content = '' )
+        #set( $block_content = $block.getChild( 'content' ) )
+        
+        #if( $block_content != '' )
+            #chanwProcessBlockChooser( $block_content )
+        #end
+    #end
+#end
+
+#macro( processCenter $pageSystemDataStructure )
+    #set( $centerSectionBlocksGroup = $pageSystemDataStructure.getChild( "main-section-group" ) )
+    #processGroup( $centerSectionBlocksGroup "main-section-chooser" )
+ 
+    #set( $centerSectionWysiwyg = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'main-section-group/main-section-wysiwyg' ) )
+
+    #if( $centerSectionWysiwyg.Value.trim() != "" )
+        $_SerializerTool.serialize( $centerSectionWysiwyg, true )
+    #end
+#end
+
+#macro( processPageConfigurations )
+    ## These are the block choosers for page configuration
+    #set( $top_slideshow_content = $_XPathTool.selectSingleNode( $page, 'system-data-structure/page-config-group/top-slideshow/content' ) )
+    #if( !$_PropertyTool.isNull( $top_slideshow_content ) )
+    <div id="slideshow-region">
+        #chanwProcessBlockChooser( $top_slideshow_content )
+    </div>
+    #end
+    #set( $page_level_override_content = $_XPathTool.selectSingleNode( $page, 'system-data-structure/page-config-group/page-level-override/content' ) )
+    #if( !$_PropertyTool.isNull( $page_level_override_content ) )
+    <div id="hide-page-level-override">
+        #chanwProcessBlockChooser( $page_level_override_content )
+    </div>
+    #end
+#end
+
+#macro( processLeftGroup $leftGroup )
+    #set( $hasLeftNav = $_XPathTool.selectSingleNode( $leftGroup, 'left-nav' ).Value )
+    
+    #if( $hasLeftNav == 'yes' )
+#import( $hannonHillFolderNav )
+    #end
+    
+    #processGroup( $leftGroup "left-group-chooser" )
+#end
+
+#macro( processRightGroup $rightGroup )
+    #processGroup( $rightGroup "right-group-chooser" )
+#end
+
+#*
+Process the page
+*#
+#macro( processPageSystemDataStructure )
+    #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "//system-page[@current and system-data-structure]" ) )
+    #set( $pageSystemDataStructure = $page.getChild( 'system-data-structure' ) )
+    
+    ## breadcrumbs
+    #set( $breadcrumbs = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'breadcrumbs' ).Value )
+    
+    #if( $breadcrumbs == "yes" )
+        #set( $preBreadcrumbsContent = "" )
+        #set( $preBreadcrumbsContent = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'pre-breadcrumbs-group/pre-breadcrumbs-group-chooser/content' ) )
+        
+        #if( $preBreadcrumbsContent != '' )
+            #chanwProcessBlockChooser( $preBreadcrumbsContent )
+        #end
+        
+        #if( !$chanwImportScript || !$upstatePagesWithoutBreadcrumbs || 
+            !$upstatePagesWithoutBreadcrumbs.contains( $currentPagePath ) )
+#import( $hannonHillBreadcrumbs )
+        #end
+    #end
+    
+    ## homepage?
+    #set( $home = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'home' ).Value )
+    
+    #if( $home != 'yes' )
+    ## process h1
+    #set( $h1 = $_EscapeTool.xml( $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'main-section-group/h1' ).Value ) )
+        
+    ## main content
+    <section id="mainContent">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12"><h1>$h1</h1></div>
+		    </div>
+            
+            ## author
+            #set( $author      = $currentPage.Metadata.Author.trim() )
+            
+            #if( $author )
+                #set( $dateTimeObj = $currentPage.Metadata.getStartDate() )
+                #set( $dateTime    = $_DateTool.format( "EEEEEE,  MMMMM d, yyyy hh:mm a ", $dateTimeObj ) )
+                <div class="col-xs-12 blog-author-time"><small><em>By $author</em> — $dateTime</small></div>
+            #end
+            
+            <div class="row">
+            ## layout
+            #set( $layout = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'main-section-group/layout' ).Value )
+
+            #if( $layout == "left" )
+    		<div class="col-xs-12 col-md-3">
+                <!-- left column -->
+                #set( $leftGroup = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'main-section-group/left-group' ) )
+				#processLeftGroup( $leftGroup )
+			</div>
+			<div class="col-xs-12 col-md-9">
+				<div class="row">
+				    <div class="col-xs-12 col-md-12">
+                        #processCenter( $pageSystemDataStructure )
+                    </div>
+				</div>
+			</div>            
+            #elseif( $layout == "right" )
+			<div class="col-xs-12 col-md-9">
+				<div class="row">
+				    <div class="col-xs-12 col-md-12">
+                        #processCenter( $pageSystemDataStructure )
+                    </div>
+				</div>
+			</div>
+            <div class="col-xs-12 col-md-3">
+                <!-- right column -->
+                #set( $rightGroup = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'main-section-group/right-group' ) )
+                #processRightGroup( $rightGroup )
+			</div>
+            #elseif( $layout == "aside" )
+    		<div class="col-xs-12 col-md-8">
+				<div class="row">
+				    <div class="col-xs-12 col-md-12">
+                        #processCenter( $pageSystemDataStructure )
+                    </div>
+				</div>
+			</div>
+            <div class="col-xs-12 col-md-4">
+                <!-- aside -->
+                #set( $asideGroup = $_XPathTool.selectSingleNode( $pageSystemDataStructure, 'main-section-group/aside-group' ) )
+                #processGroup( $asideGroup "aside-group-chooser" )
+            </div>
+            #else ## center
+                <div class="col-xs-12">
+                    #processCenter
+                </div>            
+            #end
+            </div>
+        </div>
+    </section>
+    #else
+        ## section group
+        #set( $sectionGroupBlocks = $_XPathTool.selectNodes( $pageSystemDataStructure, 'section-group/section-group-chooser' ) )
+    
+        #foreach( $sectionGroupBlock in $sectionGroupBlocks )
+            #set( $sectionGroupBlockContent = '' )
+            #set( $sectionGroupBlockContent = $sectionGroupBlock.getChild( 'content' ) )
+        
+            #if( $sectionGroupBlockContent != '' )
+                #chanwProcessBlockChooser( $sectionGroupBlockContent )
+            #end
+        #end
+    #end
+#end
