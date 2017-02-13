@@ -1,0 +1,23 @@
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="//www.hannonhill.com/_assets/js/jquery.countdown.min.js" type="text/javascript"></script>
+<script src="//www.hannonhill.com/_assets/js/wow.min.js" type="text/javascript"></script>
+<script src="//www.hannonhill.com/_assets/js/progressbars.js" type="text/javascript"></script>
+<script src="//www.hannonhill.com/_assets/js/isotope.pkgd.min.js" type="text/javascript"></script>
+<script src="//www.hannonhill.com/_assets/js/jquery.classyloader.js" type="text/javascript"></script>
+<script src="//www.hannonhill.com/_assets/js/main.js" type="text/javascript"></script>
+<script src="//www.hannonhill.com/_assets/js/jquery.magnific-popup.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+$('.video').magnificPopup({
+  type: 'iframe',
+  iframe: {
+    patterns: {
+      spectate: {
+        index: 'www3.hannonhill.com',
+        id: '/',
+        src: 'http://www3.hannonhill.com/%id%'
+      }
+    }
+  } 
+});    });
+</script>
