@@ -6,14 +6,20 @@
 #chanwImportScript( "formats/data" "_common_assets_wing" "master-setup" )
 ## the site setup
 #chanwImportScript( "/" $currentPageSiteName "setup" )
-#import( $hannonHillPrcessBlock )
-		<title>#import( "formats/data/system-page-title" ) Hannon Hill Corp.</title>
-#import( $hannonHillLink )
+
+#chanwReviveGlobalVariable( "PrcessBlock" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+#chanwReviveGlobalVariable( "Title" $master_namespace )
+		<title>#import( $chanwReviveGlobalVariable ) Hannon Hill Corp.</title>
+#chanwReviveGlobalVariable( "Link" $master_namespace )
+#import( $chanwReviveGlobalVariable )
 		<div id="show-page-level-override"></div>
 	</head>
 	<body data-offset="100" data-spy="scroll" data-target=".navbar-collapse">
-#import( $hannonHillGoogle )
-#import( $hannonHillNavDemo )
+#chanwReviveGlobalVariable( "Google" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+#chanwReviveGlobalVariable( "NavDemo" $master_namespace )
+#import( $chanwReviveGlobalVariable )
 
 #*
 There are two system-page elements with the current attribute. However, the one that is NOT
@@ -30,9 +36,12 @@ as ancestors.
 #processPageConfigurations
 #processPageSystemDataStructure
 
-#import( $hannonHillContact )
-#import( $hannonHillFooter )
-#import( $hannonHillScript )
+#chanwReviveGlobalVariable( "Contact" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+#chanwReviveGlobalVariable( "Footer" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+#chanwReviveGlobalVariable( "Script" $master_namespace )
+#import( $chanwReviveGlobalVariable )
 	</body>
 </html>
 
@@ -80,7 +89,8 @@ as ancestors.
     #set( $hasLeftNav = $_XPathTool.selectSingleNode( $leftGroup, 'left-nav' ).Value )
     
     #if( $hasLeftNav == 'yes' )
-#import( $hannonHillFolderNav )
+        #chanwReviveGlobalVariable( "FolderNav" $master_namespace )
+#import( $chanwReviveGlobalVariable )
     #end
     
     #processGroup( $leftGroup "left-group-chooser" )
@@ -108,9 +118,10 @@ Process the page
             #chanwProcessBlockChooser( $preBreadcrumbsContent )
         #end
         
-        #if( !$chanwImportScript || !$upstatePagesWithoutBreadcrumbs || 
-            !$upstatePagesWithoutBreadcrumbs.contains( $currentPagePath ) )
-#import( $hannonHillBreadcrumbs )
+        #if( !$chanwImportScript || !$hannonHillPagesWithoutBreadcrumbs || 
+            !$hannonHillPagesWithoutBreadcrumbs.contains( $currentPagePath ) )
+#chanwReviveGlobalVariable( "Breadcrumbs" $master_namespace )
+#import( $chanwReviveGlobalVariable )
         #end
     #end
     
