@@ -1,3 +1,3 @@
 # Velocity: Hannon Hill
 
-I put the formats used to implement the Hannon Hill site here. The new idea I am experimenting is to use formats for site configuration. To understand how it works, start with the default format (default.vm) and the setup format (master-setup.vm). For an example of a setup format used in a site (placed in the Base Folder), see https://github.com/wingmingchan/velocity/blob/master/custom/setup.vm
+I put the formats used to implement the Hannon Hill site here. The new idea I am experimenting is to use formats for site configuration. To understand how it works, start with the default format (default.vm) and the setup format (master-setup.vm). For an example of a setup format used in a site (placed in the Base Folder), see https://github.com/wingmingchan/velocity/blob/master/custom/setup.vm. For documentation, see http://www.upstate.edu/cascade-admin/standard-model/site-configuration/setup-formats/index.php.
