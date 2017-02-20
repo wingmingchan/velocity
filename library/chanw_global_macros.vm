@@ -5,12 +5,13 @@ Authur: Wing Ming Chan, Peter Thomas
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
+2/20/2017 Fixed a bug in #chanwReviveGlobalVariable.
 2/6/2017 Added #chanwReviveGlobalVariable.
 1/4/2017 Added #chanwProcessDDBlockWithMacro.
 《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
-《p》This format defines global macros used throughout the library.《/p》
+《p》This format defines global macros, some used by the library.《/p》
 《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_global_values' )
@@ -378,16 +379,16 @@ $chanwGetListReversed
 《/documentation》
 《macro id=“chanwGetListReversed”》
 *#
-#macro( chanwGetListReversed $chanwList )
+#macro( chanwGetListReversed $list )
     #set( $chanwGetListReversed = [] )
     
     ## does not do anything if no list passed in
-    #if( $chanwList.Class.Name == 
-        $JAVA_UTIL_ARRAY_LIST_CLASS_NAME && $chanwList.size() > 0 )
-        #set( $chanwEndIndex = $chanwList.size() - 1 )
+    #if( $list.Class.Name == 
+        $JAVA_UTIL_ARRAY_LIST_CLASS_NAME && $list.size() > 0 )
+        #set( $chanwEndIndex = $list.size() - 1 )
         
         #foreach( $num in [ $chanwEndIndex..0 ] )
-            #set( $void = $chanwGetListReversed.add( $chanwList.get( $num ) ) )
+            #set( $void = $chanwGetListReversed.add( $list.get( $num ) ) )
         #end
     #end
 #end
@@ -405,12 +406,12 @@ $chanwGetListRandomized
 《/documentation》
 《macro id=“chanwGetListRandomized”》
 *#
-#macro( chanwGetListRandomized $chanwList )
-    #set( $chanwGetListRandomized = $chanwList )
+#macro( chanwGetListRandomized $list )
+    #set( $chanwGetListRandomized = $list )
     
     ## does not do anything if no list passed in
-    #if( $chanwList.Class.Name == 
-        $JAVA_UTIL_ARRAY_LIST_CLASS_NAME && $chanwList.size() > 0 )
+    #if( $list.Class.Name == 
+        $JAVA_UTIL_ARRAY_LIST_CLASS_NAME && $list.size() > 0 )
         #set( $chanwMax       = $chanwGetListRandomized.size() - 1 )
         #set( $chanwCountList = [ $chanwMax..0 ] )
 
@@ -440,20 +441,20 @@ $chanwGetMapKeyValueReversed
 《/documentation》
 《macro id=“chanwGetMapKeyValueReversed”》
 *#
-#macro( chanwGetMapKeyValueReversed $chanwMap )
+#macro( chanwGetMapKeyValueReversed $map )
     #set( $chanwGetMapKeyValueReversed = {} )
     
     ## does not do anything if no map passed in
-    #if( ( $chanwMap.Class.Name == $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME ||
-        $chanwMap.Class.Name == $JAVA_UTIL_HASHMAP_CLASS_NAME )
-        && $chanwMap.size() > 0 )
-        #set( $chanwKeySet = $chanwMap.keySet() )
-        #foreach( $chanwKey in $chanwKeySet )
+    #if( ( $map.Class.Name == $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME ||
+        $map.Class.Name == $JAVA_UTIL_HASHMAP_CLASS_NAME )
+        && $map.size() > 0 )
+        #set( $chanwKeySet = $map.keySet() )
+        #foreach( $key in $chanwKeySet )
             #set( $void = $chanwGetMapKeyValueReversed.put(
-                $chanwMap.get( $chanwKey ), $chanwKey ) )
+                $map.get( $key ), $key ) )
         #end
     #end
-#end    
+#end
 #*
 《/macro》
 《documentation》
@@ -595,17 +596,17 @@ should be in a list. Example:《/p》
 《/documentation》
 《macro id=“chanwInvokeMacro”》
 *#
-#macro( chanwInvokeMacro $chanwMacroName $chanwMacroParams )
-    #if( $chanwMacroName.class.name == $JAVA_LANG_STRING_CLASS_NAME )
-        #set( $chanwStmt = "#$chanwMacroName(" )
+#macro( chanwInvokeMacro $macroName $macroParams )
+    #if( $macroName.Class.Name == $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $chanwStmt = "#$macroName(" )
     
-        #if( $chanwMacroParams.class.name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
-            #if( $chanwMacroParams.size() > 0 )
-                #foreach( $chanwMacroParam in $chanwMacroParams )
-                    #if( $chanwMacroParam.class.name ==
+        #if( $macroParams.Class.Name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+            #if( $macroParams.size() > 0 )
+                #foreach( $macroParam in $macroParams )
+                    #if( $macroParam.Class.Name ==
                         $JAVA_LANG_STRING_CLASS_NAME )
                         #set( $chanwStmt =
-                            $chanwStmt + "$" + $chanwMacroParam + " " )
+                            $chanwStmt + "$" + $macroParam + " " )
                     #end
                 #end
             #end
@@ -630,14 +631,14 @@ $chanwIsInstanceOf$BR   ## output false
 《/documentation》
 《macro id=“chanwIsInstanceOf”》
 *#
-#macro( chanwIsInstanceOf $chanwObj $chanwClassName )
-    #if( $_PropertyTool.isNull( $chanwObj ) )
+#macro( chanwIsInstanceOf $obj $className )
+    #if( $_PropertyTool.isNull( $obj ) )
         The object cannot be null.
         #stop
     #end
     
-    #if( !$chanwClassName || 
-        $chanwClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+    #if( !$className || 
+        $className.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
         A valid class name is required.
         #stop
     #end
@@ -645,17 +646,17 @@ $chanwIsInstanceOf$BR   ## output false
     #set( $chanwIsInstanceOf = "" )
     
     ## matching the class name passed in
-    #if( $chanwClassName.equals( $chanwObj.Class.Name ) )
+    #if( $className.equals( $obj.Class.Name ) )
         #set( $chanwIsInstanceOf = true )
     #else
         #set( $chanwInterfaces   = 
-            $globalApacheClassUtils.getAllInterfaces( $chanwObj.Class ) )
+            $globalApacheClassUtils.getAllInterfaces( $obj.Class ) )
         #set( $chanwSuperclasses = 
-            $globalApacheClassUtils.getAllSuperclasses( $chanwObj.Class ) )
+            $globalApacheClassUtils.getAllSuperclasses( $obj.Class ) )
         
         ## check interfaces
         #foreach( $interface in $chanwInterfaces )
-            #if( $chanwClassName.equals( $interface.Name ) )
+            #if( $className.equals( $interface.Name ) )
                 #set( $chanwIsInstanceOf = true )
                 #break
             #end
@@ -664,7 +665,7 @@ $chanwIsInstanceOf$BR   ## output false
         ## check superclasses
         #if( $chanwIsInstanceOf == "" )
             #foreach( $superclass in $chanwSuperclasses )
-                #if( $chanwClassName.equals( $superclass.Name ) )
+                #if( $className.equals( $superclass.Name ) )
                     #set( $chanwIsInstanceOf = true )
                     #break
                 #end
@@ -1116,7 +1117,7 @@ The list passed in should be variable names without the dollar signs. Example:�
 #*
 《/macro》
 《documentation》
-《code》#chanwReviveGlobalVariable( $globalVarName $namespace )《/code》
+《code》#chanwReviveGlobalVariable( $globalVarName $ns )《/code》
 《p》Accepting a global variable name, and possibly a namespace, stores the value
 of the global varaible in 《code》$chanwReviveGlobalVariable《/code》. Example:《/p》
 《pre》
@@ -1126,12 +1127,14 @@ $chanwReviveGlobalVariable
 《/documentation》
 《macro id=“chanwReviveGlobalVariable”》
 *#
-#macro( chanwReviveGlobalVariable $globalVarName $namespace )
+#macro( chanwReviveGlobalVariable $globalVarName $ns )
+    #set( $chanwReviveGlobalVariable = "" )
     #set( $chanwGlobalVarName = $globalVarName )
     
-    #if( $namespace.Class.Name == $JAVA_LANG_STRING_CLASS_NAME && $namespace != "" )
-        #set( $chanwGlobalVarName = $namespace + $globalVarName )
+    #if( $ns.Class.Name == $JAVA_LANG_STRING_CLASS_NAME && $ns != "" )
+        #set( $chanwGlobalVarName = $ns + $globalVarName )
     #end
+    
     #set( $chanwStmt = '#' + 'set($chanwReviveGlobalVariable=' + "$$chanwGlobalVarName" + ')' )
     #evaluate( $chanwStmt )
 #end
@@ -1241,9 +1244,12 @@ $thomaspeGetSrcSetCode
 《/documentation》
 《macro id=“thomaspeGetSrcSetCode”》
 *#
+
 #macro( thomaspeGetSrcSetCode $imagePath $imageSiteName $map )
     ## replace ".jpg" with array of replacements in order of priority
-    #set( $thomaspeGetSrcSetCode = "srcset='" )
+    ##set( $thomaspeGetSrcSetCode = "srcset='" )
+    #set( $thomaspeEachImage = [] )
+    
     #foreach( $imageOptions in $map.keySet()  )
         #set( $thomaspeImageOptionsFound = false )   
         #foreach( $imageSize in $map[ $imageOptions ] )
@@ -1251,17 +1257,34 @@ $thomaspeGetSrcSetCode
             #if( !$_PropertyTool.isNull(
                 $_.locateFile( $thomaspeNewImagePath, $imageSiteName ) ) &&
                 !$thomaspeImageOptionsFound )
-                
                 #set( $thomaspeImageOptionsFound = true )
-                #set( $thomaspeGetSrcSetCode =
-                    $thomaspeGetSrcSetCode + " " + $S_SYSTEM_ASSET_LOCAL +
+                #set( $thomaspeWrittenOut =  " " )
+                #set( $thomaspeWrittenOut =  " " + $S_SYSTEM_ASSET_LOCAL +
                     "site://" + $imageSiteName +
                     $thomaspeNewImagePath + $E_SYSTEM_ASSET_LOCAL + " " +
-                    $imageOptions + ", ")
+                    $imageOptions )    
+                #set( $void = $thomaspeEachImage.add( $thomaspeWrittenOut ) )
+                ##set( $thomaspeGetSrcSetCode =
+                ##    $thomaspeGetSrcSetCode + " " + $S_SYSTEM_ASSET_LOCAL +
+                ##    "site://" + $imageSiteName +
+                ##    $thomaspeNewImagePath + $E_SYSTEM_ASSET_LOCAL + " " +
+                ##    $imageOptions + ", ")
             #end
         #end
     #end
-    #set( $thomaspeGetSrcSetCode = $thomaspeGetSrcSetCode + "'" )
+    
+    #set( $thomaspeGetSrcSetCode = "" )
+    #if ($thomaspeEachImage.size() > 1)
+        #set( $thomaspeGetSrcSetCode = "srcset='" )
+        #foreach ( $thomaspeImage in $thomaspeEachImage )
+             #set( $thomaspeGetSrcSetCode = $thomaspeGetSrcSetCode + $thomaspeImage )
+             #if($foreach.count != $thomaspeEachImage.size())
+                #set( $thomaspeGetSrcSetCode = $thomaspeGetSrcSetCode + "," )
+             #end
+        #end
+        #set( $thomaspeGetSrcSetCode = $thomaspeGetSrcSetCode + "'" )
+    #end
+    ##set( $thomaspeGetSrcSetCode = $thomaspeGetSrcSetCode + "'" )
 #end ##end macro 
 #*
 《/macro》
