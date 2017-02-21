@@ -141,6 +141,14 @@
             #chanwReviveGlobalVariable( "FolderNav" $master_namespace )
             #import( $chanwReviveGlobalVariable )
         #end
+        
+        ## process block choosers
+        #set( $topGroupChooserContent = $pageSystemDataStructure.getChild( "top-group"
+            ).getChild( "top-group-chooser" ).getChild( "content" ) )
+            
+        #if( $topGroupChooserContent )
+            #chanwProcessBlockChooser( $topGroupChooserContent )
+        #end
     </div>
     #end
 
@@ -177,6 +185,14 @@
         #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable ) ## set with true
             #chanwReviveGlobalVariable( "FolderNav" $master_namespace )   
             #import( $chanwReviveGlobalVariable )
+        #end
+        
+        ## process block choosers
+        #set( $bottomGroupChooserContent = $pageSystemDataStructure.getChild( "bottom-group"
+            ).getChild( "bottom-group-chooser" ).getChild( "content" ) )
+            
+        #if( $bottomGroupChooserContent )
+            #chanwProcessBlockChooser( $bottomGroupChooserContent )
         #end
     </div>
     #end
