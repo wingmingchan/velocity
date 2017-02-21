@@ -1,0 +1,6 @@
+#set( $rwd2HomeString      = "HOME" )
+#set( $rwd2SeparatorString = " &gt; " )
+#chanwSetVariable( "rwd2Accessibility"    "site://${master_site_name}/formats/rwd2/accessibility" )
+#chanwSetVariable( "rwd2FolderNavAtBottom"    true )
+#chanwSetVariable( "rwd2H1FullWidth"          false )
+#chanwSetVariable( "rwd2RowCenterHeaderClasses" "centerobject" )
