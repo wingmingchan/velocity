@@ -1,0 +1,196 @@
+<!--#protect-top<!DOCTYPE html>#protect-top-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+#* ==================== setup ==================== *#
+## import the library
+#set( $core_site_name = "_core" )
+#import( "site://_core/formats/library/velocity/chanw_library_import" )
+
+## the master setup format
+#set( $master_site_name  = "_master_site" )
+#import( "site://${master_site_name}/formats/master_setup" )
+
+## the design setup format
+#chanwImportScript( "formats/${master_namespace}" $master_site_name "setup" )
+
+## the site setup format
+#chanwImportScript( "/" $currentPageSiteName "setup" )
+
+#* ==================== block processing ==================== *#
+## import required formats
+#import( "site://${master_site_name}/formats/process_block" )
+
+## title element
+#chanwReviveGlobalVariable( "Title" $master_namespace )
+    <title>#import( $chanwReviveGlobalVariable )</title>
+
+## link elements
+#chanwReviveGlobalVariable( "Link" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+		<div id="show-zone1"></div>
+	</head>
+    <body>
+#* ==================== rwd2 design ==================== *#
+#if( $master_namespace == "rwd2" )
+    ## accessibility
+    #chanwReviveGlobalVariable( "Accessibility" $master_namespace )
+    #import( $chanwReviveGlobalVariable )
+#end
+#* ==================== end ==================== *#
+
+## google tag manager
+#chanwReviveGlobalVariable( "Google" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+
+#* ==================== rwd2 design ==================== *#
+#if( $master_namespace == "rwd2" )
+    ## header
+    #chanwReviveGlobalVariable( "Header" $master_namespace )
+    #import( $chanwReviveGlobalVariable )
+
+    ## site nav
+    #chanwReviveGlobalVariable( "SiteNav" $master_namespace )
+    #import( $chanwReviveGlobalVariable )
+#* ==================== hannonHill design ==================== *#
+#elseif( $master_namespace == "hannonHill" )
+    ## nav-demo
+    #chanwReviveGlobalVariable( "NavDemo" $master_namespace )
+    #import( $chanwReviveGlobalVariable )
+#end
+#* ==================== end ==================== *#
+
+## for a root-level page, there is no current folder
+#set( $page = $_XPathTool.selectSingleNode( $contentRoot, "//system-folder[@current]/system-page[@current]" ) )
+## root-level pages
+#if( $_PropertyTool.isNull( $page ) )
+    #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "//system-page[@current]" ) )
+#end
+
+## breadcrumbs; $page must be set
+#chanwReviveGlobalVariable( "Breadcrumbs" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+
+<div id="show-zone2"></div>
+
+#processPageSystemDataStructure
+
+<div id="show-zone3"></div>
+#* ==================== hannonHill design ==================== *#
+#if( $master_namespace == "hannonHill" )
+    ## contact
+    #chanwReviveGlobalVariable( "Contact" $master_namespace )
+    #import( $chanwReviveGlobalVariable )
+#end
+#* ==================== end ==================== *#
+
+## footer
+#chanwReviveGlobalVariable( "Footer" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+
+## script elements
+#chanwReviveGlobalVariable( "Script" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+
+<div id="show-zone4"></div>
+	</body>
+</html>
+
+#macro( processPageSystemDataStructure )
+    #set( $pageSystemDataStructure = $page.getChild( "system-data-structure" ) )
+    #set( $pageLayout              = $pageSystemDataStructure.getChild( "layout" ) )
+    #set( $pageLayoutTop           = $pageLayout.getChild( "layout-top-group" ).getChild( "layout-top" ).Value )
+    #set( $pageLayoutBottom        = $pageLayout.getChild( "layout-bottom-group" ).getChild( "layout-bottom" ).Value )
+    #set( $h1      = $_EscapeTool.xml( $pageSystemDataStructure.getChild( "h1" ).Value ) )
+    #set( $content = $pageSystemDataStructure.getChild( "wysiwyg" ) )
+    
+    #set( $hasTop    = $pageLayoutTop == 'yes' )
+    #set( $hasBottom = $pageLayoutBottom == 'yes' )
+    
+    #set( $preH1ChooserContent = $pageSystemDataStructure.getChild( "pre-h1-chooser" ).getChild( "content" ) )
+    
+    #if( $preH1ChooserContent )
+        #chanwProcessBlockChooser( $preH1ChooserContent )
+    #end
+
+    #if( $hasTop && $hasBottom )
+        #set( $topCssClass    = "col-md-3" )
+        #set( $middleCssClass = "col-md-6" )
+        #set( $bottomCssClass = "col-md-3" )
+    #elseif( $hasTop )
+        #set( $topCssClass    = "col-md-3" )
+        #set( $middleCssClass = "col-md-9" )
+    #elseif( $hasBottom )
+        #set( $middleCssClass = "col-md-9" )
+        #set( $bottomCssClass = "col-md-3" )
+    #else
+        #set( $middleCssClass = "col-md-12" )
+    #end
+
+    #chanwReviveGlobalVariable( "H1FullWidth" $master_namespace )
+    
+    #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable )
+        <div class="container"><h1>$h1</h1></div>
+    #end
+    
+<div class="container">
+    #if( $hasTop )
+    <div class="${topCssClass}">
+        #chanwReviveGlobalVariable( "FolderNavOnTop" $master_namespace )
+        
+        #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable ) ## set with true
+            #chanwReviveGlobalVariable( "FolderNav" $master_namespace )
+            #import( $chanwReviveGlobalVariable )
+        #end
+    </div>
+    #end
+
+    ## middle part
+    <div class="${middleCssClass}">
+        <div class="row">
+    #chanwReviveGlobalVariable( "H1FullWidth" $master_namespace )
+        
+    #if( $chanwReviveGlobalVariable != "" && !$chanwReviveGlobalVariable )
+    <h1>$h1</h1>
+    #end
+        
+    $_SerializerTool.serialize($content, true)
+        
+    ## process block choosers
+    #set( $postWysiwygChoosers = $pageSystemDataStructure.getChildren( "post-wysiwyg-chooser" ) )
+
+    #if( $postWysiwygChoosers.size() > 0 )
+        #foreach( $postWysiwygChooser in $postWysiwygChoosers )
+            #set( $postWysiwygChooserContent = $postWysiwygChooser.getChild( "content" ) )
+            
+            #if( $postWysiwygChooserContent )
+                #chanwProcessBlockChooser( $postWysiwygChooserContent )
+            #end
+        #end
+    #end
+        </div>
+    </div>
+
+    #if( $hasBottom )    
+    <div class="${bottomCssClass}">        
+        #chanwReviveGlobalVariable( "FolderNavAtBottom" $master_namespace )
+
+        #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable ) ## set with true
+            #chanwReviveGlobalVariable( "FolderNav" $master_namespace )   
+            #import( $chanwReviveGlobalVariable )
+        #end
+    </div>
+    #end
+</div>
+
+    #set( $postWysiwygGroupChildren = $pageSystemDataStructure.getChild( "post-wysiwyg-group" ).Children )
+
+    #if( $postWysiwygGroupChildren.size() > 0 )
+        #foreach( $postWysiwygGroupChild in $postWysiwygGroupChildren )
+            #set( $postWysiwygGroupChooserContent = $postWysiwygGroupChild.getChild( "content" ) )
+            
+            #if( $postWysiwygGroupChooserContent )
+                #chanwProcessBlockChooser( $postWysiwygGroupChooserContent )
+            #end
+        #end
+    #end
+#end
