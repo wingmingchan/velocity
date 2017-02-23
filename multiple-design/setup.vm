@@ -1,6 +1,28 @@
+## accessibility
+#chanwSetVariable( "rwd2Accessibility"    "site://${master_site_name}/formats/rwd2/accessibility" )
+#chanwSetVariable( "rwd2Copyright"        "site://${master_site_name}/formats/${master_namespace}/copyright" )
+#chanwSetVariable( "rwd2GlobalMenuSearch" "site://${master_site_name}/formats/${master_namespace}/global-menu-search" )
+#chanwSetVariable( "rwd2LastModified"     "site://${master_site_name}/formats/${master_namespace}/last-modified" )
+#chanwSetVariable( "rwd2SiteTitle"        "site://${master_site_name}/formats/${master_namespace}/site-title" )
+
+## breadcrumbs
 #set( $rwd2HomeString      = "HOME" )
 #set( $rwd2SeparatorString = " &gt; " )
-#chanwSetVariable( "rwd2Accessibility"    "site://${master_site_name}/formats/rwd2/accessibility" )
-#chanwSetVariable( "rwd2FolderNavAtBottom"    true )
-#chanwSetVariable( "rwd2H1FullWidth"          false )
+
+## folder nav
+#chanwSetVariable( "rwd2FolderNavOnTop" true ) ## in left column
+
+## h1
+#chanwSetVariable( "rwd2H1FullWidth" false )
+
+## h2 in row block
 #chanwSetVariable( "rwd2RowCenterHeaderClasses" "centerobject" )
+
+## layouts
+#chanwSetVariable( "rwd2HasTop"       true )
+#chanwSetVariable( "rwd2HasBottom"    true )
+#chanwSetVariable( "rwd2TopCssClass"       "col-md-3" )
+#chanwSetVariable( "rwd2MiddleCssClass"    "col-md-6" )
+#chanwSetVariable( "rwd2BottomCssClass"    "col-md-3" )
+#chanwSetVariable( "rwd2MiddleWithNoTopCssClass"     "col-md-9" )
+#chanwSetVariable( "rwd2MiddleWithNoBottomCssClass"  "col-md-9" )
