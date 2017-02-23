@@ -20,6 +20,10 @@
 ## import required formats
 #import( "site://${master_site_name}/formats/process_block" )
 
+## meta
+#chanwReviveGlobalVariable( "Meta" $master_namespace )
+#import( $chanwReviveGlobalVariable )
+
 ## title element
 #chanwReviveGlobalVariable( "Title" $master_namespace )
     <title>#import( $chanwReviveGlobalVariable )</title>
@@ -103,27 +107,13 @@
     #set( $h1      = $_EscapeTool.xml( $pageSystemDataStructure.getChild( "h1" ).Value ) )
     #set( $content = $pageSystemDataStructure.getChild( "wysiwyg" ) )
     
-    #set( $hasTop    = $pageLayoutTop == 'yes' )
-    #set( $hasBottom = $pageLayoutBottom == 'yes' )
+    #set( $pageHasTop    = $pageLayoutTop == 'yes' )
+    #set( $pageHasBottom = $pageLayoutBottom == 'yes' )
     
     #set( $preH1ChooserContent = $pageSystemDataStructure.getChild( "pre-h1-chooser" ).getChild( "content" ) )
     
     #if( $preH1ChooserContent )
         #chanwProcessBlockChooser( $preH1ChooserContent )
-    #end
-
-    #if( $hasTop && $hasBottom )
-        #set( $topCssClass    = "col-md-3" )
-        #set( $middleCssClass = "col-md-6" )
-        #set( $bottomCssClass = "col-md-3" )
-    #elseif( $hasTop )
-        #set( $topCssClass    = "col-md-3" )
-        #set( $middleCssClass = "col-md-9" )
-    #elseif( $hasBottom )
-        #set( $middleCssClass = "col-md-9" )
-        #set( $bottomCssClass = "col-md-3" )
-    #else
-        #set( $middleCssClass = "col-md-12" )
     #end
 
     #chanwReviveGlobalVariable( "H1FullWidth" $master_namespace )
@@ -132,71 +122,8 @@
         <div class="container"><h1>$h1</h1></div>
     #end
     
-<div class="container">
-    #if( $hasTop )
-    <div class="${topCssClass}">
-        #chanwReviveGlobalVariable( "FolderNavOnTop" $master_namespace )
-        
-        #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable ) ## set with true
-            #chanwReviveGlobalVariable( "FolderNav" $master_namespace )
-            #import( $chanwReviveGlobalVariable )
-        #end
-        
-        ## process block choosers
-        #set( $topGroupChooserContent = $pageSystemDataStructure.getChild( "top-group"
-            ).getChild( "top-group-chooser" ).getChild( "content" ) )
-            
-        #if( $topGroupChooserContent )
-            #chanwProcessBlockChooser( $topGroupChooserContent )
-        #end
-    </div>
-    #end
-
-    ## middle part
-    <div class="${middleCssClass}">
-        <div class="row">
-    #chanwReviveGlobalVariable( "H1FullWidth" $master_namespace )
-        
-    #if( $chanwReviveGlobalVariable != "" && !$chanwReviveGlobalVariable )
-    <h1>$h1</h1>
-    #end
-        
-    $_SerializerTool.serialize($content, true)
-        
-    ## process block choosers
-    #set( $postWysiwygChoosers = $pageSystemDataStructure.getChildren( "post-wysiwyg-chooser" ) )
-
-    #if( $postWysiwygChoosers.size() > 0 )
-        #foreach( $postWysiwygChooser in $postWysiwygChoosers )
-            #set( $postWysiwygChooserContent = $postWysiwygChooser.getChild( "content" ) )
-            
-            #if( $postWysiwygChooserContent )
-                #chanwProcessBlockChooser( $postWysiwygChooserContent )
-            #end
-        #end
-    #end
-        </div>
-    </div>
-
-    #if( $hasBottom )    
-    <div class="${bottomCssClass}">        
-        #chanwReviveGlobalVariable( "FolderNavAtBottom" $master_namespace )
-
-        #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable ) ## set with true
-            #chanwReviveGlobalVariable( "FolderNav" $master_namespace )   
-            #import( $chanwReviveGlobalVariable )
-        #end
-        
-        ## process block choosers
-        #set( $bottomGroupChooserContent = $pageSystemDataStructure.getChild( "bottom-group"
-            ).getChild( "bottom-group-chooser" ).getChild( "content" ) )
-            
-        #if( $bottomGroupChooserContent )
-            #chanwProcessBlockChooser( $bottomGroupChooserContent )
-        #end
-    </div>
-    #end
-</div>
+    ## the layouts format
+    #chanwImportScript( "formats" $master_site_name "layouts" )
 
     #set( $postWysiwygGroupChildren = $pageSystemDataStructure.getChild( "post-wysiwyg-group" ).Children )
 
