@@ -1,0 +1,91 @@
+#chanwReviveGlobalVariable( "HasTop" $master_namespace )
+#set( $siteHasTop = $chanwReviveGlobalVariable )
+
+#chanwReviveGlobalVariable( "HasBottom" $master_namespace )
+#set( $siteHasBottom = $chanwReviveGlobalVariable )
+
+## design-specific layout
+#if( $siteHasTop && $siteHasBottom && $pageHasTop && $pageHasBottom )
+    #chanwReviveGlobalVariable( "TopCssClass" $master_namespace )
+    #set( $topCssClass = $chanwReviveGlobalVariable )
+    #chanwReviveGlobalVariable( "MiddleCssClass" $master_namespace )
+    #set( $middleCssClass = $chanwReviveGlobalVariable )
+    #chanwReviveGlobalVariable( "BottomCssClass" $master_namespace )
+    #set( $bottomCssClass = $chanwReviveGlobalVariable )
+#elseif( $siteHasTop && $pageHasTop )
+    #chanwReviveGlobalVariable( "TopCssClass" $master_namespace )
+    #set( $topCssClass = $chanwReviveGlobalVariable )
+    #chanwReviveGlobalVariable( "MiddleWithNoBottomCssClass" $master_namespace )
+    #set( $middleCssClass = $chanwReviveGlobalVariable )
+#elseif( $siteHasBottom && $pageHasBottom )
+    #chanwReviveGlobalVariable( "MiddleWithNoTopCssClass" $master_namespace )
+    #set( $middleCssClass = $chanwReviveGlobalVariable )
+    #chanwReviveGlobalVariable( "BottomCssClass" $master_namespace )
+    #set( $bottomCssClass = $chanwReviveGlobalVariable )
+#end
+
+<div class="container">
+    #if( $siteHasTop && $pageHasTop )
+    <div class="${topCssClass}">
+        #chanwReviveGlobalVariable( "FolderNavOnTop" $master_namespace )
+        
+        #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable ) ## set with true
+            #chanwReviveGlobalVariable( "FolderNav" $master_namespace )
+            #import( $chanwReviveGlobalVariable )
+        #end
+        
+        ## process block choosers
+        #set( $topGroupChooserContent = $pageSystemDataStructure.getChild( "top-group"
+            ).getChild( "top-group-chooser" ).getChild( "content" ) )
+            
+        #if( $topGroupChooserContent )
+            #chanwProcessBlockChooser( $topGroupChooserContent )
+        #end
+    </div>
+    #end
+
+    ## middle part
+    <div class="${middleCssClass}">
+        <div class="row">
+    #chanwReviveGlobalVariable( "H1FullWidth" $master_namespace )
+        
+    #if( $chanwReviveGlobalVariable != "" && !$chanwReviveGlobalVariable )
+    <h1>$h1</h1>
+    #end
+        
+    $_SerializerTool.serialize($content, true)
+        
+    ## process block choosers
+    #set( $postWysiwygChoosers = $pageSystemDataStructure.getChildren( "post-wysiwyg-chooser" ) )
+
+    #if( $postWysiwygChoosers.size() > 0 )
+        #foreach( $postWysiwygChooser in $postWysiwygChoosers )
+            #set( $postWysiwygChooserContent = $postWysiwygChooser.getChild( "content" ) )
+            
+            #if( $postWysiwygChooserContent )
+                #chanwProcessBlockChooser( $postWysiwygChooserContent )
+            #end
+        #end
+    #end
+        </div>
+    </div>
+
+    #if( $siteHasBottom && $pageHasBottom )    
+    <div class="${bottomCssClass}">        
+        #chanwReviveGlobalVariable( "FolderNavAtBottom" $master_namespace )
+
+        #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable ) ## set with true
+            #chanwReviveGlobalVariable( "FolderNav" $master_namespace )   
+            #import( $chanwReviveGlobalVariable )
+        #end
+        
+        ## process block choosers
+        #set( $bottomGroupChooserContent = $pageSystemDataStructure.getChild( "bottom-group"
+            ).getChild( "bottom-group-chooser" ).getChild( "content" ) )
+            
+        #if( $bottomGroupChooserContent )
+            #chanwProcessBlockChooser( $bottomGroupChooserContent )
+        #end
+    </div>
+    #end
+</div>
