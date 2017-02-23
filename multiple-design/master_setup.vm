@@ -1,3 +1,4 @@
+## lists to associate sites with designs
 #set( $rwd2       = [ "cascade-admin" ] )
 #set( $hannonHill = [] )
 
@@ -7,18 +8,18 @@
     #set( $master_namespace = "hannonHill" )
 #end
 
+## global components: components existing in every design
 #chanwSetVariable( "${master_namespace}Breadcrumbs"      "site://${master_site_name}/formats/${master_namespace}/breadcrumbs" )
 #chanwSetVariable( "${master_namespace}Contact"          "site://${master_site_name}/formats/${master_namespace}/contact" )
-#chanwSetVariable( "${master_namespace}Copyright"        "site://${master_site_name}/formats/${master_namespace}/copyright" )
 #chanwSetVariable( "${master_namespace}FolderNav"        "site://${master_site_name}/formats/${master_namespace}/folder-nav" )
 #chanwSetVariable( "${master_namespace}Footer"           "site://${master_site_name}/formats/${master_namespace}/footer" )
-#chanwSetVariable( "${master_namespace}GlobalMenuSearch" "site://${master_site_name}/formats/${master_namespace}/global-menu-search" )
 #chanwSetVariable( "${master_namespace}Google"           "site://${master_site_name}/formats/${master_namespace}/google-tag-manager" )
-#chanwSetVariable( "${master_namespace}H1FullWidth"      true )
 #chanwSetVariable( "${master_namespace}Header"           "site://${master_site_name}/formats/${master_namespace}/header" )
-#chanwSetVariable( "${master_namespace}LastModified"     "site://${master_site_name}/formats/${master_namespace}/last-modified" )
 #chanwSetVariable( "${master_namespace}Link"             "site://${master_site_name}/formats/${master_namespace}/link" )
+#chanwSetVariable( "${master_namespace}Meta"             "site://${master_site_name}/formats/${master_namespace}/meta" )
 #chanwSetVariable( "${master_namespace}Script"           "site://${master_site_name}/formats/${master_namespace}/script" )
 #chanwSetVariable( "${master_namespace}SiteNav"          "site://${master_site_name}/formats/${master_namespace}/site-nav" )
-#chanwSetVariable( "${master_namespace}SiteTitle"        "site://${master_site_name}/formats/${master_namespace}/site-title" )
 #chanwSetVariable( "${master_namespace}Title"            "site://${master_site_name}/formats/${master_namespace}/system-page-title" )
+
+## h1
+#chanwSetVariable( "${master_namespace}H1FullWidth" true )
