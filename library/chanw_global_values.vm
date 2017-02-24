@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+2/24/2017 Added names of setup formats.
 2/1/2017 Added more date and calendar variables.
 《/copyright》
 《documentation id=“top”》
@@ -42,6 +43,12 @@ Modification history:
 #define( $E_UL )</ul>#end
 #define( $BR )<br/>#end
 #define( $HR )<hr class="lightgray"/>#end
+
+## names of setup formats
+#set( $MASTER_SETUP_FORMAT_NAME = "master_setup" )
+#set( $DESIGN_SETUP_FORMAT_NAME = "setup" )
+#set( $SITE_SETUP_FORMAT_NAME   = "setup" )
+#set( $FOLDER_SETUP_FORMAT_NAME = "setup" )
 
 ## strings for documentation use
 #set( $SOURCE_CODE = "The Source Code" )
