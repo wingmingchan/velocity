@@ -1,0 +1,56 @@
+<div id="site-menu-bar-div">
+<div class="container" id="site-menu-div">
+<nav id="site-menu">
+#set( $base_folder = $_.locateFolder( "/", $currentPageSiteName ) )
+#set( $children = $base_folder.Children )
+
+## the logic here assumes that all indexable assets are ordered before
+## non-indexable asset; hence we can stop when the first non-indexable
+## asset is encountered
+## alternative: process all assets, and do nothing for non-indexable assets
+## it is also assumed that all assets have display names
+<ul>
+#foreach( $child in $children )##
+    #if( !$child.ShouldBeIndexed )##
+        #break##
+    #elseif( $child.Identifier.Type == "folder" )
+        #set( $folderDisplayName = $_EscapeTool.xml( $child.Metadata.DisplayName ) )
+        #set( $indexLink         = "" )
+<li><a href="#" name="${folderDisplayName}">$folderDisplayName</a>
+        #set( $grandchildren = $child.Children )
+<ul>
+        #foreach( $grandchild in $grandchildren )
+            #if( !$grandchild.ShouldBeIndexed )
+                #break
+            #elseif( $grandchild.Name == "index" )
+                ## do nothing
+            #elseif( $grandchild.Identifier.Type == "page" )
+<li><a href="${grandchild.Link}">$_EscapeTool.xml( $grandchild.Metadata.DisplayName )</a></li>
+            #elseif( $grandchild.Identifier.Type == "symlink" )
+                ## do something with symlinks here
+            #else ## folders
+<li><a href="${grandchild.Link}/index">$_EscapeTool.xml( $grandchild.Metadata.DisplayName )</a></li>
+            #end
+        #end
+</ul></li>
+        
+        #if( $children[ $foreach.count ].ShouldBeIndexed )
+<li class="separator"><div></div></li>        
+        #end
+    #elseif( $child.Name == "index" )
+        #chanwReviveGlobalVariable( "RenderHomeInSiteNav" $master_namespace )
+
+        #if( $chanwReviveGlobalVariable )
+            #chanwReviveGlobalVariable( "HomeLinkTextInSiteNav" $master_namespace )
+                    
+            #if( $chanwReviveGlobalVariable != "" )
+<li><a href="${grandchild.Link}">$chanwReviveGlobalVariable</a></li>
+<li class="separator"><div></div></li>
+            #end
+        #end
+    #end
+#end
+</ul>
+</nav> 
+</div>
+</div>
