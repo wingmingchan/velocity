@@ -1,11 +1,11 @@
 ## lists to associate sites with designs
-#set( $rwd2       = [ "cascade-admin" ] )
-#set( $hannonHill = [] )
+#set( $rwd2       = [] )
+#set( $hannonHill = [ "cascade-admin" ] )
 
-#if( $rwd2.contains( $currentPageSiteName ) )
-    #set( $master_namespace = "rwd2" )
-#else
+#if( $hannonHill.contains( $currentPageSiteName ) )
     #set( $master_namespace = "hannonHill" )
+#else ## the default design
+    #set( $master_namespace = "rwd2" )
 #end
 
 ## global components: components existing in every design
@@ -21,5 +21,32 @@
 #chanwSetVariable( "${master_namespace}SiteNav"          "site://${master_site_name}/formats/${master_namespace}/site-nav" )
 #chanwSetVariable( "${master_namespace}Title"            "site://${master_site_name}/formats/${master_namespace}/system-page-title" )
 
-## h1
-#chanwSetVariable( "${master_namespace}H1FullWidth" true )
+## breadcrumbs, defaulted to render
+#chanwSetVariable( "${master_namespace}RenderBreadcrumbs"      true )
+
+## page contents, defaulted to process
+#chanwSetVariable( "${master_namespace}ProcessPageSystemDataStructure" true )
+
+## layouts, defaulted to 3-row/column layout
+#chanwSetVariable( "${master_namespace}HasTopRowLeftCol"       true )
+#chanwSetVariable( "${master_namespace}HasBottomRowRightCol"   true )
+#chanwSetVariable( "${master_namespace}RenderTopLeftGroup"     true )
+#chanwSetVariable( "${master_namespace}RenderBottomRightGroup" true )
+
+## folder nav, defaulted in top/left
+#chanwSetVariable( "${master_namespace}RenderFolderNav"        true )
+#chanwSetVariable( "${master_namespace}FolderNavOnTopLeft"     true )
+#chanwSetVariable( "${master_namespace}FolderNavOnBottomRight" true )
+
+## h1, defaulted to render and within middle/center
+#chanwSetVariable( "${master_namespace}RenderH1"    true )
+#chanwSetVariable( "${master_namespace}H1AboveGrid" false )
+
+## fields, defaulted to render full-width
+#chanwSetVariable( "${master_namespace}RenderPreH1Chooser"                true )
+#chanwSetVariable( "${master_namespace}RenderPreH1ChooserInContainer"     false )
+#chanwSetVariable( "${master_namespace}RenderPreWysiwygChooser"           true )
+#chanwSetVariable( "${master_namespace}RenderWysiwyg"                     true )
+#chanwSetVariable( "${master_namespace}RenderPostWysiwygChooser"          true )
+#chanwSetVariable( "${master_namespace}RenderPostWysiwygGroup"            true )
+#chanwSetVariable( "${master_namespace}RenderPostWysiwygGroupInContainer" false )
