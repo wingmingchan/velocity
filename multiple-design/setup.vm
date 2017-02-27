@@ -8,9 +8,12 @@
 ##site title
 ##chanwSetVariable( "${master_namespace}RenderSiteTitle" false )
 
+## site nav
+#chanwSetVariable( "${master_namespace}HomeLinkTextInSiteNav"  "Intranet" )
+
 ## breadcrumbs
-#chanwSetVariable( "${master_namespace}HomeString"      "HOME" )
-#chanwSetVariable( "${master_namespace}SeparatorString" " &gt; " )
+#chanwSetVariable( "${master_namespace}BreadcrumbsHomeString"      "Home" )
+#chanwSetVariable( "${master_namespace}BreadcrumbsSeparatorString" " > " )
 
 ## h2 in row block
 #chanwSetVariable( "${master_namespace}RowCenterHeaderClasses" "centerobject" )
