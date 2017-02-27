@@ -9,20 +9,13 @@
 #set( $rwd2HomeString      = "HOME" )
 #set( $rwd2SeparatorString = " &gt; " )
 
-## folder nav
-#chanwSetVariable( "rwd2FolderNavOnTop" true ) ## in left column
-
-## h1
-#chanwSetVariable( "rwd2H1FullWidth" false )
-
 ## h2 in row block
 #chanwSetVariable( "rwd2RowCenterHeaderClasses" "centerobject" )
 
 ## layouts
-#chanwSetVariable( "rwd2HasTop"       true )
-#chanwSetVariable( "rwd2HasBottom"    true )
-#chanwSetVariable( "rwd2TopCssClass"       "col-md-3" )
-#chanwSetVariable( "rwd2MiddleCssClass"    "col-md-6" )
-#chanwSetVariable( "rwd2BottomCssClass"    "col-md-3" )
-#chanwSetVariable( "rwd2MiddleWithNoTopCssClass"     "col-md-9" )
-#chanwSetVariable( "rwd2MiddleWithNoBottomCssClass"  "col-md-9" )
+#chanwSetVariable( "rwd2TopLeftCssClass"                       "col-md-3 nopadding" )
+#chanwSetVariable( "rwd2MiddleCenterCssClass"                  "col-md-6" )
+#chanwSetVariable( "rwd2BottomRightCssClass"                   "col-md-3 nopadding" )
+#chanwSetVariable( "rwd2MiddleCenterWithNoTopLeftCssClass"     "col-md-9" )
+#chanwSetVariable( "rwd2MiddleCenterWithNoBottomRightCssClass" "col-md-9" )
+#chanwSetVariable( "rwd2PageCssClass"                          "bg-white" )
