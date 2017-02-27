@@ -1,19 +1,19 @@
 <system-data-structure>
     <group identifier="layout" label="layout">
-        <group identifier="layout-top-group" label="Top" collapsed="true">
+        <group identifier="layout-top-group" label="Top/Left" collapsed="true">
             <text type="radiobutton" identifier="layout-top" label="With Top Section" default="no">
                 <radio-item value="yes" show-fields="top-group"/>
                 <radio-item value="no"/>
             </text>
         </group>
-        <group identifier="layout-bottom-group" label="Bottom" collapsed="true">
+        <group identifier="layout-bottom-group" label="Bottom/Right" collapsed="true">
             <text type="radiobutton" identifier="layout-bottom" label="Bottom" default="no">
                 <radio-item value="yes" show-fields="bottom-group"/>
                 <radio-item value="no"/>
             </text>
         </group>
     </group>
-    <group identifier="top-group" label="Top Group">
+    <group identifier="top-group" label="Top/Left Group">
         <asset type="block" identifier="top-group-chooser" label="Choose a block" multiple="true" render-content-depth="5"/>
     </group>
     <asset type="block" identifier="pre-h1-chooser" label="Choose a block" multiple="true" render-content-depth="5"/>
@@ -24,7 +24,7 @@
     <group identifier="post-wysiwyg-group" label="Post Wysiwyg Group">
         <asset type="block" identifier="post-wysiwyg-group-chooser" label="Choose a block" multiple="true" render-content-depth="5"/>
     </group>
-    <group identifier="bottom-group" label="Bottom Group">
+    <group identifier="bottom-group" label="Bottom/Right Group">
         <asset type="block" identifier="bottom-group-chooser" label="Choose a block" multiple="true" render-content-depth="5"/>
     </group>
     <group identifier="category-group" label="Category Group" restrict-to-groups="Administrators,CWT-Designers">
