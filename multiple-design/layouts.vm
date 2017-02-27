@@ -1,45 +1,59 @@
-#chanwReviveGlobalVariable( "HasTop" $master_namespace )
+## global setup
+#chanwReviveGlobalVariable( "HasTopRowLeftCol" $master_namespace )
 #set( $siteHasTop = $chanwReviveGlobalVariable )
-
-#chanwReviveGlobalVariable( "HasBottom" $master_namespace )
+#chanwReviveGlobalVariable( "HasBottomRowRightCol" $master_namespace )
 #set( $siteHasBottom = $chanwReviveGlobalVariable )
 
 ## design-specific layout
 #if( $siteHasTop && $siteHasBottom && $pageHasTop && $pageHasBottom )
-    #chanwReviveGlobalVariable( "TopCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "TopLeftCssClass" $master_namespace )
     #set( $topCssClass = $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "MiddleCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "MiddleCenterCssClass" $master_namespace )
     #set( $middleCssClass = $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "BottomCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "BottomRightCssClass" $master_namespace )
     #set( $bottomCssClass = $chanwReviveGlobalVariable )
-#elseif( $siteHasTop && $pageHasTop )
-    #chanwReviveGlobalVariable( "TopCssClass" $master_namespace )
+#elseif( $siteHasTop && $pageHasTop ) ## no bottom right
+    #chanwReviveGlobalVariable( "TopLeftCssClass" $master_namespace )
     #set( $topCssClass = $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "MiddleWithNoBottomCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "MiddleCenterWithNoBottomRightCssClass" $master_namespace )
     #set( $middleCssClass = $chanwReviveGlobalVariable )
-#elseif( $siteHasBottom && $pageHasBottom )
-    #chanwReviveGlobalVariable( "MiddleWithNoTopCssClass" $master_namespace )
+#elseif( $siteHasBottom && $pageHasBottom ) ## no top left
+    #chanwReviveGlobalVariable( "MiddleCenterWithNoTopLeftCssClass" $master_namespace )
     #set( $middleCssClass = $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "BottomCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "BottomRightCssClass" $master_namespace )
     #set( $bottomCssClass = $chanwReviveGlobalVariable )
 #end
 
-<div class="container">
+#if( $master_namespace == "rwd2" )
+    #set( $containerClass = "container " + $rwd2PageCssClass )
+#else
+    #set( $containerClass = "container" )
+#end
+
+<div class="${containerClass}">
     #if( $siteHasTop && $pageHasTop )
     <div class="${topCssClass}">
-        #chanwReviveGlobalVariable( "FolderNavOnTop" $master_namespace )
+        #chanwReviveGlobalVariable( "RenderFolderNav" $master_namespace )
         
-        #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable ) ## set with true
-            #chanwReviveGlobalVariable( "FolderNav" $master_namespace )
-            #import( $chanwReviveGlobalVariable )
+        #if( $chanwReviveGlobalVariable )
+            #chanwReviveGlobalVariable( "FolderNavOnTopLeft" $master_namespace )
+
+            #if( $chanwReviveGlobalVariable ) ## set with true
+                #chanwReviveGlobalVariable( "FolderNav" $master_namespace )
+                #import( $chanwReviveGlobalVariable )
+            #end
         #end
         
         ## process block choosers
-        #set( $topGroupChooserContent = $pageSystemDataStructure.getChild( "top-group"
-            ).getChild( "top-group-chooser" ).getChild( "content" ) )
+        #chanwReviveGlobalVariable( "RenderTopLeftGroup" $master_namespace )
+        
+        #if( $chanwReviveGlobalVariable )
+            #set( $topGroupChooserContent = $pageSystemDataStructure.getChild( "top-group"
+                ).getChild( "top-group-chooser" ).getChild( "content" ) )
             
-        #if( $topGroupChooserContent )
-            #chanwProcessBlockChooser( $topGroupChooserContent )
+            #if( $topGroupChooserContent )
+                #chanwProcessBlockChooser( $topGroupChooserContent )
+            #end
         #end
     </div>
     #end
@@ -47,10 +61,14 @@
     ## middle part
     <div class="${middleCssClass}">
         <div class="row">
-    #chanwReviveGlobalVariable( "H1FullWidth" $master_namespace )
+    #chanwReviveGlobalVariable( "RenderH1" $master_namespace )
         
-    #if( $chanwReviveGlobalVariable != "" && !$chanwReviveGlobalVariable )
+    #if( $chanwReviveGlobalVariable )
+        #chanwReviveGlobalVariable( "H1AboveGrid" $master_namespace )
+        
+        #if( !$chanwReviveGlobalVariable )
     <h1>$h1</h1>
+        #end
     #end
         
     $_SerializerTool.serialize($content, true)
@@ -71,20 +89,29 @@
     </div>
 
     #if( $siteHasBottom && $pageHasBottom )    
-    <div class="${bottomCssClass}">        
-        #chanwReviveGlobalVariable( "FolderNavAtBottom" $master_namespace )
+    <div class="${bottomCssClass}">
+        #chanwReviveGlobalVariable( "RenderFolderNav" $master_namespace )
 
-        #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable ) ## set with true
-            #chanwReviveGlobalVariable( "FolderNav" $master_namespace )   
-            #import( $chanwReviveGlobalVariable )
+        #if( $chanwReviveGlobalVariable )
+            #chanwReviveGlobalVariable( "FolderNavOnBottomRight" $master_namespace )
+
+            #if( $chanwReviveGlobalVariable ) ## set with true
+                #chanwReviveGlobalVariable( "FolderNav" $master_namespace )   
+                #import( $chanwReviveGlobalVariable )
+            #end
         #end
         
         ## process block choosers
-        #set( $bottomGroupChooserContent = $pageSystemDataStructure.getChild( "bottom-group"
-            ).getChild( "bottom-group-chooser" ).getChild( "content" ) )
+        #chanwReviveGlobalVariable( "RenderBottomRightGroup" $master_namespace )
+        
+        #if( $chanwReviveGlobalVariable )
+        
+            #set( $bottomGroupChooserContent = $pageSystemDataStructure.getChild( "bottom-group"
+                ).getChild( "bottom-group-chooser" ).getChild( "content" ) )
             
-        #if( $bottomGroupChooserContent )
-            #chanwProcessBlockChooser( $bottomGroupChooserContent )
+            #if( $bottomGroupChooserContent )
+                #chanwProcessBlockChooser( $bottomGroupChooserContent )
+            #end
         #end
     </div>
     #end
