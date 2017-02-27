@@ -24,7 +24,7 @@
 #end
 
 #* ==================== block processing ==================== *#
-## import required formats
+## import required formats for processing blocks
 #import( "site://${master_site_name}/formats/process_block" )
 
 ## meta
@@ -78,11 +78,19 @@
 #end
 
 ## breadcrumbs; $page must be set
-#chanwReviveGlobalVariable( "Breadcrumbs" $master_namespace )
-#import( $chanwReviveGlobalVariable )
+#chanwReviveGlobalVariable( "RenderBreadcrumbs" $master_namespace )
+
+#if( $chanwReviveGlobalVariable )    
+    #chanwReviveGlobalVariable( "Breadcrumbs" $master_namespace )
+    #import( $chanwReviveGlobalVariable )
+#end
 
 <div id="show-zone2"></div>
-#processPageSystemDataStructure
+
+#chanwReviveGlobalVariable( "ProcessPageSystemDataStructure" $master_namespace )
+#if( $chanwReviveGlobalVariable )    
+    #processPageSystemDataStructure
+#end
 
 <div id="show-zone3"></div>
 #* ==================== hannonHill design ==================== *#
@@ -118,27 +126,53 @@
     
     #set( $preH1ChooserContent = $pageSystemDataStructure.getChild( "pre-h1-chooser" ).getChild( "content" ) )
     
-    #if( $preH1ChooserContent )
-        #chanwProcessBlockChooser( $preH1ChooserContent )
+    ## pre-h1 chooser
+    #chanwReviveGlobalVariable( "RenderPreH1Chooser" $master_namespace )
+    
+    #if( $chanwReviveGlobalVariable && $preH1ChooserContent )
+        #chanwReviveGlobalVariable( "RenderPreH1ChooserInContainer" $master_namespace )
+        
+        #if( $chanwReviveGlobalVariable )
+        <div class="container">
+            #chanwProcessBlockChooser( $preH1ChooserContent )
+        </div>
+        #elseif( $preH1ChooserContent )
+            #chanwProcessBlockChooser( $preH1ChooserContent )
+        #end
     #end
 
-    #chanwReviveGlobalVariable( "H1FullWidth" $master_namespace )
+    ## render h1 outside the grids
+    #chanwReviveGlobalVariable( "RenderH1" $master_namespace )
     
-    #if( $chanwReviveGlobalVariable != "" && $chanwReviveGlobalVariable )
+    #if( $chanwReviveGlobalVariable )
+        #chanwReviveGlobalVariable( "H1AboveGrid" $master_namespace )
+        #if( $chanwReviveGlobalVariable ) 
         <div class="container"><h1>$h1</h1></div>
+        #end
     #end
     
     ## the layouts format
     #import( "site://${master_site_name}/formats/layouts" )
 
-    #set( $postWysiwygGroupChildren = $pageSystemDataStructure.getChild( "post-wysiwyg-group" ).Children )
+    ## the chooser group after the wysiwyg
+    #chanwReviveGlobalVariable( "RenderPostWysiwygGroup" $master_namespace )
+    
+    #if( $chanwReviveGlobalVariable )
+        #chanwReviveGlobalVariable( "RenderPostWysiwygGroupInContainer" $master_namespace )
 
-    #if( $postWysiwygGroupChildren.size() > 0 )
-        #foreach( $postWysiwygGroupChild in $postWysiwygGroupChildren )
-            #set( $postWysiwygGroupChooserContent = $postWysiwygGroupChild.getChild( "content" ) )
+        #set( $postWysiwygGroupChildren = $pageSystemDataStructure.getChild( "post-wysiwyg-group" ).Children )
+
+        #if( $postWysiwygGroupChildren.size() > 0 )
+            #foreach( $postWysiwygGroupChild in $postWysiwygGroupChildren )
+                #set( $postWysiwygGroupChooserContent = $postWysiwygGroupChild.getChild( "content" ) )
             
-            #if( $postWysiwygGroupChooserContent )
-                #chanwProcessBlockChooser( $postWysiwygGroupChooserContent )
+                #if( $chanwReviveGlobalVariable && $postWysiwygGroupChooserContent )
+                <div class="container">
+                    #chanwProcessBlockChooser( $postWysiwygGroupChooserContent )
+                </div>
+                #elseif( $postWysiwygGroupChooserContent )
+                    #chanwProcessBlockChooser( $postWysiwygGroupChooserContent )
+                #end
             #end
         #end
     #end
