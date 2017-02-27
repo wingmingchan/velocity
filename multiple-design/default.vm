@@ -80,7 +80,7 @@
 ## breadcrumbs; $page must be set
 #chanwReviveGlobalVariable( "RenderBreadcrumbs" $master_namespace )
 
-#if( $chanwReviveGlobalVariable )    
+#if( $chanwReviveGlobalVariable )
     #chanwReviveGlobalVariable( "Breadcrumbs" $master_namespace )
     #import( $chanwReviveGlobalVariable )
 #end
@@ -88,7 +88,8 @@
 <div id="show-zone2"></div>
 
 #chanwReviveGlobalVariable( "ProcessPageSystemDataStructure" $master_namespace )
-#if( $chanwReviveGlobalVariable )    
+
+#if( $chanwReviveGlobalVariable )
     #processPageSystemDataStructure
 #end
 
