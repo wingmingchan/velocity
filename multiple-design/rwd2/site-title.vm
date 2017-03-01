@@ -1,8 +1,9 @@
 #if( $rwd2RenderSiteTitle )
-    #chanwReviveGlobalVariable( "SiteTitleString" $master_namespace )
+    #chanwReviveGlobalVariable( "SiteTitleString" $design_namespace )
     #set( $siteTitleString = $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "SiteTitleLink" $master_namespace )
+    #chanwReviveGlobalVariable( "SiteTitleLink" $design_namespace )
     #set( $siteTitleLink = $chanwReviveGlobalVariable )
+    
     #if( $chanwReviveGlobalVariable != "" && $siteTitleLink != "" )
 <div id="site-title-div"><a href="${siteTitleLink}">$siteTitleString</a></div>
     #end
