@@ -1,59 +1,59 @@
 ## lists to associate sites with designs
-#set( $rwd2       = [ "cascade-admin" ] )
-#set( $hannonHill = [] )
+#set( $rwd2       = [] )
+#set( $hannonHill = [ "cascade-admin" ] )
 
 #if( $hannonHill.contains( $currentPageSiteName ) )
-    #set( $master_namespace = "hannonHill" )
+    #set( $design_namespace = "hannonHill" )
 #else ## the default design
-    #set( $master_namespace = "rwd2" )
+    #set( $design_namespace = "rwd2" )
 #end
 
 ## global components: components existing in every design
-#chanwSetVariable( "${master_namespace}Breadcrumbs"      "site://${master_site_name}/formats/${master_namespace}/breadcrumbs" )
-#chanwSetVariable( "${master_namespace}Contact"          "site://${master_site_name}/formats/${master_namespace}/contact" )
-#chanwSetVariable( "${master_namespace}FolderNav"        "site://${master_site_name}/formats/${master_namespace}/folder-nav" )
-#chanwSetVariable( "${master_namespace}Footer"           "site://${master_site_name}/formats/${master_namespace}/footer" )
-#chanwSetVariable( "${master_namespace}Google"           "site://${master_site_name}/formats/${master_namespace}/google-tag-manager" )
-#chanwSetVariable( "${master_namespace}Header"           "site://${master_site_name}/formats/${master_namespace}/header" )
-#chanwSetVariable( "${master_namespace}Link"             "site://${master_site_name}/formats/${master_namespace}/link" )
-#chanwSetVariable( "${master_namespace}Meta"             "site://${master_site_name}/formats/${master_namespace}/meta" )
-#chanwSetVariable( "${master_namespace}Script"           "site://${master_site_name}/formats/${master_namespace}/script" )
-#chanwSetVariable( "${master_namespace}SiteNav"          "site://${master_site_name}/formats/${master_namespace}/site-nav" )
-#chanwSetVariable( "${master_namespace}Title"            "site://${master_site_name}/formats/${master_namespace}/system-page-title" )
+#chanwSetVariable( "${design_namespace}Breadcrumbs"      "site://${master_site_name}/formats/${design_namespace}/breadcrumbs" )
+#chanwSetVariable( "${design_namespace}Contact"          "site://${master_site_name}/formats/${design_namespace}/contact" )
+#chanwSetVariable( "${design_namespace}FolderNav"        "site://${master_site_name}/formats/${design_namespace}/folder-nav" )
+#chanwSetVariable( "${design_namespace}Footer"           "site://${master_site_name}/formats/${design_namespace}/footer" )
+#chanwSetVariable( "${design_namespace}Google"           "site://${master_site_name}/formats/${design_namespace}/google-tag-manager" )
+#chanwSetVariable( "${design_namespace}Header"           "site://${master_site_name}/formats/${design_namespace}/header" )
+#chanwSetVariable( "${design_namespace}Link"             "site://${master_site_name}/formats/${design_namespace}/link" )
+#chanwSetVariable( "${design_namespace}Meta"             "site://${master_site_name}/formats/${design_namespace}/meta" )
+#chanwSetVariable( "${design_namespace}Script"           "site://${master_site_name}/formats/${design_namespace}/script" )
+#chanwSetVariable( "${design_namespace}SiteNav"          "site://${master_site_name}/formats/${design_namespace}/site-nav" )
+#chanwSetVariable( "${design_namespace}Title"            "site://${master_site_name}/formats/${design_namespace}/system-page-title" )
 
 ## site title
-#chanwSetVariable( "${master_namespace}RenderSiteTitle"        true )
+#chanwSetVariable( "${design_namespace}RenderSiteTitle"        true )
 
 ## site naviagation
-#chanwSetVariable( "${master_namespace}RenderHomeInSiteNav"    true )
-#chanwSetVariable( "${master_namespace}HomeLinkTextInSiteNav"  "Home" )
+#chanwSetVariable( "${design_namespace}RenderHomeInSiteNav"    true )
+#chanwSetVariable( "${design_namespace}HomeLinkTextInSiteNav"  "Home" )
 
 ## breadcrumbs, defaulted to render
-#chanwSetVariable( "${master_namespace}RenderBreadcrumbs"      true )
+#chanwSetVariable( "${design_namespace}RenderBreadcrumbs"      true )
 
 ## page contents, defaulted to process
-#chanwSetVariable( "${master_namespace}ProcessPageSystemDataStructure" true )
+#chanwSetVariable( "${design_namespace}ProcessPageSystemDataStructure" true )
 
 ## layouts, defaulted to 3-row/column layout
-#chanwSetVariable( "${master_namespace}HasTopRowLeftCol"       true )
-#chanwSetVariable( "${master_namespace}HasBottomRowRightCol"   true )
-#chanwSetVariable( "${master_namespace}RenderTopLeftGroup"     true )
-#chanwSetVariable( "${master_namespace}RenderBottomRightGroup" true )
+#chanwSetVariable( "${design_namespace}HasTopRowLeftCol"       true )
+#chanwSetVariable( "${design_namespace}HasBottomRowRightCol"   true )
+#chanwSetVariable( "${design_namespace}RenderTopLeftGroup"     true )
+#chanwSetVariable( "${design_namespace}RenderBottomRightGroup" true )
 
 ## folder nav, defaulted in top/left
-#chanwSetVariable( "${master_namespace}RenderFolderNav"        true )
-#chanwSetVariable( "${master_namespace}FolderNavOnTopLeft"     true )
-#chanwSetVariable( "${master_namespace}FolderNavOnBottomRight" false )
+#chanwSetVariable( "${design_namespace}RenderFolderNav"        true )
+#chanwSetVariable( "${design_namespace}FolderNavOnTopLeft"     true )
+#chanwSetVariable( "${design_namespace}FolderNavOnBottomRight" false )
 
 ## h1, defaulted to render and within middle/center
-#chanwSetVariable( "${master_namespace}RenderH1"    true )
-#chanwSetVariable( "${master_namespace}H1AboveGrid" false )
+#chanwSetVariable( "${design_namespace}RenderH1"    true )
+#chanwSetVariable( "${design_namespace}H1AboveGrid" false )
 
 ## fields, defaulted to render full-width
-#chanwSetVariable( "${master_namespace}RenderPreH1Chooser"                true )
-#chanwSetVariable( "${master_namespace}RenderPreH1ChooserInContainer"     false )
-#chanwSetVariable( "${master_namespace}RenderPreWysiwygChooser"           true )
-#chanwSetVariable( "${master_namespace}RenderWysiwyg"                     true )
-#chanwSetVariable( "${master_namespace}RenderPostWysiwygChooser"          true )
-#chanwSetVariable( "${master_namespace}RenderPostWysiwygGroup"            true )
-#chanwSetVariable( "${master_namespace}RenderPostWysiwygGroupInContainer" false )
+#chanwSetVariable( "${design_namespace}RenderPreH1Chooser"                true )
+#chanwSetVariable( "${design_namespace}RenderPreH1ChooserInContainer"     false )
+#chanwSetVariable( "${design_namespace}RenderPreWysiwygChooser"           true )
+#chanwSetVariable( "${design_namespace}RenderWysiwyg"                     true )
+#chanwSetVariable( "${design_namespace}RenderPostWysiwygChooser"          true )
+#chanwSetVariable( "${design_namespace}RenderPostWysiwygGroup"            true )
+#chanwSetVariable( "${design_namespace}RenderPostWysiwygGroupInContainer" false )
