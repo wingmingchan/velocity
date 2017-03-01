@@ -11,12 +11,12 @@
 #import( "site://${master_site_name}/formats/${MASTER_SETUP_FORMAT_NAME}" )
 
 ## the design setup format
-#chanwImportScript( "formats/${master_namespace}" $master_site_name $DESIGN_SETUP_FORMAT_NAME )
+#chanwImportScript( "formats/${design_namespace}" $master_site_name $DESIGN_SETUP_FORMAT_NAME )
 
 ## the site setup format
 #chanwImportScript( "/" $currentPageSiteName $SITE_SETUP_FORMAT_NAME )
 
-## the folder setup format
+## the folder setup format; there is at least one
 #chanwLocateAssetInAncestorFolder(
     $currentPage.ParentFolder.Path $currentPageSiteName "format" $FOLDER_SETUP_FORMAT_NAME )
 #if( $chanwLocateAssetInAncestorFolder.ParentFolder.Path != "/" )
@@ -28,44 +28,44 @@
 #import( "site://${master_site_name}/formats/process_block" )
 
 ## meta
-#chanwReviveGlobalVariable( "Meta" $master_namespace )
+#chanwReviveGlobalVariable( "Meta" $design_namespace )
 #import( $chanwReviveGlobalVariable )
 
 ## title element
-#chanwReviveGlobalVariable( "Title" $master_namespace )
+#chanwReviveGlobalVariable( "Title" $design_namespace )
     <title>#import( $chanwReviveGlobalVariable )</title>
 
 ## link elements
-#chanwReviveGlobalVariable( "Link" $master_namespace )
+#chanwReviveGlobalVariable( "Link" $design_namespace )
 #import( $chanwReviveGlobalVariable )
         <div id="show-zone1"></div>
     </head>
     <body>
 #* ==================== rwd2 design ==================== *#
-#if( $master_namespace == "rwd2" )
+#if( $design_namespace == "rwd2" )
     ## accessibility
-    #chanwReviveGlobalVariable( "Accessibility" $master_namespace )
+    #chanwReviveGlobalVariable( "Accessibility" $design_namespace )
     #import( $chanwReviveGlobalVariable )
 #end
 #* ==================== end ==================== *#
 
 ## google tag manager
-#chanwReviveGlobalVariable( "Google" $master_namespace )
+#chanwReviveGlobalVariable( "Google" $design_namespace )
 #import( $chanwReviveGlobalVariable )
 
 #* ==================== rwd2 design ==================== *#
-#if( $master_namespace == "rwd2" )
+#if( $design_namespace == "rwd2" )
     ## header
-    #chanwReviveGlobalVariable( "Header" $master_namespace )
+    #chanwReviveGlobalVariable( "Header" $design_namespace )
     #import( $chanwReviveGlobalVariable )
 
     ## site nav
-    #chanwReviveGlobalVariable( "SiteNav" $master_namespace )
+    #chanwReviveGlobalVariable( "SiteNav" $design_namespace )
     #import( $chanwReviveGlobalVariable )
 #* ==================== hannonHill design ==================== *#
-#elseif( $master_namespace == "hannonHill" )
+#elseif( $design_namespace == "hannonHill" )
     ## nav-demo
-    #chanwReviveGlobalVariable( "NavDemo" $master_namespace )
+    #chanwReviveGlobalVariable( "NavDemo" $design_namespace )
     #import( $chanwReviveGlobalVariable )
 #end
 #* ==================== end ==================== *#
@@ -78,16 +78,16 @@
 #end
 
 ## breadcrumbs; $page must be set
-#chanwReviveGlobalVariable( "RenderBreadcrumbs" $master_namespace )
+#chanwReviveGlobalVariable( "RenderBreadcrumbs" $design_namespace )
 
 #if( $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "Breadcrumbs" $master_namespace )
+    #chanwReviveGlobalVariable( "Breadcrumbs" $design_namespace )
     #import( $chanwReviveGlobalVariable )
 #end
 
 <div id="show-zone2"></div>
 
-#chanwReviveGlobalVariable( "ProcessPageSystemDataStructure" $master_namespace )
+#chanwReviveGlobalVariable( "ProcessPageSystemDataStructure" $design_namespace )
 
 #if( $chanwReviveGlobalVariable )
     #processPageSystemDataStructure
@@ -95,19 +95,19 @@
 
 <div id="show-zone3"></div>
 #* ==================== hannonHill design ==================== *#
-#if( $master_namespace == "hannonHill" )
+#if( $design_namespace == "hannonHill" )
     ## contact
-    #chanwReviveGlobalVariable( "Contact" $master_namespace )
+    #chanwReviveGlobalVariable( "Contact" $design_namespace )
     #import( $chanwReviveGlobalVariable )
 #end
 #* ==================== end ==================== *#
 
 ## footer
-#chanwReviveGlobalVariable( "Footer" $master_namespace )
+#chanwReviveGlobalVariable( "Footer" $design_namespace )
 #import( $chanwReviveGlobalVariable )
 
 ## script elements
-#chanwReviveGlobalVariable( "Script" $master_namespace )
+#chanwReviveGlobalVariable( "Script" $design_namespace )
 #import( $chanwReviveGlobalVariable )
 
 <div id="show-zone4"></div>
@@ -128,10 +128,10 @@
     #set( $preH1ChooserContent = $pageSystemDataStructure.getChild( "pre-h1-chooser" ).getChild( "content" ) )
     
     ## pre-h1 chooser
-    #chanwReviveGlobalVariable( "RenderPreH1Chooser" $master_namespace )
+    #chanwReviveGlobalVariable( "RenderPreH1Chooser" $design_namespace )
     
     #if( $chanwReviveGlobalVariable && $preH1ChooserContent )
-        #chanwReviveGlobalVariable( "RenderPreH1ChooserInContainer" $master_namespace )
+        #chanwReviveGlobalVariable( "RenderPreH1ChooserInContainer" $design_namespace )
         
         #if( $chanwReviveGlobalVariable )
         <div class="container">
@@ -143,10 +143,10 @@
     #end
 
     ## render h1 outside the grids
-    #chanwReviveGlobalVariable( "RenderH1" $master_namespace )
+    #chanwReviveGlobalVariable( "RenderH1" $design_namespace )
     
     #if( $chanwReviveGlobalVariable )
-        #chanwReviveGlobalVariable( "H1AboveGrid" $master_namespace )
+        #chanwReviveGlobalVariable( "H1AboveGrid" $design_namespace )
         #if( $chanwReviveGlobalVariable ) 
         <div class="container"><h1>$h1</h1></div>
         #end
@@ -156,10 +156,10 @@
     #import( "site://${master_site_name}/formats/layouts" )
 
     ## the chooser group after the wysiwyg
-    #chanwReviveGlobalVariable( "RenderPostWysiwygGroup" $master_namespace )
+    #chanwReviveGlobalVariable( "RenderPostWysiwygGroup" $design_namespace )
     
     #if( $chanwReviveGlobalVariable )
-        #chanwReviveGlobalVariable( "RenderPostWysiwygGroupInContainer" $master_namespace )
+        #chanwReviveGlobalVariable( "RenderPostWysiwygGroupInContainer" $design_namespace )
 
         #set( $postWysiwygGroupChildren = $pageSystemDataStructure.getChild( "post-wysiwyg-group" ).Children )
 
