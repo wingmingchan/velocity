@@ -1,0 +1,6 @@
+## These are single-group blocks, put block type info here, and do not use '-group' in type info.
+## The group identifier should be {type-info}-group.
+#set( $single_group_names = [ "wysiwyg", "row" ] )
+
+## These are multi-group blocks, and put the required dispatch macro names here.
+#set( $multi_macro_names = [] )
