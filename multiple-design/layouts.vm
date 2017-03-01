@@ -1,30 +1,30 @@
 ## global setup
-#chanwReviveGlobalVariable( "HasTopRowLeftCol" $master_namespace )
+#chanwReviveGlobalVariable( "HasTopRowLeftCol" $design_namespace )
 #set( $siteHasTop = $chanwReviveGlobalVariable )
-#chanwReviveGlobalVariable( "HasBottomRowRightCol" $master_namespace )
+#chanwReviveGlobalVariable( "HasBottomRowRightCol" $design_namespace )
 #set( $siteHasBottom = $chanwReviveGlobalVariable )
 
 ## design-specific layout
 #if( $siteHasTop && $siteHasBottom && $pageHasTop && $pageHasBottom )
-    #chanwReviveGlobalVariable( "TopLeftCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "TopLeftCssClass" $design_namespace )
     #set( $topCssClass = $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "MiddleCenterCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "MiddleCenterCssClass" $design_namespace )
     #set( $middleCssClass = $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "BottomRightCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "BottomRightCssClass" $design_namespace )
     #set( $bottomCssClass = $chanwReviveGlobalVariable )
 #elseif( $siteHasTop && $pageHasTop ) ## no bottom right
-    #chanwReviveGlobalVariable( "TopLeftCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "TopLeftCssClass" $design_namespace )
     #set( $topCssClass = $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "MiddleCenterWithNoBottomRightCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "MiddleCenterWithNoBottomRightCssClass" $design_namespace )
     #set( $middleCssClass = $chanwReviveGlobalVariable )
 #elseif( $siteHasBottom && $pageHasBottom ) ## no top left
-    #chanwReviveGlobalVariable( "MiddleCenterWithNoTopLeftCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "MiddleCenterWithNoTopLeftCssClass" $design_namespace )
     #set( $middleCssClass = $chanwReviveGlobalVariable )
-    #chanwReviveGlobalVariable( "BottomRightCssClass" $master_namespace )
+    #chanwReviveGlobalVariable( "BottomRightCssClass" $design_namespace )
     #set( $bottomCssClass = $chanwReviveGlobalVariable )
 #end
 
-#if( $master_namespace == "rwd2" )
+#if( $design_namespace == "rwd2" )
     #set( $containerClass = "container " + $rwd2PageCssClass )
 #else
     #set( $containerClass = "container" )
@@ -33,19 +33,19 @@
 <div id="main-div-wrapper" class="${containerClass}">
     #if( $siteHasTop && $pageHasTop )
     <div class="${topCssClass}">
-        #chanwReviveGlobalVariable( "RenderFolderNav" $master_namespace )
+        #chanwReviveGlobalVariable( "RenderFolderNav" $design_namespace )
         
         #if( $chanwReviveGlobalVariable )
-            #chanwReviveGlobalVariable( "FolderNavOnTopLeft" $master_namespace )
+            #chanwReviveGlobalVariable( "FolderNavOnTopLeft" $design_namespace )
 
             #if( $chanwReviveGlobalVariable ) ## set with true
-                #chanwReviveGlobalVariable( "FolderNav" $master_namespace )
+                #chanwReviveGlobalVariable( "FolderNav" $design_namespace )
                 #import( $chanwReviveGlobalVariable )
             #end
         #end
         
         ## process block choosers
-        #chanwReviveGlobalVariable( "RenderTopLeftGroup" $master_namespace )
+        #chanwReviveGlobalVariable( "RenderTopLeftGroup" $design_namespace )
         
         #if( $chanwReviveGlobalVariable )
             #set( $topGroupChooserContent = $pageSystemDataStructure.getChild( "top-group"
@@ -61,10 +61,10 @@
     ## middle part
     <div class="${middleCssClass}">
         <div class="row">
-    #chanwReviveGlobalVariable( "RenderH1" $master_namespace )
+    #chanwReviveGlobalVariable( "RenderH1" $design_namespace )
         
     #if( $chanwReviveGlobalVariable )
-        #chanwReviveGlobalVariable( "H1AboveGrid" $master_namespace )
+        #chanwReviveGlobalVariable( "H1AboveGrid" $design_namespace )
         
         #if( !$chanwReviveGlobalVariable )
     <h1>$h1</h1>
@@ -90,19 +90,19 @@
 
     #if( $siteHasBottom && $pageHasBottom )    
     <div class="${bottomCssClass}">
-        #chanwReviveGlobalVariable( "RenderFolderNav" $master_namespace )
+        #chanwReviveGlobalVariable( "RenderFolderNav" $design_namespace )
 
         #if( $chanwReviveGlobalVariable )
-            #chanwReviveGlobalVariable( "FolderNavOnBottomRight" $master_namespace )
+            #chanwReviveGlobalVariable( "FolderNavOnBottomRight" $design_namespace )
 
             #if( $chanwReviveGlobalVariable ) ## set with true
-                #chanwReviveGlobalVariable( "FolderNav" $master_namespace )   
+                #chanwReviveGlobalVariable( "FolderNav" $design_namespace )   
                 #import( $chanwReviveGlobalVariable )
             #end
         #end
         
         ## process block choosers
-        #chanwReviveGlobalVariable( "RenderBottomRightGroup" $master_namespace )
+        #chanwReviveGlobalVariable( "RenderBottomRightGroup" $design_namespace )
         
         #if( $chanwReviveGlobalVariable )
         
