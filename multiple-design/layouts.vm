@@ -30,7 +30,7 @@
     #set( $containerClass = "container" )
 #end
 
-<div class="${containerClass}">
+<div id="main-div-wrapper" class="${containerClass}">
     #if( $siteHasTop && $pageHasTop )
     <div class="${topCssClass}">
         #chanwReviveGlobalVariable( "RenderFolderNav" $master_namespace )
