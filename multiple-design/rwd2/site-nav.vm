@@ -46,10 +46,10 @@
 <li class="separator"><div></div></li>        
         #end
     #elseif( $child.Name == "index" )
-        #chanwReviveGlobalVariable( "RenderHomeInSiteNav" $master_namespace )
+        #chanwReviveGlobalVariable( "RenderHomeInSiteNav" $design_namespace )
 
         #if( $chanwReviveGlobalVariable )
-            #chanwReviveGlobalVariable( "HomeLinkTextInSiteNav" $master_namespace )
+            #chanwReviveGlobalVariable( "HomeLinkTextInSiteNav" $design_namespace )
                     
             #if( $chanwReviveGlobalVariable != "" )
 <li><a href="${child.Link}">$chanwReviveGlobalVariable</a></li>
