@@ -1,6 +1,6 @@
-#chanwReviveGlobalVariable( "SiteContactPerson" $master_namespace )
+#chanwReviveGlobalVariable( "SiteContactPerson" $design_namespace )
 #set( $contactName  = $chanwReviveGlobalVariable )
-#chanwReviveGlobalVariable( "SiteContactEmail" $master_namespace )
+#chanwReviveGlobalVariable( "SiteContactEmail" $design_namespace )
 #if( $chanwReviveGlobalVariable != "" )
     #set( $contactEmail = $chanwReviveGlobalVariable + '@upstate.edu' )
 #end
