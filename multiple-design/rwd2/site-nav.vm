@@ -14,9 +14,17 @@
     #if( !$child.ShouldBeIndexed )##
         #break##
     #elseif( $child.Identifier.Type == "folder" )
+        #chanwIsAncestorOf( $child $currentPage )
+        
+        #if( $chanwIsAncestorOf ) ## for highlighting
+            #set( $li_class = ' class="currentMenuItem"' )
+        #else
+            #set( $li_class = '' )
+        #end
+    
         #set( $folderDisplayName = $_EscapeTool.xml( $child.Metadata.DisplayName ) )
         #set( $indexLink         = "" )
-<li><a href="#" name="${folderDisplayName}">$folderDisplayName</a>
+<li${li_class}><a href="#" name="${folderDisplayName}">$folderDisplayName</a>
         #set( $grandchildren = $child.Children )
 <ul>
         #foreach( $grandchild in $grandchildren )
@@ -44,7 +52,7 @@
             #chanwReviveGlobalVariable( "HomeLinkTextInSiteNav" $master_namespace )
                     
             #if( $chanwReviveGlobalVariable != "" )
-<li><a href="${grandchild.Link}">$chanwReviveGlobalVariable</a></li>
+<li><a href="${child.Link}">$chanwReviveGlobalVariable</a></li>
 <li class="separator"><div></div></li>
             #end
         #end
