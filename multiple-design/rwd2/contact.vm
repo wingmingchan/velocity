@@ -1,0 +1,15 @@
+#chanwReviveGlobalVariable( "SiteContactPerson" $master_namespace )
+#set( $contactName  = $chanwReviveGlobalVariable )
+#chanwReviveGlobalVariable( "SiteContactEmail" $master_namespace )
+#if( $chanwReviveGlobalVariable != "" )
+    #set( $contactEmail = $chanwReviveGlobalVariable + '@upstate.edu' )
+#end
+#if( $contactName.trim() != "" && $contactEmail )
+<div id="contact">Last Modified: #set( $lastModifiedDayObj = $_DateTool.getDate( $systemPageLastModified ) )$_DateTool.format( "MMMMM dd, yyyy", $lastModifiedDayObj ).
+[system-view:external]<!--#passthrough<?php
+echo " Contact <a href='http://www.upstate.edu/email_form.php?name=" . urlencode('${contactName}') . 
+"&to=" . base64_encode('${contactEmail}') . 
+"' class='footer'>$contactName" . "</a> with questions about the content of this page.";
+if($intraflag) { echo "<br /><br />This Intranet page is to be used for official purposes of SUNY Upstate,<br />and should not be made accessible to non-SUNY Upstate users."; }
+?>#passthrough-->[/system-view:external][system-view:internal]Contact $contactName with questions about the content of this page.[/system-view:internal]</div>
+#end
