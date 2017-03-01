@@ -16,7 +16,7 @@
     #elseif( $child.Identifier.Type == "folder" )
         #chanwIsAncestorOf( $child $currentPage )
         
-        #if( $chanwIsAncestorOf ) ## for highlighting
+        #if( $chanwIsAncestorOf )  ## for highlighting
             #set( $li_class = ' class="currentMenuItem"' )
         #else
             #set( $li_class = '' )
