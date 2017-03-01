@@ -1,28 +1,28 @@
 ## accessibility
-#chanwSetVariable( "${master_namespace}Accessibility"    "site://${master_site_name}/formats/${master_namespace}/accessibility" )
-#chanwSetVariable( "${master_namespace}Copyright"        "site://${master_site_name}/formats/${master_namespace}/copyright" )
-#chanwSetVariable( "${master_namespace}GlobalMenuSearch" "site://${master_site_name}/formats/${master_namespace}/global-menu-search" )
-#chanwSetVariable( "${master_namespace}LastModified"     "site://${master_site_name}/formats/${master_namespace}/last-modified" )
-#chanwSetVariable( "${master_namespace}SiteTitle"        "site://${master_site_name}/formats/${master_namespace}/site-title" )
+#chanwSetVariable( "${design_namespace}Accessibility"    "site://${master_site_name}/formats/${design_namespace}/accessibility" )
+#chanwSetVariable( "${design_namespace}Copyright"        "site://${master_site_name}/formats/${design_namespace}/copyright" )
+#chanwSetVariable( "${design_namespace}GlobalMenuSearch" "site://${master_site_name}/formats/${design_namespace}/global-menu-search" )
+#chanwSetVariable( "${design_namespace}LastModified"     "site://${master_site_name}/formats/${design_namespace}/last-modified" )
+#chanwSetVariable( "${design_namespace}SiteTitle"        "site://${master_site_name}/formats/${design_namespace}/site-title" )
 
 ##site title
-##chanwSetVariable( "${master_namespace}RenderSiteTitle" false )
-#chanwSetVariable( "${master_namespace}SiteTitleLink"   "index" )
+##chanwSetVariable( "${design_namespace}RenderSiteTitle" false )
+#chanwSetVariable( "${design_namespace}SiteTitleLink"   "index" )
 
 ## site nav
-#chanwSetVariable( "${master_namespace}HomeLinkTextInSiteNav"  "Intranet" )
+#chanwSetVariable( "${design_namespace}HomeLinkTextInSiteNav"  "Home" )
 
 ## breadcrumbs
-#chanwSetVariable( "${master_namespace}BreadcrumbsHomeString"      "Home" )
-#chanwSetVariable( "${master_namespace}BreadcrumbsSeparatorString" " > " )
+#chanwSetVariable( "${design_namespace}BreadcrumbsHomeString"      "Home" )
+#chanwSetVariable( "${design_namespace}BreadcrumbsSeparatorString" " > " )
 
 ## h2 in row block
-#chanwSetVariable( "${master_namespace}RowCenterHeaderClasses" "centerobject" )
+#chanwSetVariable( "${design_namespace}RowCenterHeaderClasses" "centerobject" )
 
 ## layouts
-#chanwSetVariable( "${master_namespace}TopLeftCssClass"                       "col-md-3 nopadding" )
-#chanwSetVariable( "${master_namespace}MiddleCenterCssClass"                  "col-md-6" )
-#chanwSetVariable( "${master_namespace}BottomRightCssClass"                   "col-md-3 nopadding" )
-#chanwSetVariable( "${master_namespace}MiddleCenterWithNoTopLeftCssClass"     "col-md-9" )
-#chanwSetVariable( "${master_namespace}MiddleCenterWithNoBottomRightCssClass" "col-md-9" )
-#chanwSetVariable( "${master_namespace}PageCssClass"                          "bg-white" )
+#chanwSetVariable( "${design_namespace}TopLeftCssClass"                       "col-md-3 nopadding" )
+#chanwSetVariable( "${design_namespace}MiddleCenterCssClass"                  "col-md-6" )
+#chanwSetVariable( "${design_namespace}BottomRightCssClass"                   "col-md-3 nopadding" )
+#chanwSetVariable( "${design_namespace}MiddleCenterWithNoTopLeftCssClass"     "col-md-9" )
+#chanwSetVariable( "${design_namespace}MiddleCenterWithNoBottomRightCssClass" "col-md-9" )
+#chanwSetVariable( "${design_namespace}PageCssClass"                          "bg-white" )
