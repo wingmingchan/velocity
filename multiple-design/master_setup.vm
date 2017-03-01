@@ -1,6 +1,6 @@
 ## lists to associate sites with designs
-#set( $rwd2       = [] )
-#set( $hannonHill = [ "cascade-admin" ] )
+#set( $rwd2       = [ "cascade-admin" ] )
+#set( $hannonHill = [] )
 
 #if( $hannonHill.contains( $currentPageSiteName ) )
     #set( $master_namespace = "hannonHill" )
@@ -21,6 +21,13 @@
 #chanwSetVariable( "${master_namespace}SiteNav"          "site://${master_site_name}/formats/${master_namespace}/site-nav" )
 #chanwSetVariable( "${master_namespace}Title"            "site://${master_site_name}/formats/${master_namespace}/system-page-title" )
 
+## site title
+#chanwSetVariable( "${master_namespace}RenderSiteTitle"        true )
+
+## site naviagation
+#chanwSetVariable( "${master_namespace}RenderHomeInSiteNav"    true )
+#chanwSetVariable( "${master_namespace}HomeLinkTextInSiteNav"  "Home" )
+
 ## breadcrumbs, defaulted to render
 #chanwSetVariable( "${master_namespace}RenderBreadcrumbs"      true )
 
@@ -36,7 +43,7 @@
 ## folder nav, defaulted in top/left
 #chanwSetVariable( "${master_namespace}RenderFolderNav"        true )
 #chanwSetVariable( "${master_namespace}FolderNavOnTopLeft"     true )
-#chanwSetVariable( "${master_namespace}FolderNavOnBottomRight" true )
+#chanwSetVariable( "${master_namespace}FolderNavOnBottomRight" false )
 
 ## h1, defaulted to render and within middle/center
 #chanwSetVariable( "${master_namespace}RenderH1"    true )
