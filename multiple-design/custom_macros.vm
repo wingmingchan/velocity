@@ -1,4 +1,9 @@
 #macro( processRowGroup $groupToBeProcessed )
+    #if( $groupToBeProcessed.name != 'row-group' )
+        Not a Row group
+        #stop
+    #end
+    
     #set( $group_header = $groupToBeProcessed.getChild( "row-header" ).Value )
     #set( $block_width  = $groupToBeProcessed.getChild( "width" ).Value )
     #set( $background_classes  = $groupToBeProcessed.getChild( "background-classes" ).Value )
