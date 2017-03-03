@@ -1,0 +1,30 @@
+<system-data-structure>
+    <text identifier="block-type" label="Block type" restrict-to-groups="wing" default="row"/>
+    <text type="radiobutton" identifier="display" label="Display" default="yes" required="true" help-text="Select yes to display">
+        <radio-item value="yes"/>
+        <radio-item value="no"/>
+    </text>
+    <group identifier="row-group" label="Row Group">
+        <text type="radiobutton" identifier="width" label="Width" default="container" required="true">
+            <radio-item value="container"/>
+            <radio-item value="full"/>
+        </text>
+        <text identifier="background-classes" label="Background Classes"/>
+        <text identifier="row-header" label="Row Header"/>
+        <text type="checkbox" identifier="row-header-position" label="Header Position">
+            <checkbox-item value="center"/>
+        </text>
+        <text type="checkbox" identifier="even" label="Even Width">
+            <checkbox-item value="yes"/>
+        </text>
+        <text type="radiobutton" identifier="padding" label="Padding" default="no">
+            <radio-item value="yes"/>
+            <radio-item value="no"/>
+        </text>
+        <text type="radiobutton" identifier="margin" label="Margin" default="no">
+            <radio-item value="yes"/>
+            <radio-item value="no"/>
+        </text>
+        <asset type="block" identifier="row-block-chooser" label="Block Chooser" multiple="true" maximum-number="4" minimum-number="2" render-content-depth="5"/>
+    </group>
+</system-data-structure>
