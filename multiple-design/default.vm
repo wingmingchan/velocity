@@ -15,13 +15,16 @@
 
 ## the site setup format
 #chanwImportScript( $siteSetupFormatFolderPath $siteSetupFormatSiteName $siteSetupFormatName )
+#set( $siteSetupFormatExists = $chanwImportScript )
 
-## the folder setup format; there is at least one
+## the folder setup format
+#set( $folderSetupFormatExists = false )
 #chanwLocateAssetInAncestorFolder(
     $currentPage.ParentFolder.Path $currentPageSiteName "format" $FOLDER_SETUP_FORMAT_NAME )
 
 #if( $chanwLocateAssetInAncestorFolder != "" && $chanwLocateAssetInAncestorFolder.ParentFolder.Path != "/" )
-#import( "site://${currentPageSiteName}/${chanwLocateAssetInAncestorFolder.ParentFolder.Path}/${FOLDER_SETUP_FORMAT_NAME}" )
+    #set( $folderSetupFormatExists = true )
+    #import( "site://${currentPageSiteName}/${chanwLocateAssetInAncestorFolder.ParentFolder.Path}/${FOLDER_SETUP_FORMAT_NAME}" )
 #end
 
 #* ==================== block processing ==================== *#
