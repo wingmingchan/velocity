@@ -4,7 +4,7 @@
 #* ==================== setup ==================== *#
 ## import the library
 #set( $core_site_name = "_core" )
-#import( "site://_core/formats/library/velocity/chanw_library_import" )
+#import( "site://${core_site_name}/import" )
 
 ## the master setup format
 #set( $master_site_name  = "_master_site" )
@@ -14,16 +14,18 @@
 #chanwImportScript( "formats/${design_namespace}" $master_site_name $DESIGN_SETUP_FORMAT_NAME )
 
 ## the site setup format
-#chanwImportScript( "/" $currentPageSiteName $SITE_SETUP_FORMAT_NAME )
+#chanwImportScript( $siteSetupFormatFolderPath $siteSetupFormatSiteName $siteSetupFormatName )
 
 ## the folder setup format; there is at least one
 #chanwLocateAssetInAncestorFolder(
     $currentPage.ParentFolder.Path $currentPageSiteName "format" $FOLDER_SETUP_FORMAT_NAME )
-#if( $chanwLocateAssetInAncestorFolder.ParentFolder.Path != "/" )
+
+#if( $chanwLocateAssetInAncestorFolder != "" && $chanwLocateAssetInAncestorFolder.ParentFolder.Path != "/" )
 #import( "site://${currentPageSiteName}/${chanwLocateAssetInAncestorFolder.ParentFolder.Path}/${FOLDER_SETUP_FORMAT_NAME}" )
 #end
 
 #* ==================== block processing ==================== *#
+
 ## import required formats for processing blocks
 #import( "site://${master_site_name}/formats/process_block" )
 
@@ -39,6 +41,7 @@
 #chanwReviveGlobalVariable( "Link" $design_namespace )
 #import( $chanwReviveGlobalVariable )
         <div id="show-zone1"></div>
+
     </head>
     <body>
 #* ==================== rwd2 design ==================== *#
@@ -94,6 +97,7 @@
 #end
 
 <div id="show-zone3"></div>
+
 #* ==================== hannonHill design ==================== *#
 #if( $design_namespace == "hannonHill" )
     ## contact
