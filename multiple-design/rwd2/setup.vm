@@ -5,8 +5,13 @@
 #chanwSetVariable( "${design_namespace}LastModified"     "site://${master_site_name}/formats/${design_namespace}/last-modified" )
 #chanwSetVariable( "${design_namespace}SiteTitle"        "site://${master_site_name}/formats/${design_namespace}/site-title" )
 
+## site config
+#set( $siteSetupFormatSiteName   = $currentPageSiteName )
+#set( $siteSetupFormatFolderPath = "/" )
+#set( $siteSetupFormatName       = 'setup' )
+
 ##site title
-##chanwSetVariable( "${design_namespace}RenderSiteTitle" false )
+#chanwSetVariable( "${design_namespace}RenderSiteTitle" true )
 #chanwSetVariable( "${design_namespace}SiteTitleLink"   "index" )
 
 ## site nav
