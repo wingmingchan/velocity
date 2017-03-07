@@ -5,7 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
-3/7/2017 Changed $master_site_name to $core_site_name
+3/7/2017 Changed $master_site_name to $core_site_name; added system-view pseudo tags.
 2/24/2017 Added names of setup formats.
 2/1/2017 Added more date and calendar variables.
 《/copyright》
@@ -75,10 +75,14 @@ Modification history:
 #set( $ORG_JDOM_ELEMENT_CLASS_NAME              = 'org.jdom.Element' )
 
 ## cascade pseudo tags
-#set( $S_SYSTEM_ASSET       = "[" + "system-asset]" )
-#set( $E_SYSTEM_ASSET       = "[" + "/system-asset]" )
-#set( $S_SYSTEM_ASSET_LOCAL = "[" + "system-asset:local]" )
-#set( $E_SYSTEM_ASSET_LOCAL = "[" + "/system-asset:local]" )
+#set( $S_SYSTEM_ASSET         = "[" + "system-asset]" )
+#set( $E_SYSTEM_ASSET         = "[" + "/system-asset]" )
+#set( $S_SYSTEM_ASSET_LOCAL   = "[" + "system-asset:local]" )
+#set( $E_SYSTEM_ASSET_LOCAL   = "[" + "/system-asset:local]" )
+#set( $S_SYSTEM_VIEW_INTERNAL = "[" + "system-view:internal]" )
+#set( $E_SYSTEM_VIEW_INTERNAL = "[" + "/system-view:internal]" )
+#set( $S_SYSTEM_VIEW_EXTERNAL = "[" + "system-view:external]" )
+#set( $E_SYSTEM_VIEW_EXTERNAL = "[" + "/system-view:external]" )
 
 ## cascade element names
 #set( $cascadeXML_ELEMENT_AUTHOR                = 'author' )
