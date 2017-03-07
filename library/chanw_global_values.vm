@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+3/7/2017 Changed $master_site_name to $core_site_name
 2/24/2017 Added names of setup formats.
 2/1/2017 Added more date and calendar variables.
 《/copyright》
@@ -13,7 +14,7 @@ Modification history:
 《p》This format defines global values used throughout the entire library.《/p》
 《/documentation》
 *#
-#set( $master_site_name = "_common_assets" )
+#set( $core_site_name = "_common_assets" )
 
 #import( 'formats/library/velocity/chanw_object_creator' )
 #import( 'formats/library/velocity/chanw_display_velocity_code' )
@@ -588,7 +589,7 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
 
 ## read the code templates block, grab the code, and make it available
 #set( $global_code_templates_code = $_.locateBlock( 
-    "formats/library/velocity/chanw_global_code_templates", $master_site_name ).getXMLAsXMLElement().getChild( "global-code-templates" ) )
+    "formats/library/velocity/chanw_global_code_templates", $core_site_name ).getXMLAsXMLElement().getChild( "global-code-templates" ) )
 
 ## these are code templates used to generate code
 #set( $single_group_code    = $global_code_templates_code.getChild( "single-group" ).Value )

@@ -1,7 +1,7 @@
-## important: used relative path so that $master_site_name can be read from chanw_global_values
+## important: used relative path so that $core_site_name can be read from chanw_global_values
 #import( 'formats/library/velocity/chanw_global_macros' )
 
-#set( $index_block_path     = 'site://' + $master_site_name + '/formats/library/velocity/chanw_process_index_block' )
+#set( $index_block_path     = 'site://' + $core_site_name + '/formats/library/velocity/chanw_process_index_block' )
 
 #import( $index_block_path )
 

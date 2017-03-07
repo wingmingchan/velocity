@@ -1,6 +1,6 @@
 ## attach this format to a region to process any block other than text blocks
-#set( $master_site_name = "_common_assets" )
-#set( $process_block_path = 'site://' + $master_site_name + '/formats/process_block' )
+#set( $core_site_name = "_common_assets" )
+#set( $process_block_path = 'site://' + $core_site_name + '/formats/process_block' )
 
 #import( $process_block_path )
 
