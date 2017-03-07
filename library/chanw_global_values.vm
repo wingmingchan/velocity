@@ -103,7 +103,6 @@ Modification history:
 #set( $cascadeXML_ELEMENT_NAME                  = 'name' )
 #set( $cascadeXML_ELEMENT_PATH                  = 'path' )
 #set( $cascadeXML_ELEMENT_PAGE_XHTML            = 'page-xhtml' )
-#set( $cascadeXML_ELEMENT_PAGE_XHTML            = 'page-xhtml' )
 #set( $cascadeXML_ELEMENT_REVIEW_DATE           = 'review-date' )
 #set( $cascadeXML_ELEMENT_SITE                  = 'site' )
 #set( $cascadeXML_ELEMENT_START_DATE            = 'start-date' )
