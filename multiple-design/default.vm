@@ -44,7 +44,6 @@
 #chanwReviveGlobalVariable( "Link" $design_namespace )
 #import( $chanwReviveGlobalVariable )
         <div id="show-zone1"></div>
-
     </head>
     <body>
 #* ==================== rwd2 design ==================== *#
@@ -76,6 +75,8 @@
 #end
 #* ==================== end ==================== *#
 
+<div id="show-zone2"></div>
+
 ## for a root-level page, there is no current folder
 #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "//system-folder[@current]/system-page[@current]" ) )
 ## root-level pages
@@ -91,15 +92,14 @@
     #import( $chanwReviveGlobalVariable )
 #end
 
-<div id="show-zone2"></div>
+<div id="show-zone3"></div>
+
 
 #chanwReviveGlobalVariable( "ProcessPageSystemDataStructure" $design_namespace )
 
 #if( $chanwReviveGlobalVariable )
     #processPageSystemDataStructure
 #end
-
-<div id="show-zone3"></div>
 
 #* ==================== hannonHill design ==================== *#
 #if( $design_namespace == "hannonHill" )
