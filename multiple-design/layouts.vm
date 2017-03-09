@@ -71,8 +71,20 @@
         #end
     #end
         
-    $_SerializerTool.serialize($content, true)
-        
+    ## chooser before wysiwyg
+    #chanwReviveGlobalVariable( "RenderPreWysiwygChooser" $design_namespace )
+
+    #if( $chanwReviveGlobalVariable )
+        #set( $preWysiwygChooserContent = 
+            $pageSystemDataStructure.getChild( "pre-wysiwyg-chooser" ).getChild( "content" ) )
+    
+        #if( $preWysiwygChooserContent )
+            #chanwProcessBlockChooser( $preWysiwygChooserContent )
+        #end
+    #end
+    
+    $_SerializerTool.serialize( $pageSystemDataStructure.getChild( "wysiwyg" ), true )
+
     ## process block choosers
     #set( $postWysiwygChoosers = $pageSystemDataStructure.getChildren( "post-wysiwyg-chooser" ) )
 
