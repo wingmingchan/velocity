@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+3/11/2017 Fixed a bug in #chanwImportScript.
 2/5/2017 Added #chanwImportScript.
 2/4/2017 Added #chanwIsAncestorOf and chanwIsDescendentOf.
 1/20/2017 Added #chanwLocateAssetInAncestorFolder.
@@ -42,6 +43,7 @@ when using the LocatorTool.《/p》
     "chanwGetPageBlockStructuredDataNodeByIdArray",
     "chanwGetStructuredDataNodeData",
     "chanwImportScript",
+    "$chanwImportScriptPathStmt",
     "chanwInvokeQuery",
     "chanwIsAncestorOf",
     "chanwIsDescendentOf",
@@ -454,7 +456,7 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
     #set( $chanwImportScript = false )
     #chanwLocateAsset( $folderPath $siteName $scriptName )
     
-    #if( $chanwLocateAsset != "" )
+    #if( $chanwLocateAsset && $chanwLocateAsset != "" )
         #set( $chanwFolderPath = $folderPath )
     	
         #if( !$chanwFolderPath.startsWith( "/" ) )
@@ -466,7 +468,9 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
         #end
 		
         #set( $chanwScriptPath = "site://" + $siteName + $chanwFolderPath + $scriptName )
-        #import( $chanwScriptPath )
+        #set( $chanwImportScriptPathStmt = '#import("' + $chanwScriptPath + '")' )
+        ## must use evaluate here; cannot use #import directly
+        #evaluate( $chanwImportScriptPathStmt )
         #set( $chanwImportScript = true )
     #end
 #end
