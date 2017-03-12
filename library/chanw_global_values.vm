@@ -15,16 +15,16 @@ Modification history:
 《/documentation》
 *#
 #set( $core_site_name = "_common_assets" )
-
+##
 #import( 'formats/library/velocity/chanw_object_creator' )
 #import( 'formats/library/velocity/chanw_display_velocity_code' )
-
+##
 ## special characters
 #define( $chanwDOUBLE_HASH )$_EscapeTool.getH()$_EscapeTool.getH()#end
 #define( $chanwNEWLINE )$_EscapeTool.n#end
 #define( $DOUBLE_HASH )$_EscapeTool.getH()$_EscapeTool.getH()#end
 #define( $NEWLINE )$_EscapeTool.n#end
-
+##
 ## HTML tags
 #define( $S_DIV )<div>#end
 #define( $E_DIV )</div>#end
@@ -44,19 +44,19 @@ Modification history:
 #define( $E_UL )</ul>#end
 #define( $BR )<br/>#end
 #define( $HR )<hr class="lightgray"/>#end
-
+##
 ## names of setup formats
 #set( $MASTER_SETUP_FORMAT_NAME = "master_setup" )
 #set( $DESIGN_SETUP_FORMAT_NAME = "setup" )
 #set( $SITE_SETUP_FORMAT_NAME   = "setup" )
 #set( $FOLDER_SETUP_FORMAT_NAME = "setup" )
-
+##
 ## strings for documentation use
 #set( $SOURCE_CODE = "The Source Code" )
-
+##
 ## number used in loops
 #set( $INTEGER_MAX_VALUE = 50000 )
-
+##
 ## java class names used for comparison
 #set( $COM_CASCADE_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
 #set( $COM_CASCADE_METADATA_CLASS_NAME          = "com.hannonhill.cascade.api.adapters.MetadataAPIAdapter" )
@@ -73,7 +73,7 @@ Modification history:
 #set( $JAVA_SQL_RESULT_SET_CLASS_NAME           = 'java.sql.ResultSet' )
 #set( $ORG_JDOM_DOCUMENT_CLASS_NAME             = 'org.jdom.Document' )
 #set( $ORG_JDOM_ELEMENT_CLASS_NAME              = 'org.jdom.Element' )
-
+##
 ## cascade pseudo tags
 #set( $S_SYSTEM_ASSET         = "[" + "system-asset]" )
 #set( $E_SYSTEM_ASSET         = "[" + "/system-asset]" )
@@ -83,7 +83,7 @@ Modification history:
 #set( $E_SYSTEM_VIEW_INTERNAL = "[" + "/system-view:internal]" )
 #set( $S_SYSTEM_VIEW_EXTERNAL = "[" + "system-view:external]" )
 #set( $E_SYSTEM_VIEW_EXTERNAL = "[" + "/system-view:external]" )
-
+##
 ## cascade element names
 #set( $cascadeXML_ELEMENT_AUTHOR                = 'author' )
 #set( $cascadeXML_ELEMENT_CREATED_BY            = 'created-by' )
@@ -120,7 +120,7 @@ Modification history:
 #set( $chanwFolderContainedAssets = [ $cascadeXML_ELEMENT_SYSTEM_BLOCK, 
     $cascadeXML_ELEMENT_SYSTEM_FILE, $cascadeXML_ELEMENT_SYSTEM_FOLDER,
     $cascadeXML_ELEMENT_SYSTEM_PAGE, $cascadeXML_ELEMENT_SYSTEM_SYMLINK ] )
-
+##
 ## RSS
 #set( $rssXML_ELEMENT_CHANNEL                   = 'channel' )
 #set( $rssXML_ELEMENT_DESCRIPTION               = 'description' )
@@ -129,7 +129,7 @@ Modification history:
 #set( $rssXML_ELEMENT_LINK                      = 'link' )
 #set( $rssXML_ELEMENT_PUB_DATE                  = 'pubDate' )
 #set( $rssXML_ELEMENT_TITLE                     = 'title' )
-
+##
 ## Cascade API types
 #set( $CASCADE_API_BLOCK_TYPE     = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_BLOCK )
 #set( $CASCADE_API_FILE_TYPE      = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FILE )
@@ -138,7 +138,7 @@ Modification history:
 #set( $CASCADE_API_PAGE_TYPE      = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_PAGE )
 #set( $CASCADE_API_REFERENCE_TYPE = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_REFERENCE )
 #set( $CASCADE_API_SYMLINK_TYPE   = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_SYMLINK )
-
+##
 ## element to Cascade type map
 #set( $CASCADE_TYPE_ELEMENT_MAP = {
     "system-block":  $CASCADE_API_BLOCK_TYPE,
@@ -147,7 +147,7 @@ Modification history:
     "system-page":   $CASCADE_API_PAGE_TYPE,
     "system-symlink":$CASCADE_API_SYMLINK_TYPE
 } )
-
+##
 ## Cascade API class strings
 #set( $CASCADE_API_DataBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
 #set( $CASCADE_API_FeedBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.FeedBlockAPIAdapter" )
@@ -158,7 +158,7 @@ Modification history:
 #set( $CASCADE_API_Symlink_CLASS_NAME      = "com.hannonhill.cascade.api.adapters.SymlinkAPIAdapter" )
 #set( $CASCADE_API_TextBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
 #set( $CASCADE_API_XMLBlock_CLASS_NAME     = "com.hannonhill.cascade.api.adapters.XMLBlockAPIAdapter" )
-
+##
 ## Cascade API Asset
 #set( $DataBlockPropertyMap = {
     "DataBlockCreatedBy":             "CreatedBy",
@@ -181,7 +181,7 @@ Modification history:
     "DataBlockXHTML":                 "XHTML",
     "DataBlockXHTMLAsXMLElement":     "XHTMLAsXMLElement"
 } )
-
+##
 #set( $FeedBlockPropertyMap = {
     "FeedBlockCreatedBy":             "CreatedBy",
     "FeedBlockCreatedOn":             "CreatedOn",
@@ -201,8 +201,8 @@ Modification history:
     "FeedBlockSiteName":              "SiteName",
     "FeedBlockType":                  "Identifier.Type"
 } )
-
-## FileData, FileText are left out
+##
+## FileData, FileText are left out; large files can crash the system
 #set( $FilePropertyMap = {
     "FileCreatedBy":             "CreatedBy",
     "FileCreatedOn":             "CreatedOn",
@@ -226,7 +226,7 @@ Modification history:
     "FileSiteName":              "SiteName",
     "FileType":                  "Identifier.Type"
 } )
-
+##
 #set( $FolderPropertyMap = {
     "FolderChildren":              "Children",
     "FolderChildrenIdentifiers":   "ChildrenIdentifiers",
@@ -250,7 +250,7 @@ Modification history:
     "FolderSiteName":              "SiteName",
     "FolderType":                  "Identifier.Type"
 } )
-
+##
 #set( $PagePropertyMap = {
     "PageCreatedBy":             "CreatedBy",
     "PageCreatedOn":             "CreatedOn",
@@ -277,7 +277,7 @@ Modification history:
     "PageXHTML":                 "XHTML",
     "PageXHTMLAsXMLElement":     "XHTMLAsXMLElement"
 } )
-
+##
 #set( $ScriptFormatPropertyMap = {
     "ScriptFormatCreatedBy":             "CreatedBy",
     "ScriptFormatCreatedOn":             "CreatedOn",
@@ -295,7 +295,7 @@ Modification history:
     "ScriptFormatSiteName":              "SiteName",
     "ScriptFormatType":                  "Identifier.Type"
 } )
-
+##
 #set( $SymlinkPropertyMap = {
     "SymlinkCreatedBy":             "CreatedBy",
     "SymlinkCreatedOn":             "CreatedOn",
@@ -314,7 +314,7 @@ Modification history:
     "SymlinkSiteName":              "SiteName",
     "SymlinkType":                  "Identifier.Type"
 } )
-
+##
 #set( $TextBlockPropertyMap = {
     "TextBlockCreatedBy":             "CreatedBy",
     "TextBlockCreatedOn":             "CreatedOn",
@@ -333,7 +333,7 @@ Modification history:
     "TextBlockText":                  "Text",
     "TextBlockType":                  "Identifier.Type"
 } )
-
+##
 #set( $XMLBlockPropertyMap = {
     "XMLBlockCreatedBy":             "CreatedBy",
     "XMLBlockCreatedOn":             "CreatedOn",
@@ -353,9 +353,7 @@ Modification history:
     "XMLBlockXML":                   "Identifier.XML",
     "XMLBlockXMLAsXMLElement":       "XMLAsXMLElement"
 } )
-
-
-
+##
 ## HTML element names, used in processing data definition blocks
 #* 'link', 'summary', 'title' are omitted from this list because they are used in Cascade.
 Otherwise, when an element is encountered, it is assumed to be in a wysiwyg and the element
@@ -378,7 +376,7 @@ is part of the HTML markups.
     'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time',
     'tr','track', 'u', 'ul', 'var', 'video', 'wbr'
 ] )
-
+##
 ## date and calendar
 ## fields
 #set( $chanwYearField     = $_FieldTool.in( 'java.util.Calendar' ).YEAR )
@@ -388,7 +386,7 @@ is part of the HTML markups.
 #set( $chanwMinuteField   = $_FieldTool.in( 'java.util.Calendar' ).MINUTE )
 #set( $chanwSecondField   = $_FieldTool.in( 'java.util.Calendar' ).SECOND )
 #set( $chanwAmPmField     = $_FieldTool.in( 'java.util.Calendar' ).AM_PM )
-
+##
 ## today
 #set( $chanwTodayDateObject          = $_DateTool.getSystemDate() )
 #set( $chanwShortField = $_FieldTool.in( $chanwTodayDateObject ).SHORT )
@@ -407,7 +405,7 @@ is part of the HTML markups.
 #set( $chanwCurrentDayOfWeekShortString = $_DateTool.format( "EEE", $chanwTodayDateObject ) )
 #set( $chanwCurrentMonthLongString   = $_DateTool.format( "MMMMM", $chanwTodayDateObject ) )
 #set( $chanwCurrentMonthMediumString = $_DateTool.format( "MMM", $chanwTodayDateObject ) )
-
+##
 ## yesterday
 #set( $chanwYesterdayCalObject = $chanwCalendarObject.clone() )
 $chanwYesterdayCalObject.add( $chanwDayField, -1 )
@@ -415,7 +413,7 @@ $chanwYesterdayCalObject.add( $chanwDayField, -1 )
 #set( $chanwYesterdayInt = $chanwYesterdayCalObject.get( $chanwDayField ) )
 #set( $chanwYesterdayDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwYesterdayDateObject ) )
 #set( $chanwYesterdayDayOfWeekShortString = $_DateTool.format( "EEE", $chanwYesterdayDateObject ) )
-
+##
 ## tomorrow
 #set( $chanwTomorrowCalObject  = $chanwCalendarObject.clone() )
 $chanwTomorrowCalObject.add( $chanwDayField, 1 )
@@ -423,7 +421,7 @@ $chanwTomorrowCalObject.add( $chanwDayField, 1 )
 #set( $chanwTomorrowInt = $chanwTomorrowCalObject.get( $chanwDayField ) )
 #set( $chanwTomorrowDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwTomorrowDateObject ) )
 #set( $chanwTomorrowDayOfWeekShortString = $_DateTool.format( "EEE", $chanwTomorrowDateObject ) )
-
+##
 ## last month
 #set( $chanwLastMonthCalObject = $chanwCalendarObject.clone() )
 $chanwLastMonthCalObject.add( $chanwMonthField, -1 )
@@ -431,7 +429,7 @@ $chanwLastMonthCalObject.add( $chanwMonthField, -1 )
 #set( $chanwLastMonthInt = $chanwLastMonthCalObject.get( $chanwMonthField ) )
 #set( $chanwLastMonthLongString  = $_DateTool.format( "MMMMM", $chanwLastMonthDateObject ) )
 #set( $chanwLastMonthShortString = $_DateTool.format( "MMM", $chanwLastMonthDateObject ) )
-
+##
 ## next month
 #set( $chanwNextMonthCalObject = $chanwCalendarObject.clone() )
 $chanwNextMonthCalObject.add( $chanwMonthField, 1 )
@@ -439,19 +437,19 @@ $chanwNextMonthCalObject.add( $chanwMonthField, 1 )
 #set( $chanwNextMonthInt = $chanwNextMonthCalObject.get( $chanwMonthField ) )
 #set( $chanwNextMonthLongString  = $_DateTool.format( "MMMMM", $chanwNextMonthDateObject ) )
 #set( $chanwNextMonthShortString = $_DateTool.format( "MMM", $chanwNextMonthDateObject ) )
-
+##
 ## last year
 #set( $chanwLastYearCalObject  = $chanwCalendarObject.clone() )
 $chanwLastYearCalObject.add( $chanwYearField, -1 )
 #set( $chanwLastYearDateObject = $_DateTool.toDate( $chanwLastYearCalObject ) )
 #set( $chanwLastYearInt = $chanwCurrentYearInt - 1 )
-
+##
 ## next year
 #set( $chanwNextYearCalObject  = $chanwCalendarObject.clone() )
 $chanwNextYearCalObject.add( $chanwYearField, 1 )
 #set( $chanwNextYearDateObject = $_DateTool.toDate( $chanwNextYearCalObject ) )
 #set( $chanwNextYearInt = $chanwCurrentYearInt + 1 )
-
+##
 #set( $rssItemVarElementMap = {
         'rssItemGuid':       $rssXML_ELEMENT_GUID,
         'rssItemTitle':      $rssXML_ELEMENT_TITLE,
@@ -459,7 +457,7 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
         'rssItemPubDate':    $rssXML_ELEMENT_PUB_DATE,
         'rssItemDescription':$rssXML_ELEMENT_DESCRIPTION
     } )
-
+##
 #set( $systemBlockVarElementMap = {
         'systemBlockName':           $cascadeXML_ELEMENT_NAME,
         'systemBlockTitle':          $cascadeXML_ELEMENT_TITLE,
@@ -480,9 +478,8 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
         'systemBlockLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
         'systemBlockDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA,
         'systemBlockSystemDataStructure':$cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE
-
     } )
-   
+##   
 #set( $systemFileVarElementMap = {
         'systemFileName':           $cascadeXML_ELEMENT_NAME,
         'systemFileTitle':          $cascadeXML_ELEMENT_TITLE,
@@ -508,7 +505,7 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
         'systemFileSize':           $cascadeXML_ELEMENT_FILE_SIZE,
         'systemFileDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA
     } )
-
+##
 #set( $systemFolderVarElementMap = {
         'systemFolderName':           $cascadeXML_ELEMENT_NAME,
         'systemFolderIsPublished':    $cascadeXML_ELEMENT_IS_PUBLISHED,
@@ -533,7 +530,7 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
         'systemFolderLastPublishedBy':$cascadeXML_ELEMENT_LAST_PUBLISHED_BY,
         'systemFolderDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA
     } )
-    
+##    
 #set( $systemPageVarElementMap = {
         'systemPageName':           $cascadeXML_ELEMENT_NAME,
         'systemPageIsPublished':    $cascadeXML_ELEMENT_IS_PUBLISHED,
@@ -560,7 +557,7 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
         'systemPageDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA,
         'systemPageSystemDataStructure':$cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE
     } )
-    
+##    
 #set( $systemSymlinkVarElementMap = {
         'systemSymlinkName':           $cascadeXML_ELEMENT_NAME,
         'systemSymlinkTitle':          $cascadeXML_ELEMENT_TITLE,
@@ -583,17 +580,17 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
         'systemSymlinkDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA
 
     } )
-
+##
 ## a prefix used in macro names
 #set( $MACRO_PREFIX = 'process' )
-
+##
 ## This part can contain business logic. Note that when the Locator Tool is used,
 ## site name must be provided so that the library code can be imported in other sites.
-
+##
 ## read the code templates block, grab the code, and make it available
 #set( $global_code_templates_code = $_.locateBlock( 
     "formats/library/velocity/chanw_global_code_templates", $core_site_name ).getXMLAsXMLElement().getChild( "global-code-templates" ) )
-
+##
 ## these are code templates used to generate code
 #set( $single_group_code    = $global_code_templates_code.getChild( "single-group" ).Value )
 #set( $multi_group_code     = $global_code_templates_code.getChild( "multi-group" ).Value )
@@ -604,12 +601,12 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
 #set( $page_config_code     = $global_code_templates_code.getChild( "page-config" ).Value )
 #set( $process_cascade_api_asset_code = $global_code_templates_code.getChild( "process-cascade-api-asset-code" ).Value )
 #set( $get_image_by_page_path_code = $global_code_templates_code.getChild( "get-image-by-page-path-code" ).Value )
-
+##
 ## a list of names of variables associated with Velocity code
 #set( $chanwCodeList = [
     'get_image_by_page_path_code'
 ] )
-
+##
 ## a macro to execute the blocks of code
 #macro( chanwGenerateCode $codeName )
     #set( $chanwStmt = '#set($chanwCode=$' + $codeName + ' )' )
@@ -617,7 +614,7 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
     #set( $chanwCode = $chanwCode.replaceAll("<", "<").replaceAll(">", ">").replaceAll("-aa-", "&&") )
     #evaluate( $chanwCode )
 #end
-
+##
 #foreach( $codeName in $chanwCodeList )
     #chanwGenerateCode( $codeName )
 #end
