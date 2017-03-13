@@ -359,6 +359,7 @@ Modification history:
 Otherwise, when an element is encountered, it is assumed to be in a wysiwyg and the element
 is part of the HTML markups.
 *#
+#*
 #set( $chanwHTMLElements = [
     'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 
     'b', 'base', 'bdi', 'bdo', 'blockquote', 'body', 'br', 'button', 
@@ -376,6 +377,7 @@ is part of the HTML markups.
     'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time',
     'tr','track', 'u', 'ul', 'var', 'video', 'wbr'
 ] )
+*#
 ##
 ## date and calendar
 ## fields
