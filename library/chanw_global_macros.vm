@@ -1,7 +1,7 @@
 #*
 《code》
 《copyright》
-Authur: Wing Ming Chan, Peter Thomas
+Authors: Wing Ming Chan, Peter Thomas
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
@@ -135,6 +135,8 @@ any string containing acceptable Java code. Examples:《/p》
 #set( $void = $list.add( “let's have “ ) )
 #chanwCallJavaMethod( 'list' 'add(“fun“)' )
 《/pre》
+《p》Note that since 《code》#evaluate《/code》 is used, the returned value of
+the method, if there is one, will be ignored and not output.《/p》
 《/documentation》
 《macro id=“chanwCallJavaMethod”》
 *#
@@ -263,56 +265,6 @@ $chanwGetCascadeObjectFromElement.Class.Name
 #*
 《/macro》
 《documentation》
-《code》#chanwGetDatabaseList( $listName )《/code》
-《p》Creates a list containing single values drawn from the database. The value
-of 《code》$listName《/code》 will be turned into a name of a global variable.
-The associated SQL statement selects a single value from a table. This macro
-is used by upstate_database. Example from upstate_database:《/p》
-《pre》
-#import( 'site://_common_assets/formats/library/velocity/chanw_object_creator' )
-#chanwGetObjectByClassName( 'edu.upstate.chanw.db.CascadeDB' )
-
-#set( $db           = $chanwGetObjectByClassName )
-#set( $maxNumber    = 500000 )
-#set( $list_sql_map = { “upstateSiteName“:“select name from cxml_site“, 
-                        “upstateUserName“:“select username from cxml_user“
-                      } )
-
-#foreach( $chanwKey in $list_sql_map.keySet() )
-    #set( $sql = $list_sql_map[ $chanwKey ] )
-    #chanwGetDatabaseList( $chanwKey )
-#end
-《/pre》
-《/documentation》
-《macro id=“chanwGetDatabaseList”》
-*#
-#macro( chanwGetDatabaseList $listName )
-    #set( $chanwData = $db.getResultSet( $sql ) )
-    #set( $chanwStmt = '#set($' + $listName + '=[])' )
-    #evaluate( $chanwStmt )
-
-    #if( $chanwData.next() )
-        ## the first record
-        #set( $void = $chanwData.first() )
-        #set( $chanwStmt = '#set($void=$' + $listName +
-            '.add($chanwData.getString( 1 ) ) )' )
-        #evaluate( $chanwStmt )
-    
-        ## loop through all other records
-        #foreach( $num in [ 1..$maxNumber ] )
-            #if( $chanwData.next() )
-                #set( $chanwStmt = '#set($void=$' + $listName +
-                    '.add( $chanwData.getString( 1 ) ) )' )
-                #evaluate( $chanwStmt )
-            #else
-                #break
-            #end
-        #end
-    #end
-#end
-#*
-《/macro》
-《documentation》
 《code》#chanwGetFilePath( $file $site $default )《/code》
 《p》Gets the valid file path or the default path. Invoke this macro in double
 quotes in a set directive because the macro only outputs a string.
@@ -353,7 +305,7 @@ $chanwGetFolderContainedAssetName
     
     ## check input
     #chanwIsInstanceOf( $asset
-        "com.hannonhill.cascade.api.adapters.FolderContainedAssetAPIAdapter" )
+        $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME )
         
     #if( !$chanwIsInstanceOf )
     $asset is not a folder contained asset object.
