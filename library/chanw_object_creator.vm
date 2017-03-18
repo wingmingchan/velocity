@@ -53,7 +53,7 @@ a whole set of global utility objects.《/p》
     ## check the class name string
     #if( !$className || $className.Class.Name != "java.lang.String" || $className == "" )
         A valid class name is required.<br />
-        ##stop
+        #stop
     #end
 
     #set( $chanwGetObjectByClassName = "" ) ## reinitialize the global variable
@@ -98,7 +98,7 @@ a whole set of global utility objects.《/p》
 
     ## get all constructors
     #set( $chanwGetConstructorByClassNameParamSize = "" )
-    #set( $chanwClassObj = $_PropertyTool.class.forName( $chanwClassName ) )
+    #set( $chanwClassObj = $_.Class.forName( $chanwClassName ) )
     #set( $chanwConstructors  = $chanwClassObj.getConstructors() )
   
     ## find the one with the right param size
