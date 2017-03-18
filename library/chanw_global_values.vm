@@ -1,8 +1,8 @@
 #*
 《code》
 《copyright》
-Author: Wing Ming Chan
-Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+Authors: Wing Ming Chan, Peter Thomas
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
 3/7/2017 Changed $master_site_name to $core_site_name; added system-view pseudo tags.
@@ -59,6 +59,7 @@ Modification history:
 ##
 ## java class names used for comparison
 #set( $COM_CASCADE_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
+#set( $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME = "com.hannonhill.cascade.api.adapters.FolderContainedAssetAPIAdapter" )
 #set( $COM_CASCADE_METADATA_CLASS_NAME          = "com.hannonhill.cascade.api.adapters.MetadataAPIAdapter" )
 #set( $COM_CASCADE_PAGE_API_CLASS_NAME          = "com.hannonhill.cascade.api.adapters.PageAPIAdapter" )
 #set( $COM_CASCADE_STRUCTURED_DATA_NODE_CLASS_NAME = "com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter" )
@@ -83,6 +84,8 @@ Modification history:
 #set( $E_SYSTEM_VIEW_INTERNAL = "[" + "/system-view:internal]" )
 #set( $S_SYSTEM_VIEW_EXTERNAL = "[" + "system-view:external]" )
 #set( $E_SYSTEM_VIEW_EXTERNAL = "[" + "/system-view:external]" )
+#set( $S_PHP_PASSTHROUGH      = "<!--#" + "passthrough<?php " )
+#set( $E_PHP_PASSTHROUGH      = " ?>#" + "passthrough-->" )
 ##
 ## cascade element names
 #set( $cascadeXML_ELEMENT_AUTHOR                = 'author' )
