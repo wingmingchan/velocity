@@ -13,6 +13,8 @@ Modification history:
 《p》This format defines utility macros to access the Cascade database. At the end
 of the format using this library format, put in 《code》#chanwCleanUp《/code》
 as the last line of the code.《/p》
+《p class=“text_red”》Important: table names used in SQL statement are case-sensitive.
+Use uppercase for Oracle, and lowercase for MySQL.《/p》
 《/documentation》
 *#
 #import( 'formats/library/velocity/chanw_global_macros' )
@@ -80,7 +82,14 @@ with a valid statement. This macro is used by other macros.《/p》
 《/macro》
 《documentation》
 《code》#chanwCleanUp《/code》
-《p》Cleans up the connection and statement objects.《/p》
+《p》Cleans up the connection and statement objects. Note that once this macro
+is invoked, the connection to the database is closed. To open the connecton again,
+invoke 《code》#chanwGetDatabaseStatement《/code》 like this:《/p》
+《pre》
+#if( !$chanwConnection || $chanwConnection.isClosed() )
+    #chanwGetDatabaseStatement
+#end
+《/pre》
 《/documentation》
 《macro id=“chanwCleanUp”》
 *#
@@ -112,6 +121,16 @@ Example:《/p》
 #chanwCreateDatabasePHPCode( $chanwGetResultSet )
 $globalStringBuffer.toString()
 《/pre》
+《p》The PHP code generated will be something like:《/p》
+《pre》
+$view=array(
+"wing"=&gt; array("wing@upstate.edu","Wing"),);
+《/pre》
+《p》To use the PHP code, publish the code in an XML page, then read the page
+contents using the page URL. Once the code is read, replace all instances of
+《code》&gt;《/code》 with 《code》<《/code》, and then evaluate the code.
+The variable 《code》$view《/code》 will be associated with an associative array,
+with usernames as keys and emails and full names as values.《/p》
 《/documentation》
 《macro id=“chanwCreateDatabasePHPCode”》
 *#
@@ -162,13 +181,13 @@ $data.getString( $j ) ).append( '"' ) )##
 #end##
 #end##
     
-    #set( $void = $globalStringBuffer.append(");") )
+    #set( $void = $globalStringBuffer.append( ");" ) )
 #end
 #*
 《/macro》
 《documentation》
 《code》#chanwGetAllTableNames《/code》
-《p》Creates a global variable name 《code》$chanwGetAllTableNames《/code》, which
+《p》Creates a global variable named 《code》$chanwGetAllTableNames《/code》, which
 stores all table names. Example:《/p》
 《pre》
 #chanwGetAllTableNames
@@ -182,6 +201,7 @@ $chanwGetAllTableNames
         #chanwGetDatabaseStatement
     #end
     
+    ## MySQL
     #set( $chanwDBMetadata    = $chanwConnection.getMetaData() )
     #set( $chanwDBMetadataRS  = $chanwDBMetadata.getTables( null, null, "%", null ) )
     #set( $chanwGetAllTableNames = [] )
