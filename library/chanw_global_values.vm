@@ -5,6 +5,7 @@ Authors: Wing Ming Chan, Peter Thomas
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
+3/27/2017 Added $MASTER_SETUP_GLOBAL_VARIABLES.
 3/7/2017 Changed $master_site_name to $core_site_name; added system-view pseudo tags.
 2/24/2017 Added names of setup formats.
 2/1/2017 Added more date and calendar variables.
@@ -47,6 +48,7 @@ Modification history:
 ##
 ## names of setup formats
 #set( $MASTER_SETUP_FORMAT_NAME = "master_setup" )
+#set( $MASTER_SETUP_GLOBAL_VARIABLES = "global_variables" )
 #set( $DESIGN_SETUP_FORMAT_NAME = "setup" )
 #set( $SITE_SETUP_FORMAT_NAME   = "setup" )
 #set( $FOLDER_SETUP_FORMAT_NAME = "setup" )
