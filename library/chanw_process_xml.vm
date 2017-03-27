@@ -322,7 +322,7 @@ parameter.《/p》
                     ## nothing to do
                 #else
                     #set( $$chanwTempKey = $key.substring( $chanwFirstSlashPos ) )
-                    $$chanwTempKey$BR
+                    $chanwTempKey$BR
                 #end
             #elseif( $key.Class.Name == $JAVA_LANG_STRING_CLASS_NAME )
                 $key$BR
