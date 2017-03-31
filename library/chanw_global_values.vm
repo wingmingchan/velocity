@@ -5,6 +5,7 @@ Authors: Wing Ming Chan, Peter Thomas
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
+3/31/2017 Added $CASCADE_TABLE_TYPE_ASSET_TYPE_MAP.
 3/27/2017 Added $MASTER_SETUP_GLOBAL_VARIABLES.
 3/7/2017 Changed $master_site_name to $core_site_name; added system-view pseudo tags.
 2/24/2017 Added names of setup formats.
@@ -144,6 +145,15 @@ Modification history:
 #set( $CASCADE_API_REFERENCE_TYPE = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_REFERENCE )
 #set( $CASCADE_API_SYMLINK_TYPE   = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_SYMLINK )
 ##
+## 
+#set( $CASCADE_TABLE_TYPE_ASSET_TYPE_MAP = {
+    "BLO" : $CASCADE_API_BLOCK_TYPE,
+    "FIL" : $CASCADE_API_FILE_TYPE,
+    "FOL" : $CASCADE_API_FOLDER_TYPE,
+    "PAG" : $CASCADE_API_PAGE_TYPE,
+    "REF" : $CASCADE_API_REFERENCE_TYPE,
+    "SYM" : $CASCADE_API_SYMLINK_TYPE
+} )
 ## element to Cascade type map
 #set( $CASCADE_TYPE_ELEMENT_MAP = {
     "system-block":  $CASCADE_API_BLOCK_TYPE,
