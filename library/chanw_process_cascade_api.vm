@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+3/31/2010 Add #chanwGetAssetId and #chanwGetAssetType.
 3/11/2017 Fixed a bug in #chanwImportScript.
 2/5/2017 Added #chanwImportScript.
 2/4/2017 Added #chanwIsAncestorOf and chanwIsDescendentOf.
@@ -115,6 +116,52 @@ DataBlockXHTMLAsXMLElement:
     #foreach( $key in $map.keySet() )
 $key: #evaluate( "$$key" )$BR
     #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetAssetId( $asset )《/code》
+《p》Returns the Id string of the asset.《/p》
+《p》Examples:《/p》
+《pre》
+#chanwGetAssetId( $currentPage )
+$chanwGetAssetId
+《/pre》
+《/documentation》
+《macro id=“chanwGetAssetId”》
+*#
+#macro( chanwGetAssetId $asset )
+    #chanwIsInstanceOf( $asset $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME )
+    
+    #if( !$chanwIsInstanceOf )
+        Not a folder contained asset.
+        #stop
+    #end
+    
+    #set( $chanwGetAssetId = $asset.Identifier.Id )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetAssetType( $asset )《/code》
+《p》Returns the type string of the asset.《/p》
+《p》Examples:《/p》
+《pre》
+#chanwGetAssetType( $currentPage )
+$chanwGetAssetType
+《/pre》
+《/documentation》
+《macro id=“chanwGetAssetType”》
+*#
+#macro( chanwGetAssetType $asset )
+    #chanwIsInstanceOf( $asset $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME )
+    
+    #if( !$chanwIsInstanceOf )
+        Not a folder contained asset.
+        #stop
+    #end
+    
+    #set( $chanwGetAssetType = $asset.Identifier.Type.toString() )
 #end
 #*
 《/macro》
