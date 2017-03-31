@@ -6,7 +6,8 @@ Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
 3/31/2017 Added #chanwGetRecordListFromResultSet, #chanwGetIndexableChildrenIdTypeMap,
-          #chanwGetAssetInfoById, #chanwGetAssetById,
+          #chanwGetAssetInfoById, #chanwGetAssetById, #chanwGetSiteIdBySiteName,
+          #chanwGetSiteNameBySiteId,
           and rewrote #chanwGetHTMLTableFromResultSet.
 1/12/2017 Added more code for Oracle
 1/9/2017 Added #chanwGetAllTableNames
@@ -50,6 +51,8 @@ Use uppercase for Oracle, and lowercase for MySQL.《/p》
     "chanwGetNumberOfRecordsInTable",
     "chanwGetRecordListFromResultSet",
     "chanwGetResultSet",
+    "chanwGetSiteIdBySiteName",
+    "chanwGetSiteNameBySiteId",
     "chanwGetTableColumnNames",
     "chanwMetaData",
     "chanwNumberOfRecords",
@@ -711,6 +714,48 @@ $chanwGetRecordListFromResultSet
     
     #if( !$chanwGetResultSet )
         No result set returned
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetSiteIdBySiteName( $siteName )《/code》
+《p》Returns the site id of the site so named.《/p》
+《pre》
+#chanwGetSiteIdBySiteName( "22q" )
+$chanwGetSiteIdBySiteName
+《/pre》
+《/documentation》
+《macro id=“chanwGetSiteIdBySiteName”》
+*#
+#macro( chanwGetSiteIdBySiteName $siteName )
+    #set( $chanwGetSiteIdBySiteName = "" )
+    #set( $chanwSql = "select id from cxml_site where name='$siteName'" )
+    #chanwGetResultSet( $chanwSql )
+    
+    #if( $chanwGetResultSet.next() )
+        #set( $chanwGetSiteIdBySiteName = $chanwGetResultSet.getString( 1 ) )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetSiteIdBySiteName( $siteName )《/code》
+《p》Returns the site id of the site so named.《/p》
+《pre》
+#chanwGetSiteNameBySiteId( "b4d831e88b7f085601ed95543b747ed6" )
+$chanwGetSiteNameBySiteId
+《/pre》
+《/documentation》
+《macro id=“chanwGetSiteIdBySiteName”》
+*#
+#macro( chanwGetSiteNameBySiteId $siteId )
+    #set( $chanwGetSiteNameBySiteId = "" )
+    #set( $chanwSql = "select name from cxml_site where id='$siteId'" )
+    #chanwGetResultSet( $chanwSql )
+    
+    #if( $chanwGetResultSet.next() )
+        #set( $chanwGetSiteNameBySiteId = $chanwGetResultSet.getString( 1 ) )
     #end
 #end
 #*
