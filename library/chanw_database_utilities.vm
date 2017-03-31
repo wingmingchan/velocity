@@ -5,6 +5,9 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+3/31/2017 Added #chanwGetRecordListFromResultSet, #chanwGetIndexableChildrenIdTypeMap,
+          #chanwGetAssetInfoById, #chanwGetAssetById,
+          and rewrote #chanwGetHTMLTableFromResultSet.
 1/12/2017 Added more code for Oracle
 1/9/2017 Added #chanwGetAllTableNames
 《/copyright》
@@ -18,10 +21,15 @@ Use uppercase for Oracle, and lowercase for MySQL.《/p》
 《/documentation》
 *#
 #import( 'formats/library/velocity/chanw_global_macros' )
+#import( 'formats/library/velocity/chanw_process_cascade_api' )
+
 #*
 《global-variables》
 *#
 #set( $chanwDatabaseUtilitiesGlobalVariables = [ 
+    "chanwAssetCachePath",
+    "chanwAssetSiteName",
+    "chanwAssetType",
     "chanwColumnCount",
     "chanwConnection",
     "chanwContext",
@@ -29,19 +37,27 @@ Use uppercase for Oracle, and lowercase for MySQL.《/p》
     "chanwDataSource",
     "chanwDBMetadata",
     "chanwDBMetadataRS",
+    "chanwFolderId",
     "chanwGetAllTableNames",
+    "chanwGetAssetById",
+    "chanwGetAssetInfoById",
     "chanwGetDatabasStatement",
     "chanwGetHTMLTableFromSql",
+    "chanwGetIndexableChildrenIdTypeMap",
     "chanwLastRecordNumber",
     "chanwGetMetaDataRS",
     "chanwGetNumberOfRecordsInResultSet",
     "chanwGetNumberOfRecordsInTable",
+    "chanwGetRecordListFromResultSet",
     "chanwGetResultSet",
     "chanwGetTableColumnNames",
     "chanwMetaData",
+    "chanwNumberOfRecords",
+    "chanwRecord",
+    "chanwRecordList",
     "chanwResultSet",
-    "chanwResultSetMetadata",
     "chanwResultSetColumnCount",
+    "chanwResultSetMetadata",
     "chanwSql"
 ] )
 #*
@@ -251,6 +267,62 @@ $chanwGetAllTableNames
 #*
 《/macro》
 《documentation》
+《code》#chanwGetAssetById( $id )《/code》
+《p》Returns the asset (a Cascade API object) bearing that id. Example:《/p》
+《pre》
+#chanwGetAssetById( '8d3a06308b7f08ee37c14fb2544459d1' )
+$chanwGetAssetById.Class.Name
+《/pre》
+《/documentation》
+《macro id=“chanwGetAssetById”》
+*#
+#macro( chanwGetAssetById $id )
+    #set( $chanwGetAssetById = "" )
+    #chanwGetAssetInfoById( $id )
+    
+    #if( $chanwAssetCachePath != "" )
+        #set( $chanwGetAssetById = $_.locate( $chanwAssetCachePath, $chanwAssetType, $chanwAssetSiteName ) )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetAssetInfoById( $id )《/code》
+《p》Returns 《code》$chanwGetAssetInfoById《/code》, a list of values related to
+the asset bearing that id. Besides populating the list, three other variables
+are also created: 《code》$chanwAssetCachePath《/code》 (storing the path),
+《code》$chanwAssetType《/code》 (storing the type), and
+《code》$chanwAssetSiteName《/code》 (storing the site name). Example:《/p》
+《pre》
+#chanwGetAssetInfoById( '8d3a06308b7f08ee37c14fb2544459d1' )
+$chanwGetAssetInfoById
+《/pre》
+《/documentation》
+《macro id=“chanwGetAssetInfoById”》
+*#
+#macro( chanwGetAssetInfoById $id )
+    #set( $chanwGetAssetInfoById = "" )
+    #set( $chanwAssetCachePath   = "" )
+    #set( $chanwAssetType        = "" )
+    #set( $chanwAssetSiteName    = "" )
+    #set( $chanwGetAssetInfoById = [] )
+    #set( $chanwSql = "select f.CACHEPATH, f.ASSETTYPE, s.name from cxml_foldercontent f, cxml_site s where f.id='$id' and f.SITEID=s.id" )
+    #chanwGetResultSet( $chanwSql )
+    #chanwGetRecordListFromResultSet( $chanwGetResultSet )
+
+    #if( $chanwGetRecordListFromResultSet.size() > 1 )
+        #set( $chanwRecord           = $chanwGetRecordListFromResultSet.get( 1 ) )
+        #set( $chanwAssetCachePath   = $chanwRecord.get( 0 ) )
+        #set( $void                  = $chanwGetAssetInfoById.add( $chanwAssetCachePath ) )
+        #set( $chanwAssetType        = $CASCADE_TABLE_TYPE_ASSET_TYPE_MAP.get( $chanwRecord.get( 1 ) ) )
+        #set( $void                  = $chanwGetAssetInfoById.add( $chanwAssetType ) )
+        #set( $chanwAssetSiteName    = $chanwRecord.get( 2 ) )
+        #set( $void                  = $chanwGetAssetInfoById.add( $chanwAssetSiteName ) )
+    #end
+#end
+#*
+《/macro》
+《documentation》
 《code》#chanwGetDatabaseList( $listName $sql )《/code》
 《p》Creates a global variable out of the name 《code》$listName《/code》, and associates
 the global variable with a list of values drawn from the database. The SQL string
@@ -320,48 +392,55 @@ in 《code》$globalStringBuffer《/code》. This macro is used by
 《/documentation》
 《macro id=“chanwGetHTMLTableFromResultSet”》
 *#
+#*
+#chanwGetResultSet( "SELECT count(*) Count FROM CXML_ASSETFACTORY" )
+#chanwGetHTMLTableFromResultSet( $chanwGetResultSet )
+$globalStringBuffer.toString()
+*#
 #macro( chanwGetHTMLTableFromResultSet $rs )
-    #chanwCheckResultSet( $rs )
+    #chanwGetRecordListFromResultSet( $rs )
     $globalStringBuffer.setLength( 0 )
     
-    #set( $chanwResultSetMetadata    = $rs.MetaData )
-    #set( $chanwResultSetColumnCount = $chanwResultSetMetadata.ColumnCount )
-        
+    #set( $chanwRecordListFromResultSetLastIndex = 
+        $chanwGetRecordListFromResultSet.size() - 1 )
+	#set( $chanwResultSetMetadataList = $chanwGetRecordListFromResultSet.get( 0 ) )
+	    
     #set( $void = $globalStringBuffer.append(
         "<table class='tcellspacing1 tcellpadding5' summary='Table'>" ) )
     #set( $void = $globalStringBuffer.append(
         "<tr class='bg1 text_white'>" ) )
 
-    #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+    #set( $chanwLastColumnIndex = $chanwResultSetColumnCount - 1 )
+    
+
+    #foreach( $col in [ 0..$chanwLastColumnIndex ] )
         #set( $void = $globalStringBuffer.append( "<th>" ) )
         #set( $void = $globalStringBuffer.append(
-            $chanwResultSetMetadata.getColumnName( $col ) ) )
+            $chanwResultSetMetadataList.get( $col ) ) )
         #set( $void = $globalStringBuffer.append( "</th>" ) )
     #end
 
     #set( $void = $globalStringBuffer.append( "</tr>" ) )
-    $rs.beforeFirst()
+    
+    Number of records: $chanwNumberOfRecords
+    
+    #foreach( $counter in [ 1..$chanwNumberOfRecords ] )
+        #set( $chanwRecordList = $chanwGetRecordListFromResultSet.get( $counter ) )
         
-    #foreach( $counter in [ 1..$INTEGER_MAX_VALUE ] )
-        #if( $rs.next() )
-            #if( $counter % 2 == 0 )
-                #set( $void = $globalStringBuffer.append( "<tr>" ) )
-            #else
-                #set( $void = $globalStringBuffer.append(
-                    "<tr class='tablerow1'>" ) )
-            #end
-                
-            #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
-                #set( $void = $globalStringBuffer.append( "<td>" ) )
-                #set( $void = $globalStringBuffer.append(
-                    $rs.getString( $col ) ) )
-                #set( $void = $globalStringBuffer.append( "</td>" ) )
-            #end
-                
-            #set( $void = $globalStringBuffer.append( "</tr>" ) )
+        #if( $counter % 2 == 0 )
+            #set( $void = $globalStringBuffer.append( "<tr>" ) )
         #else
-            #break
+            #set( $void = $globalStringBuffer.append(
+                "<tr class='tablerow1'>" ) )
         #end
+                
+        #foreach( $col in [ 0..$chanwLastColumnIndex ] )
+            #set( $void = $globalStringBuffer.append( "<td>" ) )
+            #set( $void = $globalStringBuffer.append( $chanwRecordList.get( $col ) ) )
+            #set( $void = $globalStringBuffer.append( "</td>" ) )
+        #end
+                
+        #set( $void = $globalStringBuffer.append( "</tr>" ) )
     #end
 
     #set( $void = $globalStringBuffer.append( "</table>" ) )
@@ -397,6 +476,50 @@ $chanwGetHTMLTableFromSql
     #end
     #set( $chanwGetHTMLTableFromSql = $globalStringBuffer.toString() )
 #end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetIndexableChildrenIdTypeMap( $folder )《/code》
+《p》Returns a map, containing information of indexable children of a folder.
+The folder must be a Cascade API object. The keys of the map are id strings of
+these children, and the values are the types of the children.
+Example:《/p》
+《pre》
+#import( 'formats/library/velocity/chanw_process_cascade_api' )
+
+#set( $folder = $currentPage.ParentFolder )
+#chanwGetIndexableChildrenIdTypeMap( $folder )
+$chanwGetIndexableChildrenIdTypeMap
+《/pre》
+《/documentation》
+《macro id=“chanwGetIndexableChildrenIdTypeMap”》
+*#
+#macro( chanwGetIndexableChildrenIdTypeMap $folder )
+    #chanwGetAssetId( $folder )
+    #set( $chanwFolderId = $chanwGetAssetId )
+    #set( $chanwSql = 
+        "select id, assettype from cxml_foldercontent where parentfolderid='$chanwGetAssetId' " +
+        "and shouldbeindexed=1 and iscurrentversion=1" )
+    #chanwGetResultSet( $chanwSql )
+    
+    #set( $chanwGetIndexableChildrenIdTypeMap = {} )
+
+    #if( $chanwGetResultSet.next() )
+        $chanwGetResultSet.beforeFirst()
+        
+        #foreach( $count in [ 1..$INTEGER_MAX_VALUE ] )
+            #if( $chanwGetResultSet.next() )
+                #set( $dummy = $chanwGetIndexableChildrenIdTypeMap.put(
+                    $chanwGetResultSet.getString( 1 ), $chanwGetResultSet.getString( 2 ) ) )
+            #else
+                #break
+            #end
+        #end
+        ## move cursor back to the front
+        $chanwGetResultSet.beforeFirst()
+    #end
+#end
+
 #*
 《/macro》
 《documentation》
@@ -490,7 +613,7 @@ $chanwGetNumberOfRecordsInResultSet
 《p》Returns the number of records in the table. The returned value is stored in 
 the global variable 《code》$chanwGetNumberOfRecordsInTable《/code》. Example:《/p》
 《pre》
-#chanwGetNumberOfRecordsInTable( "CXML_ACLENTRY" )
+#chanwGetNumberOfRecordsInTable( "cxml_aclentry" )
 $chanwGetNumberOfRecordsInTable
 《/pre》
 《/documentation》
@@ -510,6 +633,57 @@ $chanwGetNumberOfRecordsInTable
     #if( $chanwResultSet.next() )
         #set( $chanwGetNumberOfRecordsInTable = $globalApacheMathTool.toNumber(
             $chanwResultSet.getString( 1 ) ) )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetRecordListFromResultSet( $rs )《/code》
+《p》Returns a list of lists, containing values of the result set. The outer
+list stores lists representing rows, and each inner list stores values of a row.
+The first inner list stores metadata (column names) of the result set.
+Example:《/p》
+《pre》
+#chanwGetResultSet( "SELECT count(*) Count FROM CXML_ASSETFACTORY" )
+#chanwGetRecordListFromResultSet( $chanwGetResultSet )
+$chanwGetRecordListFromResultSet
+《/pre》
+《/documentation》
+《macro id=“chanwGetRecordListFromResultSet”》
+*#
+#macro( chanwGetRecordListFromResultSet $rs )
+    #chanwCheckResultSet( $rs )
+    #set( $chanwResultSetMetadata    = $rs.MetaData )
+    #set( $chanwResultSetColumnCount = $chanwResultSetMetadata.ColumnCount )
+    #set( $chanwGetRecordListFromResultSet = [] )
+    
+    ## store metadata
+    #set( $chanwRecordList = [] )
+    
+    #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+        #set( $void = $chanwRecordList.add(
+            $chanwResultSetMetadata.getColumnName( $col ) ) )
+    #end
+    
+    #set( $void = $chanwGetRecordListFromResultSet.add( $chanwRecordList ) )
+    #set( $chanwNumberOfRecords = 0 )
+    
+    $rs.beforeFirst()
+        
+    #foreach( $counter in [ 1..$INTEGER_MAX_VALUE ] )
+        #if( $rs.next() )
+        	#set( $chanwRecordList = [] )
+            #set( $chanwNumberOfRecords = $chanwNumberOfRecords + 1 )
+                
+            #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+                #set( $void = $chanwRecordList.add(
+                    $rs.getString( $col ) ) )
+            #end
+                
+            #set( $void = $chanwGetRecordListFromResultSet.add( $chanwRecordList ) )
+        #else
+            #break
+        #end
     #end
 #end
 #*
