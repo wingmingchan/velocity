@@ -1,70 +1,17 @@
-## lists to associate sites with designs
-#set( $rwd2       = [ "cascade-admin" ] )
-#set( $hannonHill = [] )
+#* Except the first part, do not hard-code any site name or design name here *#
 
-#if( $hannonHill.contains( $currentPageSiteName ) )
-    #set( $design_namespace = "hannonHill" )
+## lists to associate sites with designs
+#set( $rwd3 = [ "cascade-admin" ] )
+#set( $rwd4 = [] )
+
+#if( $rwd4.contains( $currentPageSiteName ) )
+    #set( $design_namespace = "rwd4" )
 #else ## the default design
-    #set( $design_namespace = "rwd2" )
+    #set( $design_namespace = "rwd3" )
 #end
 
-## site setup folder
-#set( $siteSetupFormatSiteName   = $master_site_name )
-#set( $siteSetupFormatFolderPath = "formats/site_setup" )
-#set( $siteSetupFormatName       = $currentPageSiteName + "-setup" )
+## define master site design path, which can be overridden
+#set( $masterSiteDesignPath = "site://${master_site_name}/formats/${design_namespace}/" )
 
-## global components: components existing in every design
-#chanwSetVariable( "${design_namespace}Breadcrumbs"      "site://${master_site_name}/formats/${design_namespace}/breadcrumbs" )
-#chanwSetVariable( "${design_namespace}Contact"          "site://${master_site_name}/formats/${design_namespace}/contact" )
-#chanwSetVariable( "${design_namespace}FolderNav"        "site://${master_site_name}/formats/${design_namespace}/folder-nav" )
-#chanwSetVariable( "${design_namespace}Footer"           "site://${master_site_name}/formats/${design_namespace}/footer" )
-#chanwSetVariable( "${design_namespace}Google"           "site://${master_site_name}/formats/${design_namespace}/google-tag-manager" )
-#chanwSetVariable( "${design_namespace}Header"           "site://${master_site_name}/formats/${design_namespace}/header" )
-#chanwSetVariable( "${design_namespace}Link"             "site://${master_site_name}/formats/${design_namespace}/link" )
-#chanwSetVariable( "${design_namespace}Meta"             "site://${master_site_name}/formats/${design_namespace}/meta" )
-#chanwSetVariable( "${design_namespace}Script"           "site://${master_site_name}/formats/${design_namespace}/script" )
-#chanwSetVariable( "${design_namespace}SiteNav"          "site://${master_site_name}/formats/${design_namespace}/site-nav" )
-#chanwSetVariable( "${design_namespace}Title"            "site://${master_site_name}/formats/${design_namespace}/system-page-title" )
-
-## site title
-#chanwSetVariable( "${design_namespace}RenderSiteTitle"        true )
-
-## site navigation
-#chanwSetVariable( "${design_namespace}RenderHomeInSiteNav"    true )
-#chanwSetVariable( "${design_namespace}HomeLinkTextInSiteNav"  "Home" )
-
-## breadcrumbs, defaulted to render
-#chanwSetVariable( "${design_namespace}RenderBreadcrumbs"      true )
-
-## layouts, defaulted to 3-row/column layout
-#chanwSetVariable( "${design_namespace}HasTopRowLeftCol"       true )
-#chanwSetVariable( "${design_namespace}HasBottomRowRightCol"   true )
-#chanwSetVariable( "${design_namespace}RenderTopLeftGroup"     true )
-#chanwSetVariable( "${design_namespace}RenderBottomRightGroup" true )
-
-## folder nav, defaulted in top/left
-#chanwSetVariable( "${design_namespace}RenderFolderNav"        true )
-#chanwSetVariable( "${design_namespace}FolderNavOnTopLeft"     true )
-#chanwSetVariable( "${design_namespace}FolderNavOnBottomRight" false )
-
-## h1, defaulted to render and within middle/center
-#chanwSetVariable( "${design_namespace}RenderH1"    true )
-#chanwSetVariable( "${design_namespace}H1AboveGrid" false )
-
-## fields, defaulted to rendered
-## whether to render fields at all
-#chanwSetVariable( "${design_namespace}ProcessPageSystemDataStructure"    true )
-## whether to render the chooser before h1
-#chanwSetVariable( "${design_namespace}RenderPreH1Chooser"                true )
-## whether the contents of the chooser should be in a container
-#chanwSetVariable( "${design_namespace}RenderPreH1ChooserInContainer"     false )
-## whether to render the chooser before the wysiwyg
-#chanwSetVariable( "${design_namespace}RenderPreWysiwygChooser"           true )
-## whether to render the wysiwyg
-#chanwSetVariable( "${design_namespace}RenderWysiwyg"                     true )
-## whether to render the chooser after the wysiwyg
-#chanwSetVariable( "${design_namespace}RenderPostWysiwygChooser"          true )
-## whether to render the multiple choosers
-#chanwSetVariable( "${design_namespace}RenderPostWysiwygGroup"            true )
-## whether to render contents of the multiple choosers in containers
-#chanwSetVariable( "${design_namespace}RenderPostWysiwygGroupInContainer" false )
+## to allow this master setup to be overridden at the page level, 
+## import global_variables only in default, not here because #import only works once
