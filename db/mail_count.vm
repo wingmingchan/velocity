@@ -1,0 +1,16 @@
+#*
+This format can be attached to a page to display message information.
+*#
+
+#import( "site://_common_assets/formats/library/velocity/chanw_library_import" )
+
+#if( !$chanwConnection || $chanwConnection.isClosed() )
+    #chanwGetDatabaseStatement
+#end
+
+#set( $sql = "select distinct(receiver), count( * ) count from cxml_mail group by receiver order by count desc" )
+
+#chanwGetHTMLTableFromSql( $sql )
+$chanwGetHTMLTableFromSql
+
+#chanwCleanUp
