@@ -7,7 +7,7 @@
 Generates the required macros.
 *#
 
-## These are list-code pairs used to generate macros to generate macros.
+## These are list-code pairs used to generate code to generate macros.
 #set( $list_code_pairs = { "multi_macro_names"    : "multi_group_code", 
                            "site_map_macro_names" : "site_map_code" } )
 
