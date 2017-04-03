@@ -1,3 +1,0 @@
-<div id="copyright">All contents copyright © 1988-[system-view:internal]${chanwCurrentYearInt}[/system-view:internal][system-view:external]<!--#passthrough<?php
-$date = getdate(); $thisyear = $date['year']; echo "$thisyear, "; ?>#passthrough-->[/system-view:external], <a class="footer" href="http://www.upstate.edu/">SUNY Upstate Medical University</a>,
-[system-view:external]<!--#passthrough<?php createPolicyLinks(); ?>#passthrough-->[/system-view:external]Syracuse, NY</div>
