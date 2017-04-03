@@ -44,7 +44,7 @@ when using the LocatorTool.《/p》
     "chanwGetPageBlockStructuredDataNodeByIdArray",
     "chanwGetStructuredDataNodeData",
     "chanwImportScript",
-    "$chanwImportScriptPathStmt",
+    "chanwImportScriptPathStmt",
     "chanwInvokeQuery",
     "chanwIsAncestorOf",
     "chanwIsDescendentOf",
