@@ -4,31 +4,29 @@
 #chanwReviveGlobalVariable( "HasBottomRowRightCol" $design_namespace )
 #set( $siteHasBottom = $chanwReviveGlobalVariable )
 
-## design-specific layout
+## page-specific layout
 #if( $siteHasTop && $siteHasBottom && $pageHasTop && $pageHasBottom )
     #chanwReviveGlobalVariable( "TopLeftCssClass" $design_namespace )
-    #set( $topCssClass = $chanwReviveGlobalVariable )
+    #set( $topCssClass = $chanwReviveGlobalVariable + " nopadding-left" )
     #chanwReviveGlobalVariable( "MiddleCenterCssClass" $design_namespace )
     #set( $middleCssClass = $chanwReviveGlobalVariable )
     #chanwReviveGlobalVariable( "BottomRightCssClass" $design_namespace )
-    #set( $bottomCssClass = $chanwReviveGlobalVariable )
+    #set( $bottomCssClass = $chanwReviveGlobalVariable + " nopadding-right" )
 #elseif( $siteHasTop && $pageHasTop ) ## no bottom right
     #chanwReviveGlobalVariable( "TopLeftCssClass" $design_namespace )
     #set( $topCssClass = $chanwReviveGlobalVariable )
     #chanwReviveGlobalVariable( "MiddleCenterWithNoBottomRightCssClass" $design_namespace )
-    #set( $middleCssClass = $chanwReviveGlobalVariable )
+    #set( $middleCssClass = $chanwReviveGlobalVariable + " nopadding-right" )
 #elseif( $siteHasBottom && $pageHasBottom ) ## no top left
     #chanwReviveGlobalVariable( "MiddleCenterWithNoTopLeftCssClass" $design_namespace )
     #set( $middleCssClass = $chanwReviveGlobalVariable )
     #chanwReviveGlobalVariable( "BottomRightCssClass" $design_namespace )
-    #set( $bottomCssClass = $chanwReviveGlobalVariable )
+    #set( $bottomCssClass = $chanwReviveGlobalVariable + " nopadding-left" )
 #end
 
-#if( $design_namespace == "rwd2" )
-    #set( $containerClass = "container " + $rwd2PageCssClass )
-#else
-    #set( $containerClass = "container" )
-#end
+## local class for page background
+#chanwReviveGlobalVariable( "PageCssClass" $design_namespace )
+#set( $containerClass = "container nopadding " + $chanwReviveGlobalVariable )
 
 <div id="main-div-wrapper" class="${containerClass}">
     #if( $siteHasTop && $pageHasTop )
@@ -59,14 +57,14 @@
     #end
 
     ## middle part
-    <div class="${middleCssClass}">
+    <div class="${middleCssClass}" id="page-content-div">
         <div class="row">
     #chanwReviveGlobalVariable( "RenderH1" $design_namespace )
         
     #if( $chanwReviveGlobalVariable )
         #chanwReviveGlobalVariable( "H1AboveGrid" $design_namespace )
         
-        #if( !$chanwReviveGlobalVariable )
+        #if( !$chanwReviveGlobalVariable && $renderH1 && !$pagesWithoutH1.contains( $currentPagePath ) )
     <h1>$h1</h1>
         #end
     #end
@@ -83,6 +81,7 @@
         #end
     #end
     
+    ## the wysiwyg
     $_SerializerTool.serialize( $pageSystemDataStructure.getChild( "wysiwyg" ), true )
 
     ## process block choosers
