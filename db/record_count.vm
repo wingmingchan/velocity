@@ -1,0 +1,16 @@
+#*
+This format can be attached to any page to display information of a table.
+The page name must be identical to a table name.
+*#
+
+#import( "site://_common_assets/formats/library/velocity/chanw_database_utilities" )
+
+#chanwGetNumberOfRecordsInTable( $currentPage.Name )
+$S_PRE
+$chanwGetNumberOfRecordsInTable
+$E_PRE
+## toUpperCase for Oracle only
+#set( $table_name = $currentPage.Name.toUpperCase() )
+#chanwGetTableColumnNames( $table_name )
+$chanwGetTableColumnNames
+#chanwCleanUp
