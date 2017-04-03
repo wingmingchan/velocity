@@ -1,0 +1,72 @@
+## site setup: the setup format should be in the Base Folder of a site
+#set( $siteSetupFormatSiteName   = $currentPageSiteName )
+#set( $siteSetupFormatFolderPath = "/" )
+#set( $siteSetupFormatName       = $SITE_SETUP_FORMAT_NAME  ) ## defined in _core
+
+## global components: components existing in every design
+#chanwSetVariable( "${design_namespace}Breadcrumbs"      "${masterSiteDesignPath}breadcrumbs" )
+#chanwSetVariable( "${design_namespace}Contact"          "${masterSiteDesignPath}contact" )
+#chanwSetVariable( "${design_namespace}FolderNav"        "${masterSiteDesignPath}folder-nav" )
+#chanwSetVariable( "${design_namespace}Footer"           "${masterSiteDesignPath}footer" )
+#chanwSetVariable( "${design_namespace}Google"           "${masterSiteDesignPath}google-tag-manager" )
+#chanwSetVariable( "${design_namespace}Header"           "${masterSiteDesignPath}header" )
+#chanwSetVariable( "${design_namespace}Link"             "${masterSiteDesignPath}link" )
+#chanwSetVariable( "${design_namespace}Meta"             "${masterSiteDesignPath}meta" )
+#chanwSetVariable( "${design_namespace}Script"           "${masterSiteDesignPath}script" )
+#chanwSetVariable( "${design_namespace}SiteNav"          "${masterSiteDesignPath}site-nav" )
+#chanwSetVariable( "${design_namespace}SiteTitle"        "${masterSiteDesignPath}site-title" )
+#chanwSetVariable( "${design_namespace}Title"            "${masterSiteDesignPath}title" )
+
+## global nav
+#chanwSetVariable( "${design_namespace}RenderGlobalNav"        true )
+
+## site title
+#chanwSetVariable( "${design_namespace}RenderSiteTitle"        true )
+#chanwSetVariable( "${design_namespace}PagesWithoutSiteTitle"  [] )
+
+## site navigation
+#chanwSetVariable( "${design_namespace}RenderSiteNav"          true )
+#chanwSetVariable( "${design_namespace}RenderHomeInSiteNav"    true )
+#chanwSetVariable( "${design_namespace}HomeLinkTextInSiteNav"  "Home" )
+
+## breadcrumbs, defaulted to render
+#chanwSetVariable( "${design_namespace}RenderBreadcrumbs"      true )
+#chanwSetVariable( "${design_namespace}PagesWithoutBreadcrumbs" [] )
+
+## layouts, defaulted to 3-row/column layout
+#chanwSetVariable( "${design_namespace}HasTopRowLeftCol"       true )
+#chanwSetVariable( "${design_namespace}HasBottomRowRightCol"   true )
+#chanwSetVariable( "${design_namespace}RenderTopLeftGroup"     true )
+#chanwSetVariable( "${design_namespace}RenderBottomRightGroup" true )
+
+## folder nav, defaulted in top/left
+#chanwSetVariable( "${design_namespace}RenderFolderNav"        true )
+#chanwSetVariable( "${design_namespace}FolderNavOnTopLeft"     true )
+#chanwSetVariable( "${design_namespace}FolderNavOnBottomRight" false )
+#chanwSetVariable( "${design_namespace}PagesWithoutFolderNav"  [] )
+
+## h1, defaulted to render and within middle/center
+#chanwSetVariable( "${design_namespace}RenderH1"       true )
+#chanwSetVariable( "${design_namespace}H1AboveGrid"    false )
+#chanwSetVariable( "${design_namespace}PagesWithoutH1" [] )
+
+## fields, defaulted to rendered
+## whether to render fields at all
+#chanwSetVariable( "${design_namespace}ProcessPageSystemDataStructure"    true )
+## whether to render the chooser before h1
+#chanwSetVariable( "${design_namespace}RenderPreH1Chooser"                true )
+## whether the contents of the chooser should be in a container
+#chanwSetVariable( "${design_namespace}RenderPreH1ChooserInContainer"     false )
+## whether to render the chooser before the wysiwyg
+#chanwSetVariable( "${design_namespace}RenderPreWysiwygChooser"           true )
+## whether to render the wysiwyg
+#chanwSetVariable( "${design_namespace}RenderWysiwyg"                     true )
+## whether to render the chooser after the wysiwyg
+#chanwSetVariable( "${design_namespace}RenderPostWysiwygChooser"          true )
+## whether to render the multiple choosers
+#chanwSetVariable( "${design_namespace}RenderPostWysiwygGroup"            true )
+## whether to render contents of the multiple choosers in containers
+#chanwSetVariable( "${design_namespace}RenderPostWysiwygGroupInContainer" false )
+
+## global flags to control data definition blocks
+#chanwSetVariable( "${design_namespace}RenderWysiwygBlock" true )
