@@ -1,0 +1,17 @@
+#*
+This format can be used to modify the text of a text block.
+*#
+
+#import( "site://_common_assets/formats/library/velocity/chanw_library_import" )
+
+#if( !$chanwConnection || $chanwConnection.isClosed() )
+    #chanwGetDatabaseStatement
+#end
+
+#set( $chanwSql = "update cxml_xml set xmldata='<system-xml xmlns:cascade=" +
+    $_EscapeTool.getQ() + "http://www.hannonhill.com/CascadeServer/" + 
+    $_EscapeTool.getQ() +
+    ">blah</system-xml>' where id='957696748b7f08ee71339a1601156a41'" )
+$chanwGetDatabaseStatement.executeUpdate( $chanwSql )
+
+#chanwCleanUp
