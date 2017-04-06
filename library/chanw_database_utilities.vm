@@ -709,8 +709,9 @@ $chanwGetNumberOfRecordsInTable
 《code》#chanwGetRecordListFromResultSet( $rs )《/code》
 《p》Returns a list of lists, containing values of the result set. The outer
 list stores lists representing rows, and each inner list stores values of a row.
-The first inner list stores metadata (column names) of the result set.
-Example:《/p》
+When a true is passed in as the second parameter, the first inner list stores
+metadata (column names or aliases) of the result set. The second parameter is
+defaulted to false. Example:《/p》
 《pre》
 #chanwGetResultSet( "SELECT count(*) Count FROM CXML_ASSETFACTORY" )
 #chanwGetRecordListFromResultSet( $chanwGetResultSet )
@@ -723,9 +724,9 @@ $chanwGetRecordListFromResultSet
     #chanwCheckResultSet( $rs )
     
     #if( !$_PropertyTool.isNull( $withColNames ) && $withColNames )
-        #set( $chanwWithColNames = true ) ## defaulted to true
+        #set( $chanwWithColNames = true ) 
     #else
-        #set( $chanwWithColNames = false )
+        #set( $chanwWithColNames = false ) ## defaulted to false
     #end
     
     #set( $chanwResultSetMetadata    = $rs.MetaData )
