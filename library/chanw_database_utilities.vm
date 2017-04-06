@@ -6,6 +6,8 @@ Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
 4/6/2017 Simplified the code of #chanwGetNumberOfRecordsInResultSet.
+         Added #chanwGetBlockOrphanIdCachepathBySiteName and
+         #chanwGetFileOrphanIdCachepathBySiteName.
 3/31/2017 Added #chanwGetRecordListFromResultSet, #chanwGetIndexableChildrenIdTypeMap,
           #chanwGetAssetInfoById, #chanwGetAssetById, #chanwGetSiteIdBySiteName,
           #chanwGetSiteNameBySiteId,
@@ -43,7 +45,9 @@ Use uppercase for Oracle, and lowercase for MySQL.《/p》
     "chanwGetAllTableNames",
     "chanwGetAssetById",
     "chanwGetAssetInfoById",
+    "chanwGetBlockOrphanIdCachepathBySiteName",
     "chanwGetDatabasStatement",
+    "chanwGetFileOrphanIdCachepathBySiteName",
     "chanwGetHTMLTableFromSql",
     "chanwGetIndexableChildrenIdTypeMap",
     "chanwLastRecordNumber",
@@ -327,6 +331,33 @@ $chanwGetAssetInfoById
 #*
 《/macro》
 《documentation》
+《code》#chanwGetBlockOrphanIdCachepathBySiteName( $siteName )《/code》
+《p》Returns a list containing ids and paths of block orphans in the site.
+Note that this macro only works for Oracle because of the use of
+《code》minus《/code》 in the SQL statement.《/p》
+《pre》
+#set( $siteName = "cascade-admin" )
+#chanwGetBlockOrphanIdCachepathBySiteName( $siteName )
+$chanwGetBlockOrphanIdCachepathBySiteName
+《/pre》
+《/documentation》
+《macro id=“chanwGetBlockOrphanIdCachepathBySiteName”》
+*#
+#macro( chanwGetBlockOrphanIdCachepathBySiteName $siteName )
+    #set( $chanwGetBlockOrphanIdCachepathBySiteName = "" )
+    ## blocks not selected by block choosers
+    #set( $chanwSql = "(select id from cxml_foldercontent " +
+        "where siteid=(select id from cxml_site where name='$siteName') and assettype='BLO' and " +
+        "iscurrentversion=1 minus select distinct blockid from cxml_structureddata) " )
+    
+    #set( $chanwSql = "select id, cachepath from cxml_foldercontent where id in " + $chanwSql )
+    #chanwGetResultSet( $chanwSql )
+    #chanwGetRecordListFromResultSet( $chanwGetResultSet false )
+    #set( $chanwGetBlockOrphanIdCachepathBySiteName = $chanwGetRecordListFromResultSet )
+#end
+#*
+《/macro》
+《documentation》
 《code》#chanwGetDatabaseList( $listName $sql )《/code》
 《p》Creates a global variable out of the name 《code》$listName《/code》, and associates
 the global variable with a list of values drawn from the database. The SQL string
@@ -389,17 +420,50 @@ associated with the Cascade database. This macro is used by other macros.《/p�
 #*
 《/macro》
 《documentation》
+《code》#chanwGetFileOrphanIdCachepathBySiteName( $siteName )《/code》
+《p》Returns a list containing ids and paths of file orphans in the site.
+Note that this macro only works for Oracle because of the use of
+《code》minus《/code》 in the SQL statement.《/p》
+《pre》
+#set( $siteName = "cascade-admin" )
+#chanwGetFileOrphanIdCachepathBySiteName( $siteName )
+$chanwGetFileOrphanIdCachepathBySiteName
+《/pre》
+《/documentation》
+《macro id=“chanwGetFileOrphanIdCachepathBySiteName”》
+*#
+#macro( chanwGetFileOrphanIdCachepathBySiteName $siteName )
+    #set( $chanwGetFileOrphanIdCachepathBySiteName = "" )
+    ## files not selected by file choosers
+    #set( $chanwSql = "((select id from cxml_foldercontent " +
+        "where siteid=(select id from cxml_site where name='$siteName') and assettype='FIL' and " +
+        "iscurrentversion=1 minus select distinct fileid from cxml_structureddata) intersect " )
+
+    ## files not linked
+    #set( $chanwSql = $chanwSql + "(select id from cxml_foldercontent " +
+        "where siteid=(select id from cxml_site where name='$siteName') and assettype='FIL' and " +
+        " iscurrentversion=1 minus select distinct fileid from cxml_entityrelation))" )
+    
+    ## the intersection of the two
+    #set( $chanwSql = "select id, cachepath from cxml_foldercontent where id in " + $chanwSql )
+    #chanwGetResultSet( $chanwSql )
+    #chanwGetRecordListFromResultSet( $chanwGetResultSet false )
+    #set( $chanwGetFileOrphanIdCachepathBySiteName = $chanwGetRecordListFromResultSet )
+#end
+#*
+《/macro》
+《documentation》
 《code》#chanwGetHTMLTableFromResultSet( $rs )《/code》
 《p》Creates an XHTML table out of the result set. The resulting table is stored
 in 《code》$globalStringBuffer《/code》. This macro is used by
 《code》#chanwGetHTMLTableFromSql《/code》.《/p》
-《/documentation》
-《macro id=“chanwGetHTMLTableFromResultSet”》
-*#
-#*
+《pre》
 #chanwGetResultSet( "SELECT count(*) Count FROM CXML_ASSETFACTORY" )
 #chanwGetHTMLTableFromResultSet( $chanwGetResultSet )
 $globalStringBuffer.toString()
+《/pre》
+《/documentation》
+《macro id=“chanwGetHTMLTableFromResultSet”》
 *#
 #macro( chanwGetHTMLTableFromResultSet $rs )
     #chanwGetRecordListFromResultSet( $rs )
@@ -597,9 +661,15 @@ $chanwGetNumberOfRecordsInResultSet
     #set( $chanwGetNumberOfRecordsInResultSet = 0 )
 
     #if( $rs.next() )
-        #set( $void = $rs.last() )
-        #set( $chanwGetNumberOfRecordsInResultSet = $rs.getRow() )
-
+        $rs.beforeFirst()
+        
+        #foreach( $count in [ 1..$INTEGER_MAX_VALUE ] )
+            #if( $rs.next() )
+                #set( $chanwGetNumberOfRecordsInResultSet = $foreach.count )
+            #else
+                #break
+            #end
+        #end
         ## move cursor back to the front
         $rs.beforeFirst()
     #end
@@ -649,8 +719,15 @@ $chanwGetRecordListFromResultSet
 《/documentation》
 《macro id=“chanwGetRecordListFromResultSet”》
 *#
-#macro( chanwGetRecordListFromResultSet $rs )
+#macro( chanwGetRecordListFromResultSet $rs $withColNames )
     #chanwCheckResultSet( $rs )
+    
+    #if( !$_PropertyTool.isNull( $withColNames ) && $withColNames )
+        #set( $chanwWithColNames = true ) ## defaulted to true
+    #else
+        #set( $chanwWithColNames = false )
+    #end
+    
     #set( $chanwResultSetMetadata    = $rs.MetaData )
     #set( $chanwResultSetColumnCount = $chanwResultSetMetadata.ColumnCount )
     #set( $chanwGetRecordListFromResultSet = [] )
@@ -658,14 +735,15 @@ $chanwGetRecordListFromResultSet
     ## store metadata
     #set( $chanwRecordList = [] )
     
-    #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
-        #set( $void = $chanwRecordList.add(
-            $chanwResultSetMetadata.getColumnName( $col ) ) )
+    #if( $chanwWithColNames )
+        #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+            #set( $void = $chanwRecordList.add(
+                $chanwResultSetMetadata.getColumnName( $col ) ) )
+        #end
+        #set( $void = $chanwGetRecordListFromResultSet.add( $chanwRecordList ) )
     #end
     
-    #set( $void = $chanwGetRecordListFromResultSet.add( $chanwRecordList ) )
     #set( $chanwNumberOfRecords = 0 )
-    
     $rs.beforeFirst()
         
     #foreach( $counter in [ 1..$INTEGER_MAX_VALUE ] )
