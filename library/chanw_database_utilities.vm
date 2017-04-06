@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+4/6/2017 Simplified the code of #chanwGetNumberOfRecordsInResultSet.
 3/31/2017 Added #chanwGetRecordListFromResultSet, #chanwGetIndexableChildrenIdTypeMap,
           #chanwGetAssetInfoById, #chanwGetAssetById, #chanwGetSiteIdBySiteName,
           #chanwGetSiteNameBySiteId,
@@ -596,15 +597,9 @@ $chanwGetNumberOfRecordsInResultSet
     #set( $chanwGetNumberOfRecordsInResultSet = 0 )
 
     #if( $rs.next() )
-        $rs.beforeFirst()
-        
-        #foreach( $count in [ 1..$INTEGER_MAX_VALUE ] )
-            #if( $rs.next() )
-                #set( $chanwGetNumberOfRecordsInResultSet = $foreach.count )
-            #else
-                #break
-            #end
-        #end
+        #set( $void = $rs.last() )
+        #set( $chanwGetNumberOfRecordsInResultSet = $rs.getRow() )
+
         ## move cursor back to the front
         $rs.beforeFirst()
     #end
