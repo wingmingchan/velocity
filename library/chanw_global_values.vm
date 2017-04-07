@@ -5,6 +5,7 @@ Authors: Wing Ming Chan, Peter Thomas
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
+4/7/2017 Added timezone and locale variables.
 3/31/2017 Added $CASCADE_TABLE_TYPE_ASSET_TYPE_MAP.
 3/27/2017 Added $MASTER_SETUP_GLOBAL_VARIABLES.
 3/7/2017 Changed $master_site_name to $core_site_name; added system-view pseudo tags.
@@ -369,31 +370,6 @@ Modification history:
     "XMLBlockXMLAsXMLElement":       "XMLAsXMLElement"
 } )
 ##
-## HTML element names, used in processing data definition blocks
-#* 'link', 'summary', 'title' are omitted from this list because they are used in Cascade.
-Otherwise, when an element is encountered, it is assumed to be in a wysiwyg and the element
-is part of the HTML markups.
-*#
-#*
-#set( $chanwHTMLElements = [
-    'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 
-    'b', 'base', 'bdi', 'bdo', 'blockquote', 'body', 'br', 'button', 
-    'canvas', 'caption', 'cite', 'code', 'col', 'colgroup',
-    'datalist', 'dd', 'del', 'details', 'dfn', 'dialog',  'div','dl', 'dt',
-    'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hr', 'html',
-    'i', 'iframe', 'img', 'input', 'ins', 'kdb', 'keygen',
-    'label', 'legend', 'li',
-    'main', 'map', 'mark', 'menu',  'menuitem', 'meta','meter', 'nav', 'noscript', 
-    'object', 'ol', 'optgroup', 'option', 'output',
-    'p', 'param', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 
-    's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strong',
-    'style', 'sub', 'sup', 
-    'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time',
-    'tr','track', 'u', 'ul', 'var', 'video', 'wbr'
-] )
-*#
-##
 ## date and calendar
 ## fields
 #set( $chanwYearField     = $_FieldTool.in( 'java.util.Calendar' ).YEAR )
@@ -466,6 +442,21 @@ $chanwLastYearCalObject.add( $chanwYearField, -1 )
 $chanwNextYearCalObject.add( $chanwYearField, 1 )
 #set( $chanwNextYearDateObject = $_DateTool.toDate( $chanwNextYearCalObject ) )
 #set( $chanwNextYearInt = $chanwCurrentYearInt + 1 )
+##
+## timezone
+#set( $chanwStr = "" )
+#set( $chanwParamList = [ '$chanwStr.Class' ] )
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.util.TimeZone' 'getTimeZone' $chanwParamList )
+#set( $chanwLondonTimeZone   = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "Europe/London" ) )
+#set( $chanwNYTimeZone       = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/New_York" ) )
+#set( $chanwChicagoTimeZone  = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/Chicago" ) )
+#set( $chanwDenverTimeZone   = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/Denver" ) )
+#set( $chanwLATimeZone       = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/Los_Angeles" ) )
+#set( $chanwHonoluluTimeZone = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "Pacific/Honolulu" ) )
+##
+## locale
+#chanwGetConstructorByClassNameParamSize( "java.util.Locale" 1 )
+#set( $chanwEnUSLocale = $chanwGetConstructorByClassNameParamSize.newInstance( "en-US" ) )
 ##
 #set( $rssItemVarElementMap = {
         'rssItemGuid':       $rssXML_ELEMENT_GUID,
