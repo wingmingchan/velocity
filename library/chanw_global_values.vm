@@ -457,6 +457,9 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
 ## locale
 #chanwGetConstructorByClassNameParamSize( "java.util.Locale" 1 )
 #set( $chanwEnUSLocale = $chanwGetConstructorByClassNameParamSize.newInstance( "en-US" ) )
+#set( $chanwZhCNLocale = $chanwGetConstructorByClassNameParamSize.newInstance( "zh-CN" ) )
+#set( $chanwFrFRLocale = $chanwGetConstructorByClassNameParamSize.newInstance( "fr-FR" ) )
+#set( $chanwFrCALocale = $chanwGetConstructorByClassNameParamSize.newInstance( "fr-CA" ) )
 ##
 #set( $rssItemVarElementMap = {
         'rssItemGuid':       $rssXML_ELEMENT_GUID,
