@@ -456,11 +456,15 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
 ##
 ## locale
 #chanwGetConstructorByClassNameParamSize( "java.util.Locale" 1 )
+#set( $chanwDeLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "de" ) ) ## German
 #set( $chanwEnLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "en" ) )
 #set( $chanwEnUSLocale = $chanwGetConstructorByClassNameParamSize.newInstance( "en-US" ) )
 #set( $chanwEsLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "es" ) )
 #set( $chanwFrLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "fr" ) )
 #set( $chanwFrCALocale = $chanwGetConstructorByClassNameParamSize.newInstance( "fr-CA" ) )
+#set( $chanwJaLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "ja" ) ) ## Japanese
+#set( $chanwRuLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "ru" ) ) ## Russian
+#set( $chanwZhLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "zh" ) ) ## Chinese
 #set( $chanwZhCNLocale = $chanwGetConstructorByClassNameParamSize.newInstance( "zh-CN" ) )
 ##
 #set( $rssItemVarElementMap = {
