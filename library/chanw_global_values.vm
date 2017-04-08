@@ -14,12 +14,20 @@ Modification history:
 《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
-《p》This format defines global values used throughout the entire library.《/p》
+《p》This format defines global values used throughout the entire library.
+It also provide useful values related to:《/p》
+《ul》
+《li》Special characters《/li》
+《li》XHTML tags《/li》
+《li》Pseudo tags《/li》
+《li》Calendar, Date, Timezone, and Locale《/li》
+《/ul》
 《/documentation》
 *#
-#set( $core_site_name = "_chan_core" )
+#set( $core_site_name = "_common_assets" )
 ##
 #import( 'formats/library/velocity/chanw_object_creator' )
+#import( 'formats/library/velocity/chanw_display_velocity_code' )
 ##
 ## special characters
 #define( $chanwDOUBLE_HASH )$_EscapeTool.getH()$_EscapeTool.getH()#end
@@ -635,7 +643,7 @@ $chanwNextYearCalObject.add( $chanwYearField, 1 )
     #chanwGenerateCode( $codeName )
 #end
 #*
-《documentation  id=“bottom”》
+《documentation id=“bottom”》
 《/documentation》
 《/code》
 *#
