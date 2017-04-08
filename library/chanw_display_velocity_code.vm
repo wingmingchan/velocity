@@ -5,10 +5,11 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+4/8/2017 Fixed a bug.
 《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
-《p》This format retrieves Velocity code from blocks and formats and displays the
+《p》This format retrieves Velocity code from formats and displays the
 documentation, possibly with the source code.《/p》
 《p》For these macros to work properly, make sure that:《/p》
 《ul》
@@ -117,12 +118,12 @@ Example:《/p》
 《macro id=“chanwDisplayDocumentationElements”》
 *#
 #macro( chanwDisplayDocumentationElements $docElements )
+    ## output introduction
+    #if( $chanwTopDocumentationElement != "" )
+        $_SerializerTool.serialize( $chanwTopDocumentationElement, true )
+    #end
+
     #if( $docElements && $docElements.size() > 0 )
-        ## output introduction
-        #if( $chanwTopDocumentationElement != "" )
-            $_SerializerTool.serialize( $chanwTopDocumentationElement, true )
-        #end
-        
         ## display global variables
         #if( $chanwGetGlobalVariablesElement != "" )
             ${S_H2}Global Variables$E_H2
