@@ -5,6 +5,9 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+4/10/2017 Fixed bugs in #chanwGetHTMLTableFromResultSet.
+          Added #chanwGetIdCachepathBySqlSiteName, #chanwGetIdCachepathWithSpaceBySiteName,
+          #chanwGetIdCachepathWithUppercaseCharBySiteName.
 4/6/2017 Simplified the code of #chanwGetNumberOfRecordsInResultSet.
          Added #chanwGetBlockOrphanIdCachepathBySiteName and
          #chanwGetFileOrphanIdCachepathBySiteName.
@@ -20,13 +23,18 @@ Modification history:
 《p》This format defines utility macros to access the Cascade database. At the end
 of the format using this library format, put in 《code》#chanwCleanUp《/code》
 as the last line of the code.《/p》
-《p class=“text_red”》Important: table names used in SQL statement are case-sensitive.
-Use uppercase for Oracle, and lowercase for MySQL.《/p》
+《p class=“text_red”》Important: Before importing the library, set the variable
+《code》$chanwOracleDB《/code》 to 《code》false《/code》 if your database is
+MySql:《/p》
+《pre》#set( $chanwOracleDB = false )
+#import( 'site://mycore/formats/library/velocity/chanw_library_import' )
+《/pre》
+《p》Also note that table names used in SQL statement are case-sensitive.
+Use uppercase for Oracle, and lowercase for MySql.《/p》
 《/documentation》
 *#
 #import( 'formats/library/velocity/chanw_global_macros' )
 #import( 'formats/library/velocity/chanw_process_cascade_api' )
-
 #*
 《global-variables》
 *#
@@ -49,6 +57,9 @@ Use uppercase for Oracle, and lowercase for MySQL.《/p》
     "chanwGetDatabasStatement",
     "chanwGetFileOrphanIdCachepathBySiteName",
     "chanwGetHTMLTableFromSql",
+    "chanwGetIdCachepathBySqlSiteName",
+    "chanwGetIdCachepathWithSpaceBySiteName",
+    "chanwGetIdCachepathWithUppercaseCharBySiteName",
     "chanwGetIndexableChildrenIdTypeMap",
     "chanwLastRecordNumber",
     "chanwGetMetaDataRS",
@@ -61,13 +72,42 @@ Use uppercase for Oracle, and lowercase for MySQL.《/p》
     "chanwGetTableColumnNames",
     "chanwMetaData",
     "chanwNumberOfRecords",
+    "chanwOracleDB",
     "chanwRecord",
     "chanwRecordList",
     "chanwResultSet",
     "chanwResultSetColumnCount",
     "chanwResultSetMetadata",
-    "chanwSql"
+    "chanwSql",
+    "sqlBlockOrphan",
+    "sqlFileOrphan",
+    "sqlCachepathWithSpace",
+    "sqlCachepathWithUppercaseChar"
 ] )
+
+#if( $_PropertyTool.isNull( $chanwOracleDB ) )
+    #set( $chanwOracleDB = true )  ## defaulted to Oracle
+#end
+
+## SQL statements that work for both Oracle and MySql
+#set( $sqlCachepathWithSpace = "select f.id, f.cachepath from cxml_foldercontent f " +
+    "where f.cachepath like '% %' and f.iscurrentversion=1 and f.siteid=" +
+    "(select s.id from cxml_site s where s.name='-siteName-')" )
+#set( $sqlCachepathWithUppercaseChar = "select f.id, f.cachepath from cxml_foldercontent f " +
+    "where not(lower(f.cachepath)=f.cachepath)  and f.siteid=" +
+    "(select s.id from cxml_site s where s.name='-siteName-') " )
+#set( $sqlBlockOrphan = "select f.* from (select id, cachepath from cxml_foldercontent " +
+    "where siteid=(select id from cxml_site where name='-siteName-') and assettype='BLO' " +
+    "and iscurrentversion=1) f left join cxml_structureddata sd on f.id = sd.blockid " +
+    "where sd.blockid is null" )
+#set( $sqlFileOrphan = "select id, cachepath from cxml_foldercontent where id in " +
+    "(select fc1.id from ((select f.id from (select id, cachepath from cxml_foldercontent " +
+    "where siteid=(select id from cxml_site where name='-siteName-') and assettype='FIL' " +
+    "and iscurrentversion=1) f left join cxml_structureddata sd on f.id = sd.fileid " +
+    "where sd.fileid is null ) fc1 join (select ff.id from (select id, cachepath from cxml_foldercontent " +
+    "where siteid=(select id from cxml_site where name='-siteName-') and assettype='FIL' " +
+    "and iscurrentversion=1) ff left join cxml_entityrelation er on ff.id = er.fileid " +
+    "where er.fileid is null) fc2 on fc1.id=fc2.id))" )
 #*
 《/global-variables》
 《documentation》
@@ -224,32 +264,8 @@ $chanwGetAllTableNames
     #if( !$chanwConnection || $chanwConnection.isClosed() )
         #chanwGetDatabaseStatement
     #end
-    
-    ## MySQL
-    #set( $chanwDBMetadata    = $chanwConnection.getMetaData() )
-    #set( $chanwDBMetadataRS  = $chanwDBMetadata.getTables( null, null, "%", null ) )
-    #set( $chanwGetAllTableNames = [] )
-
-    #if( $chanwDBMetadataRS.next() )
-        #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
-            #set( $chanwTableName = '"' + $chanwDBMetadataRS.getString( 3 ).toLowerCase() + '"' )
-            #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
-        #end
-        
-        #foreach( $num in [ 1..500 ] )
-            #if( $chanwDBMetadataRS.next() )
-                #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
-                    #set( $chanwTableName = '"' + $chanwDBMetadataRS.getString( 3 ).toLowerCase() + '"' )
-                    #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
-                #end
-            #else
-                #break
-            #end
-        #end
-    #end
-   
     ## Oracle
-    #if( $chanwGetAllTableNames.size() == 0 )
+    #if( $chanwOracleDB )
         #set( $chanwSql = "SELECT tablespace_name, table_name FROM all_tables " +
              "WHERE tablespace_name LIKE 'C%' " +
              "AND table_name like 'CXML_%' " +
@@ -265,6 +281,29 @@ $chanwGetAllTableNames
                 #if( $chanwGetResultSet.next() )
                     #set( $chanwTableName = '"' + $chanwGetResultSet.getString( 2 ).toLowerCase() + '"' )
                     #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
+                #else
+                    #break
+                #end
+            #end
+        #end
+    ## MySQL
+    #else
+        #set( $chanwDBMetadata    = $chanwConnection.getMetaData() )
+        #set( $chanwDBMetadataRS  = $chanwDBMetadata.getTables( null, null, "%", null ) )
+        #set( $chanwGetAllTableNames = [] )
+
+        #if( $chanwDBMetadataRS.next() )
+            #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
+                #set( $chanwTableName = '"' + $chanwDBMetadataRS.getString( 3 ).toLowerCase() + '"' )
+                #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
+            #end
+        
+            #foreach( $num in [ 1..500 ] )
+                #if( $chanwDBMetadataRS.next() )
+                    #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
+                        #set( $chanwTableName = '"' + $chanwDBMetadataRS.getString( 3 ).toLowerCase() + '"' )
+                        #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
+                    #end
                 #else
                     #break
                 #end
@@ -344,16 +383,8 @@ $chanwGetBlockOrphanIdCachepathBySiteName
 《macro id=“chanwGetBlockOrphanIdCachepathBySiteName”》
 *#
 #macro( chanwGetBlockOrphanIdCachepathBySiteName $siteName )
-    #set( $chanwGetBlockOrphanIdCachepathBySiteName = "" )
-    ## blocks not selected by block choosers
-    #set( $chanwSql = "(select id from cxml_foldercontent " +
-        "where siteid=(select id from cxml_site where name='$siteName') and assettype='BLO' and " +
-        "iscurrentversion=1 minus select distinct blockid from cxml_structureddata) " )
-    
-    #set( $chanwSql = "select id, cachepath from cxml_foldercontent where id in " + $chanwSql )
-    #chanwGetResultSet( $chanwSql )
-    #chanwGetRecordListFromResultSet( $chanwGetResultSet false )
-    #set( $chanwGetBlockOrphanIdCachepathBySiteName = $chanwGetRecordListFromResultSet )
+    #chanwGetIdCachepathBySqlSiteName( $sqlBlockOrphan $siteName )
+    #set( $chanwGetBlockOrphanIdCachepathBySiteName = $chanwGetIdCachepathBySqlSiteName )
 #end
 #*
 《/macro》
@@ -433,21 +464,10 @@ $chanwGetFileOrphanIdCachepathBySiteName
 《macro id=“chanwGetFileOrphanIdCachepathBySiteName”》
 *#
 #macro( chanwGetFileOrphanIdCachepathBySiteName $siteName )
-    #set( $chanwGetFileOrphanIdCachepathBySiteName = "" )
-    ## files not selected by file choosers
-    #set( $chanwSql = "((select id from cxml_foldercontent " +
-        "where siteid=(select id from cxml_site where name='$siteName') and assettype='FIL' and " +
-        "iscurrentversion=1 minus select distinct fileid from cxml_structureddata) intersect " )
-
-    ## files not linked
-    #set( $chanwSql = $chanwSql + "(select id from cxml_foldercontent " +
-        "where siteid=(select id from cxml_site where name='$siteName') and assettype='FIL' and " +
-        " iscurrentversion=1 minus select distinct fileid from cxml_entityrelation))" )
-    
-    ## the intersection of the two
-    #set( $chanwSql = "select id, cachepath from cxml_foldercontent where id in " + $chanwSql )
-    #chanwGetResultSet( $chanwSql )
-    #chanwGetRecordListFromResultSet( $chanwGetResultSet false )
+    ##set( $chanwSql = $sqlFileOrphan.replaceAll( '-siteName-', $siteName ) )
+    ##chanwGetResultSet( $chanwSql )
+    ##chanwGetRecordListFromResultSet( $chanwGetResultSet false )
+    #chanwGetIdCachepathBySqlSiteName( $sqlFileOrphan $siteName )
     #set( $chanwGetFileOrphanIdCachepathBySiteName = $chanwGetRecordListFromResultSet )
 #end
 #*
@@ -469,49 +489,50 @@ $globalStringBuffer.toString()
     #chanwGetRecordListFromResultSet( $rs )
     $globalStringBuffer.setLength( 0 )
     
-    #set( $chanwRecordListFromResultSetLastIndex = 
-        $chanwGetRecordListFromResultSet.size() - 1 )
-	#set( $chanwResultSetMetadataList = $chanwGetRecordListFromResultSet.get( 0 ) )
+    #if( $chanwGetRecordListFromResultSet.size() == 0 )
+        Empty result set
+    #else
+        #set( $chanwRecordListFromResultSetLastIndex = 
+            $chanwGetRecordListFromResultSet.size() - 1 )
+	    #set( $chanwResultSetMetadataList = $chanwGetRecordListFromResultSet.get( 0 ) )
 	    
-    #set( $void = $globalStringBuffer.append(
-        "<table class='tcellspacing1 tcellpadding5' summary='Table'>" ) )
-    #set( $void = $globalStringBuffer.append(
-        "<tr class='bg1 text_white'>" ) )
-
-    #set( $chanwLastColumnIndex = $chanwResultSetColumnCount - 1 )
-    
-
-    #foreach( $col in [ 0..$chanwLastColumnIndex ] )
-        #set( $void = $globalStringBuffer.append( "<th>" ) )
         #set( $void = $globalStringBuffer.append(
-            $chanwResultSetMetadataList.get( $col ) ) )
-        #set( $void = $globalStringBuffer.append( "</th>" ) )
-    #end
+            "<table class='tcellspacing1 tcellpadding5' summary='Table'>" ) )
+        #set( $void = $globalStringBuffer.append(
+            "<tr class='bg1 text_white'>" ) )
 
-    #set( $void = $globalStringBuffer.append( "</tr>" ) )
-    
-    Number of records: $chanwNumberOfRecords
-    
-    #foreach( $counter in [ 1..$chanwNumberOfRecords ] )
-        #set( $chanwRecordList = $chanwGetRecordListFromResultSet.get( $counter ) )
-        
-        #if( $counter % 2 == 0 )
-            #set( $void = $globalStringBuffer.append( "<tr>" ) )
-        #else
-            #set( $void = $globalStringBuffer.append(
-                "<tr class='tablerow1'>" ) )
-        #end
-                
+        #set( $chanwLastColumnIndex = $chanwResultSetColumnCount - 1 )
+
         #foreach( $col in [ 0..$chanwLastColumnIndex ] )
-            #set( $void = $globalStringBuffer.append( "<td>" ) )
-            #set( $void = $globalStringBuffer.append( $chanwRecordList.get( $col ) ) )
-            #set( $void = $globalStringBuffer.append( "</td>" ) )
+            #set( $void = $globalStringBuffer.append( "<th>" ) )
+            #set( $void = $globalStringBuffer.append(
+                $chanwResultSetMetadataList.get( $col ) ) )
+            #set( $void = $globalStringBuffer.append( "</th>" ) )
         #end
-                
-        #set( $void = $globalStringBuffer.append( "</tr>" ) )
-    #end
 
-    #set( $void = $globalStringBuffer.append( "</table>" ) )
+        #set( $void = $globalStringBuffer.append( "</tr>" ) )
+
+        #foreach( $counter in [ 0..$chanwRecordListFromResultSetLastIndex ] )
+            #set( $chanwRecordList = $chanwGetRecordListFromResultSet.get( $counter ) )
+        
+            #if( $counter % 2 == 0 )
+                #set( $void = $globalStringBuffer.append( "<tr>" ) )
+            #else
+                #set( $void = $globalStringBuffer.append(
+                    "<tr class='tablerow1'>" ) )
+            #end
+                
+            #foreach( $col in [ 0..$chanwLastColumnIndex ] )
+                #set( $void = $globalStringBuffer.append( "<td>" ) )
+                #set( $void = $globalStringBuffer.append( $chanwRecordList.get( $col ) ) )
+                #set( $void = $globalStringBuffer.append( "</td>" ) )
+            #end
+                
+            #set( $void = $globalStringBuffer.append( "</tr>" ) )
+        #end
+
+        #set( $void = $globalStringBuffer.append( "</table>" ) )
+    #end
 #end
 #*
 《/macro》
@@ -547,14 +568,65 @@ $chanwGetHTMLTableFromSql
 #*
 《/macro》
 《documentation》
+《code》#chanwGetIdCachepathBySqlSiteName( $sql $siteName )《/code》
+《p》Returns a list of id strings and cache paths of assets using the supplied
+SQL and site name. This macro is used by other marcros. Example:《/p》
+《pre》
+#chanwGetIdCachepathBySqlSiteName( $sqlCachepathWithSpace $siteName )
+《/pre》
+《/documentation》
+《macro id=“chanwGetIdCachepathBySqlSiteName”》
+*#
+#macro( chanwGetIdCachepathBySqlSiteName $sql $siteName )
+    #set( $chanwGetIdCachepathBySqlSiteName = "" )
+    #set( $chanwSql = $sql.replaceAll( '-siteName-', $siteName ) )
+    #chanwGetResultSet( $chanwSql )
+    #chanwGetRecordListFromResultSet( $chanwGetResultSet false )
+    #set( $chanwGetIdCachepathBySqlSiteName = $chanwGetRecordListFromResultSet )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetIdCachepathWithSpaceBySiteName( $siteName )《/code》
+《p》Returns a list of id strings and cache paths of assets whose system names
+contain space characters. Example:《/p》
+《pre》
+#chanwGetIdCachepathWithSpaceBySiteName( "cascade-admin" )
+$chanwGetIdCachepathWithSpaceBySiteName
+《/pre》
+《/documentation》
+《macro id=“chanwGetIdCachepathWithSpaceBySiteName”》
+*#
+#macro( chanwGetIdCachepathWithSpaceBySiteName $siteName )
+    #chanwGetIdCachepathBySqlSiteName( $sqlCachepathWithSpace $siteName )
+    #set( $chanwGetIdCachepathWithSpaceBySiteName = $chanwGetIdCachepathBySqlSiteName )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetIdCachepathWithUppercaseCharBySiteName( $siteName )《/code》
+《p》Returns a list of id strings and cache paths of assets whose system names
+contain uppercase characters. Example:《/p》
+《pre》
+#chanwGetIdCachepathWithUppercaseCharBySiteName( "cascade-admin" )
+$chanwGetIdCachepathWithUppercaseCharBySiteName
+《/pre》
+《/documentation》
+《macro id=“chanwGetIdCachepathWithUppercaseCharBySiteName”》
+*#
+#macro( chanwGetIdCachepathWithUppercaseCharBySiteName $siteName )
+    #chanwGetIdCachepathBySqlSiteName( $sqlCachepathWithUppercaseChar $siteName )
+    #set( $chanwGetIdCachepathWithUppercaseCharBySiteName = $chanwGetIdCachepathBySqlSiteName )
+#end
+#*
+《/macro》
+《documentation》
 《code》#chanwGetIndexableChildrenIdTypeMap( $folder )《/code》
 《p》Returns a map, containing information of indexable children of a folder.
 The folder must be a Cascade API object. The keys of the map are id strings of
 these children, and the values are the types of the children.
 Example:《/p》
 《pre》
-#import( 'formats/library/velocity/chanw_process_cascade_api' )
-
 #set( $folder = $currentPage.ParentFolder )
 #chanwGetIndexableChildrenIdTypeMap( $folder )
 $chanwGetIndexableChildrenIdTypeMap
@@ -587,7 +659,6 @@ $chanwGetIndexableChildrenIdTypeMap
         $chanwGetResultSet.beforeFirst()
     #end
 #end
-
 #*
 《/macro》
 《documentation》
@@ -661,15 +732,8 @@ $chanwGetNumberOfRecordsInResultSet
     #set( $chanwGetNumberOfRecordsInResultSet = 0 )
 
     #if( $rs.next() )
-        $rs.beforeFirst()
-        
-        #foreach( $count in [ 1..$INTEGER_MAX_VALUE ] )
-            #if( $rs.next() )
-                #set( $chanwGetNumberOfRecordsInResultSet = $foreach.count )
-            #else
-                #break
-            #end
-        #end
+        #set( $void = $rs.last() )
+        #set( $chanwGetNumberOfRecordsInResultSet = $rs.getRow() )
         ## move cursor back to the front
         $rs.beforeFirst()
     #end
@@ -814,14 +878,14 @@ $chanwGetSiteIdBySiteName
 #*
 《/macro》
 《documentation》
-《code》#chanwGetSiteIdBySiteName( $siteName )《/code》
+《code》#chanwGetSiteNameBySiteId( $siteName )《/code》
 《p》Returns the site id of the site so named.《/p》
 《pre》
 #chanwGetSiteNameBySiteId( "b4d831e88b7f085601ed95543b747ed6" )
 $chanwGetSiteNameBySiteId
 《/pre》
 《/documentation》
-《macro id=“chanwGetSiteIdBySiteName”》
+《macro id=“chanwGetSiteNameBySiteId”》
 *#
 #macro( chanwGetSiteNameBySiteId $siteId )
     #set( $chanwGetSiteNameBySiteId = "" )
@@ -837,9 +901,9 @@ $chanwGetSiteNameBySiteId
 《documentation》
 《code》#chanwGetTableColumnNames( $table )《/code》
 《p》Returns a list of column names of the table. Note that the table name must
-in uppercase like "CXML_XML".《/p》
+in lowercase like "cxml_site" for MySql.《/p》
 《pre》
-#chanwGetTableColumnNames( "CXML_SITE" )
+#chanwGetTableColumnNames( "cxml_site" )
 $chanwGetTableColumnNames
 《/pre》
 《/documentation》
@@ -850,16 +914,8 @@ $chanwGetTableColumnNames
     #chanwGetMetaDataRS( $table )
     #set( $chanwGetTableColumnNames = [] )
 
-    #foreach( $row in [ 1..500 ] )
-        #if( $chanwGetMetaDataRS.next() )
-            #set( $chanwColumnName = '"' + $chanwGetMetaDataRS.getString( "COLUMN_NAME" ).toLowerCase() + '"' )
-            #set( $void = $chanwGetTableColumnNames.add( $chanwColumnName ) )
-        #else
-            #break
-        #end
-    #end
-    
-    #if( $chanwGetTableColumnNames.size() == 0 )
+    ## Oracle
+    #if( $chanwOracleDB )
         #set( $chanwSql = "select * from $table where 1 = 0" )
         #chanwGetResultSet( $chanwSql )
         #set( $chanwResultSetMetadata = $chanwGetResultSet.getMetaData() )
@@ -868,6 +924,16 @@ $chanwGetTableColumnNames
         #foreach( $num in [ 1..$chanwResultSetMetadataColumnCount ] )
             #set( $chanwColumnName = '"' + $chanwResultSetMetadata.getColumnLabel( $num ).toLowerCase() + '"' )
             #set( $void = $chanwGetTableColumnNames.add( $chanwColumnName ) )
+        #end
+    ## MySql
+    #else
+        #foreach( $row in [ 1..500 ] )
+            #if( $chanwGetMetaDataRS.next() )
+                #set( $chanwColumnName = '"' + $chanwGetMetaDataRS.getString( "COLUMN_NAME" ).toLowerCase() + '"' )
+                #set( $void = $chanwGetTableColumnNames.add( $chanwColumnName ) )
+            #else
+                #break
+            #end
         #end
     #end
 #end
