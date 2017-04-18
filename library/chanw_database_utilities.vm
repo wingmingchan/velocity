@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+4/18/2017 Changed Statement to readonly.
 4/10/2017 Fixed bugs in #chanwGetHTMLTableFromResultSet.
           Added #chanwGetIdCachepathBySqlSiteName, #chanwGetIdCachepathWithSpaceBySiteName,
           #chanwGetIdCachepathWithUppercaseCharBySiteName.
@@ -443,6 +444,7 @@ associated with the Cascade database. This macro is used by other macros.ã€Š/pã€
     #set( $chanwDataSource = $chanwContext.lookup( "java:comp/env" ).lookup(
         "jdbc/CascadeDS" ) )
     #set( $chanwConnection = $chanwDataSource.Connection )
+    $chanwConnection.setReadOnly( true )
     #set( $chanwMetaData   = $chanwConnection.MetaData )
     #set( $chanwGetDatabaseStatement = $chanwConnection.createStatement( 
         $_FieldTool.in( "java.sql.ResultSet" ).TYPE_SCROLL_INSENSITIVE, 
