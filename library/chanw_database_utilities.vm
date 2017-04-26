@@ -372,9 +372,7 @@ $chanwGetAssetInfoById
 《/macro》
 《documentation》
 《code》#chanwGetBlockOrphanIdCachepathBySiteName( $siteName )《/code》
-《p》Returns a list containing ids and paths of block orphans in the site.
-Note that this macro only works for Oracle because of the use of
-《code》minus《/code》 in the SQL statement.《/p》
+《p》Returns a list containing ids and paths of block orphans in the site.《/p》
 《pre》
 #set( $siteName = "cascade-admin" )
 #chanwGetBlockOrphanIdCachepathBySiteName( $siteName )
@@ -454,9 +452,7 @@ associated with the Cascade database. This macro is used by other macros.《/p�
 《/macro》
 《documentation》
 《code》#chanwGetFileOrphanIdCachepathBySiteName( $siteName )《/code》
-《p》Returns a list containing ids and paths of file orphans in the site.
-Note that this macro only works for Oracle because of the use of
-《code》minus《/code》 in the SQL statement.《/p》
+《p》Returns a list containing ids and paths of file orphans in the site.《/p》
 《pre》
 #set( $siteName = "cascade-admin" )
 #chanwGetFileOrphanIdCachepathBySiteName( $siteName )
