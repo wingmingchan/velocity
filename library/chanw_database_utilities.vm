@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+4/26/2017 Added #chanwGetUserCountAuditByActionDays.
 4/18/2017 Changed Statement to readonly.
 4/10/2017 Fixed bugs in #chanwGetHTMLTableFromResultSet.
           Added #chanwGetIdCachepathBySqlSiteName, #chanwGetIdCachepathWithSpaceBySiteName,
@@ -62,7 +63,6 @@ Use uppercase for Oracle, and lowercase for MySql.《/p》
     "chanwGetIdCachepathWithSpaceBySiteName",
     "chanwGetIdCachepathWithUppercaseCharBySiteName",
     "chanwGetIndexableChildrenIdTypeMap",
-    "chanwLastRecordNumber",
     "chanwGetMetaDataRS",
     "chanwGetNumberOfRecordsInResultSet",
     "chanwGetNumberOfRecordsInTable",
@@ -71,9 +71,14 @@ Use uppercase for Oracle, and lowercase for MySql.《/p》
     "chanwGetSiteIdBySiteName",
     "chanwGetSiteNameBySiteId",
     "chanwGetTableColumnNames",
+    "chanwGetUserCountAuditByActionDays",
+    "chanwLastRecordNumber",
     "chanwMetaData",
     "chanwNumberOfRecords",
     "chanwOracleDB",
+    "chanwPastCalendarObject",
+    "chanwPastDateObject",
+    "chanwPastTimestamp",
     "chanwRecord",
     "chanwRecordList",
     "chanwResultSet",
@@ -934,6 +939,55 @@ $chanwGetTableColumnNames
             #end
         #end
     #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwGetUserCountAuditByActionDays( $action $days )《/code》
+《p》Returns a list of usernames and counts from the audit table.
+Acceptable actions are:《/p》
+《pre》
+activate_version
+advance_workflow
+assume_identity
+copy
+create
+delete
+edit
+identity_assumed
+identity_unassumed
+login
+login_failed
+logout
+move
+publish
+recycle
+reference
+start_workflow
+startedit
+unassume_identity
+unpublish
+《/pre》
+《p》The 《pre》$days《/pre》 variable should store a negative integer.《/p》
+《pre》
+#chanwGetUserCountAuditByActionDays( "login_failed" -5 )
+$chanwGetUserCountAuditByActionDays
+《/pre》
+《/documentation》
+《macro id=“chanwGetUserCountAuditByActionDays”》
+*#
+#macro( chanwGetUserCountAuditByActionDays $action $days )
+    #set( $chanwGetUserCountAuditByActionDays = [] )
+    #set( $chanwPastCalendarObject = $chanwCalendarObject.clone() )
+    $chanwPastCalendarObject.add( $chanwDayField, $days )
+    #set( $chanwPastDateObject = $_DateTool.toDate( $chanwPastCalendarObject ) )
+    #set( $chanwPastTimestamp = $chanwPastDateObject.getTime() )
+
+    #set( $chanwSql = "select username, count(username) from cxml_audit " +
+        "where action like '$action' and tstamp>$chanwPastTimestamp group by username" )
+    #chanwGetResultSet( $chanwSql )
+    #chanwGetRecordListFromResultSet( $chanwGetResultSet )
+    #set( $chanwGetUserCountAuditByActionDays = $chanwGetRecordListFromResultSet )
 #end
 #*
 《/macro》
