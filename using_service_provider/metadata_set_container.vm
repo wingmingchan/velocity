@@ -1,4 +1,4 @@
 #import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
 
 #set( $ms = $chanwMetadataSetContainerService.getChildWithName( "5f4522708b7f08ee76b12c4162d99e41", "Block" ) )
-$ms.class.name
+$ms.Class.Name ## com.hannonhill.cascade.model.dom.MetadataSet
