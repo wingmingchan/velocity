@@ -1,0 +1,68 @@
+#*
+《code》
+《copyright》
+Author: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+4/27/2017 Format created.
+《/copyright》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines a set of global varaibles referencing Service objects.
+These Service objects in turn can be used to retrieve assets. Since the Locator
+Tool can be used to retrieve folder contained asssets, this format focuses on
+other types of assets.《/p》
+《/documentation》
+*#
+#import( '/formats/library/velocity/chanw_global_macros' )
+#*
+《global-variables》
+*#
+#set( $chanwParamList = [] )
+#chanwGetMethodByClassNameMethodNameParamTypes(
+    "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" "getServiceProvider" $chanwParamList )
+#set( $chanwServiceProvider                          = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null ) )
+#set( $chanwAbilityService                           = $chanwServiceProvider.getAbilityService() )
+#set( $chanwMetadataSetContainerService              = $chanwServiceProvider.getMetadataSetContainerService() )
+#set( $chanwMetadataSetService                       = $chanwServiceProvider.getMetadataSetService() )
+#set( $chanwPermissionsService                       = $chanwServiceProvider.getPermissionsService() )
+#set( $chanwSiteService                              = $chanwServiceProvider.getSiteService() )
+#set( $chanwStructuredDataDefinitionService          = $chanwServiceProvider.getStructuredDataDefinitionService() )
+#set( $chanwStructuredDataDefinitionContainerService = $chanwServiceProvider.getStructuredDataDefinitionContainerService() )
+#set( $chanwTemplateService                          = $chanwServiceProvider.getTemplateService() )
+#set( $chanwUserService                              = $chanwServiceProvider.getUserService() )
+
+#set( $chanwAllSites           = $chanwSiteService.getAll() )
+#set( $chanwAllSiteNames       = [] )
+
+#foreach( $site in $chanwAllSites )
+    #set( $dummy = $chanwAllSiteNames.add( $site.Path ) )
+#end
+
+#set( $chanwAllUsers           = $chanwUserService.getAllUsers() )
+#set( $chanwAllUserNames       = [] )
+
+#foreach( $user in $chanwAllUsers )
+    #set( $dummy = $chanwAllUserNames.add( $user.Name ) )
+#end
+
+#set( $chanwServiceProviderGlobalVariables = [
+    "chanwAllSites",
+    "chanwParamList",
+    "chanwPermissionsService",
+    "chanwServiceProvider",
+    "chanwSiteService"
+])
+#chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.PermissionsLevel" "READ" )
+#set( $CASCADE_PERMISSIONS_LEVEL_READ = $chanwGetConstantValueByClassNameConstantName )
+#chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.PermissionsLevel" "WRITE" )
+#set( $CASCADE_PERMISSIONS_LEVEL_WRITE = $chanwGetConstantValueByClassNameConstantName )
+#chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.PermissionsLevel" "NONE" )
+#set( $CASCADE_PERMISSIONS_LEVEL_NONE = $chanwGetConstantValueByClassNameConstantName )
+#*
+《/global-variables》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
