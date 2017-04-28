@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+4/28/2017 Added more global variables.
 4/27/2017 Format created.
 《/copyright》
 《documentation id=“top”》
@@ -24,36 +25,67 @@ other types of assets.《/p》
     "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" "getServiceProvider" $chanwParamList )
 #set( $chanwServiceProvider                          = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null ) )
 #set( $chanwAbilityService                           = $chanwServiceProvider.getAbilityService() )
+#set( $chanwAssetFactoryContainerService             = $chanwServiceProvider.getAssetFactoryContainerService() )
+#set( $chanwAssetFactoryService                      = $chanwServiceProvider.getAssetFactoryService() )
+#set( $chanwAuditService                             = $chanwServiceProvider.getAuditService() )
+#set( $chanwConnectorContainerService                = $chanwServiceProvider.getConnectorContainerService() )
+#set( $chanwConnectorService                         = $chanwServiceProvider.getConnectorService() )
+#set( $chanwContentTypeContainerService              = $chanwServiceProvider.getContentTypeContainerService() )
+#set( $chanwContentTypeService                       = $chanwServiceProvider.getContentTypeService() )
+#set( $chanwSiteDestinationContainerService          = $chanwServiceProvider.getDestinationContainerService() )
+#set( $chanwDestinationService                       = $chanwServiceProvider.getDestinationService() )
+#set( $chanwDynamicMetadataFieldDefinitionService    = $chanwServiceProvider.getDynamicMetadataFieldDefinitionService() )
+#set( $chanwGroupService                             = $chanwServiceProvider.getGroupService() )
 #set( $chanwMetadataSetContainerService              = $chanwServiceProvider.getMetadataSetContainerService() )
 #set( $chanwMetadataSetService                       = $chanwServiceProvider.getMetadataSetService() )
+#set( $chanwPageConfigurationSetContainerService     = $chanwServiceProvider.getPageConfigurationSetContainerService() )
+#set( $chanwPageConfigurationSetService              = $chanwServiceProvider.getPageConfigurationSetService() )
 #set( $chanwPermissionsService                       = $chanwServiceProvider.getPermissionsService() )
+#set( $chanwPublishSetContainerService               = $chanwServiceProvider.getPublishSetContainerService() )
+#set( $chanwPublishSetService                        = $chanwServiceProvider.getPublishSetService() )
+#set( $chanwRoleService                              = $chanwServiceProvider.getRoleService() )
 #set( $chanwSiteService                              = $chanwServiceProvider.getSiteService() )
 #set( $chanwStructuredDataDefinitionService          = $chanwServiceProvider.getStructuredDataDefinitionService() )
 #set( $chanwStructuredDataDefinitionContainerService = $chanwServiceProvider.getStructuredDataDefinitionContainerService() )
 #set( $chanwTemplateService                          = $chanwServiceProvider.getTemplateService() )
+#set( $chanwTransportContainerService                = $chanwServiceProvider.getTransportContainerService() )
+#set( $chanwTransportService                         = $chanwServiceProvider.getTransportService() )
 #set( $chanwUserService                              = $chanwServiceProvider.getUserService() )
+#set( $chanwWorkflowDefinitionContainerService       = $chanwServiceProvider.getWorkflowDefinitionContainerService() )
+#set( $chanwWorkflowDefinitionService                = $chanwServiceProvider.getWorkflowDefinitionService() )
 
 #set( $chanwAllSites           = $chanwSiteService.getAll() )
 #set( $chanwAllSiteNames       = [] )
-
 #foreach( $site in $chanwAllSites )
     #set( $dummy = $chanwAllSiteNames.add( $site.Path ) )
 #end
 
+#set( $chanwAllGroups          = $chanwGroupService.getAllGroups() )
 #set( $chanwAllUsers           = $chanwUserService.getAllUsers() )
+#set( $chanwAllRoles           = $chanwRoleService.getAllRoles() )
+#set( $chanwAllGlobalRoles     = $chanwRoleService.getAllGlobalRoles() )
+#set( $chanwAllSiteRoles       = $chanwRoleService.getAllSiteRoles() )
+#set( $chanwAllGroupNames      = [] )
 #set( $chanwAllUserNames       = [] )
-
+#set( $chanwAllRoleNames       = [] )
+#set( $chanwAllGlobalRoleNames = [] )
+#set( $chanwAllSiteRoleNames   = [] )
+#foreach( $group in $chanwAllGroups )
+    #set( $dummy = $chanwAllGroupNames.add( $group.Name ) )
+#end
 #foreach( $user in $chanwAllUsers )
     #set( $dummy = $chanwAllUserNames.add( $user.Name ) )
 #end
+#foreach( $role in $chanwAllRoles )
+    #set( $dummy = $chanwAllRoleNames.add( $role.Name ) )
+#end
+#foreach( $global_role in $chanwAllGlobalRoles )
+    #set( $dummy = $chanwAllGlobalRoleNames.add( $global_role.Name ) )
+#end
+#foreach( $site_role in $chanwAllSiteRoles )
+    #set( $dummy = $chanwAllSiteRoleNames.add( $site_role.Name ) )
+#end
 
-#set( $chanwServiceProviderGlobalVariables = [
-    "chanwAllSites",
-    "chanwParamList",
-    "chanwPermissionsService",
-    "chanwServiceProvider",
-    "chanwSiteService"
-])
 #chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.PermissionsLevel" "READ" )
 #set( $CASCADE_PERMISSIONS_LEVEL_READ = $chanwGetConstantValueByClassNameConstantName )
 #chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.PermissionsLevel" "WRITE" )
