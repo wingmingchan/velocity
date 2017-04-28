@@ -1,0 +1,5 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
+
+## only works for wired fields
+#set( $ms = $chanwMetadataSetService.get( "5f4526018b7f08ee76b12c413ab40518" ) )
+$ms.TitleRequired
