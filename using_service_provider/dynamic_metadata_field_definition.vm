@@ -1,0 +1,7 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
+
+#set( $dmfds = $chanwDynamicMetadataFieldDefinitionService.getAllForMetadataSet( "5f4526018b7f08ee76b12c413ab40518" ) )
+#set( $dmfd = $dmfds[ 0 ] )
+$dmfd.Name
+$dmfd.MetadataType
+$dmfd.Label
