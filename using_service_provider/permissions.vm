@@ -1,0 +1,5 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
+
+#set( $site = $chanwSiteService.getByName( "cascade-admin" ) )
+
+$chanwPermissionsService.isPermitted( $site, $CASCADE_PERMISSIONS_LEVEL_WRITE, "chanw" )
