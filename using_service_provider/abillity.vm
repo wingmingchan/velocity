@@ -1,0 +1,9 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
+
+#set( $abilities = $chanwAbilityService.getUserAbilitiesInSite( "chanw", "cascade-admin" ) )
+
+#foreach( $ability in $abilities )
+    $ability.getShortName()
+    #set( $str = $ability.toString() )
+    $str.replaceAll( "<", "" ).replaceAll( ">", "" )
+#end
