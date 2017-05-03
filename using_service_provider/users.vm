@@ -1,0 +1,10 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
+
+$chanwAllUserNames
+
+#set( $usersInGroup = $chanwUserService.getUsersOfGroup( "CWT-Designers" ) )
+$usersInGroup.size()
+
+#set( $chanwTest = $chanwUserService.get( "chanw-test" ) )
+$chanwTest.Email
+$chanwTest.Password
