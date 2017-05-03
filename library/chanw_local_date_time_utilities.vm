@@ -19,6 +19,7 @@ of 《code》java.time.LocalDate《/code》:《/p》
 《li》《code》LocalDateTime atTime(int hour, int minute, int second, int nanoOfSecond)《/code》《/li》
 《li》《code》String format(DateTimeFormatter formatter)《/code》《/li》
 《li》《code》int getDayOfMonth()《/code》《/li》
+《li》《code》DayOfWeek getDayOfWeek()《/code》《/li》
 《li》《code》int getDayOfYear()《/code》《/li》
 《li》《code》Month getMonth()《/code》《/li》
 《li》《code》int getMonthValue()《/code》《/li》
@@ -40,6 +41,7 @@ of 《code》java.time.LocalDate《/code》:《/p》
 《ul》
 《li》《code》String format(DateTimeFormatter formatter)《/code》《/li》
 《li》《code》int getDayOfMonth()《/code》《/li》
+《li》《code》DayOfWeek getDayOfWeek()《/code》《/li》
 《li》《code》int getDayOfYear()《/code》《/li》
 《li》《code》int getHour()《/code》《/li》
 《li》《code》int getMinute()《/code》《/li》
@@ -88,8 +90,32 @@ of 《code》java.time.LocalDate《/code》:《/p》
 #set( $chanwLocalDateTimeNow = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null ) )
 
 #set( $chanwDateTimeGlobalVariables = [
+    "chanwCalendar",
+    "chanwDateObj",
+    "chanwDateFormat",
+    "chanwHourInt",
+    "chanwLocalDateFromCalendar",
+    "chanwLocalDateFromDate",
+    "chanwLocalDateFromTimestampString",
     "chanwLocalDateNow",
-    "chanwLocalDateTimeNow"
+    "chanwLocalDateOfYearMonthDay",
+    "chanwLocalDateParseYearMonthDayString",
+    "chanwLocalDateTimeNow",
+    "chanwLocalDateToCalendar",
+    "chanwLocalDateToDate",
+    "chanwLocalDateTimeFromCalendar",
+    "chanwLocalDateTimeFromDate",
+    "chanwLocalDateTimeFromTimestampString",
+    "chanwLocalDateTimeOfYearMonthDayHourMinuteSecond",
+    "chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString",
+    "chanwLocalDateTimeString",
+    "chanwLocalDateTimeToCalendar",
+    "chanwLocalDateTimeToDate",
+    "chanwLocalDateTimeToTimestampLong",
+    "chanwMonthInt",
+    "chanwMonthValue",
+    "chanwNanoLong",
+    "chanwTimestampString"
 ] )
 #*
 《/global-variables》
