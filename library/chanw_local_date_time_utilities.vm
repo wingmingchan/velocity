@@ -14,8 +14,8 @@ utilized in this format: 《code》java.time.LocalDate《/code》 and
 《code》java.time.LocalDateTime《/code》. Two objects of these two types,
 《code》$chanwLocalDateNow《/code》 and 《code》$chanwLocalDateTimeNow《/code》
 are instantiated, and static methods can be invoked through them. Note that methods
-like 《code》minusDays《/code》 and 《code》plusYears《/code》 are nonmutative
-(they do not change the state of the calling object).《/p》
+in these two classes are nonmutative (they do not change the state of the calling
+object).《/p》
 《p》Useful methods of 《code》java.time.LocalDate《/code》:《/p》
 《ul》
 《li》《code》LocalDateTime atStartOfDay()《/code》《/li》
