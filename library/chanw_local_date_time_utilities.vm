@@ -12,8 +12,10 @@ Modification history:
 《p》This format defines date- and time-related utilities. Two classes are
 utilized in this format: 《code》java.time.LocalDate《/code》 and
 《code》java.time.LocalDateTime《/code》. Two objects of these two types are
-instantiated, and static methods can be invoked through them. Useful methods
-of 《code》java.time.LocalDate《/code》:《/p》
+instantiated, and static methods can be invoked through them. Note that methods
+like 《code》minusDays《/code》 and 《code》plusYears《/code》 are non-mutative
+(they do not change the state of the calling object).《/p》
+《p》Useful methods of 《code》java.time.LocalDate《/code》:《/p》
 《ul》
 《li》《code》LocalDateTime atStartOfDay()《/code》《/li》
 《li》《code》LocalDateTime atTime(int hour, int minute, int second, int nanoOfSecond)《/code》《/li》
