@@ -2,17 +2,14 @@
 
 #set( $page_dom = $chanwServiceProvider.getPageService().get( $currentPage.Identifier.Id ) )
 #set( $ct_dom   = $page_dom.getContentType() )
-#set( $dd_id    = $ct_dom.getStructuredDataDefinition().Id )
-#set( $ms_id    = $ct_dom.getMetadataSet().Id )
-#set( $cs_id    = $ct_dom.getPageConfigurationSet().Id )
 
-#set( $dd_dom   = $chanwStructuredDataDefinitionService.get( $dd_id ) )
+#set( $dd_dom   = $chanwStructuredDataDefinitionService.get( $ct_dom.getStructuredDataDefinition().Id ) )
 $dd_dom.Xml
 
-#set( $ms_dom = $chanwMetadataSetService.get( $ms_id ) )
+#set( $ms_dom = $chanwMetadataSetService.get( $ct_dom.getMetadataSet().Id ) )
 $ms_dom.TitleRequired
 
-#set( $cs_dom   = $chanwPageConfigurationSetService.get( $cs_id ) )
+#set( $cs_dom   = $chanwPageConfigurationSetService.get( $ct_dom.getPageConfigurationSet().Id ) )
 #set( $conf_id  = $cs_dom.DefaultConfiguration.Id )
 #set( $conf_dom = $chanwServiceProvider.getPageConfigurationService().get( $conf_id ) )
 $conf_dom.Extension
