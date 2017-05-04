@@ -1,4 +1,6 @@
 #import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
 
-#set( $view = $chanwAuditService.getForView( "622bfd738b7f08ee2f3f69c411a0d34e" ) )
-$_EscapeTool.xml( $view )
+#set( $audit_dom = $chanwAuditService.get( "622bfd738b7f08ee2f3f69c411a0d34e" ) )
+$_EscapeTool.xml( $audit_dom )
+$audit_dom.UserId
+$audit_dom.Action
