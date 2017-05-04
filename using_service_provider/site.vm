@@ -1,0 +1,9 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
+
+#set( $site_dom = $chanwSiteService.getByName( "cascade-admin" ) )
+
+$site_dom.Url
+$site_dom.Path
+$site_dom.EveryDayPublish
+
+#set( $afc_dom  = $site.BaseAssetFactoryContainer )
