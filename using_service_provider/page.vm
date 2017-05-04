@@ -6,6 +6,14 @@
 #set( $ms_id    = $ct_dom.getMetadataSet().Id )
 #set( $cs_id    = $ct_dom.getPageConfigurationSet().Id )
 
-$dd_id
-$ms_id
-$cs_id
+#set( $dd_dom   = $chanwStructuredDataDefinitionService.get( $dd_id ) )
+$dd_dom.Xml
+
+#set( $ms = $chanwMetadataSetService.get( $ms_id ) )
+$ms.TitleRequired
+
+#set( $cs_dom   = $chanwPageConfigurationSetService.get( $cs_id ) )
+#set( $conf_id  = $cs_dom.DefaultConfiguration.Id )
+#set( $conf_dom = $chanwServiceProvider.getPageConfigurationService().get( $conf_id ) )
+#set( $ext      = $conf_dom.getExtension() )
+$ext
