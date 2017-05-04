@@ -7,5 +7,5 @@ $usersInGroup.size()
 
 #set( $chanwTest = $chanwUserService.get( "chanw-test" ) )
 $chanwTest.Email
-## does not for LDAP users
+## does not work for LDAP users
 $chanwTest.Password
