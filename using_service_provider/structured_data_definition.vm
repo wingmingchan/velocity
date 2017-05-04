@@ -1,0 +1,4 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
+
+#set( $dd_dom = $chanwStructuredDataDefinitionService.get( "b09f28068b7f08ee2e8b11d974da8dde" ) )
+$dd_dom.Xml
