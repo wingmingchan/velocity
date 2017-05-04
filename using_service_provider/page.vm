@@ -1,0 +1,11 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
+
+#set( $page_dom = $chanwServiceProvider.getPageService().get( $currentPage.Identifier.Id ) )
+#set( $ct_dom   = $page_dom.getContentType() )
+#set( $dd_id    = $ct_dom.getStructuredDataDefinition().Id )
+#set( $ms_id    = $ct_dom.getMetadataSet().Id )
+#set( $cs_id    = $ct_dom.getPageConfigurationSet().Id )
+
+$dd_id
+$ms_id
+$cs_id
