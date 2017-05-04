@@ -1,0 +1,7 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_service_provider" )
+
+#set( $cs_dom   = $chanwPageConfigurationSetService.get( "13782a228b7f08ee1890c1e42cde090e" ) )
+#set( $conf_id  = $cs_dom.DefaultConfiguration.Id )
+#set( $conf_dom = $chanwServiceProvider.getPageConfigurationService().get( $conf_id ) )
+#set( $ext      = $conf_dom.getExtension() )
+$ext
