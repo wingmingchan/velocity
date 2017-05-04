@@ -15,5 +15,5 @@ $ms_dom.TitleRequired
 #set( $cs_dom   = $chanwPageConfigurationSetService.get( $cs_id ) )
 #set( $conf_id  = $cs_dom.DefaultConfiguration.Id )
 #set( $conf_dom = $chanwServiceProvider.getPageConfigurationService().get( $conf_id ) )
-#set( $ext      = $conf_dom.getExtension() )
+#set( $ext      = $conf_dom.Extension )
 $ext
