@@ -6,7 +6,7 @@
 #set( $dd_dom   = $chanwStructuredDataDefinitionService.get( $ct_dom.getStructuredDataDefinition().Id ) )
 $dd_dom.Xml
 
-#set( $ms_dom = $chanwMetadataSetService.get( $ct_dom.getMetadataSet().Id ) )
+#set( $ms_dom   = $chanwMetadataSetService.get( $ct_dom.getMetadataSet().Id ) )
 $ms_dom.TitleRequired
 
 #set( $cs_dom   = $chanwPageConfigurationSetService.get( $ct_dom.getPageConfigurationSet().Id ) )
