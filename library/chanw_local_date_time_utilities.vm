@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+5/5/2017 Fixed a bug in #chanwLocalDateFromDate due to a change of macro name.
 5/2/2017 Format created.
 《/copyright》
 《documentation id=“top”》
@@ -165,8 +166,8 @@ $chanwLocalDateFromDate.MonthValue
         #stop
     #end
     
-    #chanwLocalDateParseTimestampString( $date.Time )
-    #set( $chanwLocalDateFromDate = $chanwLocalDateParseTimestampString )
+    #chanwLocalDateFromTimestampString( $date.Time )
+    #set( $chanwLocalDateFromDate = $chanwLocalDateFromTimestampString )
 #end
 #*
 《/macro》
