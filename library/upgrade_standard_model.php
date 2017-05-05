@@ -67,11 +67,13 @@ try
         "chanw_html_builder",
         "chanw_html_builder_with_deque",
         "chanw_library_import",
+        "chanw_local_date_time_utilities",
         "chanw_object_creator",
         "chanw_process_cascade_api",
         "chanw_process_index_block",
         "chanw_process_xml",
         "chanw_reflect_utilities",
+        "chanw_service_provider",
         "chanw_sorted_pages",
         "upstate_database"
     );
