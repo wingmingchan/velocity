@@ -1,0 +1,65 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_local_date_time_utilities" )
+
+## test #chanwLocalDateFromCalendar
+#chanwLocalDateFromCalendar( $_DateTool.SystemCalendar )
+$chanwLocalDateFromCalendar
+
+## test #chanwLocalDateFromCalendar
+#chanwLocalDateFromDate( $_DateTool.SystemDate )
+$chanwLocalDateFromDate.Year
+$chanwLocalDateFromDate.MonthValue
+
+## test #chanwLocalDateFromCalendar
+#chanwLocalDateFromTimestampString( $_DateTool.SystemDate.Time )
+$chanwLocalDateFromTimestampString
+
+## test #chanwLocalDateOfYearMonthDay
+#chanwLocalDateOfYearMonthDay( 2017 5 5 )
+$chanwLocalDateOfYearMonthDay
+
+## test #chanwLocalDateParseYearMonthDayString
+#chanwLocalDateParseYearMonthDayString( "2017-05-05" )
+$chanwLocalDateParseYearMonthDayString
+
+## test #chanwLocalDateToCalendar
+#chanwLocalDateToCalendar( $chanwLocalDateFromCalendar )
+$chanwLocalDateToCalendar
+
+## test #chanwLocalDateToDate
+#chanwLocalDateToDate( $chanwLocalDateFromDate )
+$chanwLocalDateToDate
+
+=======================================================
+
+## test #chanwLocalDateTimeFromCalendar
+#chanwLocalDateTimeFromCalendar( $_DateTool.SystemCalendar )
+$chanwLocalDateTimeFromCalendar
+
+## test #chanwLocalDateFromCalendar
+#chanwLocalDateTimeFromDate( $_DateTool.SystemDate )
+$chanwLocalDateTimeFromDate.Year
+$chanwLocalDateTimeFromDate.Hour
+
+## test #chanwLocalDateFromCalendar
+#chanwLocalDateTimeFromTimestampString( $_DateTool.SystemDate.Time )
+$chanwLocalDateTimeFromTimestampString
+
+## test #chanwLocalDateOfYearMonthDay
+#chanwLocalDateTimeOfYearMonthDayHourMinuteSecond( 2017 5 5 11 11 11 )
+$chanwLocalDateTimeOfYearMonthDayHourMinuteSecond
+
+## test #chanwLocalDateParseYearMonthDayString
+#chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString( "2017-05-05T11:11:11" )
+$chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString
+
+## test #chanwLocalDateToCalendar
+#chanwLocalDateTimeToCalendar( $chanwLocalDateTimeFromCalendar )
+$chanwLocalDateTimeToCalendar
+
+## test #chanwLocalDateToDate
+#chanwLocalDateTimeToDate( $chanwLocalDateTimeFromDate )
+$chanwLocalDateTimeToDate
+
+## test #chanwLocalDateTimeToTimestampLong
+#chanwLocalDateTimeToTimestampLong( $chanwLocalDateTimeFromDate )
+$chanwLocalDateTimeToTimestampLong
