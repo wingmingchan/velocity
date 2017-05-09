@@ -5,6 +5,9 @@ Authors: Wing Ming Chan, Peter Thomas
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
+5/1/2017 Added $JAVA_UTIL_DATE_CLASS_NAME, $JAVA_UTIL_GREGORIAN_CALENDAR_CLASS_NAME,
+$JAVA_TIME_LOCAL_DATE_CLASS_NAME, $JAVA_TIME_LOCAL_DATE_TIME_CLASS_NAME
+$chanwMillisecondField.
 4/7/2017 Added timezone and locale variables.
 3/31/2017 Added $CASCADE_TABLE_TYPE_ASSET_TYPE_MAP.
 3/27/2017 Added $MASTER_SETUP_GLOBAL_VARIABLES.
@@ -15,7 +18,7 @@ Modification history:
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines global values used throughout the entire library.
-It also provide useful values related to:《/p》
+It also provides useful values related to:《/p》
 《ul》
 《li》Special characters《/li》
 《li》XHTML tags《/li》
@@ -24,7 +27,7 @@ It also provide useful values related to:《/p》
 《/ul》
 《/documentation》
 *#
-#set( $core_site_name = "_common_assets" )
+#set( $core_site_name = "_common_assets" ) ## used in line 616
 ##
 #import( 'formats/library/velocity/chanw_object_creator' )
 #import( 'formats/library/velocity/chanw_display_velocity_code' )
@@ -57,7 +60,7 @@ It also provide useful values related to:《/p》
 ##
 ## names of setup formats
 #set( $MASTER_SETUP_FORMAT_NAME = "master_setup" )
-#set( $MASTER_SETUP_GLOBAL_VARIABLES = "global_variables" )
+#set( $MASTER_SETUP_GLOBAL_VARIABLES = "chanw_setup_global_variables" )
 #set( $DESIGN_SETUP_FORMAT_NAME = "setup" )
 #set( $SITE_SETUP_FORMAT_NAME   = "setup" )
 #set( $FOLDER_SETUP_FORMAT_NAME = "setup" )
@@ -81,6 +84,10 @@ It also provide useful values related to:《/p》
 #set( $JAVA_UTIL_ARRAY_LIST_CLASS_NAME          = 'java.util.ArrayList' )
 #set( $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME       = 'java.util.LinkedHashMap' )
 #set( $JAVA_UTIL_HASHMAP_CLASS_NAME             = 'java.util.HashMap' )
+#set( $JAVA_UTIL_DATE_CLASS_NAME                = 'java.util.Date' )
+#set( $JAVA_UTIL_GREGORIAN_CALENDAR_CLASS_NAME  = 'java.util.GregorianCalendar' )
+#set( $JAVA_TIME_LOCAL_DATE_CLASS_NAME          = 'java.time.LocalDate' )
+#set( $JAVA_TIME_LOCAL_DATE_TIME_CLASS_NAME     = 'java.time.LocalDateTime' )
 #set( $JAVA_SQL_STATEMENT_CLASS_NAME            = 'java.sql.Statement' )
 #set( $JAVA_SQL_RESULT_SET_CLASS_NAME           = 'java.sql.ResultSet' )
 #set( $ORG_JDOM_DOCUMENT_CLASS_NAME             = 'org.jdom.Document' )
@@ -379,13 +386,14 @@ It also provide useful values related to:《/p》
 ##
 ## date and calendar
 ## fields
-#set( $chanwYearField     = $_FieldTool.in( 'java.util.Calendar' ).YEAR )
-#set( $chanwMonthField    = $_FieldTool.in( 'java.util.Calendar' ).MONTH )
-#set( $chanwDayField      = $_FieldTool.in( 'java.util.Calendar' ).DATE )
-#set( $chanwHourField     = $_FieldTool.in( 'java.util.Calendar' ).HOUR )
-#set( $chanwMinuteField   = $_FieldTool.in( 'java.util.Calendar' ).MINUTE )
-#set( $chanwSecondField   = $_FieldTool.in( 'java.util.Calendar' ).SECOND )
-#set( $chanwAmPmField     = $_FieldTool.in( 'java.util.Calendar' ).AM_PM )
+#set( $chanwYearField        = $_FieldTool.in( 'java.util.Calendar' ).YEAR )
+#set( $chanwMonthField       = $_FieldTool.in( 'java.util.Calendar' ).MONTH )
+#set( $chanwDayField         = $_FieldTool.in( 'java.util.Calendar' ).DATE )
+#set( $chanwHourField        = $_FieldTool.in( 'java.util.Calendar' ).HOUR )
+#set( $chanwMinuteField      = $_FieldTool.in( 'java.util.Calendar' ).MINUTE )
+#set( $chanwSecondField      = $_FieldTool.in( 'java.util.Calendar' ).SECOND )
+#set( $chanwMillisecondField = $_FieldTool.in( 'java.util.Calendar' ).MILLISECOND )
+#set( $chanwAmPmField        = $_FieldTool.in( 'java.util.Calendar' ).AM_PM )
 ##
 ## today
 #set( $chanwTodayDateObject          = $_DateTool.getSystemDate() )
