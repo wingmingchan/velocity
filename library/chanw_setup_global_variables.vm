@@ -5,7 +5,8 @@ Authors: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
-5/10/2017 Added variables for attributes of html, head, and body.
+5/10/2017 Added variables for attributes of html, head, and body,
+variables for wrapper, top and bottom elements.
 5/7/2017 Moved format from mastetr site to core site.
 《/copyright》
 《documentation id=“top”》
@@ -61,6 +62,12 @@ default behaviors of rendering of global components.《/p》
 #chanwSetVariable( "${design_namespace}HtmlAttributes"   "" )
 #chanwSetVariable( "${design_namespace}HeadAttributes"   "" )
 #chanwSetVariable( "${design_namespace}BodyAttributes"   "" )
+
+## layouts
+#chanwSetVariable( "${design_namespace}WrapperElement"   "main" )
+#chanwSetVariable( "${design_namespace}WrapperId"        "main-div-wrapper" )
+#chanwSetVariable( "${design_namespace}TopElement"       "div" )
+#chanwSetVariable( "${design_namespace}BottomElement"    "aside" )
 
 ## global nav
 #chanwSetVariable( "${design_namespace}RenderGlobalNav"        true )
