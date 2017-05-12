@@ -280,7 +280,11 @@ $chanwGetMethodByClassNameMethodNameParamTypes.invoke( “Hello ”, “e” )
 《documentation》
 《code》#chanwSetVariable( $var $val )《/code》
 《p》Dynamically turns 《code》$var《/code》 into a variable assigned with the value
-《code》$val《/code》. The value of 《code》$var《/code》 should be a variable name without the dollar sign.《/p》
+《code》$val《/code》. The value of 《code》$var《/code》 should be a variable name
+without the dollar sign. Note that because the value of 《code》$val《/code》 can be
+a String that contains characters like "<", 《code》$_EscapeTool.xml《/code》 must
+be called to escape unacceptable characters in the String before it is assigned to
+the variable.《/p》
 《pre》
 #set( $chanwStmt = '#chanwSetVariable("' + $key + '" $chanwGetObjectByClassName)' )
 #evaluate( $chanwStmt )
