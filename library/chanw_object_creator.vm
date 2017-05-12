@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+5/12/2017 Updated documentation.
 2/6/2017 Fixed an error in documentation of chanwSetVariable.
 《/copyright》
 《documentation id=“top”》
@@ -282,9 +283,11 @@ $chanwGetMethodByClassNameMethodNameParamTypes.invoke( “Hello ”, “e” )
 《p》Dynamically turns 《code》$var《/code》 into a variable assigned with the value
 《code》$val《/code》. The value of 《code》$var《/code》 should be a variable name
 without the dollar sign. Note that because the value of 《code》$val《/code》 can be
-a String that contains characters like "<", 《code》$_EscapeTool.xml《/code》 must
-be called to escape unacceptable characters in the String before it is assigned to
-the variable.《/p》
+a String that contains characters like "<", which cannot be displayed on a page,
+《code》$_EscapeTool.xml《/code》 must be called to escape unacceptable characters
+in the String before it is assigned to the variable. This means that quotes are also
+escaped. If the String is intended to be used as code, then the escaped characters
+must be turned back to its original version.《/p》
 《pre》
 #set( $chanwStmt = '#chanwSetVariable("' + $key + '" $chanwGetObjectByClassName)' )
 #evaluate( $chanwStmt )
