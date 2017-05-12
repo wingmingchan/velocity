@@ -9,7 +9,7 @@ This program reads source code from the Upstate server,
 and updates all library formats and xml blocks.
 */
 
-require_once('auth_tutorial7.php');
+require_once('auth_tutorial7.php'); // change this
 
 use cascade_ws_AOHS      as aohs;
 use cascade_ws_constants as c;
@@ -74,6 +74,7 @@ try
         "chanw_process_xml",
         "chanw_reflect_utilities",
         "chanw_service_provider",
+        "chanw_setup_global_variables",
         "chanw_sorted_pages",
         "upstate_database"
     );
