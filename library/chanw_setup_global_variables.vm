@@ -76,7 +76,6 @@ default behaviors of rendering of global components.《/p》
 ## site navigation
 #chanwSetVariable( "${design_namespace}UseExternalSiteNav"     false )
 #chanwSetVariable( "${design_namespace}SiteNavPath"            "/_extra/site-nav.php" )
-##chanwSetVariable( "${design_namespace}SiteNameForSiteNav"     $currentPageSiteName )
 #chanwSetVariable( "${design_namespace}RenderSiteNav"          true )
 #chanwSetVariable( "${design_namespace}RenderHomeInSiteNav"    true )
 #chanwSetVariable( "${design_namespace}HomeLinkTextInSiteNav"  "Home" )
