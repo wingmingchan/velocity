@@ -5,6 +5,7 @@ Authors: Wing Ming Chan, Peter Thomas
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
+5/17/2017 Added $JAVA_LANG_BOOLEAN_CLASS_NAME.
 5/1/2017 Added $JAVA_UTIL_DATE_CLASS_NAME, $JAVA_UTIL_GREGORIAN_CALENDAR_CLASS_NAME,
 $JAVA_TIME_LOCAL_DATE_CLASS_NAME, $JAVA_TIME_LOCAL_DATE_TIME_CLASS_NAME
 $chanwMillisecondField.
@@ -79,6 +80,7 @@ It also provides useful values related to:《/p》
 #set( $COM_CASCADE_STRUCTURED_DATA_NODE_CLASS_NAME = "com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter" )
 #set( $COM_CASCADE_STRUCTURED_DATA_LIST_CLASS_NAME = "[Lcom.hannonhill.cascade.api.asset.common.StructuredDataNode;" )
 #set( $JAVA_LANG_INTEGER_CLASS_NAME             = 'java.lang.Integer' )
+#set( $JAVA_LANG_BOOLEAN_CLASS_NAME             = 'java.lang.Boolean' )
 #set( $JAVA_LANG_STRING_CLASS_NAME              = 'java.lang.String' )
 #set( $JAVA_LANG_CLASS_CLASS_NAME               = 'java.lang.Class' )
 #set( $JAVA_UTIL_ARRAY_LIST_CLASS_NAME          = 'java.util.ArrayList' )
