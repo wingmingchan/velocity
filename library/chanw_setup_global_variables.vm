@@ -5,7 +5,7 @@ Authors: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
-5/22/2017 Added middleElement.
+5/22/2017 Added middleElement, topId, middleId, and bottomId.
 5/13/2017 Added variables related to site nav.
 5/10/2017 Added variables for attributes of html, head, and body,
 variables for wrapper, top and bottom elements.
@@ -69,8 +69,11 @@ default behaviors of rendering of global components.《/p》
 #chanwSetVariable( "${design_namespace}WrapperElement"   "main" )
 #chanwSetVariable( "${design_namespace}WrapperId"        "main-div-wrapper" )
 #chanwSetVariable( "${design_namespace}TopElement"       "div" )
+#chanwSetVariable( "${design_namespace}TopId"            "" )
 #chanwSetVariable( "${design_namespace}MiddleElement"    "div" )
+#chanwSetVariable( "${design_namespace}MiddleId"         "page-content-div" )
 #chanwSetVariable( "${design_namespace}BottomElement"    "aside" )
+#chanwSetVariable( "${design_namespace}BottomId"         "" )
 
 ## global nav
 #chanwSetVariable( "${design_namespace}RenderGlobalNav"        true )
