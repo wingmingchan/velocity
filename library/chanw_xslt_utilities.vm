@@ -5,12 +5,16 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+5/25/2017 Updated documentation.
 5/24/2017 Format created.
 《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines macros to reuse XSLT formats in Velocity. Use the macro
-named 《code》#chanwGetTransformedString《/code》 as the entry point to the library.《/p》
+named 《code》#chanwGetTransformedString《/code》 as the entry point to the library.
+Note that since the XSL code is retrieved from a format as a string, 《code》xsl:include《/code》
+does not work here. Therefore, the XSLT format must include all the required code without
+relying on external library.《/p》
 《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
