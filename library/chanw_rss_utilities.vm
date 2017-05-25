@@ -1,0 +1,179 @@
+#*
+《code》
+《copyright》
+Author: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+5/22/2017 Rewrote code so that chanwCreateRSSFeed can be invoked directly;
+added documentation.
+5/19/2017 Format created.
+《/copyright》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines macros to work with RSS feeds.《/p》
+《/documentation》
+*#
+#import( 'formats/library/velocity/chanw_global_macros' )
+#*
+《global-variables》
+*#
+#set( $chanwItemElements    = [ "title", "link", "description", "pubDate" ] )
+#set( $chanwItemElementSize = $chanwItemElements.size() )
+#set( $chanwRssUtilitiesGlobalVariables = [
+    "chanwAttrString",
+    "chanwCreateElementFromNameText",
+    "chanwCreateItemElementWithList",
+    "chanwCreateJdomElementFromFeed",
+    "chanwCreateRSSFeed",
+    "chanwKeySet",
+    "chanwKeyValue"
+] )
+#*
+《/global-variables》
+《documentation》
+《code》#chanwCreateElementFromNameText( $elementName $text $map )《/code》
+《p》Creates an XML string with the supplied data. The 《code》$map《/code》 is
+used to store attributes. Example:《/p》
+《pre》
+###chanwCreateElementFromNameText( "div" "text" { "id":"main-div" } )
+#chanwCreateElementFromNameText( "div" "text" )
+$chanwCreateElementFromNameText
+《/pre》
+《/documentation》
+《macro id=“chanwCreateElementFromNameText”》
+*#
+#macro( chanwCreateElementFromNameText $elementName $text $map )
+    #if( !$elementName || $$elementName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $elementName == "" )
+        From chanwCreateElementFromNameText: An element name is required.
+        #stop
+    #end
+    
+    #set( $chanwAttrString = "" )
+    
+    #if( $map && $map.Class.Name == $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+        #set( $chanwKeySet = $map.keySet() )
+    
+        #foreach( $key in $chanwKeySet )
+            #set( $chanwKeyValue = $map.get( $key ) )
+            
+            #set( $chanwAttrString = " ${key}='${chanwKeyValue}'" )
+        #end
+    #end
+    
+    #set( $chanwCreateElementFromNameText = "" )
+    
+    #if( $chanwAttrString == "" )
+        #set( $chanwCreateElementFromNameText = "<$elementName>$text</$elementName>" )
+    #else
+        #set( $chanwCreateElementFromNameText = "<$elementName $chanwAttrString>$text</$elementName>" )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwCreateItemElementWithList( $list )《/code》
+《p》Creates an XML string of an item with the supplied data in the list. Note that
+the list should contain four strings: the title, the link, the description, and
+the pub date. Examples:《/p》
+《pre》
+#set( $listOfStrings = [ [ "title", "link", "description", "05-19-2017" ] ] )
+#chanwCreateItemElementWithList( $listOfStrings )
+$chanwCreateItemElementWithList
+《/pre》
+《/documentation》
+《macro id=“chanwCreateItemElementWithList”》
+*#
+#macro( chanwCreateItemElementWithList $list )
+    #if( !$list || $list.Class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+        From chanwCreateItemElementWithList: A list of lists of four strings is required.
+        #stop
+    #end
+    
+    #set( $chanwCreateItemElementWithList = "" )
+    
+    #foreach( $listItem in $list )
+        #set( $chanwTempString = "" )
+        
+        #if( $listItem.Class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME || $listItem.size() != $chanwItemElementSize )
+            From chanwCreateItemElementWithList: An item list must contain four strings.
+            #stop
+        #end
+        
+        #foreach( $ele in $chanwItemElements )
+            #chanwCreateElementFromNameText( $ele $listItem[ $foreach.index ] )
+            #set( $chanwTempString = $$chanwTempString + $chanwCreateElementFromNameText )
+        #end
+        
+        #chanwCreateElementFromNameText( "item" $chanwTempString )
+        #set( $chanwCreateItemElementWithList = $chanwCreateItemElementWithList + $chanwCreateElementFromNameText )
+    #end
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwCreateJdomElementFromFeed( $xml )《/code》
+《p》Turns the XML string into a 《code》org.jdom.Element《/code》 object.
+Examples:《/p》
+《pre》
+#chanwCreateJdomElementFromFeed( $xml )
+《/pre》
+《/documentation》
+《macro id=“chanwCreateJdomElementFromFeed”》
+*#
+#macro( chanwCreateJdomElementFromFeed $xml )
+    #chanwBuildXMLContentRoot( $xml )
+    #set( $chanwCreateJdomElementFromFeed = $chanwBuildXMLContentRoot )
+#end
+#*
+《/macro》
+《documentation》
+《code》#chanwCreateRSSFeed( $list )《/code》
+《p》Creates an RSS feed string with the supplied data. Examples:《/p》
+《pre》
+#set( $data = [
+    [ "Cardiology", "link1", "Cardiology", "2017-05-17" ],
+    [ "Immunology", "link2", "Immunology", "2017-05-16" ],
+    [ "Pathology", "link3", "Pathology", "2017-05-15" ]
+] )
+
+## the fourth item should be a list of lists of four strings
+#set( $feedData = [ "Emergency News", "link", "Emergency News", $data ] )
+
+#chanwCreateRSSFeed( $feedData )
+#chanwCreateJdomElementFromFeed( $chanwCreateRSSFeed )
+$chanwCreateJdomElementFromFeed.Class.Name
+《/pre》
+《/documentation》
+《macro id=“chanwCreateRSSFeed”》
+*#
+#macro( chanwCreateRSSFeed $list )
+    #if( !$list || $list.Class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME || $list.size() != 4 )
+        From chanwCreateRSSFeed: A list of lists containing four elements is required.
+        #stop
+    #end
+    
+    #set( $chanwCreateRSSFeed = "" )
+    #chanwCreateItemElementWithList( $list[ 3 ] )
+    
+    #foreach( $str in $list )
+        #if( $foreach.index != 3 )
+            #chanwCreateElementFromNameText( $chanwItemElements[ $foreach.index ] $list[ $foreach.index ] )
+            #set( $chanwCreateRSSFeed = $chanwCreateRSSFeed + $chanwCreateElementFromNameText )
+        #else ## == 3
+            #set( $chanwCreateRSSFeed = $chanwCreateRSSFeed + $chanwCreateItemElementWithList )
+        #end
+    #end
+    
+    #chanwCreateElementFromNameText( "channel" $chanwCreateRSSFeed )
+    #set( $chanwCreateRSSFeed = $chanwCreateElementFromNameText )
+    
+    #chanwCreateElementFromNameText( "rss" $chanwCreateRSSFeed { "version":"2.0" } )
+    #set( $chanwCreateRSSFeed = $chanwCreateElementFromNameText )
+#end
+#*
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+*#
