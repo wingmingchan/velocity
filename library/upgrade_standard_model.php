@@ -73,6 +73,8 @@ try
         "chanw_process_index_block",
         "chanw_process_xml",
         "chanw_reflect_utilities",
+        "chanw_rss_utilities",
+        "chanw_xslt_utilities",
         "chanw_service_provider",
         "chanw_setup_global_variables",
         "chanw_sorted_pages",
