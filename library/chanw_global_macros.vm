@@ -5,6 +5,7 @@ Authors: Wing Ming Chan, Peter Thomas
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>
 MIT Licensed
 Modification history:
+5/1/2017 Modified the code of #chanwConvertToPascalCase.
 2/20/2017 Fixed a bug in #chanwReviveGlobalVariable.
 2/6/2017 Added #chanwReviveGlobalVariable.
 1/4/2017 Added #chanwProcessDDBlockWithMacro.
@@ -180,31 +181,32 @@ $chanwConvertToPascalCase
 《/documentation》
 《macro id=“chanwConvertToPascalCase”》
 *#
-#macro( chanwConvertToPascalCase $chanwMacroName $chanwDelimiter )
-    #if( $chanwMacroName.class.name != $JAVA_LANG_STRING_CLASS_NAME ||
-        $chanwMacroName.length() == 0 )
+#macro( chanwConvertToPascalCase $macroName $delimiter )
+    #if( $macroName.class.name != $JAVA_LANG_STRING_CLASS_NAME ||
+        $macroName.length() == 0 )
         Not a String$BR 
         #stop
     #end
     
-    #if( !$chanwDelimiter ||
-        $chanwDelimiter.class.name != $JAVA_LANG_STRING_CLASS_NAME )
-        #set( $chanwDelimiter = '' ) ## default to empty string
+    #if( !$delimiter ||
+        $delimiter.class.name != $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $delimiter = '' ) ## default to empty string
     #end
     
+    #set( $chanwMacroName = $macroName.toLowerCase() )
     #set( $chanwConvertToPascalCase = "" )
     
     ## there is a delimiter passed in
-    #if( $chanwDelimiter.length() > 0 )
+    #if( $delimiter.length() > 0 )
         ## the delimiter does not exist in the string
-        #if( $chanwMacroName.indexOf( $chanwDelimiter ) < 0 )
+        #if( $chanwMacroName.indexOf( $delimiter ) < 0 )
             #set( $chanwConvertToPascalCase = $globalApacheWordUtils.capitalize(
-                $chanwMacroName ) )
+                $macroName ) )
         ## there are instances of the delimiter
         #else
             ## replace delimiters with spaces
             #set( $chanwMacroName = $chanwMacroName.replaceAll( 
-                $chanwDelimiter, ' ' ) )
+                $delimiter, ' ' ) )
             ## capitalize words
             #set( $chanwMacroName = $globalApacheWordUtils.capitalize(
                 $chanwMacroName ) )

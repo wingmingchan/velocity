@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+5/17/2017 Added $chanwLocatorService.
 4/28/2017 Added more global variables.
 4/27/2017 Format created.
 《/copyright》
@@ -35,7 +36,9 @@ other types of assets.《/p》
 #set( $chanwSiteDestinationContainerService          = $chanwServiceProvider.getDestinationContainerService() )
 #set( $chanwDestinationService                       = $chanwServiceProvider.getDestinationService() )
 #set( $chanwDynamicMetadataFieldDefinitionService    = $chanwServiceProvider.getDynamicMetadataFieldDefinitionService() )
+#set( $chanwFolderService                            = $chanwServiceProvider.getFolderService() )
 #set( $chanwGroupService                             = $chanwServiceProvider.getGroupService() )
+#set( $chanwLocatorService                           = $chanwServiceProvider.getLocatorService() )
 #set( $chanwMetadataSetContainerService              = $chanwServiceProvider.getMetadataSetContainerService() )
 #set( $chanwMetadataSetService                       = $chanwServiceProvider.getMetadataSetService() )
 #set( $chanwPageConfigurationSetContainerService     = $chanwServiceProvider.getPageConfigurationSetContainerService() )

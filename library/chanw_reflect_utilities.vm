@@ -5,10 +5,14 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+5/17/2017 Added more tests to #chanwDisplayClassAPI.
+4/7/2017 Added more annotations.
 《/copyright》
 《documentation id=“top”》
 《h2》Introduction《/h2》
-《p》This format provides utility macros for reflection.
+《p》This format provides utility macros for reflection and displaying
+class API. It can be used to generate documentation pages, like those in
+http://www.upstate.edu/cascade-admin/formats/velocity/api-documentation/index.php.
 The 《code》#chanwDisplayClassAPI《/code》 macro can accept three params,
 the second and third are optional. Example:《/p》
 《pre》
@@ -17,9 +21,15 @@ the second and third are optional. Example:《/p》
 #chanwDisplayClassAPI( $_.Class, "h3", "true" )         ## pass in a java.lang.Class object
 #chanwDisplayClassAPI( $_ )                             ## pass in an object
 《/pre》
+《p》For a class name like "java.util.HashMap&lt;K, V&gt;", pass in the string
+"java.util.LinkedHashMap,K,V" as the class name:《/p》
+《pre》
+#chanwDisplayClassAPI( "java.util.HashMap,K,V" ) ## pass in a class name with commas
+《/pre》
 《/documentation》
 *#
 #import( '/formats/library/velocity/chanw_object_creator' )
+#import( '/formats/library/velocity/chanw_global_values' )
 #*
 《global-variables》
 *#
@@ -44,8 +54,9 @@ the second and third are optional. Example:《/p》
 《documentation》
 《code》#chanwDisplayClassAPI( $obj $heading $withH2 )《/code》
 《p》Displays essential information of a class, including a list of constructors
-and methods. Use this macro
-as the entry point to this library format.《/p》
+and methods. This macro only sets up parameters, possibly with default values,
+and invokes 《code》#chanwDisplayObjClass《/code》. Use this macro as the entry
+point to this library format.《/p》
 《/documentation》
 《macro id=“chanwDisplayClassAPI”》
 *#
@@ -55,13 +66,13 @@ as the entry point to this library format.《/p》
         #stop
     #end
     
-    #if( !$heading || $heading.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+    #if( !$heading || $heading.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $heading == "" )
         #set( $chanwHeading = "h3" )
     #else
         #set( $chanwHeading = $heading )
     #end
     
-    #if( !$withH2 )
+    #if( !$withH2 || $withH2.Class.Name != $JAVA_LANG_BOOLEAN_CLASS_NAME )
         #set( $chanwWithH2 = true )
     #else
         #set( $chanwWithH2 = $withH2 )
@@ -73,7 +84,7 @@ as the entry point to this library format.《/p》
 《/macro》
 《documentation》
 《code》#chanwDisplayObjClass( $obj $heading $withH2 )《/code》
-《p》Calls other macros and displays class information.《/p》
+《p》Calls other macros and displays class API information.《/p》
 《/documentation》
 《macro id=“chanwDisplayObjClass”》
 *#
@@ -92,6 +103,7 @@ as the entry point to this library format.《/p》
     #set( $chanwSuffix = "" )
     #set( $chanwClassString = $chanwObjString )
     
+    ## to deal with a class name like "java.util.HashMap,K,V"
     #if( $chanwObjString.indexOf( "," ) > -1 )
         #set( $chanwIndex = $chanwObjString.indexOf( "," ) )
         #set( $chanwClassString = $chanwObjString.substring( 0, $chanwIndex ) )
@@ -123,7 +135,7 @@ as the entry point to this library format.《/p》
         #set( $chanwClassObj = $_PropertyTool.class.forName( $obj ) )
     #elseif( $chanwObjType == $JAVA_LANG_CLASS_CLASS_NAME ) ## class obj
         #set( $chanwClassObj = $obj )
-    #else                                              ## obj of other types
+    #else  ## obj of other types
         #set( $chanwClassObj = $obj.Class )
     #end
     
@@ -134,12 +146,10 @@ as the entry point to this library format.《/p》
             <$heading>Constructors</$heading>
             $S_UL
             #foreach( $constructor in $chanwConstructors )
-                $S_LI## print modifiers
-                $_.class.forName( "java.lang.reflect.Modifier" ).getMethod( 
+                $S_LI$_.class.forName( "java.lang.reflect.Modifier" ).getMethod( 
                     "toString", $_FieldTool.in( 
                     "java.lang.Integer" ).TYPE ).invoke( 
-                    null, $constructor.getModifiers() )
-                $constructor.Name
+                    null, $constructor.getModifiers() ) $constructor.Name
                     
                 #set( $chanwParamTypes = $constructor.getGenericParameterTypes() )
                 #set( $chanwParamTypesString = "( " )
@@ -153,11 +163,9 @@ as the entry point to this library format.《/p》
                             #set( $chanwParamTypesString = $chanwParamTypesString + 
                                 $chanwParamType.getTypeName().replaceAll( "<", "&lt;" ) )
                         #end
-                        
                         #if( $foreach.count < $chanwParamTypes.size() )
                             #set( $chanwParamTypesString = $chanwParamTypesString + ", " )
                         #end
-                        
                     #end
                 #end
                 
@@ -208,7 +216,6 @@ as the entry point to this library format.《/p》
                     #set( $chanwReturnType = 
                         $method.getGenericReturnType().getTypeName().replaceAll(
                             "<", "&lt;" ).trim() )
-                    
                     
                     #set( $chanwParamTypes = $method.getGenericParameterTypes() )
                     #set( $chanwParamTypesString = $chanwModifier + " " + 

@@ -1,6 +1,7 @@
 #*
 This format defines all import statements to the library.
 Import this single format to access all library resources.
+Example: #import( '/formats/library/velocity/chanw_library_import' )
 *#
 #import( 'formats/library/velocity/chanw_object_creator' )
 #import( 'formats/library/velocity/chanw_global_values' )
@@ -10,7 +11,7 @@ Import this single format to access all library resources.
 #import( 'formats/library/velocity/chanw_process_index_block' )
 #import( 'formats/library/velocity/chanw_process_xml' )
 #import( 'formats/library/velocity/chanw_process_cascade_api' )
-#import( 'formats/library/velocity/chanw_database_utilities' )
+##import( 'formats/library/velocity/chanw_database_utilities' )
 
 #*
 Optional:
@@ -22,4 +23,8 @@ Optional:
 #import( 'formats/library/velocity/chanw_html_builder' )
 #import( 'formats/library/velocity/chanw_html_builder_with_deque' )
 #import( 'formats/library/velocity/chanw_reflect_utilities' )
+#import( 'formats/library/velocity/chanw_rss_utilities' )
+#import( 'formats/library/velocity/chanw_xslt_utilities' )
+
+
 *#
