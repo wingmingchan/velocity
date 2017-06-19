@@ -1,0 +1,48 @@
+## ex. 1
+#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+
+## ex. 2
+#set( $suffix = 6 )
+$suffix
+
+## ex. 3
+#chanwSetVariable( "myVar${suffix}" "Hello, World!" )
+#chanwReviveGlobalVariable( "myVar${suffix}" )
+$chanwReviveGlobalVariable
+
+## ex. 4
+$chanwReviveGlobalVariable.charAt( 4 ) ## o
+
+## ex. 5
+$chanwReviveGlobalVariable.substring( 3, 5 ) ## lo
+
+## ex. 6
+#set( $num_str = "18" )
+#set( $num = $suffix.parseInt( $num_str ) )
+$num  ## 18
+$num.Class.Name ## java.lang.Integer
+
+## ex. 7
+#if( true )
+    Hey
+#end
+
+## ex. 8
+#foreach( $num in [ 1..10 ] )
+    $num
+#end
+
+## ex. 9
+#foreach( $num in [ 1..10 ] )
+    $num
+    #if( $num > 4 )
+        #break
+    #end
+#end
+
+## ex. 10
+#foreach( $num in [ 1..10 ] )
+    #if( $num % 2 == 0 )
+        $num
+    #end
+#end
