@@ -14,7 +14,7 @@ Do not process the entire block. Instead, select 《code》system-page《/code�
 (《code》org.jdom.Element《/code》 objects).《/p》
 《p》Example code:《/p》
 《pre》
-#import( 'site://_common_assets/formats/library/velocity/chanw_process_index_block' )
+#import( 'formats/library/velocity/chanw_process_index_block' )
 
 #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page" ) )
 #chanwProcessSystemPage( $page )
