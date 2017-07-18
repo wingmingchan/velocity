@@ -1,0 +1,133 @@
+## ex. 1, 2
+#macro( sum $first $second )
+    #if( !$first || !$second || 
+        $first.Class.Name != $JAVA_LANG_INTEGER_CLASS_NAME ||
+        $second.Class.Name != $JAVA_LANG_INTEGER_CLASS_NAME )
+        Two integers are required.
+        #stop
+    #end
+    
+    #set( $sum = $first + $second )
+#end
+
+#sum( 4 5 )
+$sum
+
+## ex. 3
+#macro( sum $first $second )
+    #if( !$first || $first.Class.Name != $JAVA_LANG_INTEGER_CLASS_NAME )
+        #set( $myFirst = 0 )
+    #else
+        #set( $myFirst = $first )
+    #end
+    
+    #if( !$second || $second.Class.Name != $JAVA_LANG_INTEGER_CLASS_NAME )
+        #set( $mySecond = 0 )
+    #else
+        #set( $mySecond = $second )
+    #end
+
+    #set( $sum = $myFirst + $mySecond )
+#end
+#sum( 5 6 )
+$sum
+
+## ex. 4
+#macro( printMsg $msg )
+    #if( !$msg || $msg.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+        A String is required.
+        #stop
+    #end
+    $msg
+#end
+
+#set( $result = "#printMsg('Hello, World!')" )
+$result
+
+## ex. 5
+#macro( myMacro )
+    #set( $myMacro = $bodyContent.toString() )##
+#end
+#@myMacro()Hey#end
+$myMacro
+
+##ex. 6
+#macro( sumBetween $first $second )
+    #if( !$first || $first.Class.Name != $JAVA_LANG_INTEGER_CLASS_NAME )
+        #set( $myFirst = 0 )
+    #else
+        #set( $myFirst = $first )
+    #end
+    
+    #if( !$second || $second.Class.Name != $JAVA_LANG_INTEGER_CLASS_NAME )
+        #set( $mySecond = 0 )
+    #else
+        #set( $mySecond = $second )
+    #end
+
+    #set( $sumBetween = 0 )
+    
+    #if( $myFirst == $mySecond )
+        #set( $sumBetween = $myFirst )
+    #else
+        #foreach( $num in [ $myFirst..$mySecond ] )
+            #set( $sumBetween = $sumBetween + $num )
+        #end
+    #end
+#end
+#sumBetween( 1 10 )
+$sumBetween
+
+## ex. 7
+## assuming $first <= $second
+#import( "site://_common_assets/formats/library/velocity/chanw_global_stack" )
+#macro( sumBetweenRecursive $first $second )
+    #if( $first == $second )
+        #set( $sumBetweenRecursive = $first )
+    #else
+        #chanwPushGlobalStack( $chanwGlobalStack $second )
+        #set( $minusOne = $second - 1 )
+        #sumBetweenRecursive( $first $minusOne )
+        #chanwPopGlobalStack( $chanwGlobalStack )
+        #set( $temp = $chanwPopGlobalStack )
+        #set( $sumBetweenRecursive = $temp + $sumBetweenRecursive )
+    #end
+#end
+
+#sumBetweenRecursive( 1 10 )
+$sumBetweenRecursive
+
+## ex. 8
+#macro( sumBetweenUsingMultiplecation $first $second )
+    #set( $list = [ $first..$second ] )
+    #set( $size = $list.size() )
+    #set( $isEven = $size % 2 == 0 )
+    #set( $midPoint = $size / 2 )
+    
+    #if( $isEven )
+        #set( $midPointMinusOne = $midPoint - 1 )
+        #set( $sumBetweenUsingMultiplecation = 
+            ( $list[ $midPoint ] + $list[ $midPointMinusOne ] ) * $midPoint )
+    #else
+        #set( $sumBetweenUsingMultiplecation = $list[ $midPoint ] * $size )
+    #end
+#end
+
+#sumBetweenUsingMultiplecation( 2 100 )
+$sumBetweenUsingMultiplecation
+
+## ex. 9
+#set( $switch_var = "macro1" )
+#evaluate( "#${switch_var}" )
+
+#macro( macro1 )
+    macro1 invoked
+#end
+
+#macro( macro2 )
+    macro2 invoked
+#end
+
+#macro( macro3 )
+    macro3 invoked
+#end
