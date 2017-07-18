@@ -46,3 +46,10 @@ $num.Class.Name ## java.lang.Integer
         $num
     #end
 #end
+
+## ex. 11
+#foreach( $num in [ 1..500 ] )
+    #foreach( $num in [ 1..500 ] )
+    
+    #end
+#end
