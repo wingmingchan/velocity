@@ -1,17 +1,92 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
+07/14/2017 Added more documentation.
 《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_global_deque' )##
+${SINGLE_HASH}set( ${DOLLAR}deque = ${DOLLAR}chanwGlobalDeque )
+#set( $deque = $chanwGlobalDeque )
+${SINGLE_HASH}chanwAddLastGlobalDeque( ${DOLLAR}deque "1" )
+${SINGLE_HASH}chanwAddLastGlobalDeque( ${DOLLAR}deque "2" )
+${SINGLE_HASH}chanwAddLastGlobalDeque( ${DOLLAR}deque "3" )
+#chanwAddLastGlobalDeque( $deque "1" )
+#chanwAddLastGlobalDeque( $deque "2" )
+#chanwAddLastGlobalDeque( $deque "3" )
+#chanwSizeGlobalDeque( $deque )
+#set( $size = $chanwSizeGlobalDeque ) 
+Current size: $size
+#foreach( $num in [1..10] )
+#chanwEmptyGlobalDeque( $deque )
+#set( $empty = $chanwEmptyGlobalDeque )
+#if( !$empty )
+#chanwTakeFirstGlobalDeque( $deque )
+#set( $item = $chanwTakeFirstGlobalDeque )
+$item.Class.Name $item
+#else#break#end
+#end
+Use deque as a stack
+#foreach( $num in [1..10] )
+#chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
+#end
+#foreach( $num in [1..10] )
+#chanwEmptyGlobalDeque( $deque )
+#set( $empty = $chanwEmptyGlobalDeque )
+#if( !$empty )
+#chanwTakeFirstGlobalDeque( $deque )
+#set( $item = $chanwTakeFirstGlobalDeque )
+$item.Class.Name $item
+#else#break#end
+#end
+Use deque as a queue
+#foreach( $num in [1..10] )
+#chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
+#end
+#foreach( $num in [1..10] )
+#chanwEmptyGlobalDeque( $deque )
+#set( $empty = $chanwEmptyGlobalDeque )
+#if( !$empty )
+#chanwTakeLastGlobalDeque( $deque )
+#set( $item = $chanwTakeLastGlobalDeque )
+$item.Class.Name $item
+#else#break#end
+#end
+Use deque as a deque
+#foreach( $num in [1..10] )
+#chanwAddFirstGlobalDeque( $deque $foreach.count ) ## 10,9,8...
+#end
+#foreach( $num in [1..10] )
+#set( $empty = $chanwEmptyGlobalDeque )
+#if( !$empty )
+#if( $num % 2 == 1 )
+#chanwTakeLastGlobalDeque( $deque )
+#set( $item = $chanwTakeLastGlobalDeque )
+$item.Class.Name $item
+#else
+#chanwTakeFirstGlobalDeque( $deque )
+#set( $item = $chanwTakeFirstGlobalDeque )
+$item.Class.Name $item
+#end        
+#else#break#end
+#end
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines a global deque. Example:《/p》
 《pre》
-#import( 'site://_common_assets/formats/library/velocity/chanw_global_deque' )
-
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_global_deque' )
+$chanwGlobalDeque
 #set( $deque = $chanwGlobalDeque )
 #chanwAddLastGlobalDeque( $deque "1" )
 #chanwAddLastGlobalDeque( $deque "2" )
@@ -90,11 +165,13 @@ $item.Class.Name $item
 $E_PRE
 《/pre》
 《/documentation》
-*#
-#import( '/formats/library/velocity/chanw_object_creator' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
 #set( $chanwGlobalDequeGlobalVariables = [
     "chanwAddFirstGlobalDeque",
     "chanwAddLastGlobalDeque",
@@ -110,151 +187,151 @@ $E_PRE
 #set( $chanwDEQUE_DATA  = "data" )
 #set( $chanwDEQUE_SIZE  = 500 )
 #set( $chanwGlobalDeque = {} )
-#*
+#*doc
 《/global-variables》
 《documentation》
 《code》#chanwInitializeGlobalDeque( $chanwGlobalDeque )《/code》
 《p》Initializes the deque.《/p》
 《/documentation》
 《macro id=“chanwInitializeGlobalDeque”》
-*#
+doc*###
 #macro( chanwInitializeGlobalDeque $chanwGlobalDeque )
     #chanwGetConstructorByClassNameParamTypeArray( "java.util.concurrent.LinkedBlockingDeque", [ "int" ] )
     #set( $chanwConstructor = $chanwGetConstructorByClassNameParamTypeArray )
-    #set( $chanwData        = $constructor.newInstance( $chanwDEQUE_SIZE ) )
-    #set( $dummy            = $chanwGlobalDeque.put( $chanwDEQUE_DATA, $data ) )
+    #set( $chanwData  = $chanwConstructor.newInstance( $chanwDEQUE_SIZE ) )
+    #set( $chanwGlobalDeque[ $chanwDEQUE_DATA ] = $chanwData )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwAddFirstGlobalDeque( $chanwGlobalDeque $value )《/code》
 《p》Adds the value to the front of the deque.《/p》
 《/documentation》
 《macro id=“chanwAddFirstGlobalDeque”》
-*#
-#macro( chanwAddFirstGlobalDeque $chanwGlobalDeque $value )
-    #if( $_PropertyTool.isNull( $value ) )
-Null not allow
+doc*###
+#macro( chanwAddFirstGlobalDeque $chanwGlobalDeque $chanwAddFirstGlobalDequeValue )
+    #if( $_PropertyTool.isNull( $chanwAddFirstGlobalDequeValue ) )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Null not allow." "NO9V4PBRNLI" )
         #stop
     #end
-    
-    #set( $chanwAddFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addFirst( $value ) )
+##
+    #set( $chanwAddFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addFirst( $chanwAddFirstGlobalDequeValue ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwAddLastGlobalDeque( $chanwGlobalDeque $value )《/code》
 《p》Adds the value to the back of the deque.《/p》
 《/documentation》
 《macro id=“chanwAddLastGlobalDeque”》
-*#
-#macro( chanwAddLastGlobalDeque $chanwGlobalDeque $value )
-    #if( $_PropertyTool.isNull( $value ) )
-Null not allow
+doc*###
+#macro( chanwAddLastGlobalDeque $chanwGlobalDeque $chanwAddLastGlobalDequeValue )
+    #if( $_PropertyTool.isNull( $chanwAddLastGlobalDequeValue ) )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Null not allow." "[9G[H9BIO;NM" )
         #stop
     #end
-    
-    #set( $chanwAddLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addLast( $value ) )
+##
+    #set( $chanwAddLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).addLast( $chanwAddLastGlobalDequeValue ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwClearGlobalDeque( $chanwGlobalDeque )《/code》
 《p》Clears the deque of all the data.《/p》
 《/documentation》
 《macro id=“chanwClearGlobalDeque”》
-*#
+doc*###
 #macro( chanwClearGlobalDeque $chanwGlobalDeque )
     $chanwGlobalDeque.get( $chanwDEQUE_DATA ).clear()
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwPeekFirstGlobalDeque( $chanwGlobalDeque )《/code》
 《p》Retrieves the value in the front without removing it.《/p》
 《/documentation》
 《macro id=“chanwPeekFirstGlobalDeque”》
-*#
+doc*###
 #macro( chanwPeekFirstGlobalDeque $chanwGlobalDeque )
     #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
-Deque is empty
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The deque is empty." "mfijokngeri" )
     #else
         #set( $chanwPeekFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).peekFirst() )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwPeekLastGlobalDeque( $chanwGlobalDeque )《/code》
 《p》Retrieves the value in the back without removing it.《/p》
 《/documentation》
 《macro id=“chanwPeekLastGlobalDeque”》
-*#
+doc*###
 #macro( chanwPeekLastGlobalDeque $chanwGlobalDeque )
     #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
-Deque is empty
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The deque is empty." "k;jiyo;kkryfgjy" )
     #else
         #set( $chanwPeekLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).peekLast() )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwSizeGlobalDeque( $chanwGlobalDeque )《/code》
 《p》Returns the size of the deque (the number of items stored).《/p》
 《/documentation》
 《macro id=“chanwSizeGlobalDeque”》
-*#
+doc*###
 #macro( chanwSizeGlobalDeque $chanwGlobalDeque )
     #set( $chanwSizeGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).size() )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwTakeFirstGlobalDeque( $chanwGlobalDeque )《/code》
 《p》Removes the value from the front.《/p》
 《/documentation》
 《macro id=“chanwTakeFirstGlobalDeque”》
-*#
+doc*###
 #macro( chanwTakeFirstGlobalDeque $chanwGlobalDeque )
     #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
-Deque is empty
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The deque is empty." ";.h;rejk,gtkm" )
     #else
         #set( $chanwTakeFirstGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).takeFirst() )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwTakeLastGlobalDeque( $chanwGlobalDeque )《/code》
 《p》Removes the value from the back.《/p》
 《/documentation》
 《macro id=“chanwTakeLastGlobalDeque”》
-*#
+doc*###
 #macro( chanwTakeLastGlobalDeque $chanwGlobalDeque )
     #if( $chanwGlobalDeque.get( $chanwDEQUE_DATA ).empty() )
-Deque is empty
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The deque is empty." "l;,jyko;thfbjhkl" )
     #else
         #set( $chanwTakeLastGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).takeLast() )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwEmptyGlobalDeque( $chanwGlobalDeque )《/code》
 《p》Returns a boolean, indicating whether the deque is empty.《/p》
 《/documentation》
 《macro id=“chanwEmptyGlobalDeque”》
-*#
+doc*###
 #macro( chanwEmptyGlobalDeque $chanwGlobalDeque )
     #set( $chanwEmptyGlobalDeque = $chanwGlobalDeque.get( $chanwDEQUE_DATA ).size() == 0 )
 #end
-#*
+#*doc
 《/macro》
-*#
+doc*###
 #chanwInitializeGlobalDeque( $chanwGlobalDeque )
-#*
+#*doc
 《documentation id=“bottom”》
 《/documentation》
 《/code》
-*#
+doc*###
