@@ -1,16 +1,62 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
+07/14/2017 Added more documentation.
 《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_global_queue' )##
+#set( $queue = $chanwGlobalQueue )
+#chanwEnqueueGlobalQueue( $queue $_ )
+#chanwEnqueueGlobalQueue( $queue $_PropertyTool )
+#chanwEnqueueGlobalQueue( $queue $_XPathTool )
+##chanwEnqueueGlobalQueue( $queue $blah )
+#chanwSizeGlobalQueue( $queue )
+#set( $size = $chanwSizeGlobalQueue )
+Current size: $size$BR
+#foreach( $num in [1..10] )
+#chanwSizeGlobalQueue( $queue )
+#set( $size = $chanwSizeGlobalQueue )
+#if( $size > 0 )
+#chanwDequeueGlobalQueue( $queue )
+#set( $item = $chanwDequeueGlobalQueue )
+$item.Class.Name
+#else#break#end
+#end
+#chanwClearGlobalQueue( $queue )
+#chanwSizeGlobalQueue( $queue )
+#set( $size = $chanwSizeGlobalQueue )
+Current size: $size$BR
+#foreach( $num in [1..1000] )
+#chanwRemainingCapacityGlobalQueue( $queue )
+#set( $remainingCapacity = $chanwRemainingCapacityGlobalQueue )
+#set( $item = $_ )
+#if( $remainingCapacity > 0 && !$_PropertyTool.isNull( $item ) )
+#chanwEnqueueGlobalQueue( $queue $item )
+#else
+#break
+#end
+#end
+#chanwSizeGlobalQueue( $queue )
+#set( $size = $chanwSizeGlobalQueue )
+
+Current size: $size$BR
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines a global queue. Example:《/p》
 《pre》
-#import( 'site://_common_assets/formats/library/velocity/chanw_global_queue' )
+#import( 'site://_core/formats/library/velocity/chanw_global_queue' )
 
 #set( $queue = $chanwGlobalQueue )
 #chanwEnqueueGlobalQueue( $queue $_ )
@@ -64,11 +110,13 @@ Current size: $size$BR
 $E_PRE
 《/pre》
 《/documentation》
-*#
-#import( '/formats/library/velocity/chanw_object_creator' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
 #set( $chanwGlobalQueueGlobalVariables = [
     "chanwConstructor",
     "chanwData",
@@ -81,115 +129,115 @@ $E_PRE
 #set( $chanwQUEUE_DATA  = "data" )
 #set( $chanwQUEUE_SIZE  = 500 )
 #set( $chanwGlobalQueue = {} )
-#*
+#*doc
 《/global-variables》
 《documentation》
 《code》#chanwInitializeGlobalQueue( $chanwGlobalQueue )《/code》
 《p》Initializes the queue.《/p》
 《/documentation》
 《macro id=“chanwInitializeGlobalQueue”》
-*#
+doc*###
 #macro( chanwInitializeGlobalQueue $chanwGlobalQueue )
     #chanwGetConstructorByClassNameParamSize( "java.util.concurrent.ArrayBlockingQueue", 1 )
     #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
     #set( $chanwData        = $chanwConstructor.newInstance( $chanwQUEUE_SIZE ) )
     #set( $dummy            = $chanwGlobalQueue.put( $chanwQUEUE_DATA, $chanwData ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwEnqueueGlobalQueue( $chanwGlobalQueue $value )《/code》
 《p》Enqueues the value.《/p》
 《/documentation》
 《macro id=“chanwEnqueueGlobalQueue”》
-*#
-#macro( chanwEnqueueGlobalQueue $chanwGlobalQueue $value )
-    #if( $_PropertyTool.isNull( $value ) )
-Null not allow
+doc*###
+#macro( chanwEnqueueGlobalQueue $chanwGlobalQueue $chanwEnqueueGlobalQueueValue )
+    #if( $_PropertyTool.isNull( $chanwEnqueueGlobalQueueValue ) )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Null value not allowed." "4FR,NFKNRK,t" )
         #stop
     #end
-    
+##
     #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() >= $chanwQUEUE_SIZE )
-Queue is full
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The queue is full." "4blrlr.mb;r./m" )
         #stop
     #end
-    
-    #set( $chanwEnqueueResult = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).add( $value ) )
-    
+##
+    #set( $chanwEnqueueResult = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).add( $chanwEnqueueGlobalQueueValue ) )
+##
     #if( !$chanwEnqueueResult )
-Failed to enqueue
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Failed to enqueue." "rjrgwuebkr459" )
         #stop
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwDequeueGlobalQueue( $chanwGlobalQueue )《/code》
 《p》Dequeus and returns the value.《/p》
 《/documentation》
 《macro id=“chanwDequeueGlobalQueue”》
-*#
+doc*###
 #macro( chanwDequeueGlobalQueue $chanwGlobalQueue )
     #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() > 0 )
         #set( $chanwDequeueGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).take() )
     #else
-The queue is empty
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The queue is empty." "ll'oupprjkeubnl;kgjkn" )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwSizeGlobalQueue( $chanwGlobalQueue )《/code》
 《p》Returns the size of the queue (the number of items stored).《/p》
 《/documentation》
 《macro id=“chanwSizeGlobalQueue”》
-*#
+doc*###
 #macro( chanwSizeGlobalQueue $chanwGlobalQueue )
     #set( $chanwSizeGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwRemainingCapacityGlobalQueue( $chanwGlobalQueue )《/code》
 《p》Returns the remaining capacity of the queue.《/p》
 《/documentation》
 《macro id=“chanwRemainingCapacityGlobalQueue”》
-*#
+doc*###
 #macro( chanwRemainingCapacityGlobalQueue $chanwGlobalQueue )
     #set( $chanwRemainingCapacityGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).remainingCapacity() )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwClearGlobalQueue( $chanwGlobalQueue )《/code》
 《p》Clears the queue.《/p》
 《/documentation》
 《macro id=“chanwClearGlobalQueue”》
-*#
+doc*###
 #macro( chanwClearGlobalQueue $chanwGlobalQueue )
     $chanwGlobalQueue.get( $chanwQUEUE_DATA ).clear()
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwPeekGlobalQueue( $chanwGlobalQueue )《/code》
 《p》Returns the value without dequeing.《/p》
 《/documentation》
 《macro id=“chanwPeekGlobalQueue”》
-*#
+doc*###
 #macro( chanwPeekGlobalQueue $chanwGlobalQueue )
     #if( $chanwGlobalQueue.get( $chanwQUEUE_DATA ).size() > 0 )
         #set( $chanwPeekGlobalQueue = $chanwGlobalQueue.get( $chanwQUEUE_DATA ).peek() )
     #else
-The queue is empty
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The queue is empty." "jkroo4kjkgi4mgkntjbebhj" )
     #end
 #end
-#*
+#*doc
 《/macro》
-*#
+doc*###
 #chanwInitializeGlobalQueue( $chanwGlobalQueue )
-#*
+#*doc
 《documentation id=“bottom”》
 《/documentation》
 《/code》
-*#
+doc*###
