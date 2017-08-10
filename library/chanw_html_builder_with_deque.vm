@@ -1,11 +1,20 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
+07/14/2017 Added more documentation.
 《/copyright》
+《evaluate execute=“false”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines an html builder using the global deque. 
@@ -13,7 +22,7 @@ The builder ensures that all tags are closed and nested properly.
 It will also avoid unneccessary whitespace characters.
 When using these macros, do it inside out, layer by layer.《/p》
 《p》Example code:《/p》
-《pre》#import( 'site://_common_assets/formats/library/velocity/chanw_html_builder_with_deque' )
+《pre》#import( 'site://_core/formats/library/velocity/chanw_html_builder_with_deque' )
 
 ## create an img element
 #chanwCreateEmptyElement( { 'name':'img', 'src':'/images/photo.jpg', 'class':'img-responsive', 'alt':'Photo' } )
@@ -28,12 +37,13 @@ When using these macros, do it inside out, layer by layer.《/p》
 《pre》<div id='slideshow' class='col-xs-12'><div class='slide'><img src='/images/photo.jpg' class='img-responsive' alt='Photo' /></div></div> 
 《/pre》
 《/documentation》
-*#
-#import( '/formats/library/velocity/chanw_global_values' )
-#import( '/formats/library/velocity/chanw_global_deque' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_global_deque' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
 #set( $chanwHtmlBuilderWithDequeGlobalVariables = [
     "chanwAttrs",
     "chanwCreateEmptyElement",
@@ -44,21 +54,21 @@ When using these macros, do it inside out, layer by layer.《/p》
     "chanwEndTag",
     "chanwStartTag"
 ] )
-#*
+#*doc
 《/global-variables》
 《documentation》
 《code》#chanwCreateElementWithText( $chanwMap $chanwText )《/code》
 《p》Returns an HTML element with text.《/p》
 《/documentation》
 《macro id=“chanwCreateElementWithText”》
-*#
-#macro( chanwCreateElementWithText $chanwMap $chanwText )
-    #if( $chanwMap.class.name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+doc*###
+#macro( chanwCreateElementWithText $chanwCreateElementWithTextMap $chanwCreateElementWithTextText )
+    #if( $chanwCreateElementWithTextMap.class.name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
         A map is required.
         #stop
     #end
 
-    #set( $chanwElementName = $chanwMap[ 'name' ] )
+    #set( $chanwElementName = $chanwCreateElementWithTextMap[ 'name' ] )
     
     #if( $_PropertyTool.isNull( $chanwElementName ) )
         The name cannot be null.
@@ -66,74 +76,74 @@ When using these macros, do it inside out, layer by layer.《/p》
     #end
     
     #set( $deque = $chanwGlobalDeque )
-    #chanwAddLastGlobalDeque( $deque $chanwText ) ## put the text in first
-    #chanwAddElementToGlobalDeque( $chanwMap )    ## add start and end tags
+    #chanwAddLastGlobalDeque( $deque $chanwCreateElementWithTextText ) ## put the text in first
+    #chanwAddElementToGlobalDeque( $chanwCreateElementWithTextMap )    ## add start and end tags
     #chanwEmptyDequeGetElement()                  ## get the string out
     #set( $chanwCreateElementWithText = $chanwEmptyDequeGetElement )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwCreateEmptyElement( $chanwMap )《/code》
 《p》Returns an empty HTML element.《/p》
 《/documentation》
 《macro id=“chanwCreateEmptyElement”》
-*#
-#macro( chanwCreateEmptyElement $chanwMap )
-    #if( $chanwMap.class.name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+doc*###
+#macro( chanwCreateEmptyElement $chanwCreateEmptyElementMap )
+    #if( $chanwCreateEmptyElementMap.class.name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
         A map is required.
         #stop
     #end
 
-    #set( $chanwElementName = $chanwMap[ 'name' ] )
+    #set( $chanwElementName = $chanwCreateEmptyElementMap[ 'name' ] )
     
     #if( $_PropertyTool.isNull( $chanwElementName ) )
         The name cannot be null.
         #stop
     #end
     
-    #set( $chanwAttrs = $chanwMap.keySet() )
-    #set( $chanwStartTag = "<" + $chanwMap[ 'name' ] )
+    #set( $chanwAttrs = $chanwCreateEmptyElementMap.keySet() )
+    #set( $chanwStartTag = "<" + $chanwCreateEmptyElementMap[ 'name' ] )
     
     #foreach( $chanwAttr in $chanwAttrs )
         #if( $chanwAttrs.size() > 1 && $chanwAttr != 'name' )
-            #set( $chanwStartTag = $chanwStartTag + " " + $chanwAttr + "='" + $chanwMap[ $chanwAttr ] + "'" )
+            #set( $chanwStartTag = $chanwStartTag + " " + $chanwAttr + "='" + $chanwCreateEmptyElementMap[ $chanwAttr ] + "'" )
         #end
     #end
     
     #set( $chanwCreateEmptyElement = $chanwStartTag + " />" )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwAddElementToGlobalDeque( $chanwMap )《/code》
 《p》Creates the start tag and end tag, possibly with attributes.《/p》
 《/documentation》
 《macro id=“chanwAddElementToGlobalDeque”》
-*#
-#macro( chanwAddElementToGlobalDeque $chanwMap )
-    #set( $chanwAttrs = $chanwMap.keySet() )
-    #set( $chanwStartTag = "<" + $chanwMap[ 'name' ] )
+doc*###
+#macro( chanwAddElementToGlobalDeque $chanwAddElementToGlobalDequeMap )
+    #set( $chanwAttrs = $chanwAddElementToGlobalDequeMap.keySet() )
+    #set( $chanwStartTag = "<" + $chanwAddElementToGlobalDequeMap[ 'name' ] )
     
     #foreach( $chanwAttr in $chanwAttrs )
         #if( $chanwAttrs.size() > 1 && $chanwAttr != 'name' )
-            #set( $chanwStartTag = $chanwStartTag + " " + $chanwAttr + "='" + $chanwMap[ $chanwAttr ] + "'" )
+            #set( $chanwStartTag = $chanwStartTag + " " + $chanwAttr + "='" + $chanwAddElementToGlobalDequeMap[ $chanwAttr ] + "'" )
         #end
     #end
     
     #set( $chanwStartTag = $chanwStartTag + ">" )
     #chanwAddFirstGlobalDeque( $deque $chanwStartTag )
-    #set( $chanwEndTag = "</" + $chanwMap[ 'name' ] + ">" )
+    #set( $chanwEndTag = "</" + $chanwAddElementToGlobalDequeMap[ 'name' ] + ">" )
     #chanwAddLastGlobalDeque( $deque $chanwEndTag )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwEmptyDequeGetElement《/code》
 《p》Empties the deque and returns the concatenated string.《/p》
 《/documentation》
 《macro id=“chanwEmptyDequeGetElement”》
-*#
+doc*###
 #macro( chanwEmptyDequeGetElement )
     #set( $chanwElement = "" )
     
@@ -150,9 +160,9 @@ When using these macros, do it inside out, layer by layer.《/p》
     #end
     #set( $chanwEmptyDequeGetElement = $chanwElement )
 #end
-#*
+#*doc
 《/macro》
 《documentation id=“bottom”》
 《/documentation》
 《/code》
-*#
+doc*###
