@@ -1,11 +1,20 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
+7/14/2017 Added more documentation.
 《/copyright》
+《evaluate execute=“false”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《p》This format defines macros to process XML.
 Use this format to process any 《code》system-data-structure《/code》 element or
@@ -13,11 +22,21 @@ any node without a fixed structure.
 Use 《code》chanw_process_index_block《/code》 to process a page/folder created
 by an index block.《/p》
 《/documentation》
-*#
-#import( '/formats/library/velocity/chanw_global_values' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
+## RSS
+#set( $rssXML_ELEMENT_CHANNEL                   = 'channel' )
+#set( $rssXML_ELEMENT_DESCRIPTION               = 'description' )
+#set( $rssXML_ELEMENT_GUID                      = 'guid' )
+#set( $rssXML_ELEMENT_ITEM                      = 'item' )
+#set( $rssXML_ELEMENT_LINK                      = 'link' )
+#set( $rssXML_ELEMENT_PUB_DATE                  = 'pubDate' )
+#set( $rssXML_ELEMENT_TITLE                     = 'title' )
 #set( $chanwProcessXmlGlobalVariables = [
     "chanwChildKey",
     "chanwChildPath",
@@ -40,12 +59,12 @@ by an index block.《/p》
     "chanwXmlString",
     "chanwXmlXPathTextMap"
 ] )
-#*
+#*doc
 《/global-variables》
-*#
+doc*###
 ## clean up the data structures
 #chanwCleanUpMaps
-#*
+#*doc
 《documentation》
 《code》#chanwProcessSystemDataStructure( $element $wysiwyg_ids )《/code》
 《p》Processes a 《code》system-data-structure《/code》 object (a 《code》org.jdom.Element《/code》 object).
@@ -70,13 +89,13 @@ $chanwXmlXPathTextMap
 《/pre》
 《/documentation》
 《macro id=“chanwProcessSystemDataStructure”》
-*#
+doc*###
 #macro( chanwProcessSystemDataStructure $element $wysiwyg_ids )
     #if( $element.Class.Name != $ORG_JDOM_ELEMENT_CLASS_NAME )
         Not an element.$BR
         #stop
     #end
-    
+##
     #if( $wysiwyg_ids && 
         ( $wysiwyg_ids.Class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME ||
           $wysiwyg_ids.size() == 0 ) )
@@ -84,24 +103,24 @@ $chanwXmlXPathTextMap
     #else
         #set( $chanwWithWysiwygIds = true )
     #end
-
+##
     ## store empty string for text value
     #if( !$chanwXmlXPathTextMap.containsKey( $element.Name ) )
         #set( $void = $chanwXmlXPathTextMap.put( $element.Name, '' ) )
     #end
-    
+##
     ## store the current node path
     #if( !$chanwNodeInfoMap.containsKey( $element ) )
         #set( $void = $chanwNodeInfoMap.put( $element, $element.Name ) )
     #end
-    
+##
     #if( $chanwWithWysiwygIds )
         #chanwProcessJdomElement( $element $wysiwyg_ids )
     #else
         #chanwProcessJdomElement( $element )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwProcessJdomElement( $node $ids )《/code》
@@ -109,55 +128,54 @@ $chanwXmlXPathTextMap
 Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use 《code》#chanwProcessSystemDataStructure《/code》.《/p》
 《/documentation》
 《macro id=“chanwProcessJdomElement”》
-*#
+doc*###
 #macro( chanwProcessJdomElement $node $ids )
     #if( $node.Class.Name != $ORG_JDOM_ELEMENT_CLASS_NAME )
         Not an element!!!$BR
         #stop
     #end
-    
+##
     #if( $ids )
         #set( $chanwWithWysiwygIds = true )
     #else
         #set( $chanwWithWysiwygIds = false )
     #end
-    
+##
     ## WYSIWYG or block chooser
     ## allow two suffixes in the node name: content and wysiwyg
     #if( $node.Name.endsWith( "-content" ) || $node.Name.endsWith( "-wysiwyg" ) ||
-        ( $chanwWithWysiwygIds && $ids.contains( $node.Name ) ) || $node.Name == "content"
-    )
+        ( $chanwWithWysiwygIds && $ids.contains( $node.Name ) ) || $node.Name == "content" )
         ## get the parent path
         #set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
         ## create the path for current child
         #set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
-    
+##
         ##set( $chanwWYSIWYGPath  = $chanwNodeInfoMap.get( $child ) )
         #if( $node.Name != "content" )
             #set( $chanwNodeValue = $_SerializerTool.serialize( $child, true ) )
         #else
             #set( $chanwNodeValue = $node )
         #end
-        
+##
         #set( $void = $chanwXmlXPathTextMap.put( $chanwChildKey, $chanwNodeValue ) )
-
+##
     #elseif( $node.Children && $node.Children.size() > 0 )
         ##store the group path
         #set( $chanwParentNode = $node.getParent() )
-        
+##
         #if( $chanwParentNode && $chanwParentNode.Class.Name !=
             $ORG_JDOM_DOCUMENT_CLASS_NAME  )
             #set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) + '/' )
         #else
             #set( $chanwParentPath = "" )
         #end
-        
+##
         #set( $chanwCurrentNodePath = $chanwParentPath + $node.Name )
-        
+##
         #if( !$chanwNodeInfoMap.containsKey( $node ) )
             #set( $void = $chanwNodeInfoMap.put( $node ) )
         #end
-    
+##
         #foreach( $child in $node.Children )
             ## skip chooser
             ##if( $node.Name == "content" )
@@ -166,18 +184,18 @@ Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use
                 ## test for WYSIWYG
                 #set( $chanwIsWYSIWYG = false )
                 #set( $chanwIsContent = false )
-                
+##
                 ## allow two suffixes in the node name: content and wysiwyg
                 #if( $node.Name.endsWith( "-content" ) || $node.Name.endsWith( "-wysiwyg" ) ||
                     ( $chanwWithWysiwygIds && $ids.contains( $node.Name ) ) 
                 )
                     #set( $chanwIsWYSIWYG = true )
                 #end
-                
+##
                 #if( $node.Name == "content" )
                     #set( $chanwIsContent = true )
                 #end
-        
+##
                 #if( !$chanwIsWYSIWYG  && !$chanwIsContent )
                     ## get the parent path
                     #set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
@@ -185,16 +203,16 @@ Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use
                     #set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
                     ## select all children bearing the same name
                     #set( $chanwNodes = $_XPathTool.selectNodes( $child.getParent(), $child.Name ) )
-            
+##
                     ## multiple nodes
                     #if( $chanwNodes.size() > 1 )
                         #set( $chanwSize = 0 )
-                    
+##
                         #foreach( $n in $chanwNodes )
                             #if( $chanwNodeInfoMap.containsKey( $n ) ) ## already processed
                                 #break
                             #end
-                
+##
                             ## create the correct XPath
                             #set( $tempChildKey = $chanwChildKey + "[$foreach.count]" )
                             ## store node-path pair
@@ -202,9 +220,8 @@ Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use
                                 #set( $void = $chanwNodeInfoMap.put( $n, $tempChildKey ) )
                             #end
                             #set( $chanwSize = $foreach.count )
-                        
                         #end
-                    
+##
                         #if( !$chanwNodeInfoMap.containsKey( $chanwChildKey ) )
                             #set( $void = $chanwNodeInfoMap.put( $chanwChildKey, { 'size':$chanwSize } ) )
                         #end
@@ -213,12 +230,12 @@ Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use
                         #set( $chanwParentNode = $child.getParent() )
                         #set( $chanwParentPath = $chanwNodeInfoMap.get( $chanwParentNode ) )
                         #set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
-                    
+##
                         #if( !$chanwNodeInfoMap.containsKey( $child ) )
                             #set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
                         #end
                     #end
-            
+##
                     ## group
                     #if( $child.Children && $child.Children.size() > 0 )
                         #set( $void = $chanwXmlXPathTextMap.put( $chanwNodeInfoMap.get( $child ), '' ) )
@@ -231,19 +248,19 @@ Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use
                         ## get the parent path
                         #set( $chanwParentPath = $chanwNodeInfoMap.get( $child.getParent() ) )
                         #set( $chanwChildPath  = $chanwParentPath + '/' + $child.Name )
-                
+##
                         #if( !$chanwNodeInfoMap.containsKey( $child ) )
                             #set( $void = $chanwNodeInfoMap.put( $child, $chanwChildPath ) )
                         #end
-                
-                        #processTextNode( $child  )
+##
+                        #chanwProcessTextNode( $child  )
                     #end
                 #elseif( $chanwIsWYSIWYG )
                     ## get the parent path
                     #set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
                     ## create the path for current child
                     #set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
-                
+##
                     ##set( $chanwWYSIWYGPath  = $chanwNodeInfoMap.get( $child ) )
                     #set( $chanwWYSIWYGValue = $_SerializerTool.serialize( $child, true ) )
                     #set( $void = $chanwXmlXPathTextMap.put(
@@ -253,7 +270,7 @@ Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use
                     #set( $chanwNodePath = $chanwNodeInfoMap.get( $child.getParent() ) )
                     ## create the path for current child
                     #set( $chanwChildKey = $chanwNodePath + '/' + $child.Name )
-                
+##
                     #set( $void = $chanwXmlXPathTextMap.put( $chanwChildKey, $child ) )
                 #end
             ##end
@@ -263,28 +280,28 @@ Do not invoke 《code》#chanwProcessJdomElement《/code》 directly. Always use
         Nothing to process.$BR
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
-《code》#processTextNode( $node  )《/code》
+《code》#chanwProcessTextNode( $node  )《/code》
 《p》Processes a text node. This macro is invoked by 《code》#chanwProcessSystemDataStructure《/code》,
 and do not use it independently.《/p》
 《/documentation》
-《macro id=“processTextNode”》
-*#
-#macro( processTextNode $node  )
+《macro id=“chanwProcessTextNode”》
+doc*###
+#macro( chanwProcessTextNode $node  )
     #set( $chanwTextNodePath  = $chanwNodeInfoMap.get( $node ) )
     #set( $chanwTextNodeValue = $node.Value )
-    
+##
     ## asset chooser
     #if( $chanwTextNodeValue == '/' )
         #set( $chanwTextNodeValue = '' )
     #end
-
+##
     #set( $void = $chanwXmlXPathTextMap.put( 
         $chanwTextNodePath, $_EscapeTool.xml( $chanwTextNodeValue ) ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwCleanUpMaps《/code》
@@ -292,12 +309,12 @@ and do not use it independently.《/p》
 and do not use it independently.《/p》
 《/documentation》
 《macro id=“chanwCleanUpMaps”》
-*#
+doc*###
 #macro( chanwCleanUpMaps )
     #set( $chanwXmlXPathTextMap = {} ) ## storing data
     #set( $chanwNodeInfoMap     = {} ) ## storing node information
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwDisplayMapKeys( $map $trimRoot )《/code》
@@ -311,7 +328,7 @@ parameter.《/p》
 《/pre》
 《/documentation》
 《macro id=“chanwDisplayMapKeys”》
-*#
+doc*###
 #macro( chanwDisplayMapKeys $map $trimRoot )
     #if( $map.Class.Name == $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
         #foreach( $key in $map.keySet() )
@@ -332,7 +349,7 @@ parameter.《/p》
         Not a map!!!$BR
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwDisplayMapKeyValuePairs( $map $trimRoot )《/code》
@@ -347,7 +364,7 @@ parameter.《/p》
 《/pre》
 《/documentation》
 《macro id=“chanwDisplayMapKeyValuePairs”》
-*#
+doc*###
 #macro( chanwDisplayMapKeyValuePairs $map $trimRoot )
     #if( $map.Class.Name == $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
         #foreach( $key in $map.keySet() )
@@ -368,7 +385,7 @@ parameter.《/p》
         Not a map!!!$BR
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwShowXml $block_xml $with_pre $with_newline )《/code》
@@ -378,12 +395,12 @@ parameter.《/p》
 《/pre》
 《/documentation》
 《macro id=“chanwShowXml”》
-*#
+doc*###
 #macro( chanwShowXml $blockXml $withPre $withNewline )
 #set( $chanwXmlString = $_SerializerTool.serialize( $blockXml, false ) )
 #chanwShowXmlString( $chanwXmlString $withPre $withNewline )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwShowXmlString( $xml_string $with_pre $with_newline )《/code》
@@ -393,7 +410,7 @@ parameter.《/p》
 《/pre》
 《/documentation》
 《macro id=“chanwShowXmlString”》
-*#
+doc*###
 #macro( chanwShowXmlString $xmlString $withPre $withNewline )
 #if( $withPre )$S_PRE#end##
 #if( $withNewline )
@@ -404,9 +421,9 @@ parameter.《/p》
 $chanwXmlString
 #if( $withPre )$E_PRE#end
 #end
-#*
+#*doc
 《/macro》
 《documentation id=“bottom”》
 《/documentation》
 《/code》
-*#
+doc*###
