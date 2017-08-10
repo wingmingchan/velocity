@@ -1,30 +1,29 @@
+#import( 'core/loaders/load_core' )
+#if( !$chanw_framework_site_name )
+    #set( $chanw_framework_site_name = $_brisk[ $BRISK_SITE_NAME ] )
+#end
 #*
-This format defines all import statements to the library.
 Import this single format to access all library resources.
-Example: #import( '/formats/library/velocity/chanw_library_import' )
+Example: #drulykgImportPassThrough( '/core/library/chanw_library_import' )
 *#
-#import( 'formats/library/velocity/chanw_object_creator' )
-#import( 'formats/library/velocity/chanw_global_values' )
-#import( 'formats/library/velocity/chanw_global_macros' )
-#import( 'formats/library/velocity/chanw_display_velocity_code' )
-
-#import( 'formats/library/velocity/chanw_process_index_block' )
-#import( 'formats/library/velocity/chanw_process_xml' )
-#import( 'formats/library/velocity/chanw_process_cascade_api' )
-##import( 'formats/library/velocity/chanw_database_utilities' )
-
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_initialization" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_regex_utilities" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_global_macros" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_date_time_utilities" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_display_velocity_code" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_process_index_block" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_global_queue" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_process_xml" ) ## used by chanw_process_cascade_api
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_process_cascade_api" )
+##
 #*
 Optional:
-
-#import( 'formats/library/velocity/chanw_global_deque' )
-#import( 'formats/library/velocity/chanw_global_queue' )
-#import( 'formats/library/velocity/chanw_global_stack' )
-
-#import( 'formats/library/velocity/chanw_html_builder' )
-#import( 'formats/library/velocity/chanw_html_builder_with_deque' )
-#import( 'formats/library/velocity/chanw_reflect_utilities' )
-#import( 'formats/library/velocity/chanw_rss_utilities' )
-#import( 'formats/library/velocity/chanw_xslt_utilities' )
-
-
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_global_deque" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_global_stack" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_html_builder" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_html_builder_with_deque" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_reflect_utilities" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_rss_utilities" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_xslt_utilities" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_database_utilities" )
 *#
