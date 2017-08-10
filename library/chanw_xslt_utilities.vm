@@ -1,13 +1,38 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/9/2017 Started using macro names as namespace prefixes for local parameters.
+7/14/2017 Added more documentation.
 5/25/2017 Updated documentation.
 5/24/2017 Format created.
 《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+${SINGLE_HASH}import( 'core/library/velocity/chanw/chanw_initialization' )
+${SINGLE_HASH}import( 'core/library/velocity/chanw/chanw_xslt_utilities' )
+${SINGLE_HASH}chanwLocateAsset(  "_cascade/blocks/data" "standard-model" "data-block-processing" )
+${SINGLE_HASH}set( ${DOLLAR}xsl = ${DOLLAR}chanwLocateAsset.XSL )
+${SINGLE_HASH}set( ${DOLLAR}block = ${DOLLAR}_.locateBlock( "_cascade/blocks/data/faked-dd-block", "standard-model" ) )
+${SINGLE_HASH}set( ${DOLLAR}xml = ${DOLLAR}block.XML )
+${SINGLE_HASH}chanwGetTransformedString( ${DOLLAR}xsl ${DOLLAR}xml )
+${DOLLAR}chanwGetTransformedString
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw_xslt_utilities' )
+#chanwLocateAsset(  "_cascade/blocks/data" "standard-model" "data-block-processing" )
+#set( $xsl = $chanwLocateAsset.XSL )
+#set( $block = $_.locateBlock( "_cascade/blocks/data/faked-dd-block", "standard-model" ) )
+#set( $xml = $block.XML )
+#chanwGetTransformedString( $xsl $xml )
+$chanwGetTransformedString
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines macros to reuse XSLT formats in Velocity. Use the macro
@@ -16,11 +41,13 @@ Note that since the XSL code is retrieved from a format as a string, 《code》x
 does not work here. Therefore, the XSLT format must include all the required code without
 relying on external library.《/p》
 《/documentation》
-*#
-#import( '/formats/library/velocity/chanw_object_creator' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
 #set( $chanwXsltUtilitiesGlobalVariables = [
     "chanwGetStreamResult",
     "chanwGetStreamSource",
@@ -34,7 +61,7 @@ relying on external library.《/p》
     "chanwXmlSource",
     "chanwXslSource"
 ] )
-#*
+#*doc
 《/global-variables》
 《documentation》
 《code》#chanwGetStreamResult( $writer )《/code》
@@ -42,13 +69,13 @@ relying on external library.《/p》
 wrapping up a 《code》java.io.Writer《/code》 object.《/p》
 《/documentation》
 《macro id=“chanwGetStreamResult”》
-*#
-#macro( chanwGetStreamResult $writer )
+doc*###
+#macro( chanwGetStreamResult $chanwGetStreamResultWriter )
     #set( $chanwGetStreamResult = "" )
     #chanwGetConstructorByClassNameParamTypeArray( 'javax.xml.transform.stream.StreamResult' [ 'java.io.Writer' ] )
-    #set( $chanwGetStreamResult = $chanwGetConstructorByClassNameParamTypeArray.newInstance( $writer ) )
+    #set( $chanwGetStreamResult = $chanwGetConstructorByClassNameParamTypeArray.newInstance( $chanwGetStreamResultWriter ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetStreamSource( $reader )《/code》
@@ -56,39 +83,39 @@ wrapping up a 《code》java.io.Writer《/code》 object.《/p》
 wrapping up a 《code》java.io.Reader《/code》 object.《/p》
 《/documentation》
 《macro id=“chanwGetStreamSource”》
-*#
-#macro( chanwGetStreamSource $reader )
+doc*###
+#macro( chanwGetStreamSource $chanwGetStreamSourceReader )
     #set( $chanwGetStreamSource = "" )
     #chanwGetConstructorByClassNameParamTypeArray( 'javax.xml.transform.stream.StreamSource' [ 'java.io.Reader' ] )
-    #set( $chanwGetStreamSource = $chanwGetConstructorByClassNameParamTypeArray.newInstance( $reader ) )
+    #set( $chanwGetStreamSource = $chanwGetConstructorByClassNameParamTypeArray.newInstance( $chanwGetStreamSourceReader ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetStringReader( $xsl )《/code》
 《p》Returns a 《code》java.io.StringReader《/code》 object, wrapping up the XSL code.《/p》
 《/documentation》
 《macro id=“chanwGetStringReader”》
-*#
-#macro( chanwGetStringReader $xsl )
+doc*###
+#macro( chanwGetStringReader $chanwGetStringReaderXsl )
     #set( $chanwGetStringReader = "" )
     #chanwGetConstructorByClassNameParamSize( 'java.io.StringReader' 1 )
-    #set( $chanwGetStringReader = $chanwGetConstructorByClassNameParamSize.newInstance( $xsl ) )
+    #set( $chanwGetStringReader = $chanwGetConstructorByClassNameParamSize.newInstance( $chanwGetStringReaderXsl ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetStringWriter《/code》
 《p》Returns a 《code》java.io.StringWriter《/code》 object for output.《/p》
 《/documentation》
 《macro id=“chanwGetStringWriter”》
-*#
+doc*###
 #macro( chanwGetStringWriter )
     #set( $chanwGetStringWriter = "" )
     #chanwGetObjectByClassName( 'java.io.StringWriter' )
     #set( $chanwGetStringWriter = $chanwGetObjectByClassName )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetTransformer( $xslSource )《/code》
@@ -96,14 +123,14 @@ wrapping up a 《code》java.io.Reader《/code》 object.《/p》
 the XSL 《code》javax.xml.transform.stream.StreamSource《/code》 object.《/p》
 《/documentation》
 《macro id=“chanwGetTransformer”》
-*#
-#macro( chanwGetTransformer $xslSource )
+doc*###
+#macro( chanwGetTransformer $chanwGetTransformerXslSource )
     #chanwGetMethodByClassNameMethodNameParamTypes( "javax.xml.transform.TransformerFactory" "newInstance" [] )
     #set( $chanwGetTransformerFactory = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null ) )
-    #set( $chanwGetTransformer = $chanwGetTransformerFactory.newTransformer( $xslSource ) )
+    #set( $chanwGetTransformer = $chanwGetTransformerFactory.newTransformer( $chanwGetTransformerXslSource ) )
     $chanwGetTransformer.setOutputProperty( $_FieldTool.in( "javax.xml.transform.OutputKeys" ).METHOD, "html" )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetTransformedString( $xslString $xmlString )《/code》
@@ -115,29 +142,29 @@ $chanwGetTransformedString
 《/pre》
 《/documentation》
 《macro id=“chanwGetTransformedString”》
-*#
-#macro( chanwGetTransformedString $xslString $xmlString )
+doc*###
+#macro( chanwGetTransformedString $chanwGetTransformedStringXslString $chanwGetTransformedStringXmlString )
     #set( $chanwGetTransformedString = "" )
-    #chanwGetStringReader( $xslString )
+    #chanwGetStringReader( $chanwGetTransformedStringXslString )
     #chanwGetStreamSource( $chanwGetStringReader )
     #set( $chanwXslSource = $chanwGetStreamSource )
-
-    #chanwGetStringReader( $xmlString )
+##
+    #chanwGetStringReader( $chanwGetTransformedStringXmlString )
     #chanwGetStreamSource( $chanwGetStringReader )
     #set( $chanwXmlSource = $chanwGetStreamSource )
-
+##
     #chanwGetStringWriter
     #set( $chanwWriter = $chanwGetStringWriter )
     #chanwGetStreamResult( $chanwWriter )
     #set( $chanwResult = $chanwGetStreamResult )
-
+##
     #chanwGetTransformer( $chanwXslSource )
     $chanwGetTransformer.transform( $chanwXmlSource, $chanwResult )
     #set( $chanwGetTransformedString = $chanwWriter.toString() )
 #end
-#*
+#*doc
 《/macro》
 《documentation id=“bottom”》
 《/documentation》
 《/code》
-*#
+doc*###
