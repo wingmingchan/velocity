@@ -1,20 +1,31 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
+07/14/2017 Added more documentation.
 《/copyright》
+《evaluate execute=“false”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines an html builder.《/p》
 《/documentation》
-*#
-#import( '/formats/library/velocity/chanw_global_values' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
 #set( $chanwHtmlBuilderGlobalVariables = [
     "chanwClassesTrimmed",
     "chanwCreateElementWithAttrsText",
@@ -24,20 +35,20 @@ Modification history:
     "chanwResultString",
     "chanwStartTag"
 ] )
-#*
+#*doc
 《/global-variables》
 《documentation》
 《code》#chanwCreatePreWithText( $text )《/code》
 《p》Creates a pre element wrapping up a string.《/p》
 《/documentation》
 《macro id=“chanwCreatePreWithText”》
-*#
-#macro( chanwCreatePreWithText $text )
+doc*###
+#macro( chanwCreatePreWithText $chanwCreatePreWithTextText )
 $S_PRE
-$chanwNEWLINE$text
+$chanwNEWLINE$chanwCreatePreWithTextText
 $E_PRE
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwCreateElementWithIdClassesText( $chanwElement $chanwId $chanwClasses $chanwText )《/code》
@@ -45,25 +56,25 @@ $E_PRE
 a string of CSS classes (or empty string), and the text of the element.《/p》
 《/documentation》
 《macro id=“chanwCreateElementWithIdClassesText”》
-*#
-#macro( chanwCreateElementWithIdClassesText $chanwElement $chanwId $chanwClasses $chanwText )
-    #set( $chanwStartTag       = "<$chanwElement" )
-    #set( $chanwIdTrimmed      = $chanwId.trim() )
-    #set( $chanwClassesTrimmed = $chanwClasses.trim() )
+doc*###
+#macro( chanwCreateElementWithIdClassesText $chanwCreateElementWithIdClassesTextElement $chanwCreateElementWithIdClassesTextId $chanwCreateElementWithIdClassesTextClasses $chanwCreateElementWithIdClassesTextText )
+    #set( $chanwStartTag       = "<$chanwCreateElementWithIdClassesTextElement" )
+    #set( $chanwCreateElementWithIdClassesTextIdTrimmed      = $chanwCreateElementWithIdClassesTextId.trim() )
+    #set( $chanwCreateElementWithIdClassesTextClassesTrimmed = $chanwCreateElementWithIdClassesTextClasses.trim() )
     
     ## add non-empty id
-    #if( $chanwIdTrimmed != "" )
-        #set( $chanwStartTag = $chanwStartTag + " id='$chanwIdTrimmed'" )
+    #if( $chanwCreateElementWithIdClassesTextIdTrimmed != "" )
+        #set( $chanwStartTag = $chanwStartTag + " id='$chanwCreateElementWithIdClassesTextIdTrimmed'" )
     #end
     ## add non-empty classes
-    #if( $chanwClassesTrimmed != "" )
-        #set( $chanwStartTag = $chanwStartTag + " class='$chanwClassesTrimmed'" )
+    #if( $chanwCreateElementWithIdClassesTextClassesTrimmed != "" )
+        #set( $chanwStartTag = $chanwStartTag + " class='$chanwCreateElementWithIdClassesTextClassesTrimmed'" )
     #end
       
     #set( $chanwCreateElementWithIdClassesText = 
-        $chanwStartTag + ">" + $chanwText + "</$chanwElement>" )
+        $chanwStartTag + ">" + $chanwCreateElementWithIdClassesTextText + "</$chanwCreateElementWithIdClassesTextElement>" )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwCreateElementWithIdClassesMacroGlobal(  $chanwElement $chanwId $chanwClasses $chanw_code $chanw_global_var )《/code》
@@ -71,29 +82,29 @@ a string of CSS classes (or empty string), and the text of the element.《/p》
 a string of CSS classes (or empty string), a string containing Velocity code (call to a macro) to be evaluated, and the corresponding global variable.《/p》
 《/documentation》
 《macro id=“chanwCreateElementWithIdClassesMacroGlobal”》
-*#
+doc*###
 #macro( chanwCreateElementWithIdClassesMacroGlobal 
-    $chanwElement $chanwId $chanwClasses $chanwCode $chanwGlobalVar )
-    #evaluate( $chanwCode )
-    #set( $chanwResultString = $chanwGlobalVar )
-    #chanwCreateElementWithIdClassesText( $chanwElement $chanwId $chanwClasses $chanwResultString )
+    $chanwCreateElementWithIdClassesMacroGlobalElement $chanwCreateElementWithIdClassesMacroGlobalId $chanwCreateElementWithIdClassesMacroGlobalClasses $chanwCreateElementWithIdClassesMacroGlobalCode $chanwCreateElementWithIdClassesMacroGlobalGlobalVar )
+    #evaluate( $chanwCreateElementWithIdClassesMacroGlobalCode )
+    #set( $chanwResultString = $chanwCreateElementWithIdClassesMacroGlobalGlobalVar )
+    #chanwCreateElementWithIdClassesText( $chanwCreateElementWithIdClassesMacroGlobalElement $chanwCreateElementWithIdClassesMacroGlobalId $chanwCreateElementWithIdClassesMacroGlobalClasses $chanwResultString )
     #set( $chanwCreateElementWithIdClassesMacroGlobal = 
         $chanwCreateElementWithIdClassesText )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwCreateElementWithAttrsText( $chanwElement $chanwMap $chanwText )《/code》
 《p》Creates an element by passing in the element name, a map containing attribute names and values, and the text of the element.《/p》
 《/documentation》
 《macro id=“chanwCreateElementWithAttrsText”》
-*#
-#macro( chanwCreateElementWithAttrsText $chanwElement $chanwMap $chanwText )
-    #set( $chanwStartTag = "<$chanwElement" )
-    #set( $chanwKeys = $chanwMap.keySet() )
+doc*###
+#macro( chanwCreateElementWithAttrsText $chanwCreateElementWithAttrsTextElement $chanwCreateElementWithAttrsTextMap $chanwCreateElementWithAttrsTextText )
+    #set( $chanwStartTag = "<$chanwCreateElementWithAttrsTextElement" )
+    #set( $chanwKeys = $chanwCreateElementWithAttrsTextMap.keySet() )
     
     #foreach( $chanwKey in $chanwKeys )
-        #set( $chanwValue = $chanwMap.get( $chanwKey ) )
+        #set( $chanwValue = $chanwCreateElementWithAttrsTextMap.get( $chanwKey ) )
         #set( $chanwValue = $chanwValue.trim() )
        
         #if( $chanwValue != "" )
@@ -102,11 +113,11 @@ a string of CSS classes (or empty string), a string containing Velocity code (ca
     #end
    
     #set( $chanwCreateElementWithAttrsText = $chanwStartTag + ">" + 
-        $chanwText + "</$chanwElement>" )
+        $chanwCreateElementWithAttrsTextText + "</$chanwCreateElementWithAttrsTextElement>" )
 #end
-#*
+#*doc
 《/macro》
 《documentation id=“bottom”》
 《/documentation》
 《/code》
-*#
+doc*###
