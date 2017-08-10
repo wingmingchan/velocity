@@ -1,14 +1,26 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+7/14/2017 Added documentation.
 5/17/2017 Added $chanwLocatorService.
 4/28/2017 Added more global variables.
 4/27/2017 Format created.
 《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw_service_provider' )
+
+${DOLLAR}chanwFolderService.Class.Name: $chanwFolderService.Class.Name
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines a set of global varaibles referencing Service objects.
@@ -16,14 +28,15 @@ These Service objects in turn can be used to retrieve assets. Since the Locator
 Tool can be used to retrieve folder contained asssets, this format focuses on
 other types of assets.《/p》
 《/documentation》
-*#
-#import( '/formats/library/velocity/chanw_global_macros' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
 #set( $chanwParamList = [] )
-#chanwGetMethodByClassNameMethodNameParamTypes(
-    "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" "getServiceProvider" $chanwParamList )
+#chanwGetMethodByClassNameMethodNameParamTypes( "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" "getServiceProvider" $chanwParamList )
 #set( $chanwServiceProvider                          = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null ) )
 #set( $chanwAbilityService                           = $chanwServiceProvider.getAbilityService() )
 #set( $chanwAssetFactoryContainerService             = $chanwServiceProvider.getAssetFactoryContainerService() )
@@ -56,13 +69,11 @@ other types of assets.《/p》
 #set( $chanwUserService                              = $chanwServiceProvider.getUserService() )
 #set( $chanwWorkflowDefinitionContainerService       = $chanwServiceProvider.getWorkflowDefinitionContainerService() )
 #set( $chanwWorkflowDefinitionService                = $chanwServiceProvider.getWorkflowDefinitionService() )
-
 #set( $chanwAllSites           = $chanwSiteService.getAll() )
 #set( $chanwAllSiteNames       = [] )
 #foreach( $site in $chanwAllSites )
-    #set( $dummy = $chanwAllSiteNames.add( $site.Path ) )
+#set( $dummy = $chanwAllSiteNames.add( $site.Path ) )
 #end
-
 #set( $chanwAllGroups          = $chanwGroupService.getAllGroups() )
 #set( $chanwAllUsers           = $chanwUserService.getAllUsers() )
 #set( $chanwAllRoles           = $chanwRoleService.getAllRoles() )
@@ -74,30 +85,29 @@ other types of assets.《/p》
 #set( $chanwAllGlobalRoleNames = [] )
 #set( $chanwAllSiteRoleNames   = [] )
 #foreach( $group in $chanwAllGroups )
-    #set( $dummy = $chanwAllGroupNames.add( $group.Name ) )
+#set( $dummy = $chanwAllGroupNames.add( $group.Name ) )
 #end
 #foreach( $user in $chanwAllUsers )
-    #set( $dummy = $chanwAllUserNames.add( $user.Name ) )
+#set( $dummy = $chanwAllUserNames.add( $user.Name ) )
 #end
 #foreach( $role in $chanwAllRoles )
-    #set( $dummy = $chanwAllRoleNames.add( $role.Name ) )
+#set( $dummy = $chanwAllRoleNames.add( $role.Name ) )
 #end
 #foreach( $global_role in $chanwAllGlobalRoles )
-    #set( $dummy = $chanwAllGlobalRoleNames.add( $global_role.Name ) )
+#set( $dummy = $chanwAllGlobalRoleNames.add( $global_role.Name ) )
 #end
 #foreach( $site_role in $chanwAllSiteRoles )
-    #set( $dummy = $chanwAllSiteRoleNames.add( $site_role.Name ) )
+#set( $dummy = $chanwAllSiteRoleNames.add( $site_role.Name ) )
 #end
-
 #chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.PermissionsLevel" "READ" )
 #set( $CASCADE_PERMISSIONS_LEVEL_READ = $chanwGetConstantValueByClassNameConstantName )
 #chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.PermissionsLevel" "WRITE" )
 #set( $CASCADE_PERMISSIONS_LEVEL_WRITE = $chanwGetConstantValueByClassNameConstantName )
 #chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.PermissionsLevel" "NONE" )
 #set( $CASCADE_PERMISSIONS_LEVEL_NONE = $chanwGetConstantValueByClassNameConstantName )
-#*
+#*doc
 《/global-variables》
 《documentation id=“bottom”》
 《/documentation》
 《/code》
-*#
+doc*###
