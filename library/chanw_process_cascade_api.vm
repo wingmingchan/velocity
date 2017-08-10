@@ -1,27 +1,140 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
-3/31/2017 Add #chanwGetAssetId and #chanwGetAssetType.
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
+7/21/2017 Moved global variables from chanw_global_values.
+7/14/2017 Added more documentation.
+7/13/2017 Added jdom.Element to $chanwGetFQINodeMap.
+7/4/2017 Added structured data processing macros.
+Removed #chanwGetPageBlockStructuredDataNodeByIdArray.
+3/31/2017 Added #chanwGetAssetId and #chanwGetAssetType.
 3/11/2017 Fixed a bug in #chanwImportScript.
 2/5/2017 Added #chanwImportScript.
 2/4/2017 Added #chanwIsAncestorOf and chanwIsDescendentOf.
 1/20/2017 Added #chanwLocateAssetInAncestorFolder.
 1/12/2017 Fixed a bug.
 《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+=============================================================
+${SINGLE_HASH}chanwConvertFQIToXPath( "a;0;b;1;c;3" )
+#chanwConvertFQIToXPath( "a;0;b;1;c;3" )
+${DOLLAR}chanwConvertFQIToXPath: $chanwConvertFQIToXPath
+=============================================================
+${SINGLE_HASH}set( ${DOLLAR}block = ${DOLLAR}_.locateBlock(
+    "_cascade/blocks/data/test-wysiwyg", "web-services" ) )
+${SINGLE_HASH}chanwProcessDataBlock( ${DOLLAR}block )
+${SINGLE_HASH}set( ${DOLLAR}result = "${SINGLE_HASH}chanwDisplayCascadeAPIAsset( ${DOLLAR}DataBlockPropertyMap )" )
+${DOLLAR}_EscapeTool.xml( ${DOLLAR}result )
+#set( $block = $_.locateBlock(
+    "_cascade/blocks/data/test-wysiwyg", "web-services" ) )
+#chanwProcessDataBlock( $block )
+#set( $result = "#chanwDisplayCascadeAPIAsset( $DataBlockPropertyMap )" )
+$_EscapeTool.xml( $result )
+=============================================================
+${SINGLE_HASH}chanwGetAssetId( ${DOLLAR}currentPage )
+#chanwGetAssetId( $currentPage )
+${DOLLAR}chanwGetAssetId: $chanwGetAssetId
+=============================================================
+${SINGLE_HASH}chanwGetAssetType( ${DOLLAR}currentPage )
+#chanwGetAssetType( $currentPage )
+${DOLLAR}chanwGetAssetType: $chanwGetAssetType
+=============================================================
+${SINGLE_HASH}chanwGetCascadeAPIAssetProperties( "Page" )
+#chanwGetCascadeAPIAssetProperties( "Page" )
+${DOLLAR}chanwGetCascadeAPIAssetProperties:
+$chanwGetCascadeAPIAssetProperties
+=============================================================
+${SINGLE_HASH}chanwGetFQINodeMap( ${DOLLAR}block.StructuredData )
+${SINGLE_HASH}drulykgVarDump( ${DOLLAR}chanwGetFQINodeMap )
+#chanwGetFQINodeMap( $block.StructuredData )
+#drulykgVarDump( $chanwGetFQINodeMap )$BR
+=============================================================
+${SINGLE_HASH}chanwGetMetadataData( ${DOLLAR}currentPage.Metadata )
+${DOLLAR}chanwGetMetadataData
+#chanwGetMetadataData( $currentPage.Metadata )
+$chanwGetMetadataData
+=============================================================
+${SINGLE_HASH}chanwGetStructuredDataNodeData( ${DOLLAR}chanwGetFQINodeMap[ "wysiwyg-group;wysiwyg-content" ][ ${DOLLAR}KEY_NODE ] )
+${DOLLAR}chanwGetStructuredDataNodeData
+#chanwGetStructuredDataNodeData( $chanwGetFQINodeMap[ "wysiwyg-group;wysiwyg-content" ][ $KEY_NODE ] )
+$chanwGetStructuredDataNodeData
+=============================================================
+${SINGLE_HASH}chanwGetTextNodeSubType( ${DOLLAR}chanwGetFQINodeMap[ "wysiwyg-group;wysiwyg-content" ][ ${DOLLAR}KEY_NODE ] )
+#chanwGetTextNodeSubType( $chanwGetFQINodeMap[ "wysiwyg-group;wysiwyg-content" ][ $KEY_NODE ] )
+${DOLLAR}chanwGetTextNodeSubType: $chanwGetTextNodeSubType
+=============================================================
+${SINGLE_HASH}chanwGetTextValues( [ "", "one", "", "two" ] )
+#chanwGetTextValues( [ "", "one", "", "two" ] )
+${DOLLAR}chanwGetTextValues: $chanwGetTextValues
+=============================================================
+${SINGLE_HASH}set( ${DOLLAR}folder = ${DOLLAR}_.locateFolder( "brisk", "standard-model" ) )
+${SINGLE_HASH}chanwIsAncestorOf( ${DOLLAR}folder ${DOLLAR}currentPage )
+#set( $folder = $_.locateFolder( "brisk", "standard-model" ) )
+#chanwIsAncestorOf( $folder $currentPage )
+${DOLLAR}chanwIsAncestorOf: $chanwIsAncestorOf
+=============================================================
+${SINGLE_HASH}chanwShowMetadataData( ${DOLLAR}currentPage.Metadata )
+#chanwShowMetadataData( $currentPage.Metadata )
+
+=============================================================
+${SINGLE_HASH}chanwShowStructuredDataNodeData( ${DOLLAR}chanwGetFQINodeMap[ "wysiwyg-group;wysiwyg-content" ][ $KEY_NODE ] )
+#chanwShowStructuredDataNodeData( $chanwGetFQINodeMap[ "wysiwyg-group;wysiwyg-content" ][ $KEY_NODE ] )
+=============================================================
+${SINGLE_HASH}chanwInvokeQuery( "MetadataSet" "site://_brisk/Page" [ false, false, false, true, false ] [] 5000 "author" "desc" "" [ true, false ] )
+#chanwInvokeQuery( "MetadataSet" "site://_brisk/Page" [ false, false, false, true, false ] [] 5000 "author" "desc" "" [ true, false ] )
+${DOLLAR}chanwInvokeQuery.size(): $chanwInvokeQuery.size()
+=============================================================
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format provides methods to work with structured data and metadata,
 when using the LocatorTool.《/p》
 《/documentation》
-*#
-#import( '/formats/library/velocity/chanw_global_macros' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_global_macros' )
+#import( 'core/library/velocity/chanw/chanw_global_queue' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
+## cascade structured data keys
+#set( $KEY_DATA         = "data" )
+#set( $KEY_FQI          = "fqi" )
+#set( $KEY_NODE         = "node" )
+#set( $KEY_SITE         = "site" )
+#set( $KEY_SIZE         = "size" )
+#set( $KEY_TYPE         = "type" )
+#set( $KEY_URL          = "url" )
+#set( $KEY_CONTENT      = "content" )
+#set( $KEY_SUBTYPE      = "subtype" )
+#set( $TYPE_WYSIWYG     = "wysiwyg" )
+#set( $TYPE_CHECKBOX    = "checkbox" )
+#set( $TYPE_DROPDOWN    = "dropdown" )
+#set( $TYPE_MULTISELECT = "multiselect" )
+#set( $TYPE_RADIO       = "radio" )
+#set( $TYPE_PLAIN_TEXT  = "plaintext" )
+#set( $TYPE_CALENDAR    = "calendar" )
+#set( $TYPE_DATE_TIME   = "datetime" )
+## Cascade API class strings
+#set( $CASCADE_API_DataBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
+#set( $CASCADE_API_FeedBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.FeedBlockAPIAdapter" )
+#set( $CASCADE_API_File_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.FileAPIAdapter" )
+#set( $CASCADE_API_Folder_CLASS_NAME       = "com.hannonhill.cascade.api.adapters.FolderAPIAdapter" )
+#set( $CASCADE_API_Page_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.PageAPIAdapter" )
+#set( $CASCADE_API_ScriptFormat_CLASS_NAME = "com.hannonhill.cascade.api.adapters.ScriptFormatAPIAdapter" )
+#set( $CASCADE_API_Symlink_CLASS_NAME      = "com.hannonhill.cascade.api.adapters.SymlinkAPIAdapter" )
+#set( $CASCADE_API_TextBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
+#set( $CASCADE_API_XMLBlock_CLASS_NAME     = "com.hannonhill.cascade.api.adapters.XMLBlockAPIAdapter" )
 #set( $chanwProcessCascadeApiGlobalVariables = [
     "chanwAsset",
     "chanwAssetLink",
@@ -31,18 +144,24 @@ when using the LocatorTool.《/p》
     "chanwAssetSiteName",
     "chanwAssetType",
     "chanwCascadeAssetList",
+    "chanwChildParentMap",
     "chanwChildren",
     "chanwCurrent",
+    "chanwCurrentIndex",
     "chanwDFS",
     "chanwFolder",
     "chanwFolderContainedAssetPath",
     "chanwFolderPath",
     "chanwFolderParentPath",
+    "chanwGetAssetId",
+    "chanwGetAssetType",
     "chanwGetCascadeAPIAssetProperties",
     "chanwGetDynamicFieldsData",
+    "chanwGetFQINodeMap",
     "chanwGetMetadataData",
     "chanwGetPageBlockStructuredDataNodeByIdArray",
     "chanwGetStructuredDataNodeData",
+    "chanwGetTextValues",
     "chanwImportScript",
     "chanwImportScriptPathStmt",
     "chanwInvokeQuery",
@@ -51,9 +170,16 @@ when using the LocatorTool.《/p》
     "chanwLocateAssetInAncestorFolder",
     "chanwNext",
     "chanwNextInt",
+    "chanwNodeAttributeMap",
+    "chanwNodeAttributes",
+    "chanwOffset",
+    "chanwParentFQI",
+    "chanwPreviousIdentifier",
     "chanwQuery",
+    "chanwRootString",
     "chanwSdns",
     "chanwStmt",
+    "chanwStructuredData",
     "chanwTextNodeOptions",
     "chanwTextSize",
     "chanwTextValue",
@@ -61,8 +187,35 @@ when using the LocatorTool.《/p》
     "chanwTextValues",
     "chanwValue"
 ] )
-#*
+#*doc
 《/global-variables》
+《documentation》
+《code》chanwConvertFQIToXPath( $fqi )《/code》
+《p》Converts the FQI string to its corresponding XPath expression.《/p》
+《pre》
+#chanwConvertFQIToXPath( "a;0;b;1;c;3" )
+$chanwConvertFQIToXPath
+《/pre》
+《/documentation》
+《macro id=“chanwConvertFQIToXPath”》
+doc*###
+#macro( chanwConvertFQIToXPath $chanwConvertFQIToXPathFqi )
+    #set( $chanwConvertFQIToXPath = "" )
+    #set( $chanwStringArray = $chanwConvertFQIToXPathFqi.split( ";" ) )
+    #set( $chanwStringList = [] )
+##
+#foreach( $str in $chanwStringArray )
+#if( !$globalApacheNumberUtils.isNumber( $str ) )
+#set( $void = $chanwStringList.add( $str ) )
+#else
+#set( $chanwIndexString = "[" + ( $globalApacheNumberUtils.createNumber( $str ) + 1 ) + "]" )
+#set( $void = $chanwStringList.add( $chanwIndexString ) )
+#end
+#end
+#set( $chanwConvertFQIToXPath = $_DisplayTool.list( $chanwStringList, "/" ).replaceAll( "\/\[", "[" ) )
+#end
+#*doc
+《/macro》
 《documentation》
 《code》chanwDisplayCascadeAPIAsset( $map )《/code》
 《p》Displays the properties of an asset. Possible values for the map parameter are:
@@ -106,18 +259,18 @@ DataBlockXHTMLAsXMLElement:
 《/pre》
 《/documentation》
 《macro id=“chanwDisplayCascadeAPIAsset”》
-*#
-#macro( chanwDisplayCascadeAPIAsset $map )
-    #if( !$map || $map.Class.Name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
-        Not a map.$BR
+doc*###
+#macro( chanwDisplayCascadeAPIAsset $chanwDisplayCascadeAPIAssetMap )
+    #if( !$chanwDisplayCascadeAPIAssetMap || $chanwDisplayCascadeAPIAssetMap.Class.Name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A map is required." "f4ghklfk4lmgfkln4bkj" )
         #stop
     #end
-
-    #foreach( $key in $map.keySet() )
+##
+    #foreach( $key in $chanwDisplayCascadeAPIAssetMap.keySet() )
 $key: #evaluate( "$$key" )$BR
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetAssetId( $asset )《/code》
@@ -129,18 +282,18 @@ $chanwGetAssetId
 《/pre》
 《/documentation》
 《macro id=“chanwGetAssetId”》
-*#
-#macro( chanwGetAssetId $asset )
-    #chanwIsInstanceOf( $asset $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME )
-    
+doc*###
+#macro( chanwGetAssetId $chanwGetAssetIdAsset )
+    #chanwIsInstanceOf( $chanwGetAssetIdAsset $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME )
+##
     #if( !$chanwIsInstanceOf )
-        Not a folder contained asset.
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Not a folder contained asset." "85ig;trl/enn;4i" )
         #stop
     #end
-    
-    #set( $chanwGetAssetId = $asset.Identifier.Id )
+##
+    #set( $chanwGetAssetId = $chanwGetAssetIdAsset.Identifier.Id )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetAssetType( $asset )《/code》
@@ -152,18 +305,18 @@ $chanwGetAssetType
 《/pre》
 《/documentation》
 《macro id=“chanwGetAssetType”》
-*#
-#macro( chanwGetAssetType $asset )
-    #chanwIsInstanceOf( $asset $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME )
-    
+doc*###
+#macro( chanwGetAssetType $chanwGetAssetTypeAsset )
+    #chanwIsInstanceOf( $chanwGetAssetTypeAsset $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME )
+##
     #if( !$chanwIsInstanceOf )
-        Not a folder contained asset.
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Not a folder contained asset." "49KLN;HTILNKLNBLMGIW" )
         #stop
     #end
-    
-    #set( $chanwGetAssetType = $asset.Identifier.Type.toString() )
+##
+    #set( $chanwGetAssetType = $chanwGetAssetTypeAsset.Identifier.Type.toString() )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》chanwGetCascadeAPIAssetProperties( $assetType )《/code》
@@ -206,18 +359,202 @@ PageXHTMLAsXMLElement
 《/pre》
 《/documentation》
 《macro id=“chanwGetCascadeAPIAssetProperties”》
-*#
-#macro( chanwGetCascadeAPIAssetProperties $assetType )
-    #if( !$chanwCascadeAssetList.contains( $assetType ) )
-        $assetType is not a supported type.$BR
+doc*###
+#macro( chanwGetCascadeAPIAssetProperties $chanwGetCascadeAPIAssetPropertiesAssetType )
+    #if( !$chanwCascadeAssetList.contains( $chanwGetCascadeAPIAssetPropertiesAssetType ) )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "$chanwGetCascadeAPIAssetPropertiesAssetType is not a supported type." "KLL;H9YUHJSHO5" )
         #stop
     #end
-    
+##
     #set( $chanwStmt = '#set($chanwGetCascadeAPIAssetProperties=$' +
-        $assetType + 'PropertyMap.keySet())' )
+        $chanwGetCascadeAPIAssetPropertiesAssetType + 'PropertyMap.keySet())' )
     #evaluate( $chanwStmt )
 #end
-#*
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetFQINodeMap( $sd )《/code》
+《p》Returns a map store in the variable 《code》$chanwGetFQINodeMap《/code》,
+containing fully qualified identifiers as keys and maps containing information
+of the structured data nodes in 《code》$sd《/code》. The value of 《code》$sd《/code》
+can ba a single structured data node (e.g., a group node), or a list of structured
+data nodes returned by the 《code》StructuredDataNodeAPIAdapter.getChildren()《/code》 method.
+This macro invokes 《code》#chanwProcessStructuredDataNodes《/code》 and
+《code》#chanwGetTextValues《/code》.《/p》
+《p》Example:《/p》
+《pre》
+#set( $sd = $_.locateBlock( "random-image", "cascade-admin-old" ).StructuredData )
+#chanwGetFQINodeMap( $sd )
+#drulykgVarDump( $chanwGetFQINodeMap )
+《/pre》
+《p》This outputs the data of the following type:《/p》
+《pre》
+LinkedHashMap(14) {
+    ["random-image-group"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@774c415d )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["random-image-group;caption-yes"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@770e4d1a )
+        ["data"] == String(27)( "Show Description as Caption" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(8)( "checkbox" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["random-image-group;mul-image;0"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@79d5d2d3 )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 3 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["random-image-group;mul-image;1"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@6c06221d )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 3 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["random-image-group;mul-image;2"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@217d2dd0 )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 3 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["random-image-group;mul-image;0;selectimage"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@48493315 )
+        ["data"] == String(22)( "images/ambassadors.jpg" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "file" )
+        ["content"] == Element(  )
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@26290aaf )
+    }
+    ["random-image-group;mul-image;0;altText"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@70a08309 )
+        ["data"] == String(11)( "Ambassadors" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["random-image-group;mul-image;0;image-link"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@1c5e662b )
+        ["data"] == String(9)( "academics" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(7)( "symlink" )
+        ["content"] == Element( http://www.upstate.edu/education )
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@6bc8ea55 )
+    }
+    ["random-image-group;mul-image;1;selectimage"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@4669a823 )
+        ["data"] == String(37)( "images/billing-insurance-topimage.jpg" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "file" )
+        ["content"] == Element(  )
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@4ab2c03b )
+    }
+    ["random-image-group;mul-image;1;altText"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@55bd6a87 )
+        ["data"] == String(21)( "Billing and Insurance" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["random-image-group;mul-image;1;image-link"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@2c4b8d95 )
+        ["data"] == String(5)( "index" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "page" )
+        ["content"] == Element(  )
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@5fc5b36e )
+    }
+    ["random-image-group;mul-image;2;selectimage"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@2e3fdc2e )
+        ["data"] == String(27)( "images/research-400x200.jpg" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "file" )
+        ["content"] == Element(  )
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@3157b64b )
+    }
+    ["random-image-group;mul-image;2;altText"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@167ffa93 )
+        ["data"] == String(8)( "Research" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["random-image-group;mul-image;2;image-link"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@4869c1b4 )
+        ["data"] == null
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+}
+《/pre》
+《p》More examples:《/p》
+《pre》
+#set( $sd = $_.locateBlock( "_cascade/blocks/data/nesting", "cascade-admin-old" ).StructuredData )
+
+#chanwGetFQINodeMap( $sd )
+$chanwGetFQINodeMap.keySet()
+$chanwGetFQINodeMap[ "outer" ][ $KEY_TYPE ]
+
+$chanwGetFQINodeMap[ "outer;middle;mul-inner;2;mul-inner-text;2" ][ $KEY_NODE ].TextValue
+$chanwGetFQINodeMap[ "outer;middle;mul-inner;2;mul-inner-text;2" ][ $KEY_DATA ]
+$chanwGetFQINodeMap[ "outer;middle;mul-inner;2;mul-inner-text;2" ][ $KEY_TYPE ]
+$chanwGetFQINodeMap[ "outer;middle;mul-inner;2;mul-inner-text;2" ][ $KEY_SIZE ]
+$chanwGetFQINodeMap[ "outer;middle" ][ $KEY_SIZE ]
+《/pre》
+《/documentation》
+《macro id=“chanwGetFQINodeMap”》
+doc*###
+#macro( chanwGetFQINodeMap $chanwGetFQINodeMapSd $chanwGetFQINodeMapSds )
+    #set( $chanwGetFQINodeMap = {} )
+##
+    #chanwProcessStructuredDataNodes( $chanwGetFQINodeMapSd $chanwGetFQINodeMapSds )
+##
+#foreach( $key in $chanwChildParentMap.keySet() )
+#set( $chanwGetFQINodeMap[ $chanwNodeAttributeMap[ $key ][ $KEY_FQI ] ] =
+{ $KEY_NODE:$key, 
+  $KEY_DATA:$chanwNodeAttributeMap[ $key ][ $KEY_DATA ],
+  $KEY_TYPE:$chanwNodeAttributeMap[ $key ][ $KEY_TYPE ],
+  $KEY_SIZE:$_DisplayTool.alt( $chanwNodeAttributeMap[ $key ][ $KEY_SIZE ], 1 ),
+  $KEY_SUBTYPE:$chanwNodeAttributeMap[ $key ][ $KEY_SUBTYPE ].toString(),
+  $KEY_CONTENT:$chanwNodeAttributeMap[ $key ][ $KEY_CONTENT ],
+  $KEY_SITE:$chanwNodeAttributeMap[ $key ][ $KEY_SITE ]
+} )
+##,
+##$KEY_URL:$chanwNodeAttributeMap[ $key ][ $KEY_URL ]
+#end
+#end
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetMetadataData( $chanwMetadata )《/code》
@@ -242,13 +579,13 @@ $chanwGetMetadataData
 《/pre》
 《/documentation》
 《macro id=“chanwGetMetadataData”》
-*#
-#macro( chanwGetMetadataData $metadata )
-    #if( $metadata.Class.Name != $COM_CASCADE_METADATA_CLASS_NAME )
-        Not a metadata.
+doc*###
+#macro( chanwGetMetadataData $chanwGetMetadataDataMetadata )
+    #if( $chanwGetMetadataDataMetadata.Class.Name != $COM_CASCADE_METADATA_CLASS_NAME )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A Metadata object is required." "KL544BLK;YO5HHJKL " )
         #stop
     #end
-    
+##
     ## initialization
     #set( $chanwGetMetadataData = {
         "DisplayName":"",
@@ -263,22 +600,20 @@ $chanwGetMetadataData
         "EndDate":"",
         "DynamicFields":""
     } )
-    
     #set( $chanwGetDynamicFieldsData = {} )
-    #set( $chanwGetMetadataData[ "DisplayName" ]   = $metadata.DisplayName )
-    #set( $chanwGetMetadataData[ "Description" ]   = $metadata.Description )
-    #set( $chanwGetMetadataData[ "Title" ]         = $metadata.Title )
-    #set( $chanwGetMetadataData[ "Summary" ]       = $metadata.Summary )
-    #set( $chanwGetMetadataData[ "Teaser" ]        = $metadata.Teaser )
-    #set( $chanwGetMetadataData[ "Keywords" ]      = $metadata.Keywords )
-    #set( $chanwGetMetadataData[ "Author" ]        = $metadata.Author )
-    #set( $chanwGetMetadataData[ "ReviewDate" ]    = $metadata.ReviewDate )
-    #set( $chanwGetMetadataData[ "StartDate" ]     = $metadata.StartDate )
-    #set( $chanwGetMetadataData[ "EndDate" ]       = $metadata.EndDate  )
-    #set( $chanwGetMetadataData[ "DynamicFields" ] = $metadata.DynamicFields )
-    
-    #set( $chanwDFS = $metadata.DynamicFields )
-    
+    #set( $chanwGetMetadataData[ "DisplayName" ]   = $chanwGetMetadataDataMetadata.DisplayName )
+    #set( $chanwGetMetadataData[ "Description" ]   = $chanwGetMetadataDataMetadata.Description )
+    #set( $chanwGetMetadataData[ "Title" ]         = $chanwGetMetadataDataMetadata.Title )
+    #set( $chanwGetMetadataData[ "Summary" ]       = $chanwGetMetadataDataMetadata.Summary )
+    #set( $chanwGetMetadataData[ "Teaser" ]        = $chanwGetMetadataDataMetadata.Teaser )
+    #set( $chanwGetMetadataData[ "Keywords" ]      = $chanwGetMetadataDataMetadata.Keywords )
+    #set( $chanwGetMetadataData[ "Author" ]        = $chanwGetMetadataDataMetadata.Author )
+    #set( $chanwGetMetadataData[ "ReviewDate" ]    = $chanwGetMetadataDataMetadata.ReviewDate )
+    #set( $chanwGetMetadataData[ "StartDate" ]     = $chanwGetMetadataDataMetadata.StartDate )
+    #set( $chanwGetMetadataData[ "EndDate" ]       = $chanwGetMetadataDataMetadata.EndDate  )
+    #set( $chanwGetMetadataData[ "DynamicFields" ] = $chanwGetMetadataDataMetadata.DynamicFields )
+    #set( $chanwDFS = $chanwGetMetadataDataMetadata.DynamicFields )
+##
     #if( $chanwDFS.size() > 0 )
         #foreach( $chanwDF in $chanwDFS )
             #set( $dummy = $chanwGetDynamicFieldsData.put( $chanwDF.Name, {} ) )
@@ -298,78 +633,10 @@ $chanwGetMetadataData
                     "isRadio", $chanwDF.isRadio() ) )
         #end
     #end
-    
+##
     #set( $chanwGetMetadataData[ "DynamicFieldsData" ] = $chanwGetDynamicFieldsData )
 #end
-#*
-《/macro》
-《documentation》
-《code》#chanwGetPageBlockStructuredDataNodeByIdArray( $chanw_bp $chanw_array )《/code》
-《p》Retrieves the structured data node by using the supplied identifier.《/p》
-《pre》
-#chanwGetPageBlockStructuredDataNodeByIdArray( $b [ “single-group-single-text“, “st“ ] )
-
-## get the third “multiple-group-multiple-text“, second “mt“
-#chanwGetPageBlockStructuredDataNodeByIdArray( $b [ “multiple-group-multiple-text“, 2, “mt“, 1 ] )
-《/pre》
-《/documentation》
-《macro id=“chanwGetPageBlockStructuredDataNodeByIdArray”》
-*#
-#macro( chanwGetPageBlockStructuredDataNodeByIdArray $chanw_bp $chanw_array )
-    #if( $chanw_array.class.Name != $JAVA_UTIL_ARRAY_LIST_CLASS_NAME || $chanw_array.size() == 0 )
-        No valid path passed in
-    #elseif( $chanw_bp.class.Name == $COM_CASCADE_BLOCK_API_CLASS_NAME ||
-        $chanw_bp.class.Name == $COM_CASCADE_PAGE_API_CLASS_NAME
-    )
-        #set( $chanw_next = 0 )
-        #set( $chanw_next_int = 0 )
-        
-        #foreach( $chanw_item in $chanw_array )
-            #set( $chanw_sdns = "" )
-            #set( $chanw_next = $foreach.index + 1 )
-            
-            #if( !$_PropertyTool.isNull( $_MathTool.toInteger( $chanw_array[ $foreach.index ] ) ) )
-                #set( $chanw_value = $_MathTool.toInteger( $chanw_array[ $foreach.index ] ) )
-            #else
-                #set( $chanw_value = "" )
-            #end
-        
-            ## an identifier
-            #if( $chanw_value == "" )
-                #if( $chanw_next < $chanw_array.size() )
-                    #set( $chanw_next_int = $_MathTool.toInteger( $chanw_array[ $chanw_next ] ) )
-                #end
-                
-                ## multiple nodes
-                #if( $chanw_next < $chanw_array.size() && !$_PropertyTool.isNull( $chanw_next_int ) )
-                    #if( $foreach.index == 0 ) ## first node
-                        #set( $chanw_sdns    = $chanw_bp.getStructuredDataNodes( $chanw_array[ $foreach.index ] ) )
-                    #else
-                        #set( $chanw_sdns    = $chanw_current.getChildren( $chanw_array[ $foreach.index ] ) )                       
-                    #end
-                    
-                    #set( $chanw_current = $chanw_sdns.get( $chanw_next_int ) )
-                ## single node
-                #else
-                    #if( $foreach.index == 0 ) ## first node
-                        #set( $chanw_current  = $chanw_bp.getStructuredDataNode( $chanw_array[ $foreach.index ] ) )
-                    #else
-                        #set( $chanw_current  = $chanw_current.getChild( $chanw_array[ $foreach.index ] ) )
-                        
-                    #end
-                #end     
-            ## an int
-            #else
-                ## do nothing
-            #end
-            
-            #set( $chanwGetPageBlockStructuredDataNodeByIdArray = $chanw_current )
-        #end        
-    #else
-        Neither a block nor a page
-    #end
-#end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetStructuredDataNodeData( $node )《/code》
@@ -416,27 +683,27 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
 《/pre》
 《/documentation》
 《macro id=“chanwGetStructuredDataNodeData”》
-*#
-#macro( chanwGetStructuredDataNodeData $node )
-    #if( !$node || $node.Class.Name != $COM_CASCADE_STRUCTURED_DATA_NODE_CLASS_NAME )
-    Not a structured data node.
+doc*###
+#macro( chanwGetStructuredDataNodeData $chanwGetStructuredDataNodeDataNode )
+    #if( !$chanwGetStructuredDataNodeDataNode || $chanwGetStructuredDataNodeDataNode.Class.Name != $COM_CASCADE_STRUCTURED_DATA_NODE_CLASS_NAME )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A structured data node is required." "484IUJLK" )
     #stop
     #end
-    
+##
     #set( $chanwGetStructuredDataNodeData = {} )
-    #set( $dummy = $chanwGetStructuredDataNodeData.put( "Identifer", $node.Identifer ) )
-    #set( $dummy = $chanwGetStructuredDataNodeData.put( "Identifier", $node.Identifier ) )
-    #set( $dummy = $chanwGetStructuredDataNodeData.put( "isAsset", $node.isAsset() ) )
-    #set( $dummy = $chanwGetStructuredDataNodeData.put( "isGroup", $node.isGroup() ) )
-    #set( $dummy = $chanwGetStructuredDataNodeData.put( "isText", $node.isText() ) )
-
-    #if( $node.isGroup() )
+    #set( $dummy = $chanwGetStructuredDataNodeData.put( "Identifer", $chanwGetStructuredDataNodeDataNode.Identifer ) )
+    #set( $dummy = $chanwGetStructuredDataNodeData.put( "Identifier", $chanwGetStructuredDataNodeDataNode.Identifier ) )
+    #set( $dummy = $chanwGetStructuredDataNodeData.put( "isAsset", $chanwGetStructuredDataNodeDataNode.isAsset() ) )
+    #set( $dummy = $chanwGetStructuredDataNodeData.put( "isGroup", $chanwGetStructuredDataNodeDataNode.isGroup() ) )
+    #set( $dummy = $chanwGetStructuredDataNodeData.put( "isText", $chanwGetStructuredDataNodeDataNode.isText() ) )
+##
+    #if( $chanwGetStructuredDataNodeDataNode.isGroup() )
         #set( $dummy = $chanwGetStructuredDataNodeData.put( "Type", "Group" ) )
-        #set( $dummy = $chanwGetStructuredDataNodeData.put( "Children", $node.Children ) )
+        #set( $dummy = $chanwGetStructuredDataNodeData.put( "Children", $chanwGetStructuredDataNodeDataNode.Children ) )
     #else
         #set( $dummy = $chanwGetStructuredDataNodeData.put( "Children", "" ) )
     #end
-    
+##
     #set( $chanwAsset = "" )
     #set( $chanwAssetType = "" )
     #set( $chanwAssetLink = "" )
@@ -444,15 +711,15 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
     #set( $chanwAssetSiteId = "" )
     #set( $chanwAssetSiteName = "" )
     #set( $chanwAssetPathSegments = "" )
-    
-    #if( $node.isAsset() )
-        #set( $chanwAsset = $node.Asset )
-        #set( $chanwAssetType = $node.Asset.Identifier.Type )
-        #set( $chanwAssetLink = $node.Asset.Link )
-        #set( $chanwAssetPath = $node.Asset.Path )
-        #set( $chanwAssetSiteId = $node.Asset.SiteId )
-        #set( $chanwAssetSiteName = $node.Asset.SiteName )
-        #set( $chanwAssetPathSegments = $node.Asset.Identifier.Path.PathSegments )
+##
+    #if( $chanwGetStructuredDataNodeDataNode.isAsset() )
+        #set( $chanwAsset = $chanwGetStructuredDataNodeDataNode.Asset )
+        #set( $chanwAssetType = $chanwGetStructuredDataNodeDataNode.Asset.Identifier.Type )
+        #set( $chanwAssetLink = $chanwGetStructuredDataNodeDataNode.Asset.Link )
+        #set( $chanwAssetPath = $chanwGetStructuredDataNodeDataNode.Asset.Path )
+        #set( $chanwAssetSiteId = $chanwGetStructuredDataNodeDataNode.Asset.SiteId )
+        #set( $chanwAssetSiteName = $chanwGetStructuredDataNodeDataNode.Asset.SiteName )
+        #set( $chanwAssetPathSegments = $chanwGetStructuredDataNodeDataNode.Asset.Identifier.Path.PathSegments )
         #set( $dummy = $chanwGetStructuredDataNodeData.put( "Type", "Asset" ) )
     #end
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "Asset", $chanwAsset ) )
@@ -462,66 +729,73 @@ TextValues=, TextNodeOptions=, TextValueAsXMLElement=}
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "AssetSiteId", $chanwAssetSiteId ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "AssetSiteName", $chanwAssetSiteName ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "AssetPathSegments", $chanwAssetPathSegments ) )
-
+##
     #set( $chanwTextValue = "" )
     #set( $chanwTextValues = "" )
     #set( $chanwTextNodeOptions = "" )
     #set( $chanwTextValueAsXMLElement = "" )
-    
-    #if( $node.isText() )
+##
+    #if( $chanwGetStructuredDataNodeDataNode.isText() )
         #set( $dummy = $chanwGetStructuredDataNodeData.put( "Type", "Text" ) )
-        #set( $chanwTextValue = $node.TextValue )
-        #set( $chanwTextValues = $node.TextValues )
-        #set( $chanwTextNodeOptions = $node.TextNodeOptions )
-        #set( $chanwTextValueAsXMLElement = $node.TextValueAsXMLElement )
+        #set( $chanwTextValue = $chanwGetStructuredDataNodeDataNode.TextValue )
+        #set( $chanwTextValues = $chanwGetStructuredDataNodeDataNode.TextValues )
+        #set( $chanwTextNodeOptions = $chanwGetStructuredDataNodeDataNode.TextNodeOptions )
+        #set( $chanwTextValueAsXMLElement = $chanwGetStructuredDataNodeDataNode.TextValueAsXMLElement )
     #end
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextValue", $chanwTextValue ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextValues", $chanwTextValues ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextNodeOptions", $chanwTextNodeOptions ) )
     #set( $dummy = $chanwGetStructuredDataNodeData.put( "TextValueAsXMLElement", $chanwTextValueAsXMLElement ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
-《code》#chanwImportScript( $folderPath $siteName $scriptName )《/code》
-《p》Returns a boolean, indicating whether the script format is imported successfully.
-《code》$folderPath《/code》 should be the path string of the parent folder containing the format.《/p》
-《p》Examples:《/p》
-《pre》
-## look for the setup format in the Base Folder of a site
-#chanwImportScript( "/" "cascade-admin" "setup" )
-
-#if( !$chanwImportScript || !$upstateSiteTitle || $upstateSiteTitle == "" )
-    ## if not defined in a site, supply a default value
-    #set( $upstateSiteTitle = "Cascade Administration" )
-#end
-《/pre》
+《code》#chanwGetTextNodeSubType( $node )《/code》
+《p》Returns the subtype of a text node.《/p》
 《/documentation》
-《macro id=“chanwImportScript”》
-*#
-#macro( chanwImportScript $folderPath $siteName $scriptName )
-    #set( $chanwImportScript = false )
-    #chanwLocateAsset( $folderPath $siteName $scriptName )
-    
-    #if( $chanwLocateAsset && $chanwLocateAsset != "" )
-        #set( $chanwFolderPath = $folderPath )
-    	
-        #if( !$chanwFolderPath.startsWith( "/" ) )
-            #set( $chanwFolderPath = "/" + $chanwFolderPath )
-        #end
-		
-        #if( !$chanwFolderPath.endsWith( "/" ) )
-            #set( $chanwFolderPath = $chanwFolderPath + "/" )
-        #end
-		
-        #set( $chanwScriptPath = "site://" + $siteName + $chanwFolderPath + $scriptName )
-        #set( $chanwImportScriptPathStmt = '#import("' + $chanwScriptPath + '")' )
-        ## must use evaluate here; cannot use #import directly
-        #evaluate( $chanwImportScriptPathStmt )
-        #set( $chanwImportScript = true )
-    #end
+《macro id=“chanwGetTextNodeSubType”》
+doc*###
+#macro( chanwGetTextNodeSubType $chanwGetTextNodeSubTypeNode )
+    #set( $chanwGetTextNodeSubType = "" )
+    #set( $chanwGetTextNodeSubType = $_PropertyTool.isNull( $chanwGetTextNodeSubTypeNode ) )
+##
+    #if( $chanwGetTextNodeSubTypeNode.getTextNodeOptions().isWysiwyg() )
+        #set( $chanwGetTextNodeSubType = $TYPE_WYSIWYG )
+    #elseif( $chanwGetTextNodeSubTypeNode.TextNodeOptions.isCheckbox() )
+        #set( $chanwGetTextNodeSubType = $TYPE_CHECKBOX )
+    #elseif( $chanwGetTextNodeSubTypeNode.TextNodeOptions.isDropdown() )
+        #set( $chanwGetTextNodeSubType = $TYPE_DROPDOWN )
+    #elseif( $chanwGetTextNodeSubTypeNode.TextNodeOptions.isMultiselect() )
+        #set( $chanwGetTextNodeSubType = $TYPE_MULTISELECT )
+    #elseif( $chanwGetTextNodeSubTypeNode.TextNodeOptions.isRadio() )
+        #set( $chanwGetTextNodeSubType = $TYPE_RADIO )
+    #elseif( $chanwGetTextNodeSubTypeNode.TextNodeOptions.isPlainText() )
+        #set( $chanwGetTextNodeSubType = $TYPE_PLAIN_TEXT )
+    #elseif( $chanwGetTextNodeSubTypeNode.TextNodeOptions.isCalendar() )
+        #set( $chanwGetTextNodeSubType = $TYPE_CALENDAR )
+    #elseif( $chanwGetTextNodeSubTypeNode.TextNodeOptions.isDatetime() )
+        #set( $chanwGetTextNodeSubType = $TYPE_DATE_TIME )
+    #end    
 #end
-#*
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetTextValues( $list )《/code》
+《p》Returns a list of Strings from the original 《code》$list《/code》, with
+all empty Strings removed.《/p》
+《/documentation》
+《macro id=“chanwGetTextValues”》
+doc*###
+#macro( chanwGetTextValues $chanwGetTextValuesList )
+    #set( $chanwGetTextValues = [] )
+##
+#foreach( $str in $chanwGetTextValuesList )
+#if( $str != "" )
+#set( $void = $chanwGetTextValues.add( $_EscapeTool.xml( $str ) ) )
+#end
+#end
+#end
+#*doc
 《/macro》
 《documentation》
 《code》#chanwIsAncestorOf( $folder $folderContainedAsset )《/code》
@@ -535,36 +809,37 @@ $chanwIsAncestorOf
 《/pre》
 《/documentation》
 《macro id=“chanwIsAncestorOf”》
-*#
-#macro( chanwIsAncestorOf $folder $folderContainedAsset )
-    #if( !$folder || $folder.Class.Name != "com.hannonhill.cascade.api.adapters.FolderAPIAdapter" )
-        No folder supplied.
+doc*###
+#macro( chanwIsAncestorOf $chanwIsAncestorOfFolder $chanwIsAncestorOfFolderContainedAsset )
+    #if( !$chanwIsAncestorOfFolder || $chanwIsAncestorOfFolder.Class.Name != "com.hannonhill.cascade.api.adapters.FolderAPIAdapter" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "No folder supplied." "894KIWLHLKLR" )
+        
         #stop
-    #elseif( !$folderContainedAsset )
-        No folder contained asset is supplied.
+    #elseif( !$chanwIsAncestorOfFolderContainedAsset )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "No folder contained asset is supplied." "48RYGBNKGGLK" )
         #stop
     #end
-    
-    #chanwIsInstanceOf( $folderContainedAsset "com.hannonhill.cascade.api.adapters.FolderContainedAssetAPIAdapter" )
-    
+##
+    #chanwIsInstanceOf( $chanwIsAncestorOfFolderContainedAsset "com.hannonhill.cascade.api.adapters.FolderContainedAssetAPIAdapter" )
+##
     #if( !$chanwIsInstanceOf )
-        No folder contained asset supplied.
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "No folder contained asset is supplied." "48HJKTIOWGJHUIOIO" )
         #stop
     #end
-
+##
     ## make sure that the folder path starts with /
-    #set( $chanwFolderPath = "/" + $folder.Path + "/" )
-    #set( $chanwFolderContainedAssetPath = "/" + $folderContainedAsset.Path )
-    
-    #if( $folder.SiteName != $folderContainedAsset.SiteName ) ## different site, false
+    #set( $chanwFolderPath = "/" + $chanwIsAncestorOfFolder.Path + "/" )
+    #set( $chanwFolderContainedAssetPath = "/" + $chanwIsAncestorOfFolderContainedAsset.Path )
+##
+    #if( $chanwIsAncestorOfFolder.SiteName != $chanwIsAncestorOfFolderContainedAsset.SiteName ) ## different site, false
         #set( $chanwIsAncestorOf = false )
-    #elseif( $folder.Path == "/" ) ## base folder, true
+    #elseif( $chanwIsAncestorOfFolder.Path == "/" ) ## base folder, true
         #set( $chanwIsAncestorOf = true )
     #else
         #set( $chanwIsAncestorOf = $chanwFolderContainedAssetPath.contains( $chanwFolderPath ) )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwIsDescendentOf( $folder $folderContainedAsset )《/code》
@@ -579,73 +854,198 @@ $chanwIsDescendentOf
 《/pre》
 《/documentation》
 《macro id=“chanwIsDescendentOf”》
-*#
-#macro( chanwIsDescendentOf $folder $folderContainedAsset )
-    #chanwIsAncestorOf( $folder $folderContainedAsset )
+doc*###
+#macro( chanwIsDescendentOf $chanwIsDescendentOfFolder $chanwIsDescendentOfFolderContainedAsset )
+    #chanwIsAncestorOf( $chanwIsDescendentOfFolder $chanwIsDescendentOfFolderContainedAsset )
     #set( $chanwIsDescendentOf = $chanwIsAncestorOf )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
-《code》#chanwLocateAssetInAncestorFolder( $folderPath $siteName $type $name )《/code》
-《p》Locates the asset by matching the type and name, starting from the supplied folder path.
-《code》$folderPath《/code》 should be the path string of a folder containing the asset.
-If the asset cannot be found, then look for the asset in the grandparent folder, and so on.《/p》
-《p》Examples:《/p》
+《code》#chanwProcessStructuredDataNodes( $sd )《/code》
+《p》Processes a structured data node or a list of structured data nodes,
+and populates two maps 《code》$chanwChildParentMap《/code》 and
+《code》$chanwChildParentMap《/code》.《/p》
+《p》For this macro to work properly, all and only identifiers of multiple fields in a data definition
+must have the prefix "mul-". This ensures that multiple nodes (even when there is only one)
+can be recognized when creating FQIs without consulting the data definition.《/p》
 《pre》
-#chanwLocateAssetInAncestorFolder(
-    $currentPage.ParentFolder.Path $currentPageSiteName "block" "_site-info" )
-$chanwLocateAssetInAncestorFolder.Name
+#set( $block = $_.locateBlock( "_cascade/blocks/data/instruction-block-bottom-outer", "cascade-admin" ) )
+#chanwGetFQINodeMap( $block.StructuredData )
+#drulykgVarDump( $chanwGetFQINodeMap )
 《/pre》
 《/documentation》
-《macro id=“chanwLocateAssetInAncestorFolder”》
-*#
-#macro( chanwLocateAssetInAncestorFolder $folderPath $siteName $type $name )
-    #set( $chanwLocateAssetInAncestorFolder = "" )
-    #set( $chanwFolder = $_.locateFolder( $folderPath, $siteName ) )
-
-    #if( $chanwFolder )
-        #set( $chanwChildren = $chanwFolder.Children )
-        
-        #foreach( $child in $chanwChildren )
-            #if( $child.Identifier.Type == $type && $child.Name == $name )
-                #set( $chanwLocateAssetInAncestorFolder = $child )
-                #break
+《macro id=“chanwProcessStructuredDataNodes”》
+doc*###
+#macro( chanwProcessStructuredDataNodes $chanwProcessStructuredDataNodesSd $chanwProcessStructuredDataNodesSds )
+    #set( $chanwChildParentMap   = {} )    ## child node as key, parent node as value
+    #set( $chanwNodeAttributeMap = {} )    ## node as key, attribute map as value
+    #set( $chanwRootString = "root" )      ## dummy parent for top-level nodes
+##
+    ## turn a single node to a list
+    #set( $chanwStructuredData = $chanwProcessStructuredDataNodesSd )
+##
+    #if( !$chanwProcessStructuredDataNodesSd.size() )
+        #set( $chanwStructuredData = [ $chanwProcessStructuredDataNodesSd ] )
+    #end
+##
+    ## setup: deal with top-level nodes
+    #foreach( $node in $chanwStructuredData )
+        ## store the top-level nodes
+        #set( $chanwChildParentMap[ $node ] = $chanwRootString )
+        ## enqueue elements
+        #chanwEnqueueGlobalQueue( $chanwGlobalQueue $node )
+        ## top-level nodes should not be multiple; no $KEY_SIZE without the parent node
+        #set( $chanwNodeAttributes = { 'path':$node.Identifier, $KEY_FQI:$node.Identifier  } )
+##
+        ## store type and data
+        #if( $node.isGroup() )
+            #set( $void = $chanwNodeAttributes.put( $KEY_TYPE, 'group' ) )
+        #elseif( $node.isText() )
+            #set( $void = $chanwNodeAttributes.put( $KEY_TYPE, 'text' ) )
+            #chanwGetTextNodeSubType( $node )
+            #set( $void = $chanwNodeAttributes.put( $KEY_SUBTYPE, $chanwGetTextNodeSubType ) )
+##
+            #if( $node.TextValues )
+                #chanwGetTextValues( $node.TextValues )
+##
+                #if( $chanwGetTextValues.size() > 1 )
+                    #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues ) )
+                #elseif( $chanwGetTextValues.size() == 1 )
+                    #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues[ 0 ] ) )
+                #end
+            #else
+                #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $node.TextValue ) )
+            #end
+        #else ## asset
+            #set( $void = $chanwNodeAttributes.put( $KEY_TYPE, 'asset' ) )
+            #if( $node.Asset )
+                #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $node.Asset.Identifier.Path.PathAsString ) )
+                #set( $void = $chanwNodeAttributes.put( $KEY_SITE, $child.Asset.Site ) )
+                #set( $chanwNodeAttributes[ $KEY_SUBTYPE ] = $node.Asset.Identifier.Type )
+                #if( $child.Asset.Identifier.Type == "symlink" )
+                    #set( $chanwNodeAttributes[ $KEY_URL ] = $child.Asset.Link )
+                #end
             #end
         #end
-        
-        #set( $chanwFolderParentPath = "" )
-        
-        #if( $chanwLocateAssetInAncestorFolder == "" )
-            #set( $chanwFolderParentPath = 
-                $chanwFolder.ParentFolderIdentifier.Path.PathAsString )
-
-            ## recursive call
-            #if( $chanwFolderParentPath != "" )
-                #chanwLocateAssetInAncestorFolder(
-                    $chanwFolderParentPath $siteName $type $name )
+##
+        #set( $chanwNodeAttributeMap[ $node ] = $chanwNodeAttributes )
+    #end
+##
+    ## while the queue is not empty
+    #foreach( $num in [ 1..5000 ] )
+        #chanwDequeueGlobalQueue( $chanwGlobalQueue )
+##
+        #if( $chanwDequeueGlobalQueue.isGroup() )
+            #set( $chanwChildren = $chanwDequeueGlobalQueue.Children )
+            ## variables to work with multiple nodes
+            #set( $chanwPreviousIdentifier = "" )
+            #set( $chanwOffset             = 0 )
+            #set( $chanwCurrentIndex       = 0 )
+##
+            #foreach( $child in $chanwChildren )
+                #chanwEnqueueGlobalQueue( $chanwGlobalQueue $child )
+                #set( $chanwChildParentMap[ $child ] = $chanwDequeueGlobalQueue )
+##
+                ## multiple nodes
+                #if( $child.Identifier.startsWith( 'mul-' ) )
+                    ## first instance
+                    #if( $chanwPreviousIdentifier == "" || $chanwPreviousIdentifier != $child.Identifier )
+                        ## the actual index of the first instance
+                        #set( $chanwOffset = $chanwChildren.indexOf( $child ) )
+                        ## get the parent fqi
+                        #set( $chanwParentFQI = $chanwNodeAttributeMap[ $chanwChildParentMap[ $child ] ][ $KEY_FQI ] )
+                        ## append the child local path to parent fqi to create the child fqi
+                        #set( $chanwNodeAttributes = { 'index':0, 'path':"${child.Identifier};0",
+                            $KEY_FQI:"${chanwParentFQI};${child.Identifier};0" } )
+                        ## store the size of the set of multiple nodes having the same identifier
+                        #set( $chanwNodeAttributes[ $KEY_SIZE ] = $chanwChildParentMap[ $child ].getChildren( $child.Identifier ).size() )
+                    ## other instances
+                    #elseif( $chanwPreviousIdentifier == $child.Identifier )
+                        #set( $chanwCurrentIndex = $chanwChildren.indexOf( $child ) - $chanwOffset )
+                        #set( $chanwParentFQI = $chanwNodeAttributeMap[ $chanwChildParentMap[ $child ] ][ $KEY_FQI ] )
+                        #set( $chanwNodeAttributes = { 'index':$chanwCurrentIndex, 'path':"${child.Identifier};${chanwCurrentIndex}",
+                            $KEY_FQI:"${chanwParentFQI};${child.Identifier};${chanwCurrentIndex}" } )
+                        #set( $chanwNodeAttributes[ $KEY_SIZE ] = $chanwChildParentMap[ $child ].getChildren( $child.Identifier ).size() )
+                    #end
+                ## non-multiple
+                #else
+                    #set( $chanwParentFQI = $chanwNodeAttributeMap[ $chanwChildParentMap[ $child ] ][ $KEY_FQI ] )
+                    #set( $chanwNodeAttributes = { 'path':"${child.Identifier}", 
+                        $KEY_FQI:"${chanwParentFQI};${child.Identifier}" } )
+                #end
+##
+                ## process data
+                #if( $child.isAsset() )
+                    #set( $void = $chanwNodeAttributes.put( $KEY_TYPE, 'asset' ) )
+                    #if( $child.Asset )
+                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $child.Asset.Identifier.Path.PathAsString ) )
+                        #set( $void = $chanwNodeAttributes.put( $KEY_SITE, $child.Asset.Site ) )
+                        #set( $chanwNodeAttributes[ $KEY_SUBTYPE ] = $child.Asset.Identifier.Type )
+                        #set( $chanwNodeFQI = $chanwNodeAttributes[ "fqi" ] )
+                        #chanwConvertFQIToXPath( $chanwNodeFQI )
+                        #set( $chanwNodeAttributes[ $KEY_CONTENT ] =
+                            $_XPathTool.selectSingleNode( $chanwProcessStructuredDataNodesSds, $chanwConvertFQIToXPath ).getChild( $KEY_CONTENT ) )
+                        #if( $child.Asset.Identifier.Type == "symlink" )
+                            #set( $chanwNodeAttributes[ $KEY_URL ] = $child.Asset.Link )
+                        #end
+                    #end
+                #elseif( $child.isText() )
+                    #set( $void = $chanwNodeAttributes.put( $KEY_TYPE, 'text' ) )
+                    #chanwGetTextNodeSubType( $child )
+                    #set( $void = $chanwNodeAttributes.put( $KEY_SUBTYPE, $chanwGetTextNodeSubType ) )
+##
+                    #if( $child.TextValues )
+                        #chanwGetTextValues( $child.TextValues )
+##
+                        #if( $chanwGetTextValues.size() > 1 )
+                            #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues ) )
+                        #elseif( $chanwGetTextValues.size() == 1 )
+                            #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues[ 0 ] ) )
+                        #end
+                    #elseif( $child.TextNodeOptions.isWysiwyg() )
+                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $child.TextValue ) )
+                    #else
+                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $_EscapeTool.xml( $child.TextValue ) ) )
+                    #end
+                #else ## group
+                    #set( $void = $chanwNodeAttributes.put( $KEY_TYPE, 'group' ) )
+                #end
+##
+                ## store attributes
+                #set( $chanwNodeAttributeMap[ $child ] = $chanwNodeAttributes )
+            
+                ## update previous identifier for next loop
+                #set( $chanwPreviousIdentifier = $child.Identifier )
             #end
+        #end
+##
+        ## exit when the queue is empty
+        #chanwSizeGlobalQueue( $chanwGlobalQueue )
+##
+        #if( $chanwSizeGlobalQueue == 0 )
+            #break
         #end
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwRecurseGroup( $group_node )《/code》
 《p》Displays group node information recursively, used by 《code》#chanwRecurseNodes《/code》.《/p》
 《/documentation》
 《macro id=“chanwRecurseGroup”》
-*#
-#macro( chanwRecurseGroup $group_node )
-    Group identifier: $group_node.Identifier$BR 
-            
-    #set( $chanwChildren = $group_node.Children )
-      
+doc*###
+#macro( chanwRecurseGroup $chanwRecurseGroupGroupName )
+    Group identifier: $chanwRecurseGroupGroupName.Identifier$BR 
+##
+    #set( $chanwChildren = $chanwRecurseGroupGroupName.Children )
+##
     #if( $chanwChildren.size() > 0 )      
         #chanwRecurseNodes( $chanwChildren )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwRecurseNodes( $nodes )《/code》
@@ -658,26 +1058,25 @@ $chanwLocateAssetInAncestorFolder.Name
 《/pre》
 《/documentation》
 《macro id=“chanwRecurseNodes”》
-*#
-#macro( chanwRecurseNodes $nodes )
-    #if( $nodes.isGroup() )
-        #chanwRecurseGroup( $nodes )
-    #elseif( $nodes.class.name != $COM_CASCADE_STRUCTURED_DATA_LIST_CLASS_NAME )
-        Not a list of nodes.
+doc*###
+#macro( chanwRecurseNodes $chanwRecurseNodesNodes )
+    #if( $chanwRecurseNodesNodes.isGroup() )
+        #chanwRecurseGroup( $chanwRecurseNodesNodes )
+    #elseif( $chanwRecurseNodesNodes.class.name != $COM_CASCADE_STRUCTURED_DATA_LIST_CLASS_NAME )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "$chanwRecurseNodesNodes is not a list of nodes." "KLMBHLLWKHKLGSL; T;L KBM," )
         #stop
     #end
-    
-    #foreach( $child in $nodes )
+##
+    #foreach( $child in $chanwRecurseNodesNodes )
         #if( $child.isText() )
             Text identifier: $child.Identifier$BR 
-            
+##
             #if( $child.TextValues )
                 Text values size: $child.TextValues.size()$BR 
                 #foreach( $string in $child.TextValues )
                     #if( $string != '' )Text value: $string$BR #end
                 #end
             #end
-
         #elseif( $child.isGroup() )
             #chanwRecurseGroup( $child )
         #elseif( $child.isAsset() )
@@ -688,7 +1087,7 @@ $chanwLocateAssetInAncestorFolder.Name
         $BR
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwShowMetadataData( $chanwMetadata )《/code》
@@ -710,26 +1109,26 @@ No text value
 《/pre》
 《/documentation》
 《macro id=“chanwShowMetadataData”》
-*#
-#macro( chanwShowMetadataData $chanwMetadata )
-    #if( $chanwMetadata.class.name != $COM_CASCADE_METADATA_CLASS_NAME )
-        Not a metadata.
+doc*###
+#macro( chanwShowMetadataData $chanwShowMetadataDataMetadata )
+    #if( $chanwShowMetadataDataMetadata.class.name != $COM_CASCADE_METADATA_CLASS_NAME )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A Metadata object is required." "bkl4w g jknnwlnktw" )
         #stop
     #end
-
-    #if( $chanwMetadata.DisplayName )Display name: $chanwMetadata.DisplayName$BR #end
-    #if( $chanwMetadata.Description )Description: $chanwMetadata.Description$BR #end
-    #if( $chanwMetadata.Title )Title: $chanwMetadata.Title$BR #end
-    #if( $chanwMetadata.Summary )Summary: $chanwMetadata.Summary$BR #end
-    #if( $chanwMetadata.Teaser )Teaser: $chanwMetadata.Teaser$BR #end
-    #if( $chanwMetadata.Keywords )Keywords: $chanwMetadata.Keywords$BR #end
-    #if( $chanwMetadata.Author )Author: $chanwMetadata.Author$BR #end
-    #if( $chanwMetadata.ReviewDate )ReviewDate: $chanwMetadata.ReviewDate$BR #end
-    #if( $chanwMetadata.StartDate )StartDate: $chanwMetadata.StartDate$BR #end
-    #if( $chanwMetadata.EndDate )EndDate: $chanwMetadata.EndDate$BR #end
-    
-    #set( $chanwDFS = $chanwMetadata.DynamicFields )
-    
+##
+    #if( $chanwShowMetadataDataMetadata.DisplayName )Display name: $chanwShowMetadataDataMetadata.DisplayName$BR #end
+    #if( $chanwShowMetadataDataMetadata.Description )Description: $chanwShowMetadataDataMetadata.Description$BR #end
+    #if( $chanwShowMetadataDataMetadata.Title )Title: $chanwShowMetadataDataMetadata.Title$BR #end
+    #if( $chanwShowMetadataDataMetadata.Summary )Summary: $chanwShowMetadataDataMetadata.Summary$BR #end
+    #if( $chanwShowMetadataDataMetadata.Teaser )Teaser: $chanwShowMetadataDataMetadata.Teaser$BR #end
+    #if( $chanwShowMetadataDataMetadata.Keywords )Keywords: $chanwShowMetadataDataMetadata.Keywords$BR #end
+    #if( $chanwShowMetadataDataMetadata.Author )Author: $chanwShowMetadataDataMetadata.Author$BR #end
+    #if( $chanwShowMetadataDataMetadata.ReviewDate )ReviewDate: $chanwShowMetadataDataMetadata.ReviewDate$BR #end
+    #if( $chanwShowMetadataDataMetadata.StartDate )StartDate: $chanwShowMetadataDataMetadata.StartDate$BR #end
+    #if( $chanwShowMetadataDataMetadata.EndDate )EndDate: $chanwShowMetadataDataMetadata.EndDate$BR #end
+##
+    #set( $chanwDFS = $chanwShowMetadataDataMetadata.DynamicFields )
+##
     #if( $chanwDFS.size() > 0 )
     *****$BR
         #foreach( $chanwDF in $chanwDFS )
@@ -743,7 +1142,7 @@ No text value
             #elseif( $chanwDF.isRadio() )
             Type: Radio$BR
             #end
-            
+##
             #set( $chanwTextSize = $chanwDF.Values.size() )
             #if( $chanwTextSize > 0 )
                 Size: $chanwTextSize$BR
@@ -759,7 +1158,7 @@ No text value
         #end
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwShowStructuredDataNodeData( $node )《/code》
@@ -889,56 +1288,71 @@ Asset site name: cascade-admin
 《/pre》
 《/documentation》
 《macro id=“chanwShowStructuredDataNodeData”》
-*#
-#macro( chanwShowStructuredDataNodeData $node )
-    #chanwGetStructuredDataNodeData( $node )
-
-    Identifier: $chanwGetStructuredDataNodeData[ 'Identifier' ]$BR
-    Type: $chanwGetStructuredDataNodeData[ 'Type' ]$BR
-    
-    #if( $node.isGroup() )
-        Children size: $node.Children.size()$BR
-    #elseif( $node.isAsset() )
-        Asset type: $chanwGetStructuredDataNodeData[ "AssetType" ]$BR
-        Asset path: $chanwGetStructuredDataNodeData[ "AssetPath" ]$BR
-        Asset site name: $chanwGetStructuredDataNodeData[ "AssetSiteName" ]$BR
-    #else ## Text
-        Text value: $chanwGetStructuredDataNodeData[ "TextValue" ]$BR
-        Text values:$BR
-        
-        #if( $node.TextValues.size() > 1 )
-            #foreach( $string in $node.TextValues )
-                #if( $foreach.count == 1 )
-                    ## do nothing to skip the first empty string
-                #else
-                $string$BR
-                #end
-            #end
-        #else
-            ## do nothing
-        #end
-        Text node options:$BR
-        #if( $node.TextNodeOptions )
-            Plain text: $node.TextNodeOptions.isPlainText()$BR
-            Radio: $node.TextNodeOptions.isRadio()$BR
-            Calendar: $node.TextNodeOptions.isCalendar()$BR
-            Datetime: $node.TextNodeOptions.isDatetime()$BR
-            Checkbox: $node.TextNodeOptions.isCheckbox()$BR
-            Multiselect: $node.TextNodeOptions.isMultiselect()$BR
-            Wysiwyg: $node.TextNodeOptions.isWysiwyg()$BR
-            Dropdown: $node.TextNodeOptions.isDropdown()$BR
-        #end
-    #end
-    $BR
+doc*###
+#macro( chanwShowStructuredDataNodeData $chanwShowStructuredDataNodeDataNode )
+#chanwGetStructuredDataNodeData( $chanwShowStructuredDataNodeDataNode )
+##
+Identifier: $chanwGetStructuredDataNodeData[ 'Identifier' ]
+Type: $chanwGetStructuredDataNodeData[ 'Type' ]
+##
+#if( $chanwShowStructuredDataNodeDataNode.isGroup() )
+Children size: $chanwShowStructuredDataNodeDataNode.Children.size()$BR
+#elseif( $chanwShowStructuredDataNodeDataNode.isAsset() )
+Asset type: $chanwGetStructuredDataNodeData[ "AssetType" ]
+Asset path: $chanwGetStructuredDataNodeData[ "AssetPath" ]
+Asset site name: $chanwGetStructuredDataNodeData[ "AssetSiteName" ]
+#else ## Text
+Text value: $chanwGetStructuredDataNodeData[ "TextValue" ]
+Text values:
+##
+#if( $chanwShowStructuredDataNodeDataNode.TextValues.size() > 1 )
+#foreach( $string in $chanwShowStructuredDataNodeDataNode.TextValues )
+#if( $foreach.count == 1 )
+## do nothing to skip the first empty string
+#else
+$string
 #end
-#*
+#end
+#else
+## do nothing
+#end
+Text node options:
+#if( $chanwShowStructuredDataNodeDataNode.TextNodeOptions )
+Plain text: $chanwShowStructuredDataNodeDataNode.TextNodeOptions.isPlainText()
+Radio: $chanwShowStructuredDataNodeDataNode.TextNodeOptions.isRadio()
+Calendar: $chanwShowStructuredDataNodeDataNode.TextNodeOptions.isCalendar()
+Datetime: $chanwShowStructuredDataNodeDataNode.TextNodeOptions.isDatetime()
+Checkbox: $chanwShowStructuredDataNodeDataNode.TextNodeOptions.isCheckbox()
+Multiselect: $chanwShowStructuredDataNodeDataNode.TextNodeOptions.isMultiselect()
+Wysiwyg: $chanwShowStructuredDataNodeDataNode.TextNodeOptions.isWysiwyg()
+Dropdown: $chanwShowStructuredDataNodeDataNode.TextNodeOptions.isDropdown()
+#end
+#end
+#end
+#*doc
 《/macro》
 《documentation》
 《p》The list and the 《code》$foreach《/code》 structure are used to generate macros
 like 《code》#chanwProcessDataBlock《/code》.《/p》
 《/documentation》
 《macro id=“generatedCode”》
-*#
+doc*###
+#set( $process_cascade_api_asset_code =
+$SINGLE_HASH + 'macro( chanwProcess-asset_type- ' + $DOLLAR + 'asset )' +
+    $SINGLE_HASH + 'if( !' + $DOLLAR + 'asset || ' +
+        $DOLLAR + 'asset.Class.Name != ' + $DOLLAR + 'CASCADE_API_-asset_type-_CLASS_NAME )' +
+        'Not a -asset_type-.' +
+        $SINGLE_HASH + 'stop' +
+    $SINGLE_HASH + 'end' +
+    $SINGLE_HASH + 'set( $chanwKeySet=' + $DOLLAR + '-asset_type-PropertyMap.keySet() )' +
+    $SINGLE_HASH + 'foreach(' + $DOLLAR + 'var in ' + $DOLLAR + 'chanwKeySet)' +
+    $SINGLE_HASH + 'set(' + $DOLLAR + 'chanwStmt = ' + $SINGLE_QUOTE + $SINGLE_HASH + 
+    'chanwSetVariable(' + $DOLLAR + 'var ' + $DOLLAR + 'asset.' + $SINGLE_QUOTE + ' + ' +
+    $DOLLAR + '-asset_type-PropertyMap.get(' + 
+    '$' + 'var' + ')' + '+' + $SINGLE_QUOTE + ')' + $SINGLE_QUOTE + ')' +
+    $SINGLE_HASH + 'evaluate(' + $DOLLAR + 'chanwStmt)' +
+    $SINGLE_HASH + 'end' +
+    $SINGLE_HASH + 'end' )
 #set( $chanwCascadeAssetList = [
     "DataBlock",
     "FeedBlock",
@@ -950,13 +1364,12 @@ like 《code》#chanwProcessDataBlock《/code》.《/p》
     "TextBlock",
     "XMLBlock"
 ] )
-
 #foreach( $asset in $chanwCascadeAssetList )
     #set( $chanwStmt = $process_cascade_api_asset_code.replaceAll(
         '-asset_type-', $asset ) )
     #evaluate( $chanwStmt )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwInvokeQuery( $type $link $assets $hasMetadata $maxResults $sortBy
@@ -981,64 +1394,63 @@ $chanwInvokeQuery.size()
 《/pre》
 《/documentation》
 《macro id=“chanwInvokeQuery”》
-*#
-#macro( chanwInvokeQuery $type $link $assets $hasMetadata $maxResults $sortBy $direction $siteName $indexablePublishable )
-    #if( $type != "MetadataSet" && $type != "ContentType" )
-        $type is not an acceptable type.
+doc*###
+#macro( chanwInvokeQuery $chanwInvokeQueryType $chanwInvokeQueryLink $chanwInvokeQueryAssets $chanwInvokeQueryHasMetadata $chanwInvokeQueryMaxResults $chanwInvokeQuerySortBy $chanwInvokeQueryDirection $chanwInvokeQuerySiteName $chanwInvokeQueryIndexablePublishable )
+    #if( $chanwInvokeQueryType != "MetadataSet" && $chanwInvokeQueryType != "ContentType" )
+        $chanwInvokeQueryType is not an acceptable type.
         #stop
     #end
-    
-    #if( !$link || $link == "" )
+##
+    #if( !$chanwInvokeQueryLink || $chanwInvokeQueryLink == "" )
         A path to either the MetadataSet or ContentType must be provided.
         #stop
     #end
-    
+##
     #set( $chanwStmt = '#set($chanwQuery=$_.query())' )
     #set( $chanwStmt = $chanwStmt + '#set($chanwInvokeQuery=' )
-    
-    #if( $assets.size() == 5 )
-        #set( $chanwStmt = $chanwStmt + '$chanwQuery.by' + $type + "('$link')" +
-                       '.includeBlocks(' + $assets[ 0 ] + ')' +
-                       '.includeFiles(' + $assets[ 1 ] + ')' +
-                       '.includeFolders(' + $assets[ 2 ] + ')' +
-                       '.includePages(' + $assets[ 3 ] + ')' +
-                       '.includeSymlinks(' + $assets[ 4 ] + ')'
+##
+    #if( $chanwInvokeQueryAssets.size() == 5 )
+        #set( $chanwStmt = $chanwStmt + '$chanwQuery.by' + $chanwInvokeQueryType + "('$chanwInvokeQueryLink')" +
+                       '.includeBlocks(' + $chanwInvokeQueryAssets[ 0 ] + ')' +
+                       '.includeFiles(' + $chanwInvokeQueryAssets[ 1 ] + ')' +
+                       '.includeFolders(' + $chanwInvokeQueryAssets[ 2 ] + ')' +
+                       '.includePages(' + $chanwInvokeQueryAssets[ 3 ] + ')' +
+                       '.includeSymlinks(' + $chanwInvokeQueryAssets[ 4 ] + ')'
         )
     #end
-    
-    #if( $hasMetadata.size() == 2 )
+##
+    #if( $chanwInvokeQueryHasMetadata.size() == 2 )
         #set( $chanwStmt = $chanwStmt + '.hasMetadata(' +
-            "'" + $hasMetadata[ 0 ] + "','" + $hasMetadata[ 1 ] + "'" + ')' )
+            "'" + $chanwInvokeQueryHasMetadata[ 0 ] + "','" + $chanwInvokeQueryHasMetadata[ 1 ] + "'" + ')' )
     #end
-    
-    #if( $maxResults > 0 )
-        #set( $chanwStmt = $chanwStmt + '.maxResults(' + $maxResults + ')' )
+##
+    #if( $chanwInvokeQueryMaxResults > 0 )
+        #set( $chanwStmt = $chanwStmt + '.maxResults(' + $chanwInvokeQueryMaxResults + ')' )
     #end
-    
-    #if( $sortBy && $sortBy != "" )
-        #set( $chanwStmt = $chanwStmt + '.sortBy' + "('$sortBy')" )
+##
+    #if( $chanwInvokeQuerySortBy && $chanwInvokeQuerySortBy != "" )
+        #set( $chanwStmt = $chanwStmt + '.sortBy' + "('$chanwInvokeQuerySortBy')" )
     #end
-    
-    #if( $direction && $direction != "" )
-        #set( $chanwStmt = $chanwStmt + '.sortDirection' + "('$direction')" )
+##
+    #if( $chanwInvokeQueryDirection && $chanwInvokeQueryDirection != "" )
+        #set( $chanwStmt = $chanwStmt + '.sortDirection' + "('$chanwInvokeQueryDirection')" )
     #end
-    
-    #if( !$siteName || $siteName == "" )
+##
+    #if( !$chanwInvokeQuerySiteName || $chanwInvokeQuerySiteName == "" )
         #set( $chanwStmt = $chanwStmt + '.searchAcrossAllSites()' )
     #else
-        #set( $chanwStmt = $chanwStmt + '.siteName' + "('$siteName')" )
+        #set( $chanwStmt = $chanwStmt + '.siteName' + "('$chanwInvokeQuerySiteName')" )
     #end
-    
-    #if( $indexablePublishable.size() == 2 )
-        #set( $chanwStmt = $chanwStmt + '.indexableOnly' + '(' + $indexablePublishable[ 0 ] + ')' +
-            '.publishableOnly' + '(' + $indexablePublishable[ 1 ] + ')' )
+##
+    #if( $chanwInvokeQueryIndexablePublishable.size() == 2 )
+        #set( $chanwStmt = $chanwStmt + '.indexableOnly' + '(' + $chanwInvokeQueryIndexablePublishable[ 0 ] + ')' +
+            '.publishableOnly' + '(' + $chanwInvokeQueryIndexablePublishable[ 1 ] + ')' )
     #end
-    
+##
     #set( $chanwStmt = $chanwStmt + '.execute() )' )
-    ##$chanwStmt
     #evaluate( $chanwStmt )
 #end
-#*
+#*doc
 《/macro》
 《/code》
-*#
+doc*###
