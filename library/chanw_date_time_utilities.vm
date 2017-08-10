@@ -1,0 +1,691 @@
+#*doc
+《code》
+《copyright》
+Author: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
+7/14/2017 Added import and evaluate elements.
+5/5/2017 Fixed a bug in #chanwLocalDateFromDate due to a change of macro name.
+5/2/2017 Format created.
+《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+=============================================================
+Global objects:
+${DOLLAR}chanwInstantNow: $chanwInstantNow
+${DOLLAR}chanwLocalDateNow: $chanwLocalDateNow
+${DOLLAR}chanwLocalDateTimeNow: $chanwLocalDateTimeNow
+${DOLLAR}chanwLocalTimeNow: $chanwLocalTimeNow
+${DOLLAR}chanwMonthDayNow: $chanwMonthDayNow
+${DOLLAR}chanwYearNow: $chanwYearNow
+${DOLLAR}chanwYearMonthNow: $chanwYearMonthNow
+${DOLLAR}chanwZeroPeriod: $chanwZeroPeriod
+${DOLLAR}chanwDayDuration: $chanwDayDuration
+${DOLLAR}chanwMonthDuration: $chanwMonthDuration
+${DOLLAR}chanwYearDuration: $chanwYearDuration
+=============================================================
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_date_time_utilities' )
+${DOLLAR}chanwYearField: $chanwYearField
+${SINGLE_HASH}chanwLocalDateFromCalendar( ${DOLLAR}chanwCalendarObject )
+#chanwLocalDateFromCalendar( $chanwCalendarObject )
+${DOLLAR}chanwLocalDateFromCalendar.Class.Name: $chanwLocalDateFromCalendar.Class.Name
+=============================================================
+${SINGLE_HASH}chanwLocalDateFromDate( ${DOLLAR}chanwTodayDateObject )
+#chanwLocalDateFromDate( $chanwTodayDateObject )
+${DOLLAR}chanwLocalDateFromDate.Class.Name: $chanwLocalDateFromDate.Class.Name
+=============================================================
+${SINGLE_HASH}chanwLocalDateFromTimestampString( ${DOLLAR}_DateTool.SystemTime )
+#chanwLocalDateFromTimestampString( $_DateTool.SystemTime )
+$chanwLocalDateFromTimestampString.Class.Name
+=============================================================
+${SINGLE_HASH}chanwLocalDateOfYearMonthDay( 2017 10 24 )
+#chanwLocalDateOfYearMonthDay( 2017 10 24 )
+${DOLLAR}chanwLocalDateOfYearMonthDay: $chanwLocalDateOfYearMonthDay
+=============================================================
+${SINGLE_HASH}chanwLocalDateParseYearMonthDayString( "2017-10-24" )
+#chanwLocalDateParseYearMonthDayString( "2017-10-24" )
+${DOLLAR}chanwLocalDateParseYearMonthDayString.Year: $chanwLocalDateParseYearMonthDayString.Year
+=============================================================
+${SINGLE_HASH}chanwLocalDateToCalendar( ${DOLLAR}chanwLocalDateParseYearMonthDayString )
+#chanwLocalDateToCalendar( $chanwLocalDateParseYearMonthDayString )
+${DOLLAR}chanwLocalDateToCalendar.Class.Name: $chanwLocalDateToCalendar.Class.Name
+=============================================================
+${SINGLE_HASH}chanwLocalDateToDate( ${DOLLAR}chanwLocalDateParseYearMonthDayString )
+#chanwLocalDateToDate( $chanwLocalDateParseYearMonthDayString )
+${DOLLAR}chanwLocalDateToDate.Class.Name: $chanwLocalDateToDate.Class.Name
+=============================================================
+${SINGLE_HASH}chanwLocalDateTimeFromCalendar( ${DOLLAR}chanwCalendarObject )
+#chanwLocalDateTimeFromCalendar( $chanwCalendarObject )
+${DOLLAR}chanwLocalDateTimeFromCalendar.Class.Name: $chanwLocalDateTimeFromCalendar.Class.Name
+=============================================================
+${SINGLE_HASH}chanwLocalDateTimeFromDate( ${DOLLAR}chanwTodayDateObject )
+#chanwLocalDateTimeFromDate( $chanwTodayDateObject )
+${DOLLAR}chanwLocalDateTimeFromDate.Class.Name: $chanwLocalDateTimeFromDate.Class.Name
+=============================================================
+${SINGLE_HASH}chanwLocalDateTimeFromTimestampString( ${DOLLAR}_DateTool.SystemTime )
+#chanwLocalDateTimeFromTimestampString( $_DateTool.SystemTime )
+${DOLLAR}chanwLocalDateTimeFromTimestampString: $chanwLocalDateTimeFromTimestampString
+=============================================================
+${SINGLE_HASH}chanwLocalDateTimeOfYearMonthDayHourMinuteSecond( 2017  5  2  15  23  12  436 )
+#chanwLocalDateTimeOfYearMonthDayHourMinuteSecond( 2017  5  2  15  23  12  436 )
+${DOLLAR}chanwLocalDateTimeOfYearMonthDayHourMinuteSecond: $chanwLocalDateTimeOfYearMonthDayHourMinuteSecond
+=============================================================
+${SINGLE_HASH}chanwLocalDateTimeToCalendar( ${DOLLAR}chanwLocalDateTimeNow )
+#chanwLocalDateTimeToCalendar( $chanwLocalDateTimeNow )
+${DOLLAR}chanwLocalDateTimeToCalendar: $chanwLocalDateTimeToCalendar
+=============================================================
+#chanwLocalDateTimeToDate( $chanwLocalDateTimeNow )
+${DOLLAR}chanwLocalDateTimeToDate: $chanwLocalDateTimeToDate
+=============================================================
+#chanwLocalDateTimeToTimestampLong( $chanwLocalDateTimeNow )
+${DOLLAR}chanwLocalDateTimeToTimestampLong: $chanwLocalDateTimeToTimestampLong
+=============================================================
+《/pre》
+《/div》
+《/evaluate》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines date- and time-related utilities. The main focus is the 《code》java.time《/code》
+package. Objects of the following classes are created:《/p》
+《ul》
+《li》《code》java.time.Instant《/code》《/li》
+《li》《code》java.time.LocalDate《/code》《/li》
+《li》《code》java.time.LocalDateTime《/code》《/li》
+《li》《code》java.time.MonthDay《/code》《/li》
+《li》《code》java.time.Year《/code》《/li》
+《li》《code》java.time.YearMonth《/code》《/li》
+《li》《code》java.time.Period《/code》《/li》
+《/ul》
+
+《p》Two classes are
+utilized in this format: 《code》java.time.LocalDate《/code》 and
+《code》java.time.LocalDateTime《/code》. Two objects of these two types,
+《code》$chanwLocalDateNow《/code》 and 《code》$chanwLocalDateTimeNow《/code》
+are instantiated, and static methods can be invoked through them. Note that methods
+in these two classes are nonmutative (they do not change the state of the calling
+object).《/p》
+《p》Useful methods of 《code》java.time.LocalDate《/code》:《/p》
+《ul》
+《li》《code》LocalDateTime atStartOfDay()《/code》《/li》
+《li》《code》LocalDateTime atTime(int hour, int minute, int second, int nanoOfSecond)《/code》《/li》
+《li》《code》String format(DateTimeFormatter formatter)《/code》《/li》
+《li》《code》int getDayOfMonth()《/code》《/li》
+《li》《code》DayOfWeek getDayOfWeek()《/code》《/li》
+《li》《code》int getDayOfYear()《/code》《/li》
+《li》《code》Month getMonth()《/code》《/li》
+《li》《code》int getMonthValue()《/code》《/li》
+《li》《code》int getYear()《/code》《/li》
+《li》《code》int lengthOfMonth()《/code》《/li》
+《li》《code》int lengthOfYear()《/code》《/li》
+《li》《code》LocalDate minusDays(long daysToSubtract)《/code》《/li》
+《li》《code》LocalDate minusMonths(long monthsToSubtract)《/code》《/li》
+《li》《code》LocalDate minusYears(long yearsToSubtract)《/code》《/li》
+《li》《code》LocalDate plusDays(long daysToAdd)《/code》《/li》
+《li》《code》LocalDate plusMonths(long monthsToAdd)《/code》《/li》
+《li》《code》LocalDate plusYears(long yearsToAdd)《/code》《/li》
+《li》《code》LocalDate withDayOfMonth(int dayOfMonth)《/code》《/li》
+《li》《code》LocalDate withDayOfYear(int dayOfYear)《/code》《/li》
+《li》《code》LocalDate withMonth(int month)《/code》《/li》
+《li》《code》LocalDate withYear(int year)《/code》《/li》
+《/ul》
+《p》Useful methods of 《code》java.time.LocalDateTime《/code》:《/p》
+《ul》
+《li》《code》String format(DateTimeFormatter formatter)《/code》《/li》
+《li》《code》int getDayOfMonth()《/code》《/li》
+《li》《code》DayOfWeek getDayOfWeek()《/code》《/li》
+《li》《code》int getDayOfYear()《/code》《/li》
+《li》《code》int getHour()《/code》《/li》
+《li》《code》int getMinute()《/code》《/li》
+《li》《code》Month getMonth()《/code》《/li》
+《li》《code》int getMonthValue()《/code》《/li》
+《li》《code》int getNano()《/code》《/li》
+《li》《code》int getSecond()《/code》《/li》
+《li》《code》int getYear()《/code》《/li》
+《li》《code》boolean isAfter(ChronoLocalDateTime<?> other)《/code》《/li》
+《li》《code》boolean isBefore(ChronoLocalDateTime<?> other)《/code》《/li》
+《li》《code》LocalDateTime minusDays(long days)《/code》《/li》
+《li》《code》LocalDateTime minusHours(long hours)《/code》《/li》
+《li》《code》LocalDateTime minusMinutes(long minutes)《/code》《/li》
+《li》《code》LocalDateTime minusMonths(long months)《/code》《/li》
+《li》《code》LocalDateTime minusNanos(long nanos)《/code》《/li》
+《li》《code》LocalDateTime minusSeconds(long seconds)《/code》《/li》
+《li》《code》LocalDateTime minusYears(long years)《/code》《/li》
+《li》《code》static LocalDateTime of(int year, int month, int dayOfMonth, int hour, int minute, int second, int nanoOfSecond)《/code》《/li》
+《li》《code》LocalDateTime plusDays(long days)《/code》《/li》
+《li》《code》LocalDateTime plusHours(long hours)《/code》《/li》
+《li》《code》LocalDateTime plusMinutes(long minutes)《/code》《/li》
+《li》《code》LocalDateTime plusMonths(long months)《/code》《/li》
+《li》《code》LocalDateTime plusNanos(long nanos)《/code》《/li》
+《li》《code》LocalDateTime plusSeconds(long seconds)《/code》《/li》
+《li》《code》LocalDateTime plusYears(long years)《/code》《/li》
+《li》《code》LocalDate toLocalDate()《/code》《/li》
+《li》《code》LocalTime toLocalTime()《/code》《/li》
+《li》《code》LocalDateTime withDayOfMonth(int dayOfMonth)《/code》《/li》
+《li》《code》LocalDateTime withDayOfYear(int dayOfYear)《/code》《/li》
+《li》《code》LocalDateTime withHour(int hour)《/code》《/li》
+《li》《code》LocalDateTime withMinute(int minute)《/code》《/li》
+《li》《code》LocalDateTime withMonth(int month)《/code》《/li》
+《li》《code》LocalDateTime withNano(int nanoOfSecond)《/code》《/li》
+《li》《code》LocalDateTime withSecond(int second)《/code》《/li》
+《li》《code》LocalDateTime withYear(int year)《/code》《/li》
+《/ul》
+《/documentation》
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
+《global-variables》
+doc*###
+## create objects
+#set( $chanwInstantNow       = $_.Class.forName( "java.time.Instant" ).getMethod( "now" ).invoke( null ) )
+#set( $chanwLocalDateNow     = $_.Class.forName( "java.time.LocalDate" ).getMethod( "now" ).invoke( null ) )
+#set( $chanwLocalDateTimeNow = $_.Class.forName( "java.time.LocalDateTime" ).getMethod( "now" ).invoke( null ) )
+#set( $chanwLocalTimeNow     = $_.Class.forName( "java.time.LocalTime" ).getMethod( "now" ).invoke( null ) )
+#set( $chanwMonthDayNow      = $_.Class.forName( "java.time.MonthDay" ).getMethod( "now" ).invoke( null ) )
+#set( $chanwYearNow          = $_.Class.forName( "java.time.Year" ).getMethod( "now" ).invoke( null ) )
+#set( $chanwYearMonthNow     = $_.Class.forName( "java.time.YearMonth" ).getMethod( "now" ).invoke( null ) )
+#set( $chanwZeroPeriod       = $_.Class.forName( "java.time.Period" ).getMethod( "of", 
+    $_FieldTool.in( "java.lang.Integer" ).TYPE, 
+    $_FieldTool.in( "java.lang.Integer" ).TYPE, $_FieldTool.in( "java.lang.Integer" ).TYPE ).invoke( null, 0, 0, 0 ) )
+#set( $chanwDayDuration   = $_.Class.forName( "java.time.temporal.ChronoUnit" ).getMethod( "getDuration" ).invoke( 
+    $_FieldTool.in( "java.time.temporal.ChronoUnit" ).DAYS ) )
+#set( $chanwMonthDuration = $_.Class.forName( "java.time.temporal.ChronoUnit" ).getMethod( "getDuration" ).invoke( 
+    $_FieldTool.in( "java.time.temporal.ChronoUnit" ).MONTHS ) )
+#set( $chanwYearDuration = $_.Class.forName( "java.time.temporal.ChronoUnit" ).getMethod( "getDuration" ).invoke( 
+    $_FieldTool.in( "java.time.temporal.ChronoUnit" ).YEARS ) )
+## date and calendar
+## fields
+#set( $chanwYearField        = $_FieldTool.in( 'java.util.Calendar' ).YEAR )
+#set( $chanwMonthField       = $_FieldTool.in( 'java.util.Calendar' ).MONTH )
+#set( $chanwDayField         = $_FieldTool.in( 'java.util.Calendar' ).DATE )
+#set( $chanwHourField        = $_FieldTool.in( 'java.util.Calendar' ).HOUR )
+#set( $chanwMinuteField      = $_FieldTool.in( 'java.util.Calendar' ).MINUTE )
+#set( $chanwSecondField      = $_FieldTool.in( 'java.util.Calendar' ).SECOND )
+#set( $chanwMillisecondField = $_FieldTool.in( 'java.util.Calendar' ).MILLISECOND )
+#set( $chanwAmPmField        = $_FieldTool.in( 'java.util.Calendar' ).AM_PM )
+##
+## today
+#set( $chanwTodayDateObject          = $_DateTool.getSystemDate() )
+#set( $chanwShortField = $_FieldTool.in( $chanwTodayDateObject ).SHORT )
+#set( $chanwLongField  = $_FieldTool.in( $chanwTodayDateObject ).LONG )
+#set( $chanwCalendarObject           = $_DateTool.getCalendar() )
+#set( $chanwCurrentTimestampLong     = $_DateTool.getSystemTime() )
+#set( $chanwCurrentTimestampString   = "" + $_DateTool.getSystemTime() )
+#set( $chanwCurrentYearInt           = $_DateTool.getYear() )
+#set( $chanwCurrentMonthInt          = $_DateTool.getMonth() )
+#set( $chanwCurrentDayInt            = $_DateTool.getDay() )
+#set( $chanwCurrentHourInt           = $_DateTool.getValue( $chanwHourField, $chanwTodayDateObject ) )
+#set( $chanwCurrentMinuteInt         = $_DateTool.getValue( $chanwMinuteField, $chanwTodayDateObject ) )
+#set( $chanwCurrentSecondInt         = $_DateTool.getValue( $chanwSecondField, $chanwTodayDateObject ) )
+#set( $chanwCurrentAmPmString        = $_DateTool.getValue( $chanwAmPmField, $chanwTodayDateObject ) )
+#set( $chanwCurrentDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwTodayDateObject ) )
+#set( $chanwCurrentDayOfWeekShortString = $_DateTool.format( "EEE", $chanwTodayDateObject ) )
+#set( $chanwCurrentMonthLongString   = $_DateTool.format( "MMMMM", $chanwTodayDateObject ) )
+#set( $chanwCurrentMonthMediumString = $_DateTool.format( "MMM", $chanwTodayDateObject ) )
+##
+## yesterday
+#set( $chanwYesterdayCalObject = $chanwCalendarObject.clone() )
+$chanwYesterdayCalObject.add( $chanwDayField, -1 )
+#set( $chanwYesterdayDateObject = $_DateTool.toDate( $chanwYesterdayCalObject ) )
+#set( $chanwYesterdayInt = $chanwYesterdayCalObject.get( $chanwDayField ) )
+#set( $chanwYesterdayDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwYesterdayDateObject ) )
+#set( $chanwYesterdayDayOfWeekShortString = $_DateTool.format( "EEE", $chanwYesterdayDateObject ) )
+##
+## tomorrow
+#set( $chanwTomorrowCalObject  = $chanwCalendarObject.clone() )
+$chanwTomorrowCalObject.add( $chanwDayField, 1 )
+#set( $chanwTomorrowDateObject = $_DateTool.toDate( $chanwTomorrowCalObject ) )
+#set( $chanwTomorrowInt = $chanwTomorrowCalObject.get( $chanwDayField ) )
+#set( $chanwTomorrowDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwTomorrowDateObject ) )
+#set( $chanwTomorrowDayOfWeekShortString = $_DateTool.format( "EEE", $chanwTomorrowDateObject ) )
+##
+## last month
+#set( $chanwLastMonthCalObject = $chanwCalendarObject.clone() )
+$chanwLastMonthCalObject.add( $chanwMonthField, -1 )
+#set( $chanwLastMonthDateObject = $_DateTool.toDate( $chanwLastMonthCalObject ) )
+#set( $chanwLastMonthInt = $chanwLastMonthCalObject.get( $chanwMonthField ) )
+#set( $chanwLastMonthLongString  = $_DateTool.format( "MMMMM", $chanwLastMonthDateObject ) )
+#set( $chanwLastMonthShortString = $_DateTool.format( "MMM", $chanwLastMonthDateObject ) )
+##
+## next month
+#set( $chanwNextMonthCalObject = $chanwCalendarObject.clone() )
+$chanwNextMonthCalObject.add( $chanwMonthField, 1 )
+#set( $chanwNextMonthDateObject = $_DateTool.toDate( $chanwNextMonthCalObject ) )
+#set( $chanwNextMonthInt = $chanwNextMonthCalObject.get( $chanwMonthField ) )
+#set( $chanwNextMonthLongString  = $_DateTool.format( "MMMMM", $chanwNextMonthDateObject ) )
+#set( $chanwNextMonthShortString = $_DateTool.format( "MMM", $chanwNextMonthDateObject ) )
+##
+## last year
+#set( $chanwLastYearCalObject  = $chanwCalendarObject.clone() )
+$chanwLastYearCalObject.add( $chanwYearField, -1 )
+#set( $chanwLastYearDateObject = $_DateTool.toDate( $chanwLastYearCalObject ) )
+#set( $chanwLastYearInt = $chanwCurrentYearInt - 1 )
+##
+## next year
+#set( $chanwNextYearCalObject  = $chanwCalendarObject.clone() )
+$chanwNextYearCalObject.add( $chanwYearField, 1 )
+#set( $chanwNextYearDateObject = $_DateTool.toDate( $chanwNextYearCalObject ) )
+#set( $chanwNextYearInt = $chanwCurrentYearInt + 1 )
+##
+## timezone
+#set( $chanwStr = "" )
+#set( $chanwParamList = [ '$chanwStr.Class' ] )
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.util.TimeZone' 'getTimeZone' $chanwParamList )
+#set( $chanwLondonTimeZone   = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "Europe/London" ) )
+#set( $chanwNYTimeZone       = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/New_York" ) )
+#set( $chanwChicagoTimeZone  = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/Chicago" ) )
+#set( $chanwDenverTimeZone   = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/Denver" ) )
+#set( $chanwLATimeZone       = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/Los_Angeles" ) )
+#set( $chanwHonoluluTimeZone = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "Pacific/Honolulu" ) )
+##
+## locale
+#chanwGetConstructorByClassNameParamSize( "java.util.Locale" 1 )
+#set( $chanwDeLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "de" ) ) ## German
+#set( $chanwEnLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "en" ) )
+#set( $chanwEnUSLocale = $chanwGetConstructorByClassNameParamSize.newInstance( "en-US" ) )
+#set( $chanwEsLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "es" ) )
+#set( $chanwFrLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "fr" ) )
+#set( $chanwFrCALocale = $chanwGetConstructorByClassNameParamSize.newInstance( "fr-CA" ) )
+#set( $chanwJaLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "ja" ) ) ## Japanese
+#set( $chanwRuLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "ru" ) ) ## Russian
+#set( $chanwZhLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "zh" ) ) ## Chinese
+#set( $chanwZhCNLocale = $chanwGetConstructorByClassNameParamSize.newInstance( "zh-CN" ) )
+#set( $chanwDateTimeGlobalVariables = [
+    "chanwCalendar",
+    "chanwDateObj",
+    "chanwDateFormat",
+    "chanwHourInt",
+    "chanwLocalDateFromCalendar",
+    "chanwLocalDateFromDate",
+    "chanwLocalDateFromTimestampString",
+    "chanwLocalDateNow",
+    "chanwLocalDateOfYearMonthDay",
+    "chanwLocalDateParseYearMonthDayString",
+    "chanwLocalDateTimeNow",
+    "chanwLocalDateToCalendar",
+    "chanwLocalDateToDate",
+    "chanwLocalDateTimeFromCalendar",
+    "chanwLocalDateTimeFromDate",
+    "chanwLocalDateTimeFromTimestampString",
+    "chanwLocalDateTimeOfYearMonthDayHourMinuteSecond",
+    "chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString",
+    "chanwLocalDateTimeString",
+    "chanwLocalDateTimeToCalendar",
+    "chanwLocalDateTimeToDate",
+    "chanwLocalDateTimeToTimestampLong",
+    "chanwMonthInt",
+    "chanwMonthValue",
+    "chanwNanoLong",
+    "chanwTimestampString"
+] )
+#*doc
+《/global-variables》
+《documentation》
+《code》#chanwLocalDateFromCalendar( $cal )《/code》
+《p》Returns a 《code》LocalDate《/code》 object based on the data from the
+《code》GregorianCalendar《/code》 object 《code》$cal《/code》.《/p》
+《pre》
+#chanwLocalDateFromCalendar( $_DateTool.SystemCalendar )
+$chanwLocalDateFromCalendar.Year
+$chanwLocalDateFromCalendar.MonthValue
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateFromCalendar”》
+doc*###
+#macro( chanwLocalDateFromCalendar $chanwLocalDateFromCalendarCal )
+    #if( $chanwLocalDateFromCalendarCal.Class.Name != $JAVA_UTIL_GREGORIAN_CALENDAR_CLASS_NAME )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A GregorianCalendar object is required." "43n;4n;rlnkng4" )
+        #stop
+    #end
+##
+    #set( $chanwCalendar = $chanwLocalDateFromCalendarCal )
+    #set( $chanwMonthInt = $chanwCalendar.get( $chanwMonthField ) + 1 )
+    #set( $chanwLocalDateFromCalendar = $chanwLocalDateNow.of(
+        $chanwCalendar.get( $chanwYearField ), $chanwMonthInt, $chanwCalendar.get( $chanwDayField ) ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateFromDate( $date )《/code》
+《p》Returns a 《code》LocalDate《/code》 object based on the data from the
+《code》Date《/code》 object 《code》$date《/code》.《/p》
+《pre》
+#chanwLocalDateFromDate( $_DateTool.SystemDate )
+$chanwLocalDateFromDate.Year
+$chanwLocalDateFromDate.MonthValue
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateFromDate”》
+doc*###
+#macro( chanwLocalDateFromDate $chanwLocalDateFromDateDate )
+    #if( $chanwLocalDateFromDateDate.Class.Name != $JAVA_UTIL_DATE_CLASS_NAME )
+        A Date object is required.
+        #stop
+    #end
+##
+    #chanwLocalDateFromTimestampString( $chanwLocalDateFromDateDate.Time )
+    #set( $chanwLocalDateFromDate = $chanwLocalDateFromTimestampString )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateFromTimestampString( $str )《/code》
+《p》Parses the string and returns the corresponding 《code》LocalDate《/code》 object.
+The string can be a timestamp string or a 《code》Long《/code》 object storing the
+timestamp.《/p》
+《pre》
+#chanwLocalDateFromTimestampString( "1508904000000" )
+$chanwLocalDateParseTimestampString.Year
+#chanwConvertToPascalCase( $chanwLocalDateParseTimestampString.Month.toString() )
+$chanwConvertToPascalCase
+$chanwLocalDateParseTimestampString.DayOfMonth
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateFromTimestampString”》
+doc*###
+#macro( chanwLocalDateFromTimestampString $chanwLocalDateFromTimestampStringStr )
+    #if( !$chanwLocalDateFromTimestampStringStr )
+        A timestamp string is required.
+        #stop
+    #end
+##
+    #set( $chanwTimestampString = $chanwLocalDateFromTimestampStringStr )
+##
+    #if( $chanwLocalDateFromTimestampStringStr.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $chanwTimestampString = $chanwTimestampString + "" )
+    #end
+##
+    #set( $chanwCalendar = $_DateTool.toCalendar( $_DateTool.getDate( $chanwTimestampString ) ) )
+    #chanwLocalDateFromCalendar( $chanwCalendar )
+    #set( $chanwLocalDateFromTimestampString = $chanwLocalDateFromCalendar )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateOfYearMonthDay( $year $month $day )《/code》
+《p》Returns a 《code》LocalDate《/code》 object storing the input values.《/p》
+《pre》
+#chanwLocalDateOfYearMonthDay( 2017 5 1 )
+$chanwLocalDateOfYearMonthDay.Month ## MAY
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateOfYearMonthDay”》
+doc*###
+#macro( chanwLocalDateOfYearMonthDay $chanwLocalDateOfYearMonthDayYear $chanwLocalDateOfYearMonthDayMonth $chanwLocalDateOfYearMonthDayDay )
+    #set( $chanwLocalDateOfYearMonthDay = $chanwLocalDateNow.of( $chanwLocalDateOfYearMonthDayYear, $chanwLocalDateOfYearMonthDayMonth, $chanwLocalDateOfYearMonthDayDay ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateParseYearMonthDayString( $str )《/code》
+《p》Parses the string and returns the corresponding 《code》LocalDate《/code》 object.
+The string should be of the format 《code》yyyy-mm-dd《/code》.《/p》
+《pre》
+#chanwLocalDateParseYearMonthDayString( "2017-05-01" )
+$chanwLocalDateParseYearMonthDayString.Year
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateParseYearMonthDayString”》
+doc*###
+#macro( chanwLocalDateParseYearMonthDayString $chanwLocalDateParseYearMonthDayStringStr )
+    #set( $chanwLocalDateParseYearMonthDayString = $chanwLocalDateNow.parse( $chanwLocalDateParseYearMonthDayStringStr ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateToCalendar( $dt )《/code》
+《p》Converts a 《code》LocalDate《/code》 object to a 《code》GregorianCalendar《/code》 object.《/p》
+《pre》
+#chanwLocalDateToCalendar( $chanwLocalDateNow )
+$chanwLocalDateToCalendar
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateToCalendar”》
+doc*###
+#macro( chanwLocalDateToCalendar $chanwLocalDateToCalendarDt )
+    #if( $chanwLocalDateToCalendarDt.Class.Name != $JAVA_TIME_LOCAL_DATE_CLASS_NAME )
+        A LocalDate object is required.
+        #stop
+    #end
+##
+    #set( $chanwMonthValue = $chanwLocalDateToCalendarDt.MonthValue - 1 )
+    #set( $chanwLocalDateToCalendar = $_DateTool.Calendar )
+    $chanwLocalDateToCalendar.set( $chanwLocalDateToCalendarDt.Year, $chanwMonthValue, $chanwLocalDateToCalendarDt.DayOfMonth )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateToDate( $dt )《/code》
+《p》Converts a 《code》LocalDate《/code》 object to a 《code》Date《/code》 object.《/p》
+《pre》
+#chanwLocalDateToDate( $chanwLocalDateNow )
+$chanwLocalDateToDate
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateToDate”》
+doc*###
+#macro( chanwLocalDateToDate $chanwLocalDateToDateDt )
+    #if( $chanwLocalDateToDateDt.Class.Name != $JAVA_TIME_LOCAL_DATE_CLASS_NAME )
+        A LocalDate object is required.
+        #stop
+    #end
+##
+    #chanwLocalDateToCalendar( $chanwLocalDateToDateDt )
+    #set( $chanwLocalDateToDate = $_DateTool.toDate( $chanwLocalDateToCalendar ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateTimeFromCalendar( $cal )《/code》
+《p》Returns a 《code》LocalDateTime《/code》 object based on the data from the
+《code》GregorianCalendar《/code》 object 《code》$cal《/code》.《/p》
+《pre》
+#chanwLocalDateTimeToCalendar( $chanwLocalDateTimeNow )
+#chanwLocalDateTimeFromCalendar( $chanwLocalDateTimeToCalendar )
+$chanwLocalDateTimeNow
+$chanwLocalDateTimeFromCalendar
+
+#chanwLocalDateTimeToDate( $chanwLocalDateTimeFromCalendar )
+$chanwLocalDateTimeToDate
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateTimeFromCalendar”》
+doc*###
+#macro( chanwLocalDateTimeFromCalendar $chanwLocalDateTimeFromCalendarCal )
+    #if( $chanwLocalDateTimeFromCalendarCal.Class.Name != $JAVA_UTIL_GREGORIAN_CALENDAR_CLASS_NAME )
+        A GregorianCalendar object is required.
+        #stop
+    #end
+##
+    #chanwLocalDateTimeFromDate( $_DateTool.toDate( $chanwLocalDateTimeFromCalendarCal ) )
+    #set( $chanwLocalDateTimeFromCalendar = $chanwLocalDateTimeFromDate )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateTimeFromDate( $date )《/code》
+《p》Returns a 《code》LocalDateTime《/code》 object based on the data from the
+《code》Date《/code》 object 《code》$date《/code》.《/p》
+《pre》
+#chanwLocalDateTimeToDate( $chanwLocalDateTimeNow )
+#chanwLocalDateTimeFromDate( $chanwLocalDateTimeToDate )
+$chanwLocalDateTimeNow
+$chanwLocalDateTimeFromDate
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateTimeFromDate”》
+doc*###
+#macro( chanwLocalDateTimeFromDate $chanwLocalDateTimeFromDateDate )
+    #if( $chanwLocalDateTimeFromDateDate.Class.Name != $JAVA_UTIL_DATE_CLASS_NAME )
+        A Date object is required.
+        #stop
+    #end
+##
+    #set( $chanwCalendar = $_DateTool.toCalendar( $chanwLocalDateTimeFromDateDate ) )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeNow.withYear( $chanwCalendar.get( $chanwYearField ) ) )
+    #set( $chanwMonthInt = $chanwCalendar.get( $chanwMonthField ) + 1 )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withMonth( $chanwMonthInt ) )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withDayOfMonth( $chanwCalendar.get( $chanwDayField ) ) )
+    #set( $chanwHourInt = $chanwCalendar.get( $chanwHourField ) )
+##
+    #if( $chanwCalendar.get( $chanwAmPmField ) == $_FieldTool.in( 'java.util.Calendar' ).PM )
+        #set( $chanwHourInt = $chanwHourInt + 12 )
+    #end
+##
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withHour( $chanwHourInt ) )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withMinute( $chanwCalendar.get( $chanwMinuteField ) ) )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withSecond( $chanwCalendar.get( $chanwSecondField ) ) )
+    #set( $chanwNanoLong = $chanwCalendar.get( $chanwMillisecondField ) * 1000000 )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withNano( $chanwNanoLong ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateTimeFromTimestampString( $str )《/code》
+《p》Parses the string and returns the corresponding 《code》LocalDateTime《/code》 object.
+The string can be a timestamp string or a 《code》Long《/code》 object storing the
+timestamp.《/p》
+《pre》
+#chanwLocalDateTimeToTimestampLong( $chanwLocalDateTimeNow )
+#chanwLocalDateTimeFromTimestampString( $chanwLocalDateTimeToTimestampLong )
+$chanwLocalDateTimeFromTimestampString
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateTimeFromTimestampString”》
+doc*###
+#macro( chanwLocalDateTimeFromTimestampString $chanwLocalDateTimeFromTimestampStringStr )
+    #if( !$chanwLocalDateTimeFromTimestampStringStr )
+        A timestamp string is required.
+        #stop
+    #end
+##
+    #set( $chanwTimestampString = $chanwLocalDateTimeFromTimestampStringStr )
+##
+    #if( $chanwLocalDateTimeFromTimestampStringStr.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $chanwTimestampString = $chanwTimestampString + "" )
+    #end
+##
+    #set( $chanwDateObj = $_DateTool.getDate( $chanwTimestampString ) )
+    #chanwLocalDateTimeFromDate( $chanwDateObj )
+    #set( $chanwLocalDateTimeFromTimestampString = $chanwLocalDateTimeFromDate )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateTimeOfYearMonthDayHourMinuteSecond《/code》
+《p》Returns a 《code》LocalDateTime《/code》 object storing the input values.《/p》
+《pre》
+#chanwLocalDateTimeOfYearMonthDayHourMinuteSecond( 2017  5  2  15  23  12  436 )
+$chanwLocalDateTimeOfYearMonthDayHourMinuteSecond
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateTimeOfYearMonthDayHourMinuteSecond”》
+doc*###
+#macro( chanwLocalDateTimeOfYearMonthDayHourMinuteSecond $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondYear $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondMonth $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondDay $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondHour $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondMinute $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondSecond $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondMillisecond )
+    #if( $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondMillisecond )
+        #set( $chanwNanoLong = $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondMillisecond * 1000000 )
+    #else
+        #set( $chanwNanoLong = 0 )
+    #end
+##
+    #set( $chanwLocalDateTimeOfYearMonthDayHourMinuteSecond = $chanwLocalDateTimeNow.of( $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondYear, $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondMonth, $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondDay, $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondHour, $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondMinute, $chanwLocalDateTimeOfYearMonthDayHourMinuteSecondSecond, $chanwNanoLong ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString( $str )《/code》
+《p》Parses the string and returns the corresponding 《code》LocalDateTime《/code》 object.
+The string should be of the format 《code》yyyy-mm-ddThh:mm:ss《/code》.《/p》
+《pre》
+#chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString( "2017-05-02T15:20:30" )
+$chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString
+$chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString.Second
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString”》
+doc*###
+#macro( chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString $chanwLocalDateTimeParseYearMonthDayHourMinuteSecondStringStr )
+    #set( $chanwLocalDateTimeParseYearMonthDayHourMinuteSecondString = $chanwLocalDateTimeNow.parse( $chanwLocalDateTimeParseYearMonthDayHourMinuteSecondStringStr ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateTimeToCalendar( $dt )《/code》
+《p》Converts a 《code》LocalDateTime《/code》 object to a 《code》GregorianCalendar《/code》 object.《/p》
+《pre》
+#chanwLocalDateTimeToCalendar( $chanwLocalDateTimeNow )
+$chanwLocalDateTimeToCalendar
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateTimeToCalendar”》
+doc*###
+#macro( chanwLocalDateTimeToCalendar $chanwLocalDateTimeToCalendarDt )
+    #if( $chanwLocalDateTimeToCalendarDt.Class.Name != $JAVA_TIME_LOCAL_DATE_TIME_CLASS_NAME )
+        A LocalDateTime object is required.
+        #stop
+    #end
+##
+    #chanwLocalDateTimeToDate( $chanwLocalDateTimeToCalendarDt )
+    #set( $chanwLocalDateTimeToCalendar = $_DateTool.toCalendar( $chanwLocalDateTimeToDate ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateTimeToDate( $dt )《/code》
+《p》Converts a 《code》LocalDateTime《/code》 object to a 《code》Date《/code》 object.《/p》
+《pre》
+#chanwLocalDateTimeToDate( $chanwLocalDateTimeNow )
+$chanwLocalDateTimeToDate
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateTimeToDate”》
+doc*###
+#macro( chanwLocalDateTimeToDate $chanwLocalDateTimeToDateDt )
+    #if( $chanwLocalDateTimeToDateDt.Class.Name != $JAVA_TIME_LOCAL_DATE_TIME_CLASS_NAME )
+        A LocalDateTime object is required.
+        #stop
+    #end
+##
+    #set( $chanwLocalDateTimeString = $chanwLocalDateTimeToDateDt.toString() )
+    #set( $chanwDateFormat = $_DateTool.getDateFormat( 
+        "y-M-d'T'H:m:s.S", $_DateTool.getLocale(), $_DateTool.getTimeZone() ) )
+    #set( $chanwLocalDateTimeToDate = $chanwDateFormat.parse( $chanwLocalDateTimeString ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocalDateTimeToTimestampLong( $dt )《/code》
+《p》Converts a 《code》LocalDateTime《/code》 object to a 《code》Long《/code》 object.《/p》
+《pre》
+#chanwLocalDateTimeToTimestampLong( $chanwLocalDateTimeNow )
+$chanwLocalDateTimeToTimestampLong
+《/pre》
+《/documentation》
+《macro id=“chanwLocalDateTimeToTimestampLong”》
+doc*###
+#macro( chanwLocalDateTimeToTimestampLong $chanwLocalDateTimeToTimestampLongDt )
+    #if( $chanwLocalDateTimeToTimestampLongDt.Class.Name != $JAVA_TIME_LOCAL_DATE_TIME_CLASS_NAME )
+        A LocalDateTime object is required.
+        #stop
+    #end
+##
+    #chanwLocalDateTimeToDate( $chanwLocalDateTimeToTimestampLongDt )
+    #set( $chanwLocalDateTimeToTimestampLong = $chanwLocalDateTimeToDate.Time )
+#end
+#*doc
+《/macro》
+《documentation id=“bottom”》
+《h2》References《/h2》
+《ul》
+《li》《a href=“https://docs.oracle.com/javase/8/docs/api/java/time/LocalDate.html”》java.time.LocalDate《/a》 API《/li》
+《li》《a href=“https://docs.oracle.com/javase/8/docs/api/java/time/LocalTime.html”》java.time.LocalTime《/a》 API《/li》
+《li》《a href=“https://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html”》java.time.LocalDateTime《/a》 API《/li》
+《/ul》
+《/documentation》
+《/code》
+doc*###
