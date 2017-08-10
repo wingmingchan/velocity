@@ -1,11 +1,32 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
 《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+${SINGLE_HASH}set( ${DOLLAR}page = ${DOLLAR}_XPathTool.selectSingleNode( ${DOLLAR}contentRoot, "calling-page/system-page" ) )
+${SINGLE_HASH}chanwProcessSystemPage( ${DOLLAR}page )
+#set( $page = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page" ) )
+#chanwProcessSystemPage( $page )
+
+${DOLLAR}systemPageName: $systemPageName
+${SINGLE_HASH}set( ${DOLLAR}folder = ${DOLLAR}_XPathTool.selectSingleNode( ${DOLLAR}contentRoot, "system-folder" ) )
+${SINGLE_HASH}chanwProcessSystemFolder( ${DOLLAR}folder )
+#set( $folder = $_XPathTool.selectSingleNode( $contentRoot, "system-folder" ) )
+#chanwProcessSystemFolder( $folder )
+
+${DOLLAR}systemFolderName: $systemFolderName
+${DOLLAR}systemFolderIsPublished: $systemFolderIsPublished
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines macros to process an index block.
@@ -14,47 +35,197 @@ Do not process the entire block. Instead, select 《code》system-page《/code�
 (《code》org.jdom.Element《/code》 objects).《/p》
 《p》Example code:《/p》
 《pre》
-#import( 'site://_common_assets/formats/library/velocity/chanw_process_index_block' )
-
 #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page" ) )
 #chanwProcessSystemPage( $page )
-$S_PRE
-
 $systemPageName
 $systemPageIsPublished
-
-$chanwDynamicMetatdataNameValuesMap.get( "exclude-from-menu" )
-$E_PRE
-
 #set( $folder = $_XPathTool.selectSingleNode( $contentRoot, "system-folder" ) )
 #chanwProcessSystemFolder( $folder )
-$S_PRE
-
 $systemFolderName
 $systemFolderIsPublished
-
-$chanwDynamicMetatdataNameValuesMap.get( "exclude-from-left" )
-$E_PRE
 《/pre》
 《p》Output:《/p》
 《pre》
-test-process-index-block
+chanw_process_index_block
 true
-
-[Yes]
-
-/
+brisk
 true
-
-[]
 《/pre》
 《/documentation》
-*#
-#import( 'formats/library/velocity/chanw_global_values' )
-#import( 'formats/library/velocity/chanw_global_macros' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_global_macros' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
+## cascade element names
+#set( $cascadeXML_ELEMENT_AUTHOR                = 'author' )
+#set( $cascadeXML_ELEMENT_CREATED_BY            = 'created-by' )
+#set( $cascadeXML_ELEMENT_CREATED_ON            = 'created-on' )
+#set( $cascadeXML_ELEMENT_DESCRIPTION           = 'description' )
+#set( $cascadeXML_ELEMENT_DISPLAY_NAME          = 'display-name' )
+#set( $cascadeXML_ELEMENT_DYNAMIC_METADATA      = 'dynamic-metadata' )
+#set( $cascadeXML_ELEMENT_END_DATE              = 'end-date' )
+#set( $cascadeXML_ELEMENT_FILE_SIZE             = 'file-size' )
+#set( $cascadeXML_ELEMENT_IS_PUBLISHED          = 'is-published' )
+#set( $cascadeXML_ELEMENT_KEYWORDS              = 'keywords' )
+#set( $cascadeXML_ELEMENT_LAST_MODIFIED_BY      = 'last-modified-by' )
+#set( $cascadeXML_ELEMENT_LAST_MODIFIED         = 'last-modified' )
+#set( $cascadeXML_ELEMENT_LAST_PUBLISHED_BY     = 'last-published-by' )
+#set( $cascadeXML_ELEMENT_LAST_PUBLISHED_ON     = 'last-published-on' )
+#set( $cascadeXML_ELEMENT_LINK                  = 'link' )
+#set( $cascadeXML_ELEMENT_NAME                  = 'name' )
+#set( $cascadeXML_ELEMENT_PATH                  = 'path' )
+#set( $cascadeXML_ELEMENT_PAGE_XHTML            = 'page-xhtml' )
+#set( $cascadeXML_ELEMENT_REVIEW_DATE           = 'review-date' )
+#set( $cascadeXML_ELEMENT_SITE                  = 'site' )
+#set( $cascadeXML_ELEMENT_START_DATE            = 'start-date' )
+#set( $cascadeXML_ELEMENT_SUMMARY               = 'summary' )
+#set( $cascadeXML_ELEMENT_SYSTEM_BLOCK          = 'system-block' )
+#set( $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE = 'system-data-structure' )
+#set( $cascadeXML_ELEMENT_SYSTEM_FILE           = 'system-file' )
+#set( $cascadeXML_ELEMENT_SYSTEM_FOLDER         = 'system-folder' )
+#set( $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK    = 'system-index-block' )
+#set( $cascadeXML_ELEMENT_SYSTEM_PAGE           = 'system-page' )
+#set( $cascadeXML_ELEMENT_SYSTEM_SYMLINK        = 'system-symlink' )
+#set( $cascadeXML_ELEMENT_SYSTEM_XML            = 'system-xml' )
+#set( $cascadeXML_ELEMENT_TEASER                = 'teaser' )
+#set( $cascadeXML_ELEMENT_TITLE                 = 'title' )
+#set( $chanwFolderContainedAssets = [ $cascadeXML_ELEMENT_SYSTEM_BLOCK, 
+    $cascadeXML_ELEMENT_SYSTEM_FILE, $cascadeXML_ELEMENT_SYSTEM_FOLDER,
+    $cascadeXML_ELEMENT_SYSTEM_PAGE, $cascadeXML_ELEMENT_SYSTEM_SYMLINK ] )
+## maps used to generate code
+#set( $rssItemVarElementMap = {
+        'rssItemGuid':       $rssXML_ELEMENT_GUID,
+        'rssItemTitle':      $rssXML_ELEMENT_TITLE,
+        'rssItemLink':       $rssXML_ELEMENT_LINK,
+        'rssItemPubDate':    $rssXML_ELEMENT_PUB_DATE,
+        'rssItemDescription':$rssXML_ELEMENT_DESCRIPTION
+    } )
+##
+#set( $systemBlockVarElementMap = {
+        'systemBlockName':           $cascadeXML_ELEMENT_NAME,
+        'systemBlockTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemBlockSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemBlockAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemBlockTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemBlockKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemBlockDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemBlockStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemBlockEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemBlockReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
+        'systemBlockDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
+        'systemBlockPath':           $cascadeXML_ELEMENT_PATH,
+        'systemBlockSite':           $cascadeXML_ELEMENT_SITE,
+        'systemBlockCreatedBy':      $cascadeXML_ELEMENT_CREATED_BY,
+        'systemBlockCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
+        'systemBlockLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
+        'systemBlockLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
+        'systemBlockDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA,
+        'systemBlockSystemDataStructure':$cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE
+    } )
+##   
+#set( $systemFileVarElementMap = {
+        'systemFileName':           $cascadeXML_ELEMENT_NAME,
+        'systemFileTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemFileSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemFileAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemFileTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemFileKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemFileDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemFileStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemFileEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemFileReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
+        'systemFileDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
+        'systemFileIsPublished':    $cascadeXML_ELEMENT_IS_PUBLISHED,
+        'systemFileLastPublishedOn':$cascadeXML_ELEMENT_LAST_PUBLISHED_ON,
+        'systemFileLastPublishedBy':$cascadeXML_ELEMENT_LAST_PUBLISHED_BY,
+        'systemFilePath':           $cascadeXML_ELEMENT_PATH,
+        'systemFileSite':           $cascadeXML_ELEMENT_SITE,
+        'systemFileLink':           $cascadeXML_ELEMENT_LINK,
+        'systemFileCreatedBy':      $cascadeXML_ELEMENT_CREATED_BY,
+        'systemFileCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
+        'systemFileLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
+        'systemFileLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
+        'systemFileSize':           $cascadeXML_ELEMENT_FILE_SIZE,
+        'systemFileDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA
+    } )
+##
+#set( $systemFolderVarElementMap = {
+        'systemFolderName':           $cascadeXML_ELEMENT_NAME,
+        'systemFolderIsPublished':    $cascadeXML_ELEMENT_IS_PUBLISHED,
+        'systemFolderTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemFolderSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemFolderAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemFolderTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemFolderKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemFolderDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemFolderStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemFolderEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemFolderReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
+        'systemFolderDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
+        'systemFolderPath':           $cascadeXML_ELEMENT_PATH,
+        'systemFolderSite':           $cascadeXML_ELEMENT_SITE,
+        'systemFolderLink':           $cascadeXML_ELEMENT_LINK,
+        'systemFolderCreatedBy':      $cascadeXML_ELEMENT_CREATED_BY,
+        'systemFolderCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
+        'systemFolderLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
+        'systemFolderLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
+        'systemFolderLastPublishedOn':$cascadeXML_ELEMENT_LAST_PUBLISHED_ON,
+        'systemFolderLastPublishedBy':$cascadeXML_ELEMENT_LAST_PUBLISHED_BY,
+        'systemFolderDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA
+    } )
+##    
+#set( $systemPageVarElementMap = {
+        'systemPageName':           $cascadeXML_ELEMENT_NAME,
+        'systemPageIsPublished':    $cascadeXML_ELEMENT_IS_PUBLISHED,
+        'systemPageTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemPageSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemPageAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemPageTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemPageKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemPageDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemPageStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemPageEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemPageReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
+        'systemPageDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
+        'systemPagePath':           $cascadeXML_ELEMENT_PATH,
+        'systemPageSite':           $cascadeXML_ELEMENT_SITE,
+        'systemPageLink':           $cascadeXML_ELEMENT_LINK,
+        'systemPageCreatedBy':      $cascadeXML_ELEMENT_CREATED_BY,
+        'systemPageCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
+        'systemPageLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
+        'systemPageLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
+        'systemPageLastPublishedOn':$cascadeXML_ELEMENT_LAST_PUBLISHED_ON,
+        'systemPageLastPublishedBy':$cascadeXML_ELEMENT_LAST_PUBLISHED_BY,
+        'systemPagePageXhtml':      $cascadeXML_ELEMENT_PAGE_XHTML,
+        'systemPageDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA,
+        'systemPageSystemDataStructure':$cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE
+    } )
+##    
+#set( $systemSymlinkVarElementMap = {
+        'systemSymlinkName':           $cascadeXML_ELEMENT_NAME,
+        'systemSymlinkTitle':          $cascadeXML_ELEMENT_TITLE,
+        'systemSymlinkSummary':        $cascadeXML_ELEMENT_SUMMARY,
+        'systemSymlinkAuthor':         $cascadeXML_ELEMENT_AUTHOR,
+        'systemSymlinkTeaser':         $cascadeXML_ELEMENT_TEASER,
+        'systemSymlinkKeywords':       $cascadeXML_ELEMENT_KEYWORDS,
+        'systemSymlinkDescription':    $cascadeXML_ELEMENT_DESCRIPTION,
+        'systemSymlinkStartDate':      $cascadeXML_ELEMENT_START_DATE,
+        'systemSymlinkEndDate':        $cascadeXML_ELEMENT_END_DATE,
+        'systemSymlinkReviewDate':     $cascadeXML_ELEMENT_REVIEW_DATE,
+        'systemSymlinkDisplayName':    $cascadeXML_ELEMENT_DISPLAY_NAME,
+        'systemSymlinkPath':           $cascadeXML_ELEMENT_PATH,
+        'systemSymlinkSite':           $cascadeXML_ELEMENT_SITE,
+        'systemSymlinkCreatedBy':      $cascadeXML_ELEMENT_CREATED_BY,
+        'systemSymlinkCreatedOn':      $cascadeXML_ELEMENT_CREATED_ON,
+        'systemSymlinkLastModifiedBy': $cascadeXML_ELEMENT_LAST_MODIFIED_BY,
+        'systemSymlinkLastModified':   $cascadeXML_ELEMENT_LAST_MODIFIED,
+        'systemSymlinkLink':           $cascadeXML_ELEMENT_LINK,
+        'systemSymlinkDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA
+
+    } )
 #set( $chanwProcessIndexBlockGlobalVariables = [
     "chanwDynamicMetatdataNameValuesList",
     "chanwDynamicMetatdataNameValuesMap",
@@ -65,7 +236,7 @@ true
     "indexBlockElementMap",
     "indexBlockMapKeys"
 ] )
-#*
+#*doc
 《/global-variables》
 《documentation》
 《code》#chanwProcessDynamicData( $dynamicDataNode )《/code》
@@ -73,29 +244,29 @@ true
 a variable named 《code》$chanwDynamicMetatdataNameValuesList《/code》.《/p》
 《/documentation》
 《macro id=“chanwProcessDynamicData”》
-*#
-#macro( chanwProcessDynamicData $dynamicDataNode )
-    #if( $dynamicDataNode.name != $cascadeXML_ELEMENT_DYNAMIC_METADATA )
+doc*###
+#macro( chanwProcessDynamicData $chanwProcessDynamicDataDynamicDataNode )
+    #if( $chanwProcessDynamicDataDynamicDataNode.name != $cascadeXML_ELEMENT_DYNAMIC_METADATA )
         Not a dynamic data!!!$BR
         #stop
     #end
-    
+##
     #set( $chanwDynamicMetatdataNameValuesList = [] )
-    #set( $chanwDynamicMetatdataValues         = $dynamicDataNode.getChildren( 'value' ) )
-    
+    #set( $chanwDynamicMetatdataValues         = $chanwProcessDynamicDataDynamicDataNode.getChildren( 'value' ) )
+##
     #foreach( $value in $chanwDynamicMetatdataValues )
         #set( $void = $chanwDynamicMetatdataNameValuesList.add( $value.Value ) )
     #end
-    
+##
     #if( !$chanwDynamicMetatdataNameValuesMap )
         #set( $chanwDynamicMetatdataNameValuesMap = {} )
     #end
-    
+##
     #set( $void = $chanwDynamicMetatdataNameValuesMap.put( 
-        $dynamicDataNode.getChild( 'name' ).Value,
+        $chanwProcessDynamicDataDynamicDataNode.getChild( 'name' ).Value,
         $chanwDynamicMetatdataNameValuesList ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 There is code and a code template used to generate four macros: 《code》#chanwProcessRSSItem《/code》,
@@ -141,7 +312,7 @@ elements like 《code》last-modified《/code》. When an element is missing, th
 its corresponding variable will be the empty string.《/p》
 《/documentation》
 《macro id=“generatedCode”》
-*#
+doc*###
 ## generate macros that process rss item, system-block, system-file, system-symlink
 #set( $indexBlockElementMap = {
     "chanwProcessRSSItem" :        [ "item",    "rssXML_ELEMENT_ITEM",               "rssItemVarElementMap",       "" ],
@@ -153,15 +324,34 @@ its corresponding variable will be the empty string.《/p》
 
 #set( $indexBlockMapKeys = $indexBlockElementMap.keySet() )
 
+#set( $index_block_code = $SINGLE_HASH + 'macro( -macro_name- $-macro_name--node_type-Node )' +
+$SINGLE_HASH + 'if( !$-macro_name--node_type-Node )' +
+'        The -macro_name--node_type- element is not defined.' +
+$SINGLE_HASH + 'elseif( $-macro_name--node_type-Node.name != $-element_name- )' +
+'        Not a/an -node_type- element!!!' +
+$SINGLE_HASH + 'stop' +
+$SINGLE_HASH + 'end' +
+$SINGLE_HASH + 'chanwGetNodeValues( $-macro_name--node_type-Node $-map_name- )' +
+$SINGLE_HASH + 'set( $chanwDynamicMetatdataNameValuesMap  = {} )'  +
+$SINGLE_HASH + 'if( ' + $SINGLE_QUOTE + '-dm_name-' + $SINGLE_QUOTE + '!=' + $SINGLE_QUOTE + $SINGLE_QUOTE + ')' +
+$SINGLE_HASH + 'set( $chanwStmt =' + $SINGLE_QUOTE + $SINGLE_HASH + 'set($chanwAssetDynamicMetadata=$-dm_name-)' + $SINGLE_QUOTE + ')'  +
+$SINGLE_HASH + 'evaluate( $chanwStmt )' +
+$SINGLE_HASH + 'if( $chanwAssetDynamicMetadata.size() -gt- 0 )' +
+$SINGLE_HASH + 'foreach( $dm in $chanwAssetDynamicMetadata )' +
+$SINGLE_HASH + 'chanwProcessDynamicData( $dm )' +
+$SINGLE_HASH + 'end' +
+$SINGLE_HASH + 'end' +
+$SINGLE_HASH + 'end' +
+$SINGLE_HASH + 'end' )
+
 #foreach( $macroName in $indexBlockMapKeys )
     #set( $chanwMacroList = $indexBlockElementMap[ $macroName ] )
     #set( $chanwStmt = $index_block_code.replaceAll( "-macro_name-", $macroName ).replaceAll(
         "-node_type-", $chanwMacroList[ 0 ] ).replaceAll( "-element_name-", $chanwMacroList[ 1 ] ).replaceAll(
-        "-map_name-", $chanwMacroList[ 2 ] ).replaceAll( "-dm_name-", $chanwMacroList[ 3 ] ) )
-    
+        "-map_name-", $chanwMacroList[ 2 ] ).replaceAll( "-dm_name-", $chanwMacroList[ 3 ] ).replaceAll( "-gt-", ">" ) )
     #evaluate( $chanwStmt )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwProcessSystemFolder( $folderNode )《/code》
@@ -169,42 +359,42 @@ its corresponding variable will be the empty string.《/p》
 in a set of variables, and processes the dynamic fields, if there are any.《/p》
 《/documentation》
 《macro id=“chanwProcessSystemFolder”》
-*#
-#macro( chanwProcessSystemFolder $folderNode )
-    #if( !$folderNode )
+doc*###
+#macro( chanwProcessSystemFolder $chanwProcessSystemFolderFolderNode )
+    #if( !$chanwProcessSystemFolderFolderNode )
         The folder element is not defined.$BR
-    #elseif( $folderNode.name != $cascadeXML_ELEMENT_SYSTEM_FOLDER )
-        $folderNode.name is not a folder element!!!$BR
+    #elseif( $chanwProcessSystemFolderFolderNode.name != $cascadeXML_ELEMENT_SYSTEM_FOLDER )
+        $chanwProcessSystemFolderFolderNode.name is not a folder element!!!$BR
         #stop
     #end
-    #chanwGetNodeValues( $folderNode $systemFolderVarElementMap )
-    #chanwGetNodeSets( $folderNode, { 
+    #chanwGetNodeValues( $chanwProcessSystemFolderFolderNode $systemFolderVarElementMap )
+    #chanwGetNodeSets( $chanwProcessSystemFolderFolderNode, { 
         'systemFolderDynamicMetadata':$cascadeXML_ELEMENT_DYNAMIC_METADATA, 
         'systemFolderSystemBlock':    $cascadeXML_ELEMENT_SYSTEM_BLOCK,
         'systemFolderSystemFile':     $cascadeXML_ELEMENT_SYSTEM_FILE,
         'systemFolderSystemFolder':   $cascadeXML_ELEMENT_SYSTEM_FOLDER,
         'systemFolderSystemPage':     $cascadeXML_ELEMENT_SYSTEM_PAGE,
         'systemFolderSystemSymlink':  $cascadeXML_ELEMENT_SYSTEM_SYMLINK } )
-        
+##
     #set( $chanwDynamicMetatdataNameValuesMap  = {} )
-    
+##
     #if( $systemFolderDynamicMetadata.size() > 0 )
         #foreach( $dmd in $systemFolderDynamicMetadata )
             #chanwProcessDynamicData( $dmd )
         #end
     #end
-    
+##
     #set( $chanwSystemFolderChildren = [] )
-    
-    #foreach( $child in $folderNode.Children )
+##
+    #foreach( $child in $chanwProcessSystemFolderFolderNode.Children )
         #if( $chanwFolderContainedAssets.contains( $child.name ) )
             #set( $void = $chanwSystemFolderChildren.add( $child ) )
         #end
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation id=“bottom”》
 《/documentation》
 《/code》
-*#
+doc*###
