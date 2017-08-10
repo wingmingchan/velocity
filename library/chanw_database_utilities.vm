@@ -1,10 +1,13 @@
-#*
+#*doc
 《code》
 《copyright》
 Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
+8/3/2017 Fixed a bug in #chanwGetAllTableNames.
+7/12/2017 Added import and evaluate elements.
 4/26/2017 Added #chanwGetUserCountAuditByActionDays.
 4/18/2017 Changed Statement to readonly.
 4/10/2017 Fixed bugs in #chanwGetHTMLTableFromResultSet.
@@ -20,6 +23,23 @@ Modification history:
 1/12/2017 Added more code for Oracle
 1/9/2017 Added #chanwGetAllTableNames
 《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+=============================================================
+$DOUBLE_HASH Display the number of entries in the cxml_foldercontent table
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_database_utilities' )
+${SINGLE_HASH}chanwGetNumberOfRecordsInTable( "cxml_foldercontent" )
+#chanwGetNumberOfRecordsInTable( "cxml_foldercontent" )
+${DOLLAR}chanwGetNumberOfRecordsInTable: $chanwGetNumberOfRecordsInTable
+=============================================================
+#chanwGetAllTableNames
+$chanwGetAllTableNames
+=============================================================
+《/pre》
+《/div》
+《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
 《p》This format defines utility macros to access the Cascade database. At the end
@@ -34,12 +54,30 @@ MySql:《/p》
 《p》Also note that table names used in SQL statement are case-sensitive.
 Use uppercase for Oracle, and lowercase for MySql.《/p》
 《/documentation》
-*#
-#import( 'formats/library/velocity/chanw_global_macros' )
-#import( 'formats/library/velocity/chanw_process_cascade_api' )
-#*
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_global_macros' )
+#*doc
+《/import》
 《global-variables》
-*#
+doc*###
+## strings used in tables of DB
+#set( $CASCADE_TABLE_TYPE_ASSET_TYPE_MAP = {
+    "BLO" : $CASCADE_API_BLOCK_TYPE,
+    "FIL" : $CASCADE_API_FILE_TYPE,
+    "FOL" : $CASCADE_API_FOLDER_TYPE,
+    "PAG" : $CASCADE_API_PAGE_TYPE,
+    "REF" : $CASCADE_API_REFERENCE_TYPE,
+    "SYM" : $CASCADE_API_SYMLINK_TYPE
+} )
+## element to Cascade type map
+#set( $CASCADE_TYPE_ELEMENT_MAP = {
+    "system-block":  $CASCADE_API_BLOCK_TYPE,
+    "system-file":   $CASCADE_API_FILE_TYPE,
+    "system-folder": $CASCADE_API_FOLDER_TYPE,
+    "system-page":   $CASCADE_API_PAGE_TYPE,
+    "system-symlink":$CASCADE_API_SYMLINK_TYPE
+} )
 #set( $chanwDatabaseUtilitiesGlobalVariables = [ 
     "chanwAssetCachePath",
     "chanwAssetSiteName",
@@ -90,11 +128,11 @@ Use uppercase for Oracle, and lowercase for MySql.《/p》
     "sqlCachepathWithSpace",
     "sqlCachepathWithUppercaseChar"
 ] )
-
+##
 #if( $_PropertyTool.isNull( $chanwOracleDB ) )
     #set( $chanwOracleDB = true )  ## defaulted to Oracle
 #end
-
+##
 ## SQL statements that work for both Oracle and MySql
 #set( $sqlCachepathWithSpace = "select f.id, f.cachepath from cxml_foldercontent f " +
     "where f.cachepath like '% %' and f.iscurrentversion=1 and f.siteid=" +
@@ -114,7 +152,7 @@ Use uppercase for Oracle, and lowercase for MySql.《/p》
     "where siteid=(select id from cxml_site where name='-siteName-') and assettype='FIL' " +
     "and iscurrentversion=1) ff left join cxml_entityrelation er on ff.id = er.fileid " +
     "where er.fileid is null) fc2 on fc1.id=fc2.id))" )
-#*
+#*doc
 《/global-variables》
 《documentation》
 《code》#chanwCheckResultSet( $rs )《/code》
@@ -122,16 +160,16 @@ Use uppercase for Oracle, and lowercase for MySql.《/p》
 with a valid result set. This macro is used by other macros.《/p》
 《/documentation》
 《macro id=“chanwCheckResultSet”》
-*#
-#macro( chanwCheckResultSet $rs )
-    #chanwIsInstanceOf( $rs $JAVA_SQL_RESULT_SET_CLASS_NAME )
-    
+doc*###
+#macro( chanwCheckResultSet $chanwCheckResultSetRs )
+    #chanwIsInstanceOf( $chanwCheckResultSetRs $JAVA_SQL_RESULT_SET_CLASS_NAME )
+##
     #if( !$chanwIsInstanceOf )
     A ResultSet object is required.
     #stop
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwCheckStatement( $stmt )《/code》
@@ -139,16 +177,16 @@ with a valid result set. This macro is used by other macros.《/p》
 with a valid statement. This macro is used by other macros.《/p》
 《/documentation》
 《macro id=“chanwCheckStatement”》
-*#
-#macro( chanwCheckStatement $stmt )
-    #chanwIsInstanceOf( $stmt $JAVA_SQL_STATEMENT_CLASS_NAME )
-    
+doc*###
+#macro( chanwCheckStatement $chanwCheckStatementStmt )
+    #chanwIsInstanceOf( $chanwCheckStatementStmt $JAVA_SQL_STATEMENT_CLASS_NAME )
+##
     #if( !$chanwIsInstanceOf )
     A Statement object is required.
     #stop
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwCleanUp《/code》
@@ -162,18 +200,18 @@ invoke 《code》#chanwGetDatabaseStatement《/code》 like this:《/p》
 《/pre》
 《/documentation》
 《macro id=“chanwCleanUp”》
-*#
+doc*###
 #macro( chanwCleanUp )
     #if( $chanwConnection )
         ##still open
         $chanwConnection.close()
     #end
-    
+##
     #if( $chanwGetDatabaseStatement )
         $chanwGetDatabaseStatement.close()
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwCreateDatabasePHPCode( $data )《/code》
@@ -184,7 +222,7 @@ columns. The resulting code is stored in 《code》$globalStringBuffer《/code�
 To build a one-column list, use 《code》#chanwGetDatabaseList《/code》 instead.
 Example:《/p》
 《pre》
-#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+#import( 'site://_core/formats/library/velocity/chanw_library_import' )
 
 #set( $sql  = "SELECT userName, email, fullName FROM cxml_user" )
 #chanwGetResultSet( $sql )
@@ -203,44 +241,44 @@ The variable 《code》$view《/code》 will be associated with an associative a
 with usernames as keys and emails and full names as values.《/p》
 《/documentation》
 《macro id=“chanwCreateDatabasePHPCode”》
-*#
-#macro( chanwCreateDatabasePHPCode $data )
-    #chanwCheckResultSet( $data )
-    
-    #if( $data.last() )
-        #set( $chanwLastRecordNumber = $data.Row )
+doc*###
+#macro( chanwCreateDatabasePHPCode $chanwCreateDatabasePHPCodeData )
+    #chanwCheckResultSet( $chanwCreateDatabasePHPCodeData )
+##
+    #if( $chanwCreateDatabasePHPCodeData.last() )
+        #set( $chanwLastRecordNumber = $chanwCreateDatabasePHPCodeData.Row )
     #end
-
-    #set( $chanwColumnCount = $data.getMetaData().getColumnCount() )
+##
+    #set( $chanwColumnCount = $chanwCreateDatabasePHPCodeData.getMetaData().getColumnCount() )
     $globalStringBuffer.setLength( 0 )
     #set( $void = $globalStringBuffer.append( '$view=array(' ) )
-    
+##
     #if( $chanwLastRecordNumber > 0 )
-        #set( $void = $data.first() )
+        #set( $void = $chanwCreateDatabasePHPCodeData.first() )
         ## the code is formatted in this way to avoid too much space within 
         ## foreach to avoid hanging
         ## the first record
         #foreach( $count in [ 1..$chanwColumnCount ] )##
             #if( $count == 1 )#set(
-                $void = $globalStringBuffer.append( '"' ).append( $data.getString(##
+                $void = $globalStringBuffer.append( '"' ).append( $chanwCreateDatabasePHPCodeData.getString(##
                 $count ) ).append( '"=>array(' ) )##
             #else#set( $void = $globalStringBuffer.append( '"' ).append(##
-                $data.getString( $count ) ).append( '"' ) )##
+                $chanwCreateDatabasePHPCodeData.getString( $count ) ).append( '"' ) )##
                 #if( $count == $chanwColumnCount )#set( $void = $globalStringBuffer.append( ")," ) )##
                 #else#set( $void = $globalStringBuffer.append( "," ) )##
                 #end##
             #end##
         #end##
-        
-        ## loop through all remaining records
+##
+## loop through all remaining records
 #foreach( $i in [ 2..$chanwLastRecordNumber ] )##
-#set( $void = $data.next() )##
+#set( $void = $chanwCreateDatabasePHPCodeData.next() )##
 #foreach( $j in [ 1..$chanwColumnCount ] )##
 #if( $j == 1 )#set( $void = $globalStringBuffer.append( '"' ).append(##
-$data.getString( $j ) ).append( '"=>array(' ) )##
+$chanwCreateDatabasePHPCodeData.getString( $j ) ).append( '"=>array(' ) )##
 #else##
 #set( $void = $globalStringBuffer.append( '"' ).append(##
-$data.getString( $j ) ).append( '"' ) )##
+$chanwCreateDatabasePHPCodeData.getString( $j ) ).append( '"' ) )##
 #if( $j == $chanwColumnCount )##
 #set( $void = $globalStringBuffer.append( ")," ) )##
 #else##
@@ -250,10 +288,10 @@ $data.getString( $j ) ).append( '"' ) )##
 #end##
 #end##
 #end##
-    
+##
     #set( $void = $globalStringBuffer.append( ");" ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetAllTableNames《/code》
@@ -265,24 +303,25 @@ $chanwGetAllTableNames
 《/pre》
 《/documentation》
 《macro id=“chanwGetAllTableNames”》
-*#
+doc*###
 #macro( chanwGetAllTableNames )
     #if( !$chanwConnection || $chanwConnection.isClosed() )
         #chanwGetDatabaseStatement
     #end
     ## Oracle
     #if( $chanwOracleDB )
+        #set( $chanwGetAllTableNames = [] )
         #set( $chanwSql = "SELECT tablespace_name, table_name FROM all_tables " +
              "WHERE tablespace_name LIKE 'C%' " +
              "AND table_name like 'CXML_%' " +
              "ORDER BY table_name" )
-        
+##
         #chanwGetResultSet( $chanwSql )
-
+##
         #if( $chanwGetResultSet.next() )
             #set( $chanwTableName = '"' + $chanwGetResultSet.getString( 2 ).toLowerCase() + '"' )
             #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
-        
+##
             #foreach( $num in [ 1..500 ] )
                 #if( $chanwGetResultSet.next() )
                     #set( $chanwTableName = '"' + $chanwGetResultSet.getString( 2 ).toLowerCase() + '"' )
@@ -297,13 +336,13 @@ $chanwGetAllTableNames
         #set( $chanwDBMetadata    = $chanwConnection.getMetaData() )
         #set( $chanwDBMetadataRS  = $chanwDBMetadata.getTables( null, null, "%", null ) )
         #set( $chanwGetAllTableNames = [] )
-
+##
         #if( $chanwDBMetadataRS.next() )
             #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
                 #set( $chanwTableName = '"' + $chanwDBMetadataRS.getString( 3 ).toLowerCase() + '"' )
                 #set( $void = $chanwGetAllTableNames.add( $chanwTableName ) )
             #end
-        
+##
             #foreach( $num in [ 1..500 ] )
                 #if( $chanwDBMetadataRS.next() )
                     #if( $chanwDBMetadataRS.getString( 3 ).startsWith( "cxml_" ) )
@@ -317,7 +356,7 @@ $chanwGetAllTableNames
         #end
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetAssetById( $id )《/code》
@@ -328,16 +367,16 @@ $chanwGetAssetById.Class.Name
 《/pre》
 《/documentation》
 《macro id=“chanwGetAssetById”》
-*#
-#macro( chanwGetAssetById $id )
+doc*###
+#macro( chanwGetAssetById $chanwGetAssetByIdId )
     #set( $chanwGetAssetById = "" )
-    #chanwGetAssetInfoById( $id )
-    
+    #chanwGetAssetInfoById( $chanwGetAssetByIdId )
+##
     #if( $chanwAssetCachePath != "" )
         #set( $chanwGetAssetById = $_.locate( $chanwAssetCachePath, $chanwAssetType, $chanwAssetSiteName ) )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetAssetInfoById( $id )《/code》
@@ -352,17 +391,17 @@ $chanwGetAssetInfoById
 《/pre》
 《/documentation》
 《macro id=“chanwGetAssetInfoById”》
-*#
-#macro( chanwGetAssetInfoById $id )
+doc*###
+#macro( chanwGetAssetInfoById $chanwGetAssetInfoByIdId )
     #set( $chanwGetAssetInfoById = "" )
     #set( $chanwAssetCachePath   = "" )
     #set( $chanwAssetType        = "" )
     #set( $chanwAssetSiteName    = "" )
     #set( $chanwGetAssetInfoById = [] )
-    #set( $chanwSql = "select f.CACHEPATH, f.ASSETTYPE, s.name from cxml_foldercontent f, cxml_site s where f.id='$id' and f.SITEID=s.id" )
+    #set( $chanwSql = "select f.CACHEPATH, f.ASSETTYPE, s.name from cxml_foldercontent f, cxml_site s where f.id='$chanwGetAssetInfoByIdId' and f.SITEID=s.id" )
     #chanwGetResultSet( $chanwSql )
     #chanwGetRecordListFromResultSet( $chanwGetResultSet )
-
+##
     #if( $chanwGetRecordListFromResultSet.size() > 1 )
         #set( $chanwRecord           = $chanwGetRecordListFromResultSet.get( 1 ) )
         #set( $chanwAssetCachePath   = $chanwRecord.get( 0 ) )
@@ -373,7 +412,7 @@ $chanwGetAssetInfoById
         #set( $void                  = $chanwGetAssetInfoById.add( $chanwAssetSiteName ) )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetBlockOrphanIdCachepathBySiteName( $siteName )《/code》
@@ -385,12 +424,12 @@ $chanwGetBlockOrphanIdCachepathBySiteName
 《/pre》
 《/documentation》
 《macro id=“chanwGetBlockOrphanIdCachepathBySiteName”》
-*#
-#macro( chanwGetBlockOrphanIdCachepathBySiteName $siteName )
-    #chanwGetIdCachepathBySqlSiteName( $sqlBlockOrphan $siteName )
+doc*###
+#macro( chanwGetBlockOrphanIdCachepathBySiteName $chanwGetBlockOrphanIdCachepathBySiteNameSiteName )
+    #chanwGetIdCachepathBySqlSiteName( $sqlBlockOrphan $chanwGetBlockOrphanIdCachepathBySiteNameSiteName )
     #set( $chanwGetBlockOrphanIdCachepathBySiteName = $chanwGetIdCachepathBySqlSiteName )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetDatabaseList( $listName $sql )《/code》
@@ -403,25 +442,25 @@ from a table. Example:《/p》
 《/pre》
 《/documentation》
 《macro id=“chanwGetDatabaseList”》
-*#
-#macro( chanwGetDatabaseList $listName $sql )
-    #chanwCheckString( $listName "A name for a global variable is required" )
-    #chanwGetResultSet( $sql )
+doc*###
+#macro( chanwGetDatabaseList $chanwGetDatabaseListListName $chanwGetDatabaseListSql )
+    #chanwCheckString( $chanwGetDatabaseListListName "A name for a global variable is required" )
+    #chanwGetResultSet( $chanwGetDatabaseListSql )
     #set( $chanwData = $chanwGetResultSet )
-    #set( $chanwStmt = '#set($' + $listName + '=[])' )
+    #set( $chanwStmt = '#set($' + $chanwGetDatabaseListListName + '=[])' )
     #evaluate( $chanwStmt )
-
+##
     #if( $chanwData.next() )
         ## the first record
         #set( $void = $chanwData.first() )
-        #set( $chanwStmt = '#set($void=$' + $listName +
+        #set( $chanwStmt = '#set($void=$' + $chanwGetDatabaseListListName +
             '.add($chanwData.getString( 1 ) ) )' )
         #evaluate( $chanwStmt )
-    
+##
         ## loop through all other records
         #foreach( $num in [ 1..$INTEGER_MAX_VALUE ] )
             #if( $chanwData.next() )
-                #set( $chanwStmt = '#set($void=$' + $listName +
+                #set( $chanwStmt = '#set($void=$' + $chanwGetDatabaseListListName +
                     '.add( $chanwData.getString( 1 ) ) )' )
                 #evaluate( $chanwStmt )
             #else
@@ -430,7 +469,7 @@ from a table. Example:《/p》
         #end
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetDatabaseStatement《/code》
@@ -439,7 +478,7 @@ and a 《code》Statement《/code》 object named 《code》$chanwGetDatabaseSta
 associated with the Cascade database. This macro is used by other macros.《/p》
 《/documentation》
 《macro id=“chanwGetDatabaseStatement”》
-*#
+doc*###
 #macro( chanwGetDatabaseStatement )
     #set( $chanwGetDatabasStatement = "" )
     #chanwGetObjectByClassName( "javax.naming.InitialContext" )
@@ -453,7 +492,7 @@ associated with the Cascade database. This macro is used by other macros.《/p�
         $_FieldTool.in( "java.sql.ResultSet" ).TYPE_SCROLL_INSENSITIVE, 
         $_FieldTool.in( "java.sql.ResultSet" ).CONCUR_READ_ONLY ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetFileOrphanIdCachepathBySiteName( $siteName )《/code》
@@ -465,15 +504,15 @@ $chanwGetFileOrphanIdCachepathBySiteName
 《/pre》
 《/documentation》
 《macro id=“chanwGetFileOrphanIdCachepathBySiteName”》
-*#
-#macro( chanwGetFileOrphanIdCachepathBySiteName $siteName )
-    ##set( $chanwSql = $sqlFileOrphan.replaceAll( '-siteName-', $siteName ) )
+doc*###
+#macro( chanwGetFileOrphanIdCachepathBySiteName $chanwGetFileOrphanIdCachepathBySiteNameSiteName )
+    ##set( $chanwSql = $sqlFileOrphan.replaceAll( '-siteName-', $chanwGetFileOrphanIdCachepathBySiteNameSiteName ) )
     ##chanwGetResultSet( $chanwSql )
     ##chanwGetRecordListFromResultSet( $chanwGetResultSet false )
-    #chanwGetIdCachepathBySqlSiteName( $sqlFileOrphan $siteName )
+    #chanwGetIdCachepathBySqlSiteName( $sqlFileOrphan $chanwGetFileOrphanIdCachepathBySiteNameSiteName )
     #set( $chanwGetFileOrphanIdCachepathBySiteName = $chanwGetRecordListFromResultSet )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetHTMLTableFromResultSet( $rs )《/code》
@@ -487,57 +526,57 @@ $globalStringBuffer.toString()
 《/pre》
 《/documentation》
 《macro id=“chanwGetHTMLTableFromResultSet”》
-*#
-#macro( chanwGetHTMLTableFromResultSet $rs )
-    #chanwGetRecordListFromResultSet( $rs )
+doc*###
+#macro( chanwGetHTMLTableFromResultSet $chanwGetHTMLTableFromResultSetRs )
+    #chanwGetRecordListFromResultSet( $chanwGetHTMLTableFromResultSetRs )
     $globalStringBuffer.setLength( 0 )
-    
+##
     #if( $chanwGetRecordListFromResultSet.size() == 0 )
         Empty result set
     #else
         #set( $chanwRecordListFromResultSetLastIndex = 
             $chanwGetRecordListFromResultSet.size() - 1 )
 	    #set( $chanwResultSetMetadataList = $chanwGetRecordListFromResultSet.get( 0 ) )
-	    
+##
         #set( $void = $globalStringBuffer.append(
             "<table class='tcellspacing1 tcellpadding5' summary='Table'>" ) )
         #set( $void = $globalStringBuffer.append(
             "<tr class='bg1 text_white'>" ) )
-
+##
         #set( $chanwLastColumnIndex = $chanwResultSetColumnCount - 1 )
-
+##
         #foreach( $col in [ 0..$chanwLastColumnIndex ] )
             #set( $void = $globalStringBuffer.append( "<th>" ) )
             #set( $void = $globalStringBuffer.append(
                 $chanwResultSetMetadataList.get( $col ) ) )
             #set( $void = $globalStringBuffer.append( "</th>" ) )
         #end
-
+##
         #set( $void = $globalStringBuffer.append( "</tr>" ) )
-
+##
         #foreach( $counter in [ 0..$chanwRecordListFromResultSetLastIndex ] )
             #set( $chanwRecordList = $chanwGetRecordListFromResultSet.get( $counter ) )
-        
+##
             #if( $counter % 2 == 0 )
                 #set( $void = $globalStringBuffer.append( "<tr>" ) )
             #else
                 #set( $void = $globalStringBuffer.append(
                     "<tr class='tablerow1'>" ) )
             #end
-                
+##
             #foreach( $col in [ 0..$chanwLastColumnIndex ] )
                 #set( $void = $globalStringBuffer.append( "<td>" ) )
                 #set( $void = $globalStringBuffer.append( $chanwRecordList.get( $col ) ) )
                 #set( $void = $globalStringBuffer.append( "</td>" ) )
             #end
-                
+##
             #set( $void = $globalStringBuffer.append( "</tr>" ) )
         #end
-
+##
         #set( $void = $globalStringBuffer.append( "</table>" ) )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetHTMLTableFromSql( $sql )《/code》
@@ -553,22 +592,23 @@ $chanwGetHTMLTableFromSql
 《/pre》
 《/documentation》
 《macro id=“chanwGetHTMLTableFromSql”》
-*#
-#macro( chanwGetHTMLTableFromSql $sql )
+doc*###
+#macro( chanwGetHTMLTableFromSql $chanwGetHTMLTableFromSqlSql )
     #if( !$chanwGetDatabasStatement )
         #chanwGetDatabaseStatement()
         #chanwCheckStatement( $chanwGetDatabaseStatement )
     #end
-    
-    #chanwCheckString( $sql "An SQL string is required." )
-    #chanwGetResultSet( $sql )
-    
+##
+    #chanwCheckString( $chanwGetHTMLTableFromSqlSql "An SQL string is required." )
+    #chanwGetResultSet( $chanwGetHTMLTableFromSqlSql )
+##
     #if( $chanwGetResultSet != "" )
         #chanwGetHTMLTableFromResultSet( $chanwGetResultSet )
     #end
+##
     #set( $chanwGetHTMLTableFromSql = $globalStringBuffer.toString() )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetIdCachepathBySqlSiteName( $sql $siteName )《/code》
@@ -579,15 +619,15 @@ SQL and site name. This macro is used by other marcros. Example:《/p》
 《/pre》
 《/documentation》
 《macro id=“chanwGetIdCachepathBySqlSiteName”》
-*#
-#macro( chanwGetIdCachepathBySqlSiteName $sql $siteName )
+doc*###
+#macro( chanwGetIdCachepathBySqlSiteName $chanwGetIdCachepathBySqlSiteNameSql $chanwGetIdCachepathBySqlSiteNameSiteName )
     #set( $chanwGetIdCachepathBySqlSiteName = "" )
-    #set( $chanwSql = $sql.replaceAll( '-siteName-', $siteName ) )
+    #set( $chanwSql = $chanwGetIdCachepathBySqlSiteNameSql.replaceAll( '-siteName-', $chanwGetIdCachepathBySqlSiteNameSiteName ) )
     #chanwGetResultSet( $chanwSql )
     #chanwGetRecordListFromResultSet( $chanwGetResultSet false )
     #set( $chanwGetIdCachepathBySqlSiteName = $chanwGetRecordListFromResultSet )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetIdCachepathWithSpaceBySiteName( $siteName )《/code》
@@ -599,12 +639,12 @@ $chanwGetIdCachepathWithSpaceBySiteName
 《/pre》
 《/documentation》
 《macro id=“chanwGetIdCachepathWithSpaceBySiteName”》
-*#
-#macro( chanwGetIdCachepathWithSpaceBySiteName $siteName )
-    #chanwGetIdCachepathBySqlSiteName( $sqlCachepathWithSpace $siteName )
+doc*###
+#macro( chanwGetIdCachepathWithSpaceBySiteName $chanwGetIdCachepathWithSpaceBySiteNameSiteName )
+    #chanwGetIdCachepathBySqlSiteName( $sqlCachepathWithSpace $chanwGetIdCachepathWithSpaceBySiteNameSiteName )
     #set( $chanwGetIdCachepathWithSpaceBySiteName = $chanwGetIdCachepathBySqlSiteName )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetIdCachepathWithUppercaseCharBySiteName( $siteName )《/code》
@@ -616,12 +656,12 @@ $chanwGetIdCachepathWithUppercaseCharBySiteName
 《/pre》
 《/documentation》
 《macro id=“chanwGetIdCachepathWithUppercaseCharBySiteName”》
-*#
-#macro( chanwGetIdCachepathWithUppercaseCharBySiteName $siteName )
-    #chanwGetIdCachepathBySqlSiteName( $sqlCachepathWithUppercaseChar $siteName )
+doc*###
+#macro( chanwGetIdCachepathWithUppercaseCharBySiteName $chanwGetIdCachepathWithUppercaseCharBySiteNameSiteName )
+    #chanwGetIdCachepathBySqlSiteName( $sqlCachepathWithUppercaseChar $chanwGetIdCachepathWithUppercaseCharBySiteNameSiteName )
     #set( $chanwGetIdCachepathWithUppercaseCharBySiteName = $chanwGetIdCachepathBySqlSiteName )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetIndexableChildrenIdTypeMap( $folder )《/code》
@@ -636,20 +676,20 @@ $chanwGetIndexableChildrenIdTypeMap
 《/pre》
 《/documentation》
 《macro id=“chanwGetIndexableChildrenIdTypeMap”》
-*#
-#macro( chanwGetIndexableChildrenIdTypeMap $folder )
-    #chanwGetAssetId( $folder )
+doc*###
+#macro( chanwGetIndexableChildrenIdTypeMap $chanwGetIndexableChildrenIdTypeMapFolder )
+    #chanwGetAssetId( $chanwGetIndexableChildrenIdTypeMapFolder )
     #set( $chanwFolderId = $chanwGetAssetId )
     #set( $chanwSql = 
         "select id, assettype from cxml_foldercontent where parentfolderid='$chanwGetAssetId' " +
         "and shouldbeindexed=1 and iscurrentversion=1" )
     #chanwGetResultSet( $chanwSql )
-    
+##
     #set( $chanwGetIndexableChildrenIdTypeMap = {} )
-
+##
     #if( $chanwGetResultSet.next() )
         $chanwGetResultSet.beforeFirst()
-        
+##
         #foreach( $count in [ 1..$INTEGER_MAX_VALUE ] )
             #if( $chanwGetResultSet.next() )
                 #set( $dummy = $chanwGetIndexableChildrenIdTypeMap.put(
@@ -662,7 +702,7 @@ $chanwGetIndexableChildrenIdTypeMap
         $chanwGetResultSet.beforeFirst()
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetMetaDataRS( $table )《/code》
@@ -706,16 +746,16 @@ associated with the Cascade database. This macro is used by other macros.《/p�
 See 《code》#chanwGetTableColumnNames《/code》 for example.《/p》
 《/documentation》
 《macro id=“chanwGetMetaDataRS”》
-*#
-#macro( chanwGetMetaDataRS $table )
+doc*###
+#macro( chanwGetMetaDataRS $chanwGetMetaDataRSTable )
     #if( !$chanwMetaData )
         Invoke chanwGetDatabaseStatement first.
         #stop
     #end
-    
-    #set( $chanwGetMetaDataRS = $chanwMetaData.getColumns( null, null, $table, "%" ) )
+##
+    #set( $chanwGetMetaDataRS = $chanwMetaData.getColumns( null, null, $chanwGetMetaDataRSTable, "%" ) )
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetNumberOfRecordsInResultSet( $rs )《/code》
@@ -729,19 +769,19 @@ $chanwGetNumberOfRecordsInResultSet
 《/pre》
 《/documentation》
 《macro id=“chanwGetNumberOfRecordsInResultSet”》
-*#
-#macro( chanwGetNumberOfRecordsInResultSet $rs )
-    #chanwCheckResultSet( $rs )
+doc*###
+#macro( chanwGetNumberOfRecordsInResultSet $chanwGetNumberOfRecordsInResultSetRs )
+    #chanwCheckResultSet( $chanwGetNumberOfRecordsInResultSetRs )
     #set( $chanwGetNumberOfRecordsInResultSet = 0 )
-
-    #if( $rs.next() )
-        #set( $void = $rs.last() )
-        #set( $chanwGetNumberOfRecordsInResultSet = $rs.getRow() )
+##
+    #if( $chanwGetNumberOfRecordsInResultSetRs.next() )
+        #set( $void = $chanwGetNumberOfRecordsInResultSetRs.last() )
+        #set( $chanwGetNumberOfRecordsInResultSet = $chanwGetNumberOfRecordsInResultSetRs.getRow() )
         ## move cursor back to the front
-        $rs.beforeFirst()
+        $chanwGetNumberOfRecordsInResultSetRs.beforeFirst()
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetNumberOfRecordsInTable( $table )《/code》
@@ -753,24 +793,23 @@ $chanwGetNumberOfRecordsInTable
 《/pre》
 《/documentation》
 《macro id=“chanwGetNumberOfRecordsInTable”》
-*#
-#macro( chanwGetNumberOfRecordsInTable $table )
+doc*###
+#macro( chanwGetNumberOfRecordsInTable $chanwGetNumberOfRecordsInTableTable )
     #if( !$chanwGetDatabasStatement )
         #chanwGetDatabaseStatement()
         #chanwCheckStatement( $chanwGetDatabaseStatement )
     #end
-    
-    #chanwCheckString( $table "A table name is required." )
-    
-    #set( $chanwSql       = "SELECT count(*) FROM $table " )
+##
+    #chanwCheckString( $chanwGetNumberOfRecordsInTableTable "A table name is required." )
+##
+    #set( $chanwSql       = "SELECT count(*) FROM $chanwGetNumberOfRecordsInTableTable " )
     #set( $chanwResultSet = $chanwGetDatabaseStatement.executeQuery( $chanwSql ) )
-
+##
     #if( $chanwResultSet.next() )
-        #set( $chanwGetNumberOfRecordsInTable = $globalApacheMathTool.toNumber(
-            $chanwResultSet.getString( 1 ) ) )
+        #set( $chanwGetNumberOfRecordsInTable = $globalApacheMathTool.toNumber( $chanwResultSet.getString( 1 ) ) )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetRecordListFromResultSet( $rs )《/code》
@@ -786,23 +825,23 @@ $chanwGetRecordListFromResultSet
 《/pre》
 《/documentation》
 《macro id=“chanwGetRecordListFromResultSet”》
-*#
-#macro( chanwGetRecordListFromResultSet $rs $withColNames )
-    #chanwCheckResultSet( $rs )
-    
-    #if( !$_PropertyTool.isNull( $withColNames ) && $withColNames )
+doc*###
+#macro( chanwGetRecordListFromResultSet $chanwGetRecordListFromResultSetRs $chanwGetRecordListFromResultSetWithColNames )
+    #chanwCheckResultSet( $chanwGetRecordListFromResultSetRs )
+##
+    #if( !$_PropertyTool.isNull( $chanwGetRecordListFromResultSetWithColNames ) && $chanwGetRecordListFromResultSetWithColNames )
         #set( $chanwWithColNames = true ) 
     #else
         #set( $chanwWithColNames = false ) ## defaulted to false
     #end
-    
-    #set( $chanwResultSetMetadata    = $rs.MetaData )
+##
+    #set( $chanwResultSetMetadata    = $chanwGetRecordListFromResultSetRs.MetaData )
     #set( $chanwResultSetColumnCount = $chanwResultSetMetadata.ColumnCount )
     #set( $chanwGetRecordListFromResultSet = [] )
-    
+##
     ## store metadata
     #set( $chanwRecordList = [] )
-    
+##
     #if( $chanwWithColNames )
         #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
             #set( $void = $chanwRecordList.add(
@@ -810,27 +849,27 @@ $chanwGetRecordListFromResultSet
         #end
         #set( $void = $chanwGetRecordListFromResultSet.add( $chanwRecordList ) )
     #end
-    
+##
     #set( $chanwNumberOfRecords = 0 )
-    $rs.beforeFirst()
-        
+    $chanwGetRecordListFromResultSetRs.beforeFirst()
+##
     #foreach( $counter in [ 1..$INTEGER_MAX_VALUE ] )
-        #if( $rs.next() )
+        #if( $chanwGetRecordListFromResultSetRs.next() )
         	#set( $chanwRecordList = [] )
             #set( $chanwNumberOfRecords = $chanwNumberOfRecords + 1 )
                 
             #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
                 #set( $void = $chanwRecordList.add(
-                    $rs.getString( $col ) ) )
+                    $chanwGetRecordListFromResultSetRs.getString( $col ) ) )
             #end
-                
+##
             #set( $void = $chanwGetRecordListFromResultSet.add( $chanwRecordList ) )
         #else
             #break
         #end
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetResultSet( $sql )《/code》
@@ -841,23 +880,23 @@ $chanwGetRecordListFromResultSet
 《/pre》
 《/documentation》
 《macro id=“chanwGetResultSet”》
-*#
-#macro( chanwGetResultSet $sql )
+doc*###
+#macro( chanwGetResultSet $chanwGetResultSetSql )
     #if( !$chanwGetDatabasStatement )
         #chanwGetDatabaseStatement()
         #chanwCheckStatement( $chanwGetDatabaseStatement )
     #end
-    
-    #chanwCheckString( $sql "An SQL string is required." )
-    
+##
+    #chanwCheckString( $chanwGetResultSetSql "An SQL string is required." )
+##
     #set( $chanwGetResultSet = "" )
-    #set( $chanwGetResultSet = $chanwGetDatabaseStatement.executeQuery( $sql ) )
-    
+    #set( $chanwGetResultSet = $chanwGetDatabaseStatement.executeQuery( $chanwGetResultSetSql ) )
+##
     #if( !$chanwGetResultSet )
         No result set returned
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetSiteIdBySiteName( $siteName )《/code》
@@ -868,17 +907,17 @@ $chanwGetSiteIdBySiteName
 《/pre》
 《/documentation》
 《macro id=“chanwGetSiteIdBySiteName”》
-*#
-#macro( chanwGetSiteIdBySiteName $siteName )
+doc*###
+#macro( chanwGetSiteIdBySiteName $chanwGetSiteIdBySiteNameSiteName )
     #set( $chanwGetSiteIdBySiteName = "" )
-    #set( $chanwSql = "select id from cxml_site where name='$siteName'" )
+    #set( $chanwSql = "select id from cxml_site where name='$chanwGetSiteIdBySiteNameSiteName'" )
     #chanwGetResultSet( $chanwSql )
-    
+##
     #if( $chanwGetResultSet.next() )
         #set( $chanwGetSiteIdBySiteName = $chanwGetResultSet.getString( 1 ) )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetSiteNameBySiteId( $siteName )《/code》
@@ -889,17 +928,17 @@ $chanwGetSiteNameBySiteId
 《/pre》
 《/documentation》
 《macro id=“chanwGetSiteNameBySiteId”》
-*#
-#macro( chanwGetSiteNameBySiteId $siteId )
+doc*###
+#macro( chanwGetSiteNameBySiteId $chanwGetSiteNameBySiteIdSiteId )
     #set( $chanwGetSiteNameBySiteId = "" )
-    #set( $chanwSql = "select name from cxml_site where id='$siteId'" )
+    #set( $chanwSql = "select name from cxml_site where id='$chanwGetSiteNameBySiteIdSiteId'" )
     #chanwGetResultSet( $chanwSql )
-    
+##
     #if( $chanwGetResultSet.next() )
         #set( $chanwGetSiteNameBySiteId = $chanwGetResultSet.getString( 1 ) )
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetTableColumnNames( $table )《/code》
@@ -911,19 +950,19 @@ $chanwGetTableColumnNames
 《/pre》
 《/documentation》
 《macro id=“chanwGetTableColumnNames”》
-*#
-#macro( chanwGetTableColumnNames $table )
+doc*###
+#macro( chanwGetTableColumnNames $chanwGetTableColumnNamesTable )
     #chanwGetDatabaseStatement
-    #chanwGetMetaDataRS( $table )
+    #chanwGetMetaDataRS( $chanwGetTableColumnNamesTable )
     #set( $chanwGetTableColumnNames = [] )
-
+##
     ## Oracle
     #if( $chanwOracleDB )
-        #set( $chanwSql = "select * from $table where 1 = 0" )
+        #set( $chanwSql = "select * from $chanwGetTableColumnNamesTable where 1 = 0" )
         #chanwGetResultSet( $chanwSql )
         #set( $chanwResultSetMetadata = $chanwGetResultSet.getMetaData() )
         #set( $chanwResultSetMetadataColumnCount = $chanwResultSetMetadata.getColumnCount() )
-        
+##
         #foreach( $num in [ 1..$chanwResultSetMetadataColumnCount ] )
             #set( $chanwColumnName = '"' + $chanwResultSetMetadata.getColumnLabel( $num ).toLowerCase() + '"' )
             #set( $void = $chanwGetTableColumnNames.add( $chanwColumnName ) )
@@ -940,7 +979,7 @@ $chanwGetTableColumnNames
         #end
     #end
 #end
-#*
+#*doc
 《/macro》
 《documentation》
 《code》#chanwGetUserCountAuditByActionDays( $action $days )《/code》
@@ -975,23 +1014,23 @@ $chanwGetUserCountAuditByActionDays
 《/pre》
 《/documentation》
 《macro id=“chanwGetUserCountAuditByActionDays”》
-*#
-#macro( chanwGetUserCountAuditByActionDays $action $days )
+doc*###
+#macro( chanwGetUserCountAuditByActionDays $chanwGetUserCountAuditByActionDaysAction $chanwGetUserCountAuditByActionDaysDays )
     #set( $chanwGetUserCountAuditByActionDays = [] )
     ## find the timestamp for comparison
     #set( $chanwPastCalendarObject = $chanwCalendarObject.clone() )
-    $chanwPastCalendarObject.add( $chanwDayField, $days )
+    $chanwPastCalendarObject.add( $chanwDayField, $chanwGetUserCountAuditByActionDaysDays )
     #set( $chanwPastDateObject = $_DateTool.toDate( $chanwPastCalendarObject ) )
     #set( $chanwPastTimestamp = $chanwPastDateObject.getTime() )
     #set( $chanwSql = "select username, count(username) from cxml_audit " +
-        "where action='$action' and tstamp>$chanwPastTimestamp group by username" )
+        "where action='$chanwGetUserCountAuditByActionDaysAction' and tstamp>$chanwPastTimestamp group by username" )
     #chanwGetResultSet( $chanwSql )
     #chanwGetRecordListFromResultSet( $chanwGetResultSet )
     #set( $chanwGetUserCountAuditByActionDays = $chanwGetRecordListFromResultSet )
 #end
-#*
+#*doc
 《/macro》
 《documentation id=“bottom”》
 《/documentation》
 《/code》
-*#
+doc*###
