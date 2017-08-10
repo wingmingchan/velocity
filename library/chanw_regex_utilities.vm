@@ -1,0 +1,258 @@
+#*doc
+《code》
+《copyright》
+Author: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+8/9/2017 Started using macro names as namespace prefixes for local parameters.
+8/3/2017 Added $chanwMessageFormatClassObject, #chanwGetChoiceFormatObject, #chanwGetDecimalFormatObject,
+#chanwGetMessageFormatObject, #chanwGetSimpleDateFormatObject.
+7/12/2017 Added the import element.
+7/6/2017 Added the evaluate element.
+7/4/2017 Format created
+《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+==========================================================
+${SINGLE_HASH}chanwGetMatcherObject( "group;text" "group;text;2;inner" )
+${DOLLAR}chanwGetMatcherObject.find()  $chanwDOUBLE_HASH=> true
+#chanwGetMatcherObject("group;text" "group;text;2;inner")
+$chanwGetMatcherObject.find()
+==========================================================
+${SINGLE_HASH}chanwGetPatternObject( "little" )
+${DOLLAR}chanwGetPatternObject.toString()  $chanwDOUBLE_HASH=> little
+#chanwGetPatternObject( "little" )
+$chanwGetPatternObject.toString()
+==========================================================
+${SINGLE_HASH}chanwMatches( "a\w+" "apple" )
+${DOLLAR}chanwMatches $chanwDOUBLE_HASH=> true
+${SINGLE_HASH}chanwMatches( "a" "apple" )
+${DOLLAR}chanwMatches $chanwDOUBLE_HASH=> false
+#chanwMatches( "a\w+" "apple" )
+$chanwMatches
+#chanwMatches( "a" "apple" )
+$chanwMatches
+==========================================================
+$_EscapeTool.getH()set( $map = {
+    "group;0;text;0":"Hello",
+    "group;0;text;1":"World",
+    "group;1;text;0":"A",
+    "group;1;text;1":"Wonderful",
+    "group;1;text;2":"Day"
+} )
+${SINGLE_HASH}chanwSearchStringKeyInMap( $map "text;1" )
+${DOLLAR}chanwSearchStringKeyInMap $chanwDOUBLE_HASH=> {group;0;text;1=World, group;1;text;1=Wonderful}
+#set( $map = {
+    "group;0;text;0":"Hello",
+    "group;0;text;1":"World",
+    "group;1;text;0":"A",
+    "group;1;text;1":"Wonderful",
+    "group;1;text;2":"Day"
+} )
+#chanwSearchStringKeyInMap( $map "text;1" )
+$chanwSearchStringKeyInMap
+==========================================================
+《/pre》
+《/div》
+《/evaluate》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format provides utility macros for working with regular expressions.
+Note that no String methods are used here. Only methods of Pattern and Matcher
+are used. The macro 《code》chanwGetPatternObject《/code》 can be used to
+get a 《code》Pattern《/code》 object (by calling 《code》Pattern.compile《/code》),
+whereas the macro 《code》chanwGetMatcherObject《/code》 can be used to
+get a 《code》Matcher《/code》 object. Through these two objects, other methods of
+these classes can be called.《/p》
+《/documentation》
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
+《global-variables》
+doc*###
+#set( $chanwMessageFormatClassObject = $_.Class.forName( "java.text.MessageFormat" ) )
+#set( $chanwRegexUtilitiesGlobalVariables = [
+    "chanwGetMatcherObject",
+    "chanwGetPatternObject",
+    "chanwKeySet",
+    "chanwMatches",
+    "chanwParamList",
+    "chanwSearchStringKeyInMap",
+    "chanwSplit"
+] )
+#*doc
+《/global-variables》
+《documentation》
+《code》#chanwGetChoiceFormatObject( $pString )《/code》
+《p》Stores a 《code》ChoiceFormat《/code》 object in the variable named
+《code》$chanwGetChoiceFormatObject《/code》 encapsulating the pattern String
+《code》$pString《/code》, which should be a String containing a pattern.《/p》
+《pre》
+#chanwGetChoiceFormatObject( "-1#is negative| 0#is zero or fraction | 1#is one |1.0<is 1+ |2#is two |2<is more than 2." )
+$chanwGetChoiceFormatObject.Class.Name
+《/pre》
+《/documentation》
+《macro id=“chanwGetChoiceFormatObject”》
+doc*###
+#macro( chanwGetChoiceFormatObject $chanwGetChoiceFormatObjectPString )
+    #chanwGetConstructorByClassNameParamSize( 'java.text.ChoiceFormat' 1 )
+    #set( $chanwGetChoiceFormatObject = $chanwGetConstructorByClassNameParamSize.newInstance( $chanwGetChoiceFormatObjectPString ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetDecimalFormatObject( $pString )《/code》
+《p》Stores a 《code》ChoiceFormat《/code》 object in the variable named
+《code》$chanwGetDecimalFormatObject《/code》 encapsulating the pattern String
+《code》$pString《/code》, which should be a String containing a pattern.《/p》
+《pre》
+#chanwGetDecimalFormatObject( "00.###E0" )
+$chanwGetDecimalFormatObject.Class.Name
+《/pre》
+《/documentation》
+《macro id=“chanwGetDecimalFormatObject”》
+doc*###
+#macro( chanwGetDecimalFormatObject $chanwGetDecimalFormatObjectPString )
+    #chanwGetConstructorByClassNameParamSize( 'java.text.DecimalFormat' 1 )
+    #set( $chanwGetDecimalFormatObject = $chanwGetConstructorByClassNameParamSize.newInstance( $chanwGetDecimalFormatObjectPString ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetMatcherObject( $pString $str )《/code》
+《p》Stores a 《code》Matcher《/code》 object in the variable 《code》$chanwGetMatcherObject《/code》
+object, matching the input String 《code》$str《/code》.《/p》
+《pre》
+#chanwGetMatcherObject( "group;text" "group;text;2;inner" )
+$chanwGetMatcherObject.find()
+《/pre》
+《/documentation》
+《macro id=“chanwGetMatcherObject”》
+doc*###
+#macro( chanwGetMatcherObject $chanwGetMatcherObjectPString $chanwGetMatcherObjectStr )
+    #set( $chanwGetMatcherObject = "" )
+    #chanwGetPatternObject( $chanwGetMatcherObjectPString )##
+    #set( $chanwGetMatcherObject = $chanwGetPatternObject.matcher( $chanwGetMatcherObjectStr ) )##
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetMessageFormatObject( $pString )《/code》
+《p》Stores a 《code》MessageFormat《/code》 object in the variable named
+《code》$chanwGetMessageFormat《/code》 encapsulating the pattern String
+《code》$pString《/code》, which should be a String containing a pattern.《/p》
+《pre》
+#chanwGetMessageFormatObject( "\d+" )
+$chanwGetMessageFormatObject.Class.Name
+《/pre》
+《/documentation》
+《macro id=“chanwGetMessageFormatObject”》
+doc*###
+#macro( chanwGetMessageFormatObject $chanwGetMessageFormatObjectPString )
+    #chanwGetConstructorByClassNameParamSize( 'java.text.MessageFormat' 1 )
+    #set( $chanwGetMessageFormatObject = $chanwGetConstructorByClassNameParamSize.newInstance( $chanwGetMessageFormatObjectPString ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetPatternObject( $pString )《/code》
+《p》Stores a 《code》Pattern《/code》 object in the variable named
+《code》$chanwGetPatternObject《/code》 by calling 《code》Pattern.compile()《/code》.
+The pattern String 《code》$pString《/code》 should be a String containing a pattern.《/p》
+《pre》
+#chanwGetPatternObject( "little" )
+$chanwGetPatternObject.toString()
+《/pre》
+《/documentation》
+《macro id=“chanwGetPatternObject”》
+doc*###
+#macro( chanwGetPatternObject $chanwGetPatternObjectPString )##
+    #set( $chanwGetPatternObject = "" )
+    #set( $chanwParamList = [ '${JAVA_LANG_STRING_CLASS_NAME}.Class' ] )##
+    #chanwGetMethodByClassNameMethodNameParamTypes( 'java.util.regex.Pattern' 'compile' $paramList )##
+    #set( $chanwGetPatternObject = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, $chanwGetPatternObjectPString ) )##
+#end##
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetSimpleDateFormatObject( $pString )《/code》
+《p》Stores a 《code》MessageFormat《/code》 object in the variable named
+《code》$chanwGetMessageFormatObject《/code》 encapsulating the pattern String
+《code》$pString《/code》, which should be a String containing a pattern.《/p》
+《pre》
+#chanwGetSimpleDateFormatObject( "\d+" )
+$chanwGetSimpleDateFormatObject.Class.Name
+《/pre》
+《/documentation》
+《macro id=“chanwGetSimpleDateFormatObject”》
+doc*###
+#macro( chanwGetSimpleDateFormatObject $chanwGetSimpleDateFormatObjectPString )
+    #chanwGetConstructorByClassNameParamSize( 'java.text.SimpleDateFormat' 1 )
+    #set( $chanwGetSimpleDateFormatObject = $chanwGetConstructorByClassNameParamSize.newInstance( $chanwGetSimpleDateFormatObjectPString ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwMatches( $pString $string )《/code》
+《p》Returns a boolean, indicating whether the entire region of 《code》$string《/code》
+matches the pattern 《code》$pString《/code》.《/p》
+《pre》
+#chanwMatches( "a\w+" "apple" )
+$chanwMatches ##=> true
+#chanwMatches( "a" "apple" )
+$chanwMatches ##=> false
+《/pre》
+《/documentation》
+《macro id=“chanwMatches”》
+doc*###
+#macro( chanwMatches $chanwMatchesPString $chanwMatchesString )
+    #chanwGetPatternObject( $chanwMatchesPString )##
+    #set( $chanwMatches = $chanwGetPatternObject.matches( $chanwMatchesPString, $chanwMatchesString ) )##
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwSearchStringKeyInMap( $map $pString )《/code》
+《p》Stores a map in a variable named 《code》$chanwSearchStringKeyInMap《/code》,
+which contains entries from the 《code》$map《/code》 passed in, by matching the
+String keys against the pattern String 《code》$pString《/code》.《/p》
+《pre》
+#set( $map = {
+    "group;0;text;0":"Hello",
+    "group;0;text;1":"World",
+    "group;1;text;0":"A",
+    "group;1;text;1":"Wonderful",
+    "group;1;text;2":"Day"
+} )
+
+#chanwSearchStringKeyInMap( $map "text;1" )
+$chanwSearchStringKeyInMap
+《/pre》
+《/documentation》
+《macro id=“chanwSearchStringKeyInMap”》
+doc*###
+#macro( chanwSearchStringKeyInMap $chanwSearchStringKeyInMapMap $chanwSearchStringKeyInMapPString )
+    #chanwGetPatternObject( $chanwSearchStringKeyInMapPString )##
+    #set( $chanwKeySet = $chanwSearchStringKeyInMapMap.keySet() )##
+    #set( $chanwSearchStringKeyInMap = {} )##
+    ##
+    #foreach( $key in $chanwKeySet )
+        #chanwGetMatcherObject( $chanwSearchStringKeyInMapPString $key )##
+        ##
+        #if( $chanwGetMatcherObject.find() )##
+            #set( $void = $chanwSearchStringKeyInMap.put( $key, $chanwSearchStringKeyInMapMap[ $key ] ) )##
+        #end
+    #end
+#end
+#*doc
+《/macro》
+《documentation id=“bottom”》
+《div id=“show-code1”》《/div》
+《/documentation》
+《/code》
+doc*###
