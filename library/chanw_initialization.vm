@@ -1,0 +1,1118 @@
+#*doc
+《code》
+《copyright》
+Authors: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+8/7/2017 Started using macro names as namespace prefixes for local parameters.
+7/19/2017 Renamed from chanw_object_creator. Added new global values and macros.
+《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+=============================================================
+${DOUBLE_HASH} code to be evaluated
+#set( $code =
+"${SINGLE_HASH}set( ${DOLLAR}myVar = 3 )
+${SINGLE_HASH}macro( myMacro ${DOLLAR}var )
+    $var
+${SINGLE_HASH}end
+${SINGLE_HASH}myMacro( ${DOLLAR}myVar )" )
+${DOUBLE_HASH} display the code
+#chanwDisplayEvaluateCode( $code false )
+${DOUBLE_HASH} evaluate the code
+#chanwDisplayEvaluateCode( $code true )
+=============================================================
+${SINGLE_HASH}chanwGetFolderContainedAssetName( ${DOLLAR}currentPage )
+#chanwGetFolderContainedAssetName( $currentPage )
+${DOLLAR}chanwGetFolderContainedAssetName: $chanwGetFolderContainedAssetName
+=============================================================
+${SINGLE_HASH}chanwGetConstructorByClassNameParamSize( 'org.jdom.Text' 1 )
+#chanwGetConstructorByClassNameParamSize( 'org.jdom.Text' 1 )
+${DOLLAR}chanwGetConstructorByClassNameParamSize.Class.Name: $chanwGetConstructorByClassNameParamSize.Class.Name
+=============================================================
+${SINGLE_HASH}chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuffer' [ 'int' ] )
+#chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuffer' [ 'int' ] )
+${DOLLAR}chanwGetConstructorByClassNameParamTypeArray.Class.Name: $chanwGetConstructorByClassNameParamTypeArray.Class.Name
+=============================================================
+${SINGLE_HASH}chanwGetConstantValueByClassNameConstantName( 'com.hannonhill.cascade.velocity.CascadeComparisonDateTool' 'MILLIS_PER_YEAR' )
+#chanwGetConstantValueByClassNameConstantName( 'com.hannonhill.cascade.velocity.CascadeComparisonDateTool' 'MILLIS_PER_YEAR' )
+${DOLLAR}chanwGetConstantValueByClassNameConstantName: $chanwGetConstantValueByClassNameConstantName
+=============================================================
+${SINGLE_HASH}chanwGetMethodByClassNameMethodNameParamTypes( "java.lang.Math" "abs" '$_FieldTool.in( "java.lang.Double" ).TYPE' )
+#chanwGetMethodByClassNameMethodNameParamTypes( "java.lang.Math" "abs" '$_FieldTool.in( "java.lang.Double" ).TYPE' )
+${DOLLAR}chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, -2.5 ): $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, -2.5 )
+=============================================================
+${SINGLE_HASH}chanwGetObjectByClassName( "org.apache.commons.lang.BooleanUtils" )
+#chanwGetObjectByClassName( "org.apache.commons.lang.BooleanUtils" )
+${DOLLAR}chanwGetObjectByClassName.Class.Name: $chanwGetObjectByClassName.Class.Name
+=============================================================
+${SINGLE_HASH}chanwGetStaticMethodByClassNameMethodNameWithoutParams( "java.util.concurrent.ThreadLocalRandom"  "current" )
+#chanwGetStaticMethodByClassNameMethodNameWithoutParams( "java.util.concurrent.ThreadLocalRandom"  "current" )
+${DOLLAR}chanwGetStaticMethodByClassNameMethodNameWithoutParams.Class.Name: $chanwGetStaticMethodByClassNameMethodNameWithoutParams.Class.Name
+=============================================================
+${SINGLE_HASH}chanwIsInstanceOf( [] "java.util.concurrent.BlockingDeque" )
+#chanwIsInstanceOf( [] "java.util.concurrent.BlockingDeque" )
+${DOLLAR}chanwIsInstanceOf: $chanwIsInstanceOf
+=============================================================
+${SINGLE_HASH}chanwLocateAsset( "core/library/velocity/chanw" ${DOLLAR}chanw_framework_site_name "chanw_display_velocity_code" )
+#chanwLocateAsset( "core/library/velocity/chanw" $chanw_framework_site_name "chanw_display_velocity_code" )
+${DOLLAR}chanwLocateAsset.Class.Name: $chanwLocateAsset.Class.Name
+=============================================================
+${SINGLE_HASH}chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" ${DOLLAR}CASCADE_API_FORMAT_TYPE "_brisk" )
+#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" $CASCADE_API_FORMAT_TYPE "_brisk" )
+${DOLLAR}chanwLocateAssetWithFullPath.Class.Name: $chanwLocateAssetWithFullPath.Class.Name
+=============================================================
+${SINGLE_HASH}chanwOutputErrorMsg( ${DOLLAR}CHANW_LIBRARY_FOLDER_PATH ${DOLLAR}chanw_framework_site_name ${DOLLAR}CHANW_INITIALIZATION_FORMAT_NAME "Should show a test string." "fri4;sglk4ikFIO;RK" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Should show a test string." "fri4;sglk4ikFIO;RK" )
+=============================================================
+${SINGLE_HASH}chanwSetVariable( "myVar" "myValue" )
+#chanwSetVariable( "myVar" "myValue" )## String value
+${DOLLAR}myVar: $myVar
+${SINGLE_HASH}chanwSetVariable( "myVar" 1 )
+#chanwSetVariable( "myVar" 1 )## int value
+${DOLLAR}myVar: $myVar
+${SINGLE_HASH}chanwSetVariable( "locator" ${DOLLAR}_ )
+#chanwSetVariable( "locator" $_ )## obj value
+${DOLLAR}locator.Class.Name: $locator.Class.Name
+${SINGLE_HASH}chanwSetVariable( "map" {} )
+${SINGLE_HASH}chanwSetVariable( "map['state']" "NY" )
+#chanwSetVariable( "map" {} )## obj value
+#chanwSetVariable( "map['state']" "NY" )## a map as the variable
+${DOLLAR}map: $map
+=============================================================
+《/pre》
+《/div》
+《/evaluate》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format has no dependencies on other formats in the library.
+It defines global values needed for initialization, global objects used by
+the library, macros to retrieved constructors, and other supporting macros.《/p》
+《/documentation》
+《global-variables》
+doc*###
+#if( !$chanw_framework_site_name )
+    #set( $chanw_framework_site_name = '_brisk' )
+#end
+#set( $CHANW_INITIALIZATION_FORMAT_NAME = "chanw_initialization" )
+#set( $CHANW_LIBRARY_FOLDER_PATH        = "core/library/velocity/chanw" )
+## number used in loops
+#set( $INTEGER_MAX_VALUE = 50000 )
+## special characters
+#define( $chanwDOLLAR )$_EscapeTool.getD()#end
+#define( $chanwDOUBLE_HASH )$_EscapeTool.getH()$_EscapeTool.getH()#end
+#define( $chanwDOUBLE_QUOTE )$_EscapeTool.getQ()$_EscapeTool.getQ()#end
+#define( $chanwNEWLINE )$_EscapeTool.n#end
+#define( $chanwSINGLE_HASH )$_EscapeTool.getH()#end
+#define( $chanwSINGLE_QUOTE )$_EscapeTool.getS()#end
+#define( $DOLLAR )$_EscapeTool.getD()#end
+#define( $DOUBLE_HASH )$_EscapeTool.getH()$_EscapeTool.getH()#end
+#define( $DOUBLE_QUOTE )$_EscapeTool.getQ()#end
+#define( $NEWLINE )$_EscapeTool.n#end
+#define( $SINGLE_HASH )$_EscapeTool.getH()#end
+#define( $SINGLE_QUOTE )$_EscapeTool.getS()#end
+## HTML tags
+#define( $BR )<br />#end
+#define( $S_DIV )<div>#end
+#define( $E_DIV )</div>#end
+#define( $S_H1 )<h1>#end
+#define( $E_H1 )</h1>#end
+#define( $S_H2 )<h2>#end
+#define( $E_H2 )</h2>#end
+#define( $S_H3 )<h3>#end
+#define( $E_H3 )</h3>#end
+#define( $HR )<hr class="lightgray"/>#end
+#define( $S_LI )<li>#end
+#define( $E_LI )</li>#end
+#define( $S_P )<p>#end
+#define( $E_P )</p>#end
+#define( $S_PRE )<pre>#end
+#define( $E_PRE )</pre>#end
+#define( $S_UL )<ul>#end
+#define( $E_UL )</ul>#end
+## java class names used for comparison
+#set( $COM_CASCADE_BLOCK_API_CLASS_NAME              = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
+#set( $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME = "com.hannonhill.cascade.api.adapters.FolderContainedAssetAPIAdapter" )
+#set( $COM_CASCADE_METADATA_CLASS_NAME               = "com.hannonhill.cascade.api.adapters.MetadataAPIAdapter" )
+#set( $COM_CASCADE_PAGE_API_CLASS_NAME               = "com.hannonhill.cascade.api.adapters.PageAPIAdapter" )
+#set( $COM_CASCADE_STRUCTURED_DATA_NODE_CLASS_NAME   = "com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter" )
+#set( $COM_CASCADE_STRUCTURED_DATA_LIST_CLASS_NAME   = "[Lcom.hannonhill.cascade.api.asset.common.StructuredDataNode;" )
+#set( $JAVA_LANG_INTEGER_CLASS_NAME                  = 'java.lang.Integer' )
+#set( $JAVA_LANG_BOOLEAN_CLASS_NAME                  = 'java.lang.Boolean' )
+#set( $JAVA_LANG_STRING_CLASS_NAME                   = 'java.lang.String' )
+#set( $JAVA_LANG_CLASS_CLASS_NAME                    = 'java.lang.Class' )
+#set( $JAVA_SQL_STATEMENT_CLASS_NAME                 = 'java.sql.Statement' )
+#set( $JAVA_SQL_RESULT_SET_CLASS_NAME                = 'java.sql.ResultSet' )
+#set( $JAVA_TIME_LOCAL_DATE_CLASS_NAME               = 'java.time.LocalDate' )
+#set( $JAVA_TIME_LOCAL_DATE_TIME_CLASS_NAME          = 'java.time.LocalDateTime' )
+#set( $JAVA_UTIL_ARRAY_LIST_CLASS_NAME               = 'java.util.ArrayList' )
+#set( $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME            = 'java.util.LinkedHashMap' )
+#set( $JAVA_UTIL_HASHMAP_CLASS_NAME                  = 'java.util.HashMap' )
+#set( $JAVA_UTIL_DATE_CLASS_NAME                     = 'java.util.Date' )
+#set( $JAVA_UTIL_GREGORIAN_CALENDAR_CLASS_NAME       = 'java.util.GregorianCalendar' )
+#set( $ORG_JDOM_DOCUMENT_CLASS_NAME                  = 'org.jdom.Document' )
+#set( $ORG_JDOM_ELEMENT_CLASS_NAME                   = 'org.jdom.Element' )
+## Cascade API types
+#set( $CASCADE_API_BLOCK_TYPE     = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_BLOCK )
+#set( $CASCADE_API_FILE_TYPE      = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FILE )
+#set( $CASCADE_API_FOLDER_TYPE    = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FOLDER )
+#set( $CASCADE_API_FORMAT_TYPE    = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FORMAT )
+#set( $CASCADE_API_LINKABLE_TYPE  = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_LINKABLE )
+#set( $CASCADE_API_PAGE_TYPE      = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_PAGE )
+#set( $CASCADE_API_REFERENCE_TYPE = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_REFERENCE )
+#set( $CASCADE_API_SYMLINK_TYPE   = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_SYMLINK )
+#set( $CASCADE_API_TEMPLATE_TYPE  = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_TEMPLATE )
+#set( $CASCADE_TYPE_ELEMENT_MAP   = {
+    'system-block'         : $CASCADE_API_BLOCK_TYPE,
+    'system-index-block'   : $CASCADE_API_BLOCK_TYPE,
+    'system-data-structure': $CASCADE_API_BLOCK_TYPE,
+    'system-file'          : $CASCADE_API_FILE_TYPE,
+    'system-folder'        : $CASCADE_API_FOLDER_TYPE,
+    'system-page'          : $CASCADE_API_PAGE_TYPE,
+    'system-symlink'       : $CASCADE_API_SYMLINK_TYPE
+} )
+## global utility objects
+#set( $chanwTools = {
+    'globalApacheBooleanUtils' :     'org.apache.commons.lang.BooleanUtils',
+    'globalApacheClassUtils':        'org.apache.commons.lang.ClassUtils',
+    'globalApacheClassTool' :        'org.apache.velocity.tools.generic.ClassTool',
+    'globalApacheComparisonDateTool':'org.apache.velocity.tools.generic.ComparisonDateTool',
+    'globalApacheConversionTool':    'org.apache.velocity.tools.generic.ConversionTool',
+    'globalApacheLinkTool':          'org.apache.velocity.tools.generic.LinkTool',
+    'globalApacheMathTool':          'org.apache.velocity.tools.generic.MathTool',
+    'globalApacheNumberTool':        'org.apache.velocity.tools.generic.NumberTool',
+    'globalApacheNumberUtils':       'org.apache.commons.lang.math.NumberUtils',
+    'globalApacheSortTool':          'org.apache.velocity.tools.generic.SortTool',
+    'globalApacheStringUtils':       'org.apache.commons.lang.StringUtils',
+    'globalApacheStringEscapeUtils': 'org.apache.commons.lang.StringEscapeUtils',
+    'globalApacheWordUtils':         'org.apache.commons.lang.WordUtils',
+    'globalSAXBuilder':              'org.jdom.input.SAXBuilder'
+} )
+##
+#set( $chanwToolKeys = $chanwTools.keySet() )
+##
+## generate the global objects with default constructors
+#foreach( $key in $chanwToolKeys )
+#chanwGetObjectByClassName( $chanwTools[ $key ] )
+#set( $chanwStmt = '#chanwSetVariable("' + $key + '" $chanwGetObjectByClassName)' )
+#evaluate( $chanwStmt )
+#end
+##
+## objects created with constructors with parameters
+#chanwGetConstructorByClassNameParamSize( 'org.jdom.Text' 1 )
+#set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
+#set( $globalJDOMText   = $chanwConstructor.newInstance( "" ) )
+##
+#chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuffer' [ 'int' ] )
+#set( $chanwConstructor   = $chanwGetConstructorByClassNameParamTypeArray )
+#set( $globalStringBuffer = $chanwConstructor.newInstance( 10000 ) )
+##
+#chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuilder' [ 'int' ] )
+#set( $chanwConstructor    = $chanwGetConstructorByClassNameParamTypeArray )
+#set( $globalStringBuilder = $chanwConstructor.newInstance( 10000 ) )
+##
+## objects created using static methods
+#set( $chanwGlobalRandom = $_.Class.forName( "java.util.concurrent.ThreadLocalRandom" ).current() )
+## cascade pseudo tags
+#set( $S_SYSTEM_ASSET         = "[" + "system-asset]" )
+#set( $E_SYSTEM_ASSET         = "[" + "/system-asset]" )
+#set( $S_SYSTEM_ASSET_LOCAL   = "[" + "system-asset:local]" )
+#set( $E_SYSTEM_ASSET_LOCAL   = "[" + "/system-asset:local]" )
+#set( $S_SYSTEM_VIEW_INTERNAL = "[" + "system-view:internal]" )
+#set( $E_SYSTEM_VIEW_INTERNAL = "[" + "/system-view:internal]" )
+#set( $S_SYSTEM_VIEW_EXTERNAL = "[" + "system-view:external]" )
+#set( $E_SYSTEM_VIEW_EXTERNAL = "[" + "/system-view:external]" )
+#set( $S_PHP_PASSTHROUGH      = "<!--#" + "passthrough<?php " )
+#set( $E_PHP_PASSTHROUGH      = " ?>#" + "passthrough-->" )
+#set( $S_PROTECT              = "<!--#" + "protect" )
+#set( $E_PROTECT              = "#" + "protect-->" )
+## Cascade API Asset
+#set( $DataBlockPropertyMap = {
+    "DataBlockCreatedBy":             "CreatedBy",
+    "DataBlockCreatedOn":             "CreatedOn",
+    "DataBlockDataDefinitionPath":    "DataDefinitionPath",
+    "DataBlockFolderOrder":           "FolderOrder",
+    "DataBlockId":                    "Identifier.Id",
+    "DataBlockIdentifier":            "Identifier",
+    "DataBlockLastModified":          "LastModified",
+    "DataBlockLastModifiedBy":        "LastModifiedBy",
+    "DataBlockMetadata":              "Metadata",
+    "DataBlockName":                  "Name",
+    "DataBlockParentFolder":          "ParentFolder",
+    "DataBlockParentFolderIdentifier":"ParentFolderIdentifier",
+    "DataBlockPath":                  "Path",
+    "DataBlockSiteId":                "SiteId",
+    "DataBlockSiteName":              "SiteName",
+    "DataBlockSiteStructuredData":    "StructuredData",
+    "DataBlockType":                  "Identifier.Type",
+    "DataBlockXHTML":                 "XHTML",
+    "DataBlockXHTMLAsXMLElement":     "XHTMLAsXMLElement"
+} )
+##
+#set( $FeedBlockPropertyMap = {
+    "FeedBlockCreatedBy":             "CreatedBy",
+    "FeedBlockCreatedOn":             "CreatedOn",
+    "FeedBlockFeed":                  "Feed",
+    "FeedBlockFeedURL":               "FeedURL",
+    "FeedBlockFolderOrder":           "FolderOrder",
+    "FeedBlockId":                    "Identifier.Id",
+    "FeedBlockIdentifier":            "Identifier",
+    "FeedBlockLastModified":          "LastModified",
+    "FeedBlockLastModifiedBy":        "LastModifiedBy",
+    "FeedBlockMetadata":              "Metadata",
+    "FeedBlockName":                  "Name",
+    "FeedBlockParentFolder":          "ParentFolder",
+    "FeedBlockParentFolderIdentifier":"ParentFolderIdentifier",
+    "FeedBlockPath":                  "Path",
+    "FeedBlockSiteId":                "SiteId",
+    "FeedBlockSiteName":              "SiteName",
+    "FeedBlockType":                  "Identifier.Type"
+} )
+## FileData, FileText are left out; large files can crash the system
+#set( $FilePropertyMap = {
+    "FileCreatedBy":             "CreatedBy",
+    "FileCreatedOn":             "CreatedOn",
+    "FileFileSize":              "FileSize",
+    "FileFolderOrder":           "FolderOrder",
+    "FileId":                    "Identifier.Id",
+    "FileIdentifier":            "Identifier",
+    "FileLastModified":          "LastModified",
+    "FileLastModifiedBy":        "LastModifiedBy",
+    "FileLastPublishedBy":       "LastPublishedBy",
+    "FileLastPublishedOn":       "LastPublishedOn",
+    "FileLlink":                 "Link",
+    "FileMetadata":              "Metadata",
+    "FileName":                  "Name",
+    "FileParentFolder":          "ParentFolder",
+    "FileParentFolderIdentifier":"ParentFolderIdentifier",
+    "FilePath":                  "Path",
+    "FileShouldBeIndexed":       "ShouldBeIndexed",
+    "FileShouldBePublished":     "ShouldBePublished",
+    "FileSiteId":                "SiteId",
+    "FileSiteName":              "SiteName",
+    "FileType":                  "Identifier.Type"
+} )
+##
+#set( $FolderPropertyMap = {
+    "FolderChildren":              "Children",
+    "FolderChildrenIdentifiers":   "ChildrenIdentifiers",
+    "FolderChildrenSize":          "Children.size()",
+    "FolderCreatedBy":             "CreatedBy",
+    "FolderCreatedOn":             "CreatedOn",
+    "FolderFolderOrder":           "FolderOrder",
+    "FolderId":                    "Identifier.Id",
+    "FolderIdentifier":            "Identifier",
+    "FolderisNoWorkflowRequired":  "isNoWorkflowRequired()",
+    "FolderLastModified":          "LastModified",
+    "FolderLastModifiedBy":        "LastModifiedBy",
+    "FolderLink":                  "Link",
+    "FolderMetadata":              "Metadata",
+    "FolderName":                  "Name",
+    "FolderNoWorkflowRequired":    "NoWorkflowRequired",
+    "FolderParentFolder":          "ParentFolder",
+    "FolderParentFolderIdentifier":"ParentFolderIdentifier",
+    "FolderPath":                  "Path",
+    "FolderSiteId":                "SiteId",
+    "FolderSiteName":              "SiteName",
+    "FolderType":                  "Identifier.Type"
+} )
+##
+#set( $PagePropertyMap = {
+    "PageCreatedBy":             "CreatedBy",
+    "PageCreatedOn":             "CreatedOn",
+    "PageDataDefinitionPath":    "DataDefinitionPath",
+    "PageFolderOrder":           "FolderOrder",
+    "PageId":                    "Identifier.Id",
+    "PageIdentifier":            "Identifier",
+    "PageLastModified":          "LastModified",
+    "PageLastModifiedBy":        "LastModifiedBy",
+    "PageLastPublishedBy":       "LastPublishedBy",
+    "PageLastPublishedOn":       "LastPublishedOn",
+    "PageLink":                  "Link",
+    "PageMetadata":              "Metadata",
+    "PageName":                  "Name",
+    "PageParentFolder":          "ParentFolder",
+    "PageParentFolderIdentifier":"ParentFolderIdentifier",
+    "PagePath":                  "Path",
+    "PageShouldBeIndexed":       "ShouldBeIndexed",
+    "PageShouldBePublished":     "ShouldBePublished",
+    "PageSiteId":                "SiteId",
+    "PageSiteName":              "SiteName",
+    "PageSiteStructuredData":    "StructuredData",
+    "PageType":                  "Identifier.Type",
+    "PageXHTML":                 "XHTML",
+    "PageXHTMLAsXMLElement":     "XHTMLAsXMLElement"
+} )
+##
+#set( $ScriptFormatPropertyMap = {
+    "ScriptFormatCreatedBy":             "CreatedBy",
+    "ScriptFormatCreatedOn":             "CreatedOn",
+    "ScriptFormatFolderOrder":           "FolderOrder",
+    "ScriptFormatId":                    "Identifier.Id",
+    "ScriptFormatIdentifier":            "Identifier",
+    "ScriptFormatLastModified":          "LastModified",
+    "ScriptFormatLastModifiedBy":        "LastModifiedBy",
+    "ScriptFormatName":                  "Name",
+    "ScriptFormatParentFolder":          "ParentFolder",
+    "ScriptFormatParentFolderIdentifier":"ParentFolderIdentifier",
+    "ScriptFormatPath":                  "Path",
+    "ScriptFormatScript":                "Script",
+    "ScriptFormatSiteId":                "SiteId",
+    "ScriptFormatSiteName":              "SiteName",
+    "ScriptFormatType":                  "Identifier.Type"
+} )
+##
+#set( $SymlinkPropertyMap = {
+    "SymlinkCreatedBy":             "CreatedBy",
+    "SymlinkCreatedOn":             "CreatedOn",
+    "SymlinkFolderOrder":           "FolderOrder",
+    "SymlinkId":                    "Identifier.Id",
+    "SymlinkIdentifier":            "Identifier",
+    "SymlinkLastModified":          "LastModified",
+    "SymlinkLastModifiedBy":        "LastModifiedBy",
+    "SymlinkLink":                  "Link",
+    "SymlinkMetadata":              "Metadata",
+    "SymlinkName":                  "Name",
+    "SymlinkParentFolder":          "ParentFolder",
+    "SymlinkParentFolderIdentifier":"ParentFolderIdentifier",
+    "SymlinkPath":                  "Path",
+    "SymlinkSiteId":                "SiteId",
+    "SymlinkSiteName":              "SiteName",
+    "SymlinkType":                  "Identifier.Type"
+} )
+##
+#set( $TextBlockPropertyMap = {
+    "TextBlockCreatedBy":             "CreatedBy",
+    "TextBlockCreatedOn":             "CreatedOn",
+    "TextBlockFolderOrder":           "FolderOrder",
+    "TextBlockId":                    "Identifier.Id",
+    "TextBlockIdentifier":            "Identifier",
+    "TextBlockLastModified":          "LastModified",
+    "TextBlockLastModifiedBy":        "LastModifiedBy",
+    "TextBlockMetadata":              "Metadata",
+    "TextBlockName":                  "Name",
+    "TextBlockParentFolder":          "ParentFolder",
+    "TextBlockParentFolderIdentifier":"ParentFolderIdentifier",
+    "TextBlockPath":                  "Path",
+    "TextBlockSiteId":                "SiteId",
+    "TextBlockSiteName":              "SiteName",
+    "TextBlockText":                  "Text",
+    "TextBlockType":                  "Identifier.Type"
+} )
+##
+#set( $XMLBlockPropertyMap = {
+    "XMLBlockCreatedBy":             "CreatedBy",
+    "XMLBlockCreatedOn":             "CreatedOn",
+    "XMLBlockFolderOrder":           "FolderOrder",
+    "XMLBlockId":                    "Identifier.Id",
+    "XMLBlockIdentifier":            "Identifier",
+    "XMLBlockLastModified":          "LastModified",
+    "XMLBlockLastModifiedBy":        "LastModifiedBy",
+    "XMLBlockMetadata":              "Metadata",
+    "XMLBlockName":                  "Name",
+    "XMLBlockParentFolder":          "ParentFolder",
+    "XMLBlockParentFolderIdentifier":"ParentFolderIdentifier",
+    "XMLBlockPath":                  "Path",
+    "XMLBlockSiteId":                "SiteId",
+    "XMLBlockSiteName":              "SiteName",
+    "XMLBlockType":                  "Identifier.Type",
+    "XMLBlockXML":                   "Identifier.XML",
+    "XMLBlockXMLAsXMLElement":       "XMLAsXMLElement"
+} )
+## a prefix used in macro names
+#set( $MACRO_PREFIX = 'process' )
+#*doc
+《/global-variables》
+《documentation》
+《code》#chanwDisplayEvaluateCode( $code $evaluate )《/code》
+《p》Evaluates the code when 《code》$evaluate《/code》 is 《code》true《/code》,
+or displays the code when 《code》$evaluate《/code》 is 《code》false《/code》.
+Example:《/p》
+《pre》
+#set( $code =
+"${SINGLE_HASH}set( ${DOLLAR}myVar = 3 )
+${SINGLE_HASH}macro( myMacro ${DOLLAR}var )
+    $var
+${SINGLE_HASH}end
+${SINGLE_HASH}myMacro( ${DOLLAR}myVar )" )
+#chanwDisplayEvaluateCode( $code false )
+#chanwDisplayEvaluateCode( $code true )
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayEvaluateCode”》
+doc*###
+#macro( chanwDisplayEvaluateCode $chanwDisplayEvaluateCodeCode $chanwDisplayEvaluateCodeEvaluate )
+#if( $chanwDisplayEvaluateCodeCode.Class.Name == $JAVA_LANG_STRING_CLASS_NAME && $chanwDisplayEvaluateCodeCode != "" )
+#if( $chanwDisplayEvaluateCodeEvaluate && $chanwDisplayEvaluateCodeEvaluate == true )
+#set( $chanwCode = $chanwDisplayEvaluateCodeCode.replaceAll( "-aa-", "&&" ).replaceAll( "-lt-", "<" ).replaceAll( "-gt-", ">" ) )
+#evaluate( $chanwCode )
+#else
+$_EscapeTool.xml( $chanwDisplayEvaluateCodeCode )
+#end
+#end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetFolderContainedAssetName( $asset )《/code》
+《p》Returns the name of the asset. The 《code》$asset《/code》 passed in should
+be a Cascade API Adapter object. The name is stored in
+《code》$chanwGetFolderContainedAssetName《/code》. Example:《/p》
+《pre》
+#chanwGetFolderContainedAssetName( $chanwGetCascadeObjectFromElement )
+$chanwGetFolderContainedAssetName
+《/pre》
+《/documentation》
+《macro id=“chanwGetFolderContainedAssetName”》
+doc*###
+#macro( chanwGetFolderContainedAssetName $chanwGetFolderContainedAssetNameAsset )
+    #if( !$chanwGetFolderContainedAssetNameAsset )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "No asset passed in." "msgy84y3" )
+    #stop
+    #end
+##
+    ## check input
+    #chanwIsInstanceOf( $chanwGetFolderContainedAssetNameAsset $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME )
+##
+    #if( !$chanwIsInstanceOf )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Not a folder contained asset." "msgriril" )
+    #stop
+    #end
+##
+    #set( $chanwGetFolderContainedAssetName = "" )
+    #set( $chanwPathSegments = $chanwGetFolderContainedAssetNameAsset.Identifier.Path.PathSegments )
+    #set( $chanwLastIndex = $chanwPathSegments.size() - 1 )
+    #set( $chanwGetFolderContainedAssetName = $chanwPathSegments.get( $chanwLastIndex ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetConstructorByClassNameParamSize( $chanwClassName $chanwParamSize )《/code》
+《p》Returns the first constructor that accepts the specified number of parameters. Example:《/p》
+《pre》
+#chanwGetConstructorByClassNameParamSize( 'org.jdom.Text' 1 )
+#set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
+#set( $globalJDOMText   = $chanwConstructor.newInstance( ““ ) )
+《/pre》
+《/documentation》
+《macro id=“chanwGetConstructorByClassNameParamSize”》
+doc*###
+#macro( chanwGetConstructorByClassNameParamSize $chanwGetConstructorByClassNameParamSizeClassName $chanwGetConstructorByClassNameParamSizeParamSize )
+    ## check the class name string
+    #if( !$chanwGetConstructorByClassNameParamSizeClassName || $chanwGetConstructorByClassNameParamSizeClassName.Class.Name != "java.lang.String" || $chanwGetConstructorByClassNameParamSizeClassName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." "msg4vi4bi" )
+        #stop
+    #end
+##
+    ## check the param size integer
+    #if( $chanwGetConstructorByClassNameParamSizeParamSize.Class.Name != "java.lang.Integer" || $chanwGetConstructorByClassNameParamSizeParamSize < 0 )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "An integer larger than -1 is required." "msgb4gn4g" )
+        #stop
+    #end
+##
+    ## get all constructors
+    #set( $chanwGetConstructorByClassNameParamSize = "" )
+    #set( $chanwClassObj = $_.Class.forName( $chanwGetConstructorByClassNameParamSizeClassName ) )
+    #set( $chanwConstructors  = $chanwClassObj.getConstructors() )
+##
+    ## find the one with the right param size
+#foreach( $constructor in $chanwConstructors )
+## found
+#if( $constructor.getParameterTypes().size() == $chanwGetConstructorByClassNameParamSizeParamSize )
+#set( $chanwGetConstructorByClassNameParamSize = $constructor )
+#break
+#end
+#end
+    ## not found, issue a warning
+    #if( $chanwGetConstructorByClassNameParamSize == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Constructor not found." "msglofio" )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetConstructorByClassNameParamTypeArray( $chanwClassName $chanwTypeArray )《/code》
+《p》Returns the constructor by matching the parameter list. Example:《/p》
+《pre》
+#chanwGetConstructorByClassNameParamTypeArray( 'java.lang.StringBuffer' [ 'int' ] )
+#set( $chanwConstructor   = $chanwGetConstructorByClassNameParamTypeArray )
+#set( $globalStringBuffer = $chanwConstructor.newInstance( 10000 ) )
+《/pre》
+《/documentation》
+《macro id=“chanwGetConstructorByClassNameParamTypeArray”》
+doc*###
+#macro( chanwGetConstructorByClassNameParamTypeArray $chanwGetConstructorByClassNameParamTypeArrayClassName $chanwGetConstructorByClassNameParamTypeArrayTypeArray )
+    ## check the class name string
+    #if( !$chanwGetConstructorByClassNameParamTypeArrayClassName || $chanwGetConstructorByClassNameParamTypeArrayClassName.Class.Name != "java.lang.String" || $chanwGetConstructorByClassNameParamTypeArrayClassName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." "msglf2h" )
+        #stop
+    #end
+##
+    ## check the param type array
+    #if( !$chanwGetConstructorByClassNameParamTypeArrayTypeArray || !$chanwGetConstructorByClassNameParamTypeArrayTypeArray.size() )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "An array of types is required." ";io4;" )
+        #stop
+    #end
+##
+    ## get all constructors
+    #set( $chanwGetConstructorByClassNameParamTypeArray = "" )
+    #set( $chanwClassObj = $_PropertyTool.class.forName( $chanwGetConstructorByClassNameParamTypeArrayClassName ) )
+    #set( $chanwConstructors  = $chanwClassObj.getConstructors() )
+##
+#foreach( $constructor in $chanwConstructors )
+#set( $chanwParamsMatched = true )
+#set( $chanwParamTypes    = $constructor.getParameterTypes() )
+##
+## match the size
+#if( $chanwParamTypes.size() == $chanwGetConstructorByClassNameParamTypeArrayTypeArray.size() )
+## match the types
+#foreach( $type in $chanwParamTypes )
+#if( !$type.getName().equals( $chanwGetConstructorByClassNameParamTypeArrayTypeArray[ $foreach.index ] ) )
+#set( $chanwParamsMatched = false )
+#end
+#end
+##
+## found
+#if( $chanwParamsMatched )
+#set( $chanwGetConstructorByClassNameParamTypeArray = $constructor )
+#break
+#end
+#end
+#end
+##
+    ## not found, issue a warning
+    #if( $chanwGetConstructorByClassNameParamTypeArray == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Constructor not found." "b34bo4i" )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetConstantValueByClassNameConstantName( $chanwClassName $chanwConstantName )《/code》
+《p》Returns the field value of a field name defined in a class. Example:《/p》
+《pre》
+#chanwGetConstantValueByClassNameConstantName( 'com.hannonhill.cascade.velocity.CascadeComparisonDateTool' 'MILLIS_PER_YEAR' )
+$chanwGetConstantValueByClassNameConstantName
+《/pre》
+《/documentation》
+《macro id=“chanwGetConstantValueByClassNameConstantName”》
+doc*###
+#macro( chanwGetConstantValueByClassNameConstantName $chanwGetConstantValueByClassNameConstantNameClassName $chanwGetConstantValueByClassNameConstantNameConstantName )
+    ## check the class name string
+    #if( !$chanwGetConstantValueByClassNameConstantNameClassName || $chanwGetConstantValueByClassNameConstantNameClassName.Class.Name != "java.lang.String" || $chanwGetConstantValueByClassNameConstantNameClassName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." "kfovm;34go;i" )
+        #stop
+    #end
+##
+    ## check the constant name string
+    #if( !$chanwGetConstantValueByClassNameConstantNameConstantName || $chanwGetConstantValueByClassNameConstantNameConstantName.Class.Name != "java.lang.String" || $chanwGetConstantValueByClassNameConstantNameConstantName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid constant name is required." "lk34uo4jni" )
+        #stop
+    #end
+##
+    ## get all fields
+    #set( $chanwGetConstantValueByClassNameConstantName = "" )
+    #set( $chanwClassObj  = $_.Class.forName( $chanwGetConstantValueByClassNameConstantNameClassName ) )
+    #set( $chanwFieldObj  = $chanwClassObj.getField( $chanwGetConstantValueByClassNameConstantNameConstantName ) )
+    #set( $chanwGetConstantValueByClassNameConstantName = $chanwFieldObj.get( null ) )
+##
+    ## not found
+    #if( $chanwGetConstantValueByClassNameConstantName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The field is not found." "bu45vo4ubg" )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetMethodByClassNameMethodNameParamTypes( $chanwClassName $chanwMethodName $chanwParamList )《/code》
+《p》Returns the named method of a class. The 《code》$chanwParamList《/code》 must be a list of strings,
+representing class objects, or a single class object. Example:《/p》
+《pre》
+#chanwGetMethodByClassNameMethodNameParamTypes( “java.lang.Math“ “abs“ '$_FieldTool.in( “java.lang.Double“ ).TYPE' )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, -2.5 )
+
+#set( $paramList = [ '$_FieldTool.in( “java.lang.Double“ ).TYPE' ] )
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.Math' 'abs' $paramList )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, -3 )
+
+#set( $paramList = [ '$_FieldTool.in( “java.lang.Double“ ).TYPE', '$_FieldTool.in( “java.lang.Double“ ).TYPE' ] )
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.Math' 'min' $paramList )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, -3, -4 )
+
+#set( $str = ““ )
+#set( $paramList = [ '$str.Class' ] )
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.String' 'concat' $paramList )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( “Hello, “, “World!” )
+
+#chanwGetMethodByClassNameMethodNameParamTypes( 'java.lang.String' 'indexOf' $paramList )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( “Hello ”, “e” )
+《/pre》
+《/documentation》
+《macro id=“chanwGetMethodByClassNameMethodNameParamTypes”》
+doc*###
+#macro( chanwGetMethodByClassNameMethodNameParamTypes $chanwGetMethodByClassNameMethodNameParamTypesClassName $chanwGetMethodByClassNameMethodNameParamTypesMethodName $chanwGetMethodByClassNameMethodNameParamTypesParamList )
+    ## check the class name string
+    #if( !$chanwGetMethodByClassNameMethodNameParamTypesClassName || $chanwGetMethodByClassNameMethodNameParamTypesClassName.Class.Name != "java.lang.String" || $chanwGetMethodByClassNameMethodNameParamTypesClassName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." ";io45un;or" )
+        #stop
+    #end
+##
+    ## check the method name string
+    #if( !$chanwGetMethodByClassNameMethodNameParamTypesMethodName || $chanwGetMethodByClassNameMethodNameParamTypesMethodName.Class.Name != "java.lang.String" || $chanwGetMethodByClassNameMethodNameParamTypesMethodName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid method name is required." ";bob4;b4" )
+        #stop
+    #end
+##
+    #set( $chanwClassObj  = $_.Class.forName( $chanwGetMethodByClassNameMethodNameParamTypesClassName ) )
+    #set( $chanwGetMethodByClassNameMethodNameParamTypesParamListString = $_DisplayTool.list( $chanwGetMethodByClassNameMethodNameParamTypesParamList, "," ) )
+##
+    ## check the param list string
+    #if( !$chanwGetMethodByClassNameMethodNameParamTypesParamListString )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A param list is required." ";o4b;4pobg4bi" )
+        #stop
+    #end
+##
+    #set( $chanwGetMethodByClassNameMethodNameParamTypes = "" )
+##
+    ## create and execute a statement
+    #set( $chanwStmt = '#set($chanwGetMethodByClassNameMethodNameParamTypes = $chanwClassObj.getMethod( "' + $chanwGetMethodByClassNameMethodNameParamTypesMethodName + '"' )
+##
+    #if( $chanwGetMethodByClassNameMethodNameParamTypesParamListString && $chanwGetMethodByClassNameMethodNameParamTypesParamListString != "" )
+        #set( $chanwStmt = $chanwStmt + ',' + $chanwGetMethodByClassNameMethodNameParamTypesParamListString )
+    #end
+##
+    #set( $chanwStmt = $chanwStmt + '))' )
+    #evaluate( $chanwStmt )
+##
+    ## not found, issue a warning
+    #if( $chanwGetMethodByClassNameMethodNameParamTypes == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Method not found." "ln;vr4gbNF4NO" )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetObjectByClassName( $className )《/code》
+《p》Returns an object of the class, calling the default constructor. Example:《/p》
+《pre》
+#chanwGetObjectByClassName( 'org.apache.velocity.tools.generic.LinkTool' )
+#set( $globalApacheLinkTool = $chanwGetObjectByClassName )
+《/pre》
+《/documentation》
+《macro id=“chanwGetObjectByClassName”》
+doc*###
+#macro( chanwGetObjectByClassName $chanwGetObjectByClassNameClassName )
+    ## check the class name string
+    #if( !$chanwGetObjectByClassNameClassName || $chanwGetObjectByClassNameClassName.Class.Name != "java.lang.String" || $chanwGetObjectByClassNameClassName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." "msg44n" )
+        #stop
+    #end
+##
+    #set( $chanwGetObjectByClassName = "" )## reinitialize the global variable
+    ## retrieve the default constructor
+    #chanwGetConstructorByClassNameParamSize( $chanwGetObjectByClassNameClassName 0 )
+    #set( $chanwConstructor = $chanwGetConstructorByClassNameParamSize )
+##
+    ## found
+    #if( $chanwConstructor )
+        ## create and return the object
+        #set( $chanwGetObjectByClassName = $chanwConstructor.newInstance() )
+    #else## not found, clean up and issue a warning
+        #set( $chanwGetObjectByClassName = "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "No default constructor is found." "msg4iu4ib" )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetStaticMethodByClassNameMethodNameWithoutParams( $chanwClassName $chanwMethodName )《/code》
+《p》Returns the static method of the class.《/p》
+《pre》
+#chanwGetStaticMethodByClassNameMethodNameWithoutParams(
+    "java.util.concurrent.ThreadLocalRandom"  "current"
+)
+$chanwGetStaticMethodByClassNameMethodNameWithoutParams.Class.Name
+《/pre》
+《/documentation》
+《macro id=“chanwGetStaticMethodByClassNameMethodNameWithoutParams”》
+doc*###
+#macro( chanwGetStaticMethodByClassNameMethodNameWithoutParams $chanwGetStaticMethodByClassNameMethodNameWithoutParamsClassName $chanwGetStaticMethodByClassNameMethodNameWithoutParamsMethodName )
+    ## check the class name string
+    #if( !$chanwGetStaticMethodByClassNameMethodNameWithoutParamsClassName || $chanwGetStaticMethodByClassNameMethodNameWithoutParamsClassName.Class.Name != "java.lang.String" || $chanwGetStaticMethodByClassNameMethodNameWithoutParamsClassName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." "4B4K;ENI" )
+        #stop
+    #end
+##
+    ## check the method name string
+    #if( !$chanwGetStaticMethodByClassNameMethodNameWithoutParamsMethodName || $chanwGetStaticMethodByClassNameMethodNameWithoutParamsMethodName.Class.Name != "java.lang.String" || $chanwGetStaticMethodByClassNameMethodNameWithoutParamsMethodName == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid method name is required." "KN;4I4GNN;KLBOK4" )
+        #stop
+    #end
+##
+    #set( $chanwClassObj  = $_.Class.forName( $chanwGetStaticMethodByClassNameMethodNameWithoutParamsClassName ) )
+    #set( $chanwGetStaticMethodByClassNameMethodNameWithoutParams = "" )
+    #set( $chanwGetStaticMethodByClassNameMethodNameWithoutParams = $_.Class.forName( $chanwGetStaticMethodByClassNameMethodNameWithoutParamsClassName ).getMethod( $chanwGetStaticMethodByClassNameMethodNameWithoutParamsMethodName ) )
+##
+    ## not found, issue a warning
+    #if( $chanwGetStaticMethodByClassNameMethodNameWithoutParams == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Method not found." "94BBRKIOU" )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwImportScript( $folderPath $siteName $scriptName )《/code》
+《p》Returns a boolean, indicating whether the script format is imported successfully.
+《code》$folderPath《/code》 should be the path string of the parent folder containing the format.《/p》
+《p》Examples:《/p》
+《pre》
+## look for the setup format in the Base Folder of a site
+#chanwImportScript( "/" "cascade-admin" "setup" )
+
+#if( !$chanwImportScript || !$upstateSiteTitle || $upstateSiteTitle == "" )
+    ## if not defined in a site, supply a default value
+    #set( $upstateSiteTitle = "Cascade Administration" )
+#end
+《/pre》
+《/documentation》
+《macro id=“chanwImportScript”》
+doc*#
+#macro( chanwImportScript $chanwImportScriptFolderPath $chanwImportScriptSiteName $chanwImportScriptScriptName )
+    #set( $chanwImportScript = false )
+    #chanwLocateAsset( $chanwImportScriptFolderPath $chanwImportScriptSiteName $chanwImportScriptScriptName )
+##
+    #if( $chanwLocateAsset && $chanwLocateAsset != "" )
+        #set( $chanwFolderPath = $chanwImportScriptFolderPath )
+    	
+        #if( !$chanwFolderPath.startsWith( "/" ) )
+            #set( $chanwFolderPath = "/" + $chanwFolderPath )
+        #end
+##
+        #if( !$chanwFolderPath.endsWith( "/" ) )
+            #set( $chanwFolderPath = $chanwFolderPath + "/" )
+        #end
+##
+        #set( $chanwScriptPath = "site://" + $chanwImportScriptSiteName + $chanwFolderPath + $chanwImportScriptScriptName )
+        #set( $chanwImportScriptPathStmt = '#import("' + $chanwScriptPath + '")' )
+        ## must use evaluate here; cannot use #import directly
+        #evaluate( $chanwImportScriptPathStmt )
+        #set( $chanwImportScript = true )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwIsInstanceOf( $obj $className )《/code》
+《p》Returns a boolean string, indicating whether the object is an instance of
+the suppled class name. The result is stored in
+《code》$chanwIsInstanceOf《/code》. Example:《/p》
+《pre》
+#chanwIsInstanceOf( $list “java.util.concurrent.BlockingDeque“ )
+$chanwIsInstanceOf$BR## output false
+《/pre》
+《/documentation》
+《macro id=“chanwIsInstanceOf”》
+doc*###
+#macro( chanwIsInstanceOf $chanwIsInstanceOfObj $chanwIsInstanceOfClassName )
+#if( $_PropertyTool.isNull( $chanwIsInstanceOfObj ) )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The object cannot be null." "msg487548" )
+#stop
+#end
+##
+#if( !$chanwIsInstanceOfClassName || $chanwIsInstanceOfClassName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." "9065jeiwhrjklhiwj r jgj ." )
+#stop
+#end
+##
+#set( $chanwIsInstanceOf = "" )
+##
+## matching the class name passed in
+#if( $chanwIsInstanceOfClassName.equals( $chanwIsInstanceOfObj.Class.Name ) )
+#set( $chanwIsInstanceOf = true )
+#else
+#set( $chanwInterfaces   = $globalApacheClassUtils.getAllInterfaces( $chanwIsInstanceOfObj.Class ) )
+#set( $chanwSuperclasses = $globalApacheClassUtils.getAllSuperclasses( $chanwIsInstanceOfObj.Class ) )
+##
+## check interfaces
+#foreach( $interface in $chanwInterfaces )
+#if( $chanwIsInstanceOfClassName.equals( $interface.Name ) )
+#set( $chanwIsInstanceOf = true )
+#break
+#end
+#end
+##
+## check superclasses
+#if( $chanwIsInstanceOf == "" )
+#foreach( $superclass in $chanwSuperclasses )
+#if( $chanwIsInstanceOfClassName.equals( $superclass.Name ) )
+#set( $chanwIsInstanceOf = true )
+#break
+#end
+#end
+#end
+##
+## still no match
+#if( $chanwIsInstanceOf == "" )
+#set( $chanwIsInstanceOf = false )
+#end
+#end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocateAsset( $folderPath $siteName $assetName $stop )《/code》
+《p》Locates the named asset. The asset located is stored in
+《code》$chanwLocateAsset《/code》. If the asset cannot be located, and if
+《code》$stop《/code》 is not set to true, then 《code》$chanwLocateAsset《/code》
+will store the empty string. Example:《/p》
+《pre》
+#chanwLocateAsset( "formats/library/velocity" "_core" "chanw_display_velocity_code" )
+#set( $code = $chanwLocateAsset.Script )
+《/pre》
+《/documentation》
+《macro id=“chanwLocateAsset”》
+doc*###
+#macro ( chanwLocateAsset $chanwLocateAssetFolderPath $chanwLocateAssetSiteName $chanwLocateAssetAssetName $chanwLocateAssetStop )
+    #if( !$chanwLocateAssetFolderPath || !$chanwLocateAssetSiteName || !$chanwLocateAssetAssetName )
+$chanwLocateAssetFolderPath $chanwLocateAssetSiteName $chanwLocateAssetAssetName $BR 1
+$CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are required: folder path, site name, and asset name.
+        #stop
+    #end
+##
+    #if( $chanwLocateAssetFolderPath.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
+        $chanwLocateAssetFolderPath == "" || $chanwLocateAssetSiteName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
+        $chanwLocateAssetSiteName == "" || $chanwLocateAssetAssetName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
+        $chanwLocateAssetAssetName == "" )
+$chanwLocateAssetFolderPath $chanwLocateAssetSiteName $chanwLocateAssetAssetName $BR 2
+$CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are required: folder path, site name, and asset name.
+        #stop
+    #end
+##
+    #set( $chanwFolderPath = $chanwLocateAssetFolderPath )
+##
+    ## fix the folder path
+    #if( $chanwFolderPath.endsWith( '/' ) )
+        #set( $chanwEndIndex = $chanwFolderPath.length() - 1 )
+        #set( $chanwFolderPath = $chanwFolderPath.substring( 0, $chanwEndIndex ) )
+    #end
+##
+    #set( $chanwFolderAPI   = $_.locateFolder( $chanwFolderPath, $chanwLocateAssetSiteName ) )
+    #set( $chanwLocateAsset = "" )
+##
+    #if( !$chanwFolderAPI ) ## the folder cannot be located
+    ## Cannot call chanwOutputErrorMsg due to recursion cap.
+chanw_initialization, chanwLocateAsset: The folder $chanwFolderPath in site $chanwLocateAssetSiteName cannot be located.
+        #if( $chanwLocateAssetStop == true )
+            #stop
+        #end
+    #else
+        #set( $chanwFolderAPIChildren = $chanwFolderAPI.getChildren() )
+##
+        #if( !$chanwFolderAPIChildren )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The folder has no children." "I4345NF." )
+            #if( $chanwLocateAssetStop == true )
+                #stop
+            #end
+        #else
+            ## check every child and match the name
+            #if( $chanwFolderAPIChildren.size() > 0 )
+#foreach( $chanwFolderAPIChild as $chanwFolderAPIChildren )
+#chanwGetFolderContainedAssetName( $chanwFolderAPIChild )
+#if( $chanwGetFolderContainedAssetName == $chanwLocateAssetAssetName )
+#set( $chanwLocateAsset = $chanwFolderAPIChild )
+#break
+#end
+#end
+            #end        
+        #end
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocateAssetInAncestorFolder( $folderPath $siteName $type $name )《/code》
+《p》Locates the asset by matching the type and name, starting from the supplied folder path.
+《code》$folderPath《/code》 should be the path string of a folder containing the asset.
+If the asset cannot be found, then look for the asset in the grandparent folder, and so on.《/p》
+《p》Examples:《/p》
+《pre》
+#chanwLocateAssetInAncestorFolder(
+    $currentPage.ParentFolder.Path $currentPageSiteName "block" "_site-info" )
+$chanwLocateAssetInAncestorFolder.Name
+《/pre》
+《/documentation》
+《macro id=“chanwLocateAssetInAncestorFolder”》
+doc*#
+#macro( chanwLocateAssetInAncestorFolder $chanwLocateAssetInAncestorFolderFolderPath $chanwLocateAssetInAncestorFolderSiteName $chanwLocateAssetInAncestorFolderType $chanwLocateAssetInAncestorFolderName )
+    #set( $chanwLocateAssetInAncestorFolder = "" )
+    #set( $chanwFolder = $_.locateFolder( $chanwLocateAssetInAncestorFolderFolderPath, $chanwLocateAssetInAncestorFolderSiteName ) )
+
+    #if( $chanwFolder )
+        #set( $chanwChildren = $chanwFolder.Children )
+        
+        #foreach( $child in $chanwChildren )
+            #if( $child.Identifier.Type == $chanwLocateAssetInAncestorFolderType && $child.Name == $chanwLocateAssetInAncestorFolderName )
+                #set( $chanwLocateAssetInAncestorFolder = $child )
+                #break
+            #end
+        #end
+        
+        #set( $chanwFolderParentPath = "" )
+        
+        #if( $chanwLocateAssetInAncestorFolder == "" )
+            #set( $chanwFolderParentPath = 
+                $chanwFolder.ParentFolderIdentifier.Path.PathAsString )
+
+            ## recursive call
+            #if( $chanwFolderParentPath != "" )
+                #chanwLocateAssetInAncestorFolder(
+                    $chanwFolderParentPath $chanwLocateAssetInAncestorFolderSiteName $chanwLocateAssetInAncestorFolderType $chanwLocateAssetInAncestorFolderName )
+            #end
+        #end
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwLocateAssetWithFullPath( $path $type $siteName )《/code》
+《p》Locates the asset by calling 《code》$_.locate《/code》. The asset located is stored in
+《code》$chanwLocateAssetWithFullPath《/code》. If the asset cannot be located, then
+《code》$chanwLocateAssetWithFullPath《/code》 will store the empty string. Example:《/p》
+《pre》
+#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" $CASCADE_API_FORMAT_TYPE "_brisk" )
+#set( $code = $chanwLocateAssetWithFullPath.Script )
+《/pre》
+《/documentation》
+《macro id=“chanwLocateAssetWithFullPath”》
+doc*###
+#macro ( chanwLocateAssetWithFullPath $chanwLocateAssetWithFullPathPath $chanwLocateAssetWithFullPathType $chanwLocateAssetWithFullPathSiteName )
+    #set( $chanwLocateAssetWithFullPath = "" )
+    #set( $chanwLocateAssetWithFullPath = $_.locate( $chanwLocateAssetWithFullPathPath, $chanwLocateAssetWithFullPathType, $chanwLocateAssetWithFullPathSiteName ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwOutputErrorMsg( $parentPath $siteName $formatName $msg $uniqueId )《/code》
+《p》Locates the named assets. The asset located is stored in
+《code》$chanwLocateAsset《/code》. Example:《/p》
+《pre》
+#chanwLocateAsset( "formats/library/velocity" "_core" "chanw_display_velocity_code" )
+#set( $code = $chanwLocateAsset.Script )
+《/pre》
+《/documentation》
+《macro id=“chanwOutputErrorMsg”》
+doc*###
+#macro( chanwOutputErrorMsg $chanwOutputErrorMsgParentPath $chanwOutputErrorMsgSiteName $chanwOutputErrorMsgFormatName $chanwOutputErrorMsgMsg $chanwOutputErrorMsgUniqueId )
+    #chanwLocateAsset( $chanwOutputErrorMsgParentPath $chanwOutputErrorMsgSiteName $chanwOutputErrorMsgFormatName )
+    #set( $chanwScript = $chanwLocateAsset.Script )
+    #set( $chanwScriptArray = $chanwScript.split( "\r" ) )
+##
+#foreach( $line in $chanwScriptArray )
+#if( $line.contains( $chanwOutputErrorMsgUniqueId ) )
+$chanwOutputErrorMsgParentPath/$chanwOutputErrorMsgFormatName, line $foreach.count: $chanwOutputErrorMsgMsg
+#break
+#end
+#end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwSetVariable( $var $val $escape )《/code》
+《p》Dynamically turns 《code》$var《/code》 into a variable assigned with the value
+《code》$val《/code》. The value of 《code》$var《/code》 should be a variable name
+without the dollar sign. Note that because the value of 《code》$val《/code》 can be
+a String that contains characters like "<", which cannot be displayed on a page,
+《code》$_EscapeTool.xml《/code》 will need to be called to escape unacceptable characters
+in the String before it is assigned to the variable. Therefore, 《code》$escape《/code》
+is set to 《code》false《/code》 by default. If no escaping is needed, pass in a
+《code》true《/code》.《/p》
+《pre》
+#chanwSetVariable( "myVar" "myValue" )## String value
+$myVar
+
+#chanwSetVariable( "myVar" 1 )## int value
+$myVar
+
+#chanwSetVariable( "locator" $_ )## obj value
+$locator.Class.Name
+
+#chanwSetVariable( "map" {} )## obj value
+#chanwSetVariable( "map['state']" "NY" )## a map as the variable
+$map
+《/pre》
+《/documentation》
+《macro id=“chanwSetVariable”》
+doc*###
+#macro( chanwSetVariable $chanwSetVariableVar $chanwSetVariableVal $chanwSetVariableEscape )
+    ## check the variable name
+    #if( !$chanwSetVariableVar || $chanwSetVariableVar.class.name != "java.lang.String" || $chanwSetVariableVar == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The variable name $chanwSetVariableVar is not acceptable." "ln;4V84GBIUBJKLV" )
+        #stop
+    #end
+##
+    ## escape defaulted to true
+    #if( $_PropertyTool.isNull( $chanwSetVariableEscape ) || $chanwSetVariableEscape )
+        #set( $chanwEscapeValue = true )
+    #else
+        #set( $chanwEscapeValue = false )
+    #end
+##
+    #if( $_PropertyTool.isNull( $chanwSetVariableVal ) )
+        #set( $chanwValue = "" )## default value
+    #elseif( $chanwSetVariableVal.class.name == "java.lang.String" )
+        #if( $chanwEscapeValue )
+            #set( $chanwValue = $_EscapeTool.xml( $chanwSetVariableVal ).trim() )
+        #else
+            #set( $chanwValue = $chanwSetVariableVal.trim() )
+        #end
+    ## this is an object
+    #else
+        #set( $chanwValue = 'chanwSetVariableVal' )
+    #end
+##
+    #if( !$chanwValue.equals( 'chanwSetVariableVal' ) )
+        #set( $chanwSetVarValStatement = '#' + "set(" + "$" + "$chanwSetVariableVar = '$chanwValue')" )
+    #else
+        #set( $chanwSetVarValStatement = '#' + "set(" + "$" + "$chanwSetVariableVar = $" + $chanwValue + ")" )## object assignment
+    #end
+##
+    #evaluate( $chanwSetVarValStatement )
+#end
+#*doc
+《/macro》
+《documentation id=“bottom“》
+《h2》References《/h2》
+《ul》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tutorials/01%20basics/list.vm“》ArrayList examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheBooleanUtils.vm“》BooleanUtils examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tutorials/02%20numbers_strings_dates/calendar.vm“》Calendar examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheClassTool.vm“》ClassTool examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheClassUtils.vm“》ClassUtils examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheConversionTool.vm“》ConversionTool examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tutorials/02%20numbers_strings_dates/date.vm“》Date and DateTool examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tools/display_tool.vm“》DisplayTool examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tools/escape_tool.vm“》$_EscapeTool examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tutorials/01%20basics/map.vm“》HashMap examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheMathTool.vm“》MathTool examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tutorials/02%20numbers_strings_dates/number_and_array.vm“》Number and array examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheNumberTool.vm“》NumberTool examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheNumberUtils.vm“》NumberUtils examples《/a》《/li》
+《li》SAXBuilder example
+《ul》
+《li》《a href=“https://github.com/wingmingchan/php-cascade-ws-ns-examples/blob/master/xml_feed/index_block_xml.php“》A web service program to produce a feed, containing XML from an index block《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tutorials/03%20working_with_block_xml/create_content_root_from_feed.vm“》A format that uses the LocatorTool to read indexed XML from a feed block《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/library/chanw_global_velocity.vm“》The library macro 《code》#chanwBuildXMLContentRoot《/code》《/a》《/li》
+《/ul》
+《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tools/sort_tool.vm“》SortTool examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tutorials/02%20numbers_strings_dates/string_and_array.vm“》String and array examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheStringUtils.vm“》StringUtils examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheStringEscapeUtils.vm“》StringEscapeUtils examples《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/using_global_objects/using_globalApacheWordUtils.vm“》WordUtils examples《/a》《/li》
+《/ul》
+《/documentation》
+《/code》
+doc*###
