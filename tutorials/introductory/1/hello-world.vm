@@ -1,9 +1,5 @@
-#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+## initialize a variable
+#set( $greetings = "Hello, World!" )
 
-#set( $page = $contentRoot.getChild( "system-page" ) )
-#chanwGetCascadeObjectFromElement( $page $CASCADE_API_PAGE_TYPE )
-$chanwGetCascadeObjectFromElement.Class.Name
-
-#set( $folder = $contentRoot.getChild( "system-folder" ) )
-#chanwGetCascadeObjectFromElement( $folder $CASCADE_API_FOLDER_TYPE )
-$chanwGetCascadeObjectFromElement.Name
+## output the value of the variable
+$greetings
