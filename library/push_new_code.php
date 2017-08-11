@@ -33,7 +33,6 @@ try
                     if( u\StringUtility::startsWith( $file, "chanw" ) &&
                         u\StringUtility::endsWith( $file, ".vm" ) )
                     {
-                        
                         $format_name = substr( $file, 0, strlen( $file ) - 3 );
                         $format = $cascade->getAsset(
                             a\ScriptFormat::TYPE, 
