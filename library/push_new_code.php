@@ -9,8 +9,8 @@ use cascade_ws_utility   as u;
 use cascade_ws_exception as e;
 
 $github_path        = "/Users/admin/github/velocity/library";
-$core_site_name     = "_common_assets";
-$format_folder_path = "formats/library/velocity";
+$core_site_name     = "_brisk";
+$format_folder_path = "core/library/velocity/chanw";
 $git_comment        = "Updated";
 
 try
