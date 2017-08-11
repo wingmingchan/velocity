@@ -1,0 +1,26 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+## get now as a LocalDate object
+#chanwLocalDateFromTimestampString( $_DateTool.SystemTime )
+#set( $localDateNow = $chanwLocalDateFromTimestampString )
+Now: $localDateNow  ##=> 2017-08-11
+
+## turn a timestamp string into a LocalDate object
+#set( $timestamp = "1501466917465" )
+#chanwLocalDateFromTimestampString( $timestamp )
+#set( $localDateThen = $chanwLocalDateFromTimestampString )
+Then: $localDateThen  ##=> 2017-07-30
+
+## compare two objects
+$localDateNow.compareTo( $localDateThen ) ##=> 1
+$localDateNow.isAfter( $localDateThen )   ##=> true
+
+## get some values from a LocalDate object
+$localDateThen.Month      ##=> JULY
+$globalApacheWordUtils.capitalizeFully( $localDateThen.DayOfWeek.toString() )  ##=> Sunday
+
+## the difference between the two object in days
+## we are dealing with Period objects here
+$localDateThen.until( $localDateNow ).Days    ##=> 12
+$localDateNow.until( $localDateThen ).Days    ##=> -12
+$localDateThen.until( $localDateNow ).Months  ##=> 0
