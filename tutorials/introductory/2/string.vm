@@ -1,0 +1,25 @@
+#set( $str1 = "Hello, World!" )
+#set( $str2 = $str1.toLowerCase() )
+#set( $str3 = $str1.toUpperCase() )
+#set( $pattern = "[Hh]ello.+" )
+
+$str1.charAt( 3 )                              	##=> l
+$str1.compareTo( $str2 )						##=> -32
+$str1.compareToIgnoreCase( $str2 )				##=> 0
+$str1.concat( $str2 )							##=> Hello, World!hello, world!
+$str1.contains( "ll" )							##=> true
+$str1.endsWith( "." )							##=> false
+$str1.equalsIgnoreCase( $str3 )					##=> true
+$str1.indexOf( "H" )							##=> 0
+$str2.indexOf( "H" )							##=> -1
+$str1.Empty										##=> false
+$str2.lastIndexOf( "l" )						##=> 10
+$str2.length()									##=> 13
+$str2.matches( $pattern )						##=> true
+$str1.regionMatches( true, 0, $str2, 0, 5 )		##=> true
+$str1.replaceAll( "l", "q" )					##=> Heqqo, Worqd!
+$str1.replaceFirst( "l", "q" )					##=> Heqlo, World!
+$str1.split( "," ).size()						##=> 2
+$str2.startsWith( "H" )							##=> false
+$str2.substring( 2, 4 )							##=> ll
+$str3.trim()									##=> HELLO, WORLD!
