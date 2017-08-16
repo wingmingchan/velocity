@@ -1,0 +1,10 @@
+## get current date
+#set( $now = $_DateTool.SystemDate )
+## get number of milliseconds in a year
+#set( $milliSecondsInAYear = $_FieldTool.in( "org.apache.velocity.tools.generic.ComparisonDateTool" ).MILLIS_PER_YEAR )
+## get the timestamp of the current date one year ago
+#set( $timestampString     = $_DateTool.SystemTime - $milliSecondsInAYear + '' )
+## get the date object
+#set( $oneYearAgo          = $_DateTool.getDate( $timestampString ) )
+## find the difference in days
+$_DateTool.difference( $now, $oneYearAgo ).Days
