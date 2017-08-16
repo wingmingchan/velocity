@@ -1,0 +1,9 @@
+#set( $intMax = 50000 )
+
+#foreach( $num in [ 1..$intMax ] )
+    #if( $num == 10 )
+        #break
+    #else
+        $num
+    #end
+#end
