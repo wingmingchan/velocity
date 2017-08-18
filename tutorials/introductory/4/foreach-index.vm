@@ -1,0 +1,6 @@
+#set( $states   = [ 'NY', 'NJ', 'WA'  ] )
+#set( $capitals = [ 'Albany', 'Trenton', 'Olympia' ] )
+
+#foreach( $state in $states )
+$foreach.Count $state $capitals[ $foreach.Index ]
+#end
