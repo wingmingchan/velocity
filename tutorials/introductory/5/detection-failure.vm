@@ -1,0 +1,12 @@
+#set( $myVar = 3 )
+
+#macro( myMacro $myVar ) ## local variable and global variable having the same name
+    #if( !$myVar ) ## always defined
+        #set( $myDefault = 0 )
+    #else
+        #set( $myDefault = $myVar )
+    #end
+    $myDefault
+#end
+
+#myMacro ## no argument passed in
