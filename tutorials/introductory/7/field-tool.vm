@@ -1,0 +1,13 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+$_FieldTool.in( "java.lang.Math" ).PI
+$_FieldTool.in( "java.util.Calendar" ).YEAR
+$_FieldTool.in( "java.util.GregorianCalendar" ).WEEK_OF_YEAR
+
+## this one fails
+$_FieldTool.in( "com.hannonhill.cascade.model.dom.ACLEntry" ).FIELD_GROUP
+
+## this one works
+#chanwGetConstantValueByClassNameConstantName(
+    "com.hannonhill.cascade.model.dom.ACLEntry" "FIELD_GROUP" )
+$chanwGetConstantValueByClassNameConstantName
