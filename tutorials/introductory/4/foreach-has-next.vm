@@ -1,0 +1,4 @@
+#foreach( $num in [ 1..5 ] )
+Index: $foreach.Index
+#if( !$foreach.hasNext )We are done here!#end
+#end
