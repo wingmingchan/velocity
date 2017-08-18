@@ -1,0 +1,5 @@
+#set( $states   = [ 'NY', 'NJ', 'WA'  ] )
+
+#foreach( $state in $states )
+$foreach.Count $state
+#end
