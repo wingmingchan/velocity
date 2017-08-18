@@ -1,0 +1,8 @@
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
+
+#set( $page = $_XPathTool.selectSingleNode( $contentRoot,
+    "calling-page/system-page/system-data-structure" ) )
+
+## the second argument list is a list of names of nodes that should be skipped
+#chanwProcessSystemDataStructure( $page [ "wysiwyg" ] )
+#chanwDisplayMapKeys( $chanwXmlXPathTextMap true )
