@@ -1,0 +1,5 @@
+$contentRoot.Class.Name
+$contentRoot.Parent.Class.Name
+$contentRoot.Children.size()
+$contentRoot.getChild( "system-page" ).getChild( "name" ).Value
+$contentRoot.getChildren( "system-folder" ).size()
