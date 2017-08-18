@@ -1,0 +1,20 @@
+$_EscapeTool.B                ## => \
+$_EscapeTool.D                ## => $
+$_EscapeTool.E                ## => !
+$_EscapeTool.H                ## => #
+$_EscapeTool.N                ## => newline
+$_EscapeTool.Q                ## => "
+$_EscapeTool.S                ## => '
+
+$_EscapeTool.java( '\"' )     ## => \\\"
+$_EscapeTool.xml( '<h1>' )    ## => &lt;h1&gt; displayed as <h1>
+
+## https://myorg.org/index.php?name=Wing+Ming+Chan
+https://myorg.org/index.php?name=$_EscapeTool.url( 'Wing Ming Chan' )
+
+## examples by German Drulyk
+#set( $message = """What?""" )
+$message    ##=> "What?"
+
+#set( $message = '''What?''' )
+$message    ##=> 'What?'
