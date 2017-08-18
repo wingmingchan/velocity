@@ -1,0 +1,18 @@
+#set( $cal = $_DateTool.Calendar )
+#set( $sysCal = $_DateTool.SystemCalendar )
+$cal.Class.Name
+$sysCal.Class.Name
+#set( $date = $_DateTool.Date )
+#set( $sysDate = $_DateTool.SystemDate )
+$date.Class.Name
+$sysDate.Class.Name
+#set( $time = $_DateTool.SystemTime )
+$time.Class.Name
+$_DateTool.Day
+$_DateTool.getDay( $sysCal )
+$_DateTool.Month
+$_DateTool.getMonth( $sysCal )
+$_DateTool.Year
+$_DateTool.getYear( $sysCal )
+$_DateTool.getValue( $_FieldTool.in( "java.util.Calendar" ).YEAR, $sysCal )
+$_DateTool.TimeZone.Class.Name ##=> sun.util.calendar.ZoneInfo
