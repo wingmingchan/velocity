@@ -1,0 +1,9 @@
+#set( $list = [ 1..5 ] )
+
+#foreach( $itemTop in $list )
+$foreach.Count
+    
+    #if( $foreach.Count + 2 >= $list.size() )
+        #break
+    #end
+#end
