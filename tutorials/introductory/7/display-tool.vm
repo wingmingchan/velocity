@@ -1,3 +1,27 @@
-#set( $then = $_DateTool.getDate( "1500000000000" ) )
-$_DateTool.whenIs( $then ).Full    ##=> 1 month 3 days 14 hours 7 minutes 9 seconds 16 milliseconds ago
-$_DateTool.whenIs( $then ).Days    ##=> -33
+#set( $d = $_DisplayTool )
+
+#set( $list1 = [ "apple","apple","apple","apple" ] )  
+#set( $list2 = [ "apple" ] )     
+$d.capitalize( "there is a point." )
+
+$d.list( $list1 )
+$d.list( $list1, ", " )
+$d.list( $list1, ", ", " or " )
+
+$d.plural( 3, "apple" )
+$d.plural( 2, "ox", "oxen" )
+
+Some$d.space( 6 )spaces
+
+$d.stripTags( "<span class='text_red'>three<br />bears</span>" )
+$d.stripTags( "<span class='text_red'>three<br />bears</span>", "span" )
+
+$d.truncate( "Blue blue my love is blue, blue is my love" )
+## note that the length includes the length of the suffix
+$d.truncate( "Blue blue my love is blue, blue is my love", 6 )
+$d.truncate( "Blue blue my love is blue, blue is my love", 6, "---" )
+$d.truncate( "Blue blue my love is blue, blue is my love", 8, "---", true )
+$d.truncate( "Blue blue my love is blue, blue is my love", 14, "---", true )
+$d.truncate( "Blue blue my love is blue, blue is my love", 14, "---", false )
+
+$d.uncapitalize( "THERE IS A POINT." )
