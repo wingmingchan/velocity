@@ -6,7 +6,3 @@ $_DateTool.toMonths( $num )    ##=> 578
 $_DateTool.toSeconds( $num )   ##=> 1500000000
 $_DateTool.toWeeks( $num )     ##=> 2480
 $_DateTool.toYears( $num )     ##=> 47
-
-#set( $then = $_DateTool.getDate( "$num" ) )
-$_DateTool.whenIs( $then ).Full    ##=> 1 month 3 days 14 hours 7 minutes 9 seconds 16 milliseconds ago
-$_DateTool.whenIs( $then ).Days    ##=> -33
