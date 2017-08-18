@@ -1,0 +1,8 @@
+#foreach( $num_outer in [ 1..3 ] )
+Outer count: $foreach.Count
+#foreach( $num_inner in [ 1..3 ] )
+  Inner count: $foreach.Count
+#if( !$foreach.hasNext && $foreach.Parent.hasNext )  More to come!
+#elseif( !$foreach.hasNext && !$foreach.Parent.hasNext )  Finishing up!#end
+#end
+#end
