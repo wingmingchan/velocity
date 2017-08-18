@@ -1,0 +1,14 @@
+#macro( chanwDisplayObjClass $obj )
+    #set( $objString = "" )
+    #set( $objType   = $obj.Class.Name )
+    
+    #if( $objType == "java.lang.String" )    ## class name, a string
+        #set( $objString = $obj )
+    #elseif( $objType == "java.lang.Class" ) ## Class obj
+        #set( $objString = $obj.Name )
+    #else                                    ## obj of other types
+        #set( $objString = $obj.Class.Name )
+    #end
+    
+    ## code
+#end
