@@ -1,0 +1,7 @@
+#foreach( $itemTop in [ 1..3 ] )
+#foreach( $itemMiddle in [ 1..2 ] )
+#foreach( $itemInner in [ 1..3 ] )
+$foreach.Topmost.Count, $foreach.Parent.Count, $foreach.Count
+#end
+#end
+#end
