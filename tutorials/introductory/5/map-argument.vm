@@ -1,0 +1,21 @@
+#macro( myMacro $map )
+    #if( $map.Class.Name == "java.util.LinkedHashMap" )
+        #if( !$map[ "state" ] )
+            #set( $state = "Unknown" )
+            #set( $population = "0" )
+        #elseif( !$map[ "population" ] )
+            #set( $state = $map[ "state" ] )
+            #set( $population = "Unknown" )
+        #else
+            #set( $state = $map[ "state" ] )
+            #set( $population = $map[ "population" ] )
+        #end
+        $state: $population
+    #else
+    No map is supplied.
+    #end
+#end
+
+#myMacro( { "state":"NY", "population":"19.75 Million" } )
+#myMacro( { "state":"NJ" } )
+#myMacro
