@@ -56,7 +56,7 @@ Use uppercase for Oracle, and lowercase for MySql.《/p》
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_global_macros' )
+#import( 'core/library/velocity/chanw/chanw_initialization' )
 #*doc
 《/import》
 《global-variables》
@@ -483,8 +483,7 @@ doc*###
     #set( $chanwGetDatabasStatement = "" )
     #chanwGetObjectByClassName( "javax.naming.InitialContext" )
     #set( $chanwContext    = $chanwGetObjectByClassName )
-    #set( $chanwDataSource = $chanwContext.lookup( "java:comp/env" ).lookup(
-        "jdbc/CascadeDS" ) )
+    #set( $chanwDataSource = $chanwContext.lookup( "java:comp/env/jdbc/CascadeDS" ) )
     #set( $chanwConnection = $chanwDataSource.Connection )
     $chanwConnection.setReadOnly( true )
     #set( $chanwMetaData   = $chanwConnection.MetaData )
