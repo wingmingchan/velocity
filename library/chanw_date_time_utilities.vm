@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/11/2017 Changed names like $chanwYearField to $chanwCalendarYearField.
 8/7/2017 Started using macro names as namespace prefixes for local parameters.
 7/14/2017 Added import and evaluate elements.
 5/5/2017 Fixed a bug in #chanwLocalDateFromDate due to a change of macro name.
@@ -29,7 +30,7 @@ ${DOLLAR}chanwMonthDuration: $chanwMonthDuration
 ${DOLLAR}chanwYearDuration: $chanwYearDuration
 =============================================================
 #import( 'site://_brisk/core/library/velocity/chanw/chanw_date_time_utilities' )
-${DOLLAR}chanwYearField: $chanwYearField
+${DOLLAR}chanwYearField: $chanwCalendarYearField
 ${SINGLE_HASH}chanwLocalDateFromCalendar( ${DOLLAR}chanwCalendarObject )
 #chanwLocalDateFromCalendar( $chanwCalendarObject )
 ${DOLLAR}chanwLocalDateFromCalendar.Class.Name: $chanwLocalDateFromCalendar.Class.Name
@@ -200,29 +201,29 @@ doc*###
     $_FieldTool.in( "java.time.temporal.ChronoUnit" ).YEARS ) )
 ## date and calendar
 ## fields
-#set( $chanwYearField        = $_FieldTool.in( 'java.util.Calendar' ).YEAR )
-#set( $chanwMonthField       = $_FieldTool.in( 'java.util.Calendar' ).MONTH )
-#set( $chanwDayField         = $_FieldTool.in( 'java.util.Calendar' ).DATE )
-#set( $chanwHourField        = $_FieldTool.in( 'java.util.Calendar' ).HOUR )
-#set( $chanwMinuteField      = $_FieldTool.in( 'java.util.Calendar' ).MINUTE )
-#set( $chanwSecondField      = $_FieldTool.in( 'java.util.Calendar' ).SECOND )
-#set( $chanwMillisecondField = $_FieldTool.in( 'java.util.Calendar' ).MILLISECOND )
-#set( $chanwAmPmField        = $_FieldTool.in( 'java.util.Calendar' ).AM_PM )
+#set( $chanwCalendarYearField        = $_FieldTool.in( 'java.util.Calendar' ).YEAR )
+#set( $chanwCalendarMonthField       = $_FieldTool.in( 'java.util.Calendar' ).MONTH )
+#set( $chanwCalendarDayField         = $_FieldTool.in( 'java.util.Calendar' ).DATE )
+#set( $chanwCalendarHourField        = $_FieldTool.in( 'java.util.Calendar' ).HOUR )
+#set( $chanwCalendarMinuteField      = $_FieldTool.in( 'java.util.Calendar' ).MINUTE )
+#set( $chanwCalendarSecondField      = $_FieldTool.in( 'java.util.Calendar' ).SECOND )
+#set( $chanwCalendarMillisecondField = $_FieldTool.in( 'java.util.Calendar' ).MILLISECOND )
+#set( $chanwCalendarAmPmField        = $_FieldTool.in( 'java.util.Calendar' ).AM_PM )
 ##
 ## today
-#set( $chanwTodayDateObject          = $_DateTool.getSystemDate() )
+#set( $chanwTodayDateObject          = $_DateTool.SystemDate )
 #set( $chanwShortField = $_FieldTool.in( $chanwTodayDateObject ).SHORT )
 #set( $chanwLongField  = $_FieldTool.in( $chanwTodayDateObject ).LONG )
-#set( $chanwCalendarObject           = $_DateTool.getCalendar() )
-#set( $chanwCurrentTimestampLong     = $_DateTool.getSystemTime() )
-#set( $chanwCurrentTimestampString   = "" + $_DateTool.getSystemTime() )
-#set( $chanwCurrentYearInt           = $_DateTool.getYear() )
-#set( $chanwCurrentMonthInt          = $_DateTool.getMonth() )
-#set( $chanwCurrentDayInt            = $_DateTool.getDay() )
-#set( $chanwCurrentHourInt           = $_DateTool.getValue( $chanwHourField, $chanwTodayDateObject ) )
-#set( $chanwCurrentMinuteInt         = $_DateTool.getValue( $chanwMinuteField, $chanwTodayDateObject ) )
-#set( $chanwCurrentSecondInt         = $_DateTool.getValue( $chanwSecondField, $chanwTodayDateObject ) )
-#set( $chanwCurrentAmPmString        = $_DateTool.getValue( $chanwAmPmField, $chanwTodayDateObject ) )
+#set( $chanwCalendarObject           = $_DateTool.Calendar )
+#set( $chanwCurrentTimestampLong     = $_DateTool.SystemTime )
+#set( $chanwCurrentTimestampString   = "" + $_DateTool.SystemTime )
+#set( $chanwCurrentYearInt           = $_DateTool.Year )
+#set( $chanwCurrentMonthInt          = $_DateTool.Month )
+#set( $chanwCurrentDayInt            = $_DateTool.Day )
+#set( $chanwCurrentHourInt           = $_DateTool.getValue( $chanwCalendarHourField, $chanwTodayDateObject ) )
+#set( $chanwCurrentMinuteInt         = $_DateTool.getValue( $chanwCalendarMinuteField, $chanwTodayDateObject ) )
+#set( $chanwCurrentSecondInt         = $_DateTool.getValue( $chanwCalendarSecondField, $chanwTodayDateObject ) )
+#set( $chanwCurrentAmPmString        = $_DateTool.getValue( $chanwCalendarAmPmField, $chanwTodayDateObject ) )
 #set( $chanwCurrentDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwTodayDateObject ) )
 #set( $chanwCurrentDayOfWeekShortString = $_DateTool.format( "EEE", $chanwTodayDateObject ) )
 #set( $chanwCurrentMonthLongString   = $_DateTool.format( "MMMMM", $chanwTodayDateObject ) )
@@ -230,51 +231,52 @@ doc*###
 ##
 ## yesterday
 #set( $chanwYesterdayCalObject = $chanwCalendarObject.clone() )
-$chanwYesterdayCalObject.add( $chanwDayField, -1 )
+$chanwYesterdayCalObject.add( $chanwCalendarDayField, -1 )
 #set( $chanwYesterdayDateObject = $_DateTool.toDate( $chanwYesterdayCalObject ) )
-#set( $chanwYesterdayInt = $chanwYesterdayCalObject.get( $chanwDayField ) )
+#set( $chanwYesterdayInt = $chanwYesterdayCalObject.get( $chanwCalendarDayField ) )
 #set( $chanwYesterdayDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwYesterdayDateObject ) )
 #set( $chanwYesterdayDayOfWeekShortString = $_DateTool.format( "EEE", $chanwYesterdayDateObject ) )
 ##
 ## tomorrow
 #set( $chanwTomorrowCalObject  = $chanwCalendarObject.clone() )
-$chanwTomorrowCalObject.add( $chanwDayField, 1 )
+$chanwTomorrowCalObject.add( $chanwCalendarDayField, 1 )
 #set( $chanwTomorrowDateObject = $_DateTool.toDate( $chanwTomorrowCalObject ) )
-#set( $chanwTomorrowInt = $chanwTomorrowCalObject.get( $chanwDayField ) )
+#set( $chanwTomorrowInt = $chanwTomorrowCalObject.get( $chanwCalendarDayField ) )
 #set( $chanwTomorrowDayOfWeekLongString  = $_DateTool.format( "EEEEE", $chanwTomorrowDateObject ) )
 #set( $chanwTomorrowDayOfWeekShortString = $_DateTool.format( "EEE", $chanwTomorrowDateObject ) )
 ##
 ## last month
 #set( $chanwLastMonthCalObject = $chanwCalendarObject.clone() )
-$chanwLastMonthCalObject.add( $chanwMonthField, -1 )
+$chanwLastMonthCalObject.add( $chanwCalendarMonthField, -1 )
 #set( $chanwLastMonthDateObject = $_DateTool.toDate( $chanwLastMonthCalObject ) )
-#set( $chanwLastMonthInt = $chanwLastMonthCalObject.get( $chanwMonthField ) )
+#set( $chanwLastMonthInt = $chanwLastMonthCalObject.get( $chanwCalendarMonthField ) )
 #set( $chanwLastMonthLongString  = $_DateTool.format( "MMMMM", $chanwLastMonthDateObject ) )
 #set( $chanwLastMonthShortString = $_DateTool.format( "MMM", $chanwLastMonthDateObject ) )
 ##
 ## next month
 #set( $chanwNextMonthCalObject = $chanwCalendarObject.clone() )
-$chanwNextMonthCalObject.add( $chanwMonthField, 1 )
+$chanwNextMonthCalObject.add( $chanwCalendarMonthField, 1 )
 #set( $chanwNextMonthDateObject = $_DateTool.toDate( $chanwNextMonthCalObject ) )
-#set( $chanwNextMonthInt = $chanwNextMonthCalObject.get( $chanwMonthField ) )
+#set( $chanwNextMonthInt = $chanwNextMonthCalObject.get( $chanwCalendarMonthField ) )
 #set( $chanwNextMonthLongString  = $_DateTool.format( "MMMMM", $chanwNextMonthDateObject ) )
 #set( $chanwNextMonthShortString = $_DateTool.format( "MMM", $chanwNextMonthDateObject ) )
 ##
 ## last year
 #set( $chanwLastYearCalObject  = $chanwCalendarObject.clone() )
-$chanwLastYearCalObject.add( $chanwYearField, -1 )
+$chanwLastYearCalObject.add( $chanwCalendarYearField, -1 )
 #set( $chanwLastYearDateObject = $_DateTool.toDate( $chanwLastYearCalObject ) )
 #set( $chanwLastYearInt = $chanwCurrentYearInt - 1 )
 ##
 ## next year
 #set( $chanwNextYearCalObject  = $chanwCalendarObject.clone() )
-$chanwNextYearCalObject.add( $chanwYearField, 1 )
+$chanwNextYearCalObject.add( $chanwCalendarYearField, 1 )
 #set( $chanwNextYearDateObject = $_DateTool.toDate( $chanwNextYearCalObject ) )
 #set( $chanwNextYearInt = $chanwCurrentYearInt + 1 )
 ##
 ## timezone
-#set( $chanwStr = "" )
-#set( $chanwParamList = [ '$chanwStr.Class' ] )
+#set( $chanwTimeZone         = $_DateTool.TimeZone )
+#set( $chanwStr              = "" )
+#set( $chanwParamList        = [ '$chanwStr.Class' ] )
 #chanwGetMethodByClassNameMethodNameParamTypes( 'java.util.TimeZone' 'getTimeZone' $chanwParamList )
 #set( $chanwLondonTimeZone   = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "Europe/London" ) )
 #set( $chanwNYTimeZone       = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/New_York" ) )
@@ -344,9 +346,9 @@ doc*###
     #end
 ##
     #set( $chanwCalendar = $chanwLocalDateFromCalendarCal )
-    #set( $chanwMonthInt = $chanwCalendar.get( $chanwMonthField ) + 1 )
+    #set( $chanwMonthInt = $chanwCalendar.get( $chanwCalendarMonthField ) + 1 )
     #set( $chanwLocalDateFromCalendar = $chanwLocalDateNow.of(
-        $chanwCalendar.get( $chanwYearField ), $chanwMonthInt, $chanwCalendar.get( $chanwDayField ) ) )
+        $chanwCalendar.get( $chanwCalendarYearField ), $chanwMonthInt, $chanwCalendar.get( $chanwCalendarDayField ) ) )
 #end
 #*doc
 《/macro》
@@ -527,20 +529,20 @@ doc*###
     #end
 ##
     #set( $chanwCalendar = $_DateTool.toCalendar( $chanwLocalDateTimeFromDateDate ) )
-    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeNow.withYear( $chanwCalendar.get( $chanwYearField ) ) )
-    #set( $chanwMonthInt = $chanwCalendar.get( $chanwMonthField ) + 1 )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeNow.withYear( $chanwCalendar.get( $chanwCalendarYearField ) ) )
+    #set( $chanwMonthInt = $chanwCalendar.get( $chanwCalendarMonthField ) + 1 )
     #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withMonth( $chanwMonthInt ) )
-    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withDayOfMonth( $chanwCalendar.get( $chanwDayField ) ) )
-    #set( $chanwHourInt = $chanwCalendar.get( $chanwHourField ) )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withDayOfMonth( $chanwCalendar.get( $chanwCalendarDayField ) ) )
+    #set( $chanwHourInt = $chanwCalendar.get( $chanwCalendarHourField ) )
 ##
-    #if( $chanwCalendar.get( $chanwAmPmField ) == $_FieldTool.in( 'java.util.Calendar' ).PM )
+    #if( $chanwCalendar.get( $chanwCalendarAmPmField ) == $_FieldTool.in( 'java.util.Calendar' ).PM )
         #set( $chanwHourInt = $chanwHourInt + 12 )
     #end
 ##
     #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withHour( $chanwHourInt ) )
-    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withMinute( $chanwCalendar.get( $chanwMinuteField ) ) )
-    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withSecond( $chanwCalendar.get( $chanwSecondField ) ) )
-    #set( $chanwNanoLong = $chanwCalendar.get( $chanwMillisecondField ) * 1000000 )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withMinute( $chanwCalendar.get( $chanwCalendarMinuteField ) ) )
+    #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withSecond( $chanwCalendar.get( $chanwCalendarSecondField ) ) )
+    #set( $chanwNanoLong = $chanwCalendar.get( $chanwCalendarMillisecondField ) * 1000000 )
     #set( $chanwLocalDateTimeFromDate = $chanwLocalDateTimeFromDate.withNano( $chanwNanoLong ) )
 #end
 #*doc
