@@ -101,7 +101,6 @@ when using the LocatorTool.《/p》
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_global_macros' )
 #import( 'core/library/velocity/chanw/chanw_global_queue' )
 #*doc
 《/import》
@@ -791,7 +790,11 @@ doc*###
 ##
 #foreach( $str in $chanwGetTextValuesList )
 #if( $str != "" )
-#set( $void = $chanwGetTextValues.add( $_EscapeTool.xml( $str ) ) )
+    #if( $str.contains( "<" ) && $str.contains( ">" ) ) ## for wysiwyg
+        #set( $void = $chanwGetTextValues.add( $str ) )
+    #else
+        #set( $void = $chanwGetTextValues.add( $_EscapeTool.xml( $str ) ) )
+    #end
 #end
 #end
 #end
