@@ -8,7 +8,6 @@ Example: #drulykgImportPassThrough( '/core/library/chanw_library_import' )
 *#
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_initialization" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_regex_utilities" )
-#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_global_macros" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_date_time_utilities" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_display_velocity_code" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_process_index_block" )
