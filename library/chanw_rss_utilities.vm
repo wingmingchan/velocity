@@ -70,7 +70,7 @@ $_EscapeTool.xml( $_SerializerTool.serialize( $chanwCreateJdomElementFromFeed, f
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_global_macros' )
+#import( 'core/library/velocity/chanw/chanw_initialization' )
 #*doc
 《/import》
 《global-variables》
