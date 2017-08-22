@@ -1,0 +1,37 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $block = $_.locate( "_cascade/blocks/code/latin-5-text", $CASCADE_API_BLOCK_TYPE, "cascade-admin" ) )
+$block.Class.Name ##=> com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter
+
+#set( $block = $_.locateBlock( "_cascade/blocks/code/latin-5-text", "cascade-admin" ) )
+$block.Class.Name ##=> com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter
+
+#set( $file = $_.locate( "files/global-editor.css", $CASCADE_API_FILE_TYPE, "cascade-admin") )
+$file.Class.Name ##=> com.hannonhill.cascade.api.adapters.FileAPIAdapter
+
+#set( $file = $_.locateFile( "files/global-editor.css", "cascade-admin") )
+$file.Class.Name ##=> com.hannonhill.cascade.api.adapters.FileAPIAdapter
+
+#set( $folder = $_.locate( "files", $CASCADE_API_FOLDER_TYPE, "cascade-admin") )
+$folder.Class.Name ##=> com.hannonhill.cascade.api.adapters.FolderAPIAdapter
+
+#set( $folder = $_.locateFolder( "files", "cascade-admin") )
+$folder.Class.Name ##=> com.hannonhill.cascade.api.adapters.FolderAPIAdapter
+
+#set( $page = $_.locate( "index", $CASCADE_API_PAGE_TYPE, "cascade-admin" ) )
+$page.Class.Name ##=> com.hannonhill.cascade.api.adapters.PageAPIAdapter
+
+#set( $page = $_.locatePage( "index", "cascade-admin" ) )
+$page.Class.Name ##=> com.hannonhill.cascade.api.adapters.PageAPIAdapter
+
+#set( $reference = $_.locate( "education/resource", $CASCADE_API_REFERENCE_TYPE, "cardiology" ) )
+$reference.Class.Name ##=> com.hannonhill.cascade.api.adapters.ReferenceAPIAdapter
+
+#set( $reference = $_.locateReference( "education/resource", "cardiology" ) )
+$reference.Class.Name ##=> com.hannonhill.cascade.api.adapters.ReferenceAPIAdapter
+
+#set( $symlink = $_.locate( "department-of-medicine", $CASCADE_API_SYMLINK_TYPE, "cardiology" ) )
+$symlink.Class.Name ##=> com.hannonhill.cascade.api.adapters.SymlinkAPIAdapter
+
+#set( $symlink = $_.locateSymlink( "department-of-medicine", "cardiology" ) )
+$symlink.Class.Name ##=> com.hannonhill.cascade.api.adapters.SymlinkAPIAdapter
