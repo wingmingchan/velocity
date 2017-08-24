@@ -5,6 +5,8 @@ Authors: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/24/2017 Added #chanwInvokeMacroIfExists.
+8/21/2017 Merged chanw_global_macros with this format.
 8/7/2017 Started using macro names as namespace prefixes for local parameters.
 7/19/2017 Renamed from chanw_object_creator. Added new global values and macros.
 《/copyright》
@@ -82,7 +84,6 @@ ${SINGLE_HASH}chanwSetVariable( "map['state']" "NY" )
 #chanwSetVariable( "map" {} )## obj value
 #chanwSetVariable( "map['state']" "NY" )## a map as the variable
 ${DOLLAR}map: $map
-=============================================================
 =============================================================
 ${SINGLE_HASH}set( ${DOLLAR}xml = "<greetings>Hello, World!</greetings>" )
 ${SINGLE_HASH}chanwBuildXMLContentRoot( ${DOLLAR}xml )
@@ -172,6 +173,23 @@ ${SINGLE_HASH}chanwSetVariableToNonEmptyString( "var" [ " ", "", "content" ] )
 #chanwSetVariableToNonEmptyString( "var" [ " ", "", "content" ] )
 ${DOLLAR}var: $var
 =============================================================
+#define( $myMacroExists )
+	#macro( myMacro $var1 $var2 $var3 )
+    	#set( $str = $var1 + "-" + $var2 + "-" + $var3 )
+    	$str
+	#end
+#end
+#set( $macroName = "myMacro" )
+#set( $greetings = "Hello" )
+#set( $fname     = "John" )
+#set( $lname     = "Doe" )
+
+##chanwInvokeMacroIfExists( "myMacro" [ "greetings", "fname", "lname" ] )
+
+
+#set( $result = "#chanwInvokeMacroIfExists( 'myMacro' [ 'greetings', 'fname', 'lname' ] )" )
+$result.trim()
+=============================================================
 《/pre》
 《/div》
 《/evaluate》
@@ -223,7 +241,8 @@ doc*###
 #define( $S_UL )<ul>#end
 #define( $E_UL )</ul>#end
 ## java class names used for comparison
-#set( $COM_CASCADE_BLOCK_API_CLASS_NAME              = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
+#set( $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
+#set( $COM_CASCADE_TEXT_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
 #set( $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME = "com.hannonhill.cascade.api.adapters.FolderContainedAssetAPIAdapter" )
 #set( $COM_CASCADE_METADATA_CLASS_NAME               = "com.hannonhill.cascade.api.adapters.MetadataAPIAdapter" )
 #set( $COM_CASCADE_PAGE_API_CLASS_NAME               = "com.hannonhill.cascade.api.adapters.PageAPIAdapter" )
@@ -1287,11 +1306,63 @@ doc*###
 #*doc   
 《/macro》
 《documentation》
+《code》#chanwInvokeMacroIfExists( $chanwInvokeMacroIfExistsMacroName $chanwInvokeMacroIfExistsListOfParams )《/code》
+《p》Invokes a macro with the name and parameters passed in, if the named macro exists. The parameters
+should be in a list. This macro invokes 《code》#chanwInvokeMacro《/code》. The named macro to be invoked
+should be defined in a specific way like this:《/p》
+《pre》
+#define( $myMacroExists )
+	#macro( myMacro $var1 $var2 $var3 )
+    	$var1 $var2 $var3
+	#end
+#end
+《/pre》
+《p》The macro definition should be wrapped inside the 《code》#define《/code》 directive, and the name of the variable
+to be defined should be the macro name plus the suffix 《code》Exists《/code》. Example:《/p》
+《pre》
+#define( $myMacroExists )
+	#macro( myMacro $var1 $var2 $var3 )
+    	$var1 $var2 $var3
+	#end
+#end
+
+#set( $macroName = "myMacro" )
+#set( $greetings = "Hello" )
+#set( $fname     = "John" )
+#set( $lname     = "Doe" )
+
+#chanwInvokeMacroIfExists( "myMacro" [ "greetings", "fname", "lname" ] )
+《/pre》
+《/documentation》
+《macro id=“chanwInvokeMacroIfExists”》
+doc*###
+#macro( chanwInvokeMacroIfExists $chanwInvokeMacroIfExistsMacroName $chanwInvokeMacroIfExistsListOfParams )
+    #if( !$chanwInvokeMacroIfExistsListOfParams.Class.Name )
+        #set( $chanwParamString = "" )
+    #elseif( $chanwInvokeMacroIfExistsListOfParams.Class.Name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME && $chanwInvokeMacroIfExistsListOfParams.size() > 0 )
+        #set( $chanwParamString = "[" )
+##
+        #foreach( $varName in $chanwInvokeMacroIfExistsListOfParams  )
+            #set( $chanwParamString = $chanwParamString + """" + $varName.toString() + """" )
+            #if( $foreach.count < $chanwInvokeMacroIfExistsListOfParams.size() )
+                #set( $chanwParamString = $chanwParamString + "," )
+            #end
+        #end
+        #set( $chanwParamString = $chanwParamString + "]" )
+    #else
+        #set( $chanwParamString = "[]" )
+    #end
+##
+    #set( $chanwStmt = "${SINGLE_HASH}if(${DOLLAR}${macroName}Exists)${SINGLE_HASH}chanwInvokeMacro(""$macroName"" $chanwParamString)${SINGLE_HASH}end" )
+    #evaluate( $chanwStmt )
+#end
+#*doc   
+《/macro》
+《documentation》
 《code》#chanwInvokeMacroWithVarForString( $macroName $macroParams $varName )《/code》
 《p》Invokes a macro with the name and parameters passed in and stores the resulting
 output to the supplied variable. Example:《/p》
 《pre》
-
 《/pre》
 《/documentation》
 《macro id=“chanwInvokeMacroWithVarForString”》
@@ -1315,6 +1386,7 @@ doc*###
 #*    *##set( $chanwStmt = $chanwStmt.trim() )
 #*    *##set( $chanwStmt = $chanwStmt + ")" )
 #*    *##set( $chanwStmt = '#set($' + $chanwInvokeMacroWithVarForStringVarName + '="' + $chanwStmt + '")' )
+$chanwStmt
 #*    *##evaluate( $chanwStmt )
 #**##end
 #end
@@ -1545,8 +1617,17 @@ element.《/p》
 《macro id=“chanwProcessBlockChooser”》
 doc*###
 #macro( chanwProcessBlockChooser $chanwProcessBlockChooserContent )
+    #chanwIsInstanceOf( $chanwProcessBlockChooserContent "com.hannonhill.cascade.api.adapters.BlockAPIAdapter" )
+    #set( $chanwIsBlockAPIAdapter = $chanwIsInstanceOf )
+    
+    #if( $chanwIsBlockAPIAdapter )
+        #set( $chanwBlockAPIAdapterClassName = $chanwProcessBlockChooserContent.Class.Name )
+    #else
+        #set( $chanwBlockAPIAdapterClassName = "" )
+    #end
+
 #**### switch between Docuement and Element
-#**##if( $chanwProcessBlockChooserContent.class.name == $ORG_JDOM_DOCUMENT_CLASS_NAME )
+#**##if( $chanwProcessBlockChooserContent.Class.Name == $ORG_JDOM_DOCUMENT_CLASS_NAME )
         #set( $chanwContentChildren = $chanwProcessBlockChooserContent.getContent() )
 #**##else
         #set( $chanwContentChildren = $chanwProcessBlockChooserContent.getChildren() )
@@ -1555,22 +1636,32 @@ doc*###
 #**### plain text or code
 #**##if( $chanwContentChildren.size() == 0 )
 #*    *#$_SerializerTool.serialize( $chanwProcessBlockChooserContent, true )
+    #elseif( $chanwBlockAPIAdapterClassName == "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
+        $chanwProcessBlockChooserContent.Text
 #**### at least one child
-#**##elseif( $chanwContentChildren.size() > 0 )
+#**##elseif( $chanwContentChildren.size() > 0 || $chanwIsBlockAPIAdapter )
+        #if( !$chanwIsBlockAPIAdapter && $chanwContentChildren.size() > 0 )
 #*    *### create a global variable storing the first child
 #*    *### normally the root element
-#*    *##set( $chanwFirstChild = $chanwContentChildren.get( 0 ) )
-#*    *##set( $chanwChildName  = $chanwFirstChild.name )
-#*    *##set( $chanwChildPath  = $chanwProcessBlockChooserContent.getParent().getChild( 'path' ).value )
-#*    *##set( $chanwBlockName  = $chanwChildPath )
+#*        *##set( $chanwFirstChild = $chanwContentChildren.get( 0 ) )
+#*        *##set( $chanwChildName  = $chanwFirstChild.Name )
+#*        *##set( $chanwChildPath  = $chanwProcessBlockChooserContent.getParent().getChild( 'path' ).Value )
+#*        *##set( $chanwBlockName  = $chanwChildPath )
 ##
-#*    *### there is at least one slash in the path
-#*    *##set( $chanwLastIndexOfSlash = $chanwBlockName.lastIndexOf( '/' ) + 1 )
+#*        *### there is at least one slash in the path
+#*        *##set( $chanwLastIndexOfSlash = $chanwBlockName.lastIndexOf( '/' ) + 1 )
 ##
-#*    *### get the name of the block
-#*    *##if( $chanwLastIndexOfSlash > -1 )
-#*        *##set( $chanwBlockName = $chanwBlockName.substring( $chanwLastIndexOfSlash ) )
-#*    *##end
+#*        *### get the name of the block
+#*        *##if( $chanwLastIndexOfSlash > -1 )
+#*            *##set( $chanwBlockName = $chanwBlockName.substring( $chanwLastIndexOfSlash ) )
+#*        *##end
+        #else
+#*        *##set( $chanwFirstChild = "" )
+#*        *##set( $chanwChildName  = "" )
+#*        *##set( $chanwChildPath  = "" )
+#*        *##set( $chanwBlockName  = "" )
+            #set( $chanwBlockName = $chanwProcessBlockChooserContent.Name )
+        #end
 ##
 #*    *##if( $chanwBlockName.endsWith( 'dd-macro' ) )
 #*        *##chanwInvokeMacro( "chanwProcessDDBlockWithMacro" [ "chanwFirstChild" ] )
@@ -1586,6 +1677,8 @@ doc*###
 #*    *### data definition blocks
 #*    *##elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
 #*        *##chanwProcessDataDefinitionBlock( $chanwFirstChild )
+        #elseif( $chanwBlockAPIAdapterClassName == "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
+            #chanwProcessDataDefinitionBlock( $chanwProcessBlockChooserContent )
 #*    *### index block
 #*    *##elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK ) 
 #*        *##chanwProcessIndexBlock( $chanwBlockName $chanwFirstChild )
@@ -1634,44 +1727,45 @@ into a macro name. This macro is used by 《code》#chanwProcessBlockChooser《/
 《macro id=“chanwProcessDataDefinitionBlock”》
 doc*###
 #macro( chanwProcessDataDefinitionBlock $chanwProcessDataDefinitionBlockSystemDataStructure )
-#**##set( $chanwTopLevelElementSize = $chanwProcessDataDefinitionBlockSystemDataStructure.Children.size() )
-#**##set( $chanwDisplayElement = $chanwProcessDataDefinitionBlockSystemDataStructure.getChild( 'display' ) )
+    #set( $chanwGroupName = "" )
 ##
-#**##if( $chanwDisplayElement.Value.toLowerCase() == 'yes' )
+    #if( $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
+#*    *##set( $chanwTopLevelElementSize = $chanwProcessDataDefinitionBlockSystemDataStructure.Children.size() )
+#*    *##set( $chanwDisplayElement = $chanwProcessDataDefinitionBlockSystemDataStructure.getChild( 'display' ) )
+##
+#*    *##if( $chanwDisplayElement.Value.toLowerCase() == 'yes' )
 #*    *### determine the group to be processed
-#*    *##if( $chanwTopLevelElementSize == 2 )
-#*        *##set( $chanwGroupToBeProcessed = $_XPathTool.selectSingleNode( $chanwDisplayElement, "following-sibling::node()" ) )
-#*        *##set( $chanwGroupName = $chanwGroupToBeProcessed.Name )
-#*    *##elseif( $chanwTopLevelElementSize > 2 )
-#*        *##set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.Children[ 1 ].Value + "-group" )
-#*    *##else
-#*        *##set( $chanwGroupName = "unknown" )
-#*    *##end
+#*        *##if( $chanwTopLevelElementSize == 2 )
+#*            *##set( $chanwGroupToBeProcessed = $_XPathTool.selectSingleNode( $chanwDisplayElement, "following-sibling::node()" ) )
+#*            *##set( $chanwGroupName = $chanwGroupToBeProcessed.Name )
+#*        *##elseif( $chanwTopLevelElementSize > 2 )
+#*            *##set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.Children[ 1 ].Value + "-group" )
+#*        *##else
+#*            *##set( $chanwGroupName = "unknown" )
+#*        *##end
 ##
 #*    *### data retrieval
-#*    *##set( $chanwPath = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "path" ).Value )
-#*    *##set( $chanwSite = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "site" ).Value )
-#*    *##set( $chanwGroupNode = $_.locateBlock( $chanwPath, $chanwSite ).getStructuredDataNodes( $chanwGroupName )[ 0 ] )
-#*    *##chanwGetFQINodeMap( $chanwGroupNode $chanwProcessDataDefinitionBlockSystemDataStructure )
-##
+#*        *##set( $chanwPath = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "path" ).Value )
+#*        *##set( $chanwSite = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "site" ).Value )
+#*        *##set( $chanwGroupNode = $_.locateBlock( $chanwPath, $chanwSite ).getStructuredDataNodes( $chanwGroupName )[ 0 ] )
+            #chanwGetFQINodeMap( $chanwGroupNode $chanwProcessDataDefinitionBlockSystemDataStructure )
+        #end
+    #elseif( $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
+        #chanwGetFQINodeMap( $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData )
+        #set( $chanwGroupName = $chanwGetFQINodeMap[ "choose-type" ][ $KEY_DATA ] + "-group" )
+        ##set( $chanwGroupNode = $chanwProcessDataDefinitionBlockSystemDataStructure.getStructuredDataNodes( $chanwGroupName )[ 0 ] )
+        ##chanwGetFQINodeMap( $chanwGroupNode )
+    #end
+##        
 #*    *### compute macro name from group name
 #*    *##chanwConvertToPascalCase( $chanwGroupName "-" )
 #*    *##set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
 ##
-        #set( $chanwHtmlAssetHandlerName = "htmlAssetHandlerAddViaMacroName" )
-        #set( $chanwCode =
-            "${SINGLE_HASH}if(${DOLLAR}${chanwHtmlAssetHandlerName}Exists -aa- ${DOLLAR}design_namespace )
-            ${SINGLE_HASH}set(${DOLLAR}macro_name=${DOLLAR}design_namespace + 'ProcessAccordionGroup')
-            ${SINGLE_HASH}chanwInvokeMacro(  '$chanwHtmlAssetHandlerName' 
-            [ '${DOLLAR}macro_name', 'chanwGetFQINodeMap' ] )
-            ${SINGLE_HASH}end" )
-##
-        #chanwDisplayEvaluateCode( $chanwCode true )
 #*    *### invoke macro
 #*    *##chanwInvokeMacro( $chanwMacroName [ "chanwGetFQINodeMap" ] )
-#**##else
+#**###else
 #*    *### do nothing if no
-#**##end
+#**###end
 #end
 #*doc
 《/macro》
