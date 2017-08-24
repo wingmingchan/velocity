@@ -5,6 +5,7 @@ Authors: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/24/2017 Added code in chanwProcessBlockChooser and chanwProcessDataDefinitionBlock to deal with Cascade API objects.
 8/24/2017 Added #chanwInvokeMacroIfExists.
 8/21/2017 Merged chanw_global_macros with this format.
 8/7/2017 Started using macro names as namespace prefixes for local parameters.
