@@ -1,0 +1,44 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $block = $_.locate( "_cascade/blocks/code/latin-5-text", $CASCADE_API_BLOCK_TYPE, "cascade-admin" ) )
+$block.Name
+$block.Identifier.Id
+$block.Identifier.Type
+$block.Path
+$block.SiteName
+
+#set( $folder = $block.ParentFolder )
+#set( $child_ids = $folder.ChildrenIdentifiers )
+
+#foreach( $id in $child_ids )
+    $id.Path.PathAsString
+    $id.Path.PathSegments
+#end
+
+#* output:
+latin-5-text
+0fed27778b7f08ee5a4fada2f503fe38
+block
+_cascade/blocks/code/latin-5-text
+cascade-admin
+
+
+    _cascade/blocks/code/width-bar-text
+    [_cascade, blocks, code, width-bar-text]
+    _cascade/blocks/code/mountain-12-text
+    [_cascade, blocks, code, mountain-12-text]
+    _cascade/blocks/code/latin-text
+    [_cascade, blocks, code, latin-text]
+    _cascade/blocks/code/latin-5-text
+    [_cascade, blocks, code, latin-5-text]
+    _cascade/blocks/code/latin-7-text
+    [_cascade, blocks, code, latin-7-text]
+    _cascade/blocks/code/test-text
+    [_cascade, blocks, code, test-text]
+    _cascade/blocks/code/curent-item-js-text
+    [_cascade, blocks, code, curent-item-js-text]
+    _cascade/blocks/code/pete-test-text
+    [_cascade, blocks, code, pete-test-text]
+    _cascade/blocks/code/mountain-no-class-text
+    [_cascade, blocks, code, mountain-no-class-text]
+*#
