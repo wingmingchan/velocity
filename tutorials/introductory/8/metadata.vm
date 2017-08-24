@@ -1,0 +1,73 @@
+#set( $page = $_.locatePage( "index", "medicine" ) )
+#set( $metadata = $page.Metadata )
+
+$page.ShouldBeIndexed
+$page.ShouldBePublished
+$metadata.Title
+$metadata.DisplayName
+
+#if( $metadata.DynamicFields.size() > 0 )
+    #foreach( $df in $metadata.DynamicFields )
+$df.Name
+$!df.Value
+$df.Label
+        #if( $df.Values.size() > 0 )
+            #foreach( $value in $df.Values )
+                #if( $value != "" )
+$value
+                #end
+            #end
+        #end
+        #set( $isText = !$df.Multiselect && !$df.Checkbox && !$df.Dropdown && !$df.Radio )
+Checkbox: $df.Checkbox
+Multiselect: $df.Multiselect
+Dropdown: $df.Dropdown
+Radio: $df.Radio
+Text: $isText
+    #end
+#end
+
+#set( $field = $metadata.getDynamicField( "include-in-menubar" ) )
+$field.Class.Name
+
+#* output:
+true
+true
+Department of Medicine
+Department of Medicine
+
+    include-in-menubar
+
+Include in Menu Bar
+        Checkbox: true
+Multiselect: false
+Dropdown: false
+Radio: false
+Text: false
+    exclude-from-menu
+
+Exclude from Drop-down
+        Checkbox: true
+Multiselect: false
+Dropdown: false
+Radio: false
+Text: false
+    exclude-from-left
+
+Exclude from Left Menu
+        Checkbox: true
+Multiselect: false
+Dropdown: false
+Radio: false
+Text: false
+    displayed-as-submenu
+
+Displayed As Submenu
+        Checkbox: true
+Multiselect: false
+Dropdown: false
+Radio: false
+Text: false
+    
+com.hannonhill.cascade.api.adapters.DynamicMetadataFieldImpl
+*#
