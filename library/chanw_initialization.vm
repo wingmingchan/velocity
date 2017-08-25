@@ -5,6 +5,7 @@ Authors: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/25/2017 Added more code to chanwProcessDataDefinitionBlock to deal with legacy blocks.
 8/24/2017 Added code in chanwProcessBlockChooser and chanwProcessDataDefinitionBlock to deal with Cascade API objects.
 8/24/2017 Added #chanwInvokeMacroIfExists.
 8/21/2017 Merged chanw_global_macros with this format.
@@ -1731,19 +1732,30 @@ doc*###
     #set( $chanwGroupName = "" )
 ##
     #if( $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
-#*    *##set( $chanwTopLevelElementSize = $chanwProcessDataDefinitionBlockSystemDataStructure.Children.size() )
-#*    *##set( $chanwDisplayElement = $chanwProcessDataDefinitionBlockSystemDataStructure.getChild( 'display' ) )
+        #set( $chanwTopLevelElementSize = $chanwProcessDataDefinitionBlockSystemDataStructure.Children.size() )
+        #set( $chanwTypeInfoElement     = "" )
+        #set( $chanwTypeInfoElement     = $chanwProcessDataDefinitionBlockSystemDataStructure.getChild( 'block-type' ) )
+        #set( $chanwDisplayElement      = $chanwProcessDataDefinitionBlockSystemDataStructure.getChild( 'display' ) )
 ##
 #*    *##if( $chanwDisplayElement.Value.toLowerCase() == 'yes' )
+
 #*    *### determine the group to be processed
-#*        *##if( $chanwTopLevelElementSize == 2 )
+#*        *##if( $chanwTopLevelElementSize == 2 && $chanwTypeInfoElement == "" )
 #*            *##set( $chanwGroupToBeProcessed = $_XPathTool.selectSingleNode( $chanwDisplayElement, "following-sibling::node()" ) )
 #*            *##set( $chanwGroupName = $chanwGroupToBeProcessed.Name )
-#*        *##elseif( $chanwTopLevelElementSize > 2 )
+#*        *##elseif( $chanwTopLevelElementSize > 2 && $chanwTypeInfoElement == "" )
 #*            *##set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.Children[ 1 ].Value + "-group" )
+            ## old block type
+            #elseif( $chanwTypeInfoElement != "" )
+                #set( $chanwGroupName = $chanwTypeInfoElement.Value )
+                #chanwConvertToPascalCase( $chanwGroupName "-" )
+                #set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
+                #chanwInvokeMacro( $chanwMacroName [ "chanwProcessDataDefinitionBlockSystemDataStructure" ] )
+                #break
 #*        *##else
 #*            *##set( $chanwGroupName = "unknown" )
 #*        *##end
+
 ##
 #*    *### data retrieval
 #*        *##set( $chanwPath = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "path" ).Value )
@@ -1761,13 +1773,13 @@ doc*###
             #set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData[ 1 ].Identifier )
         #end
     #end
-##        
-#*    *### compute macro name from group name
-#*    *##chanwConvertToPascalCase( $chanwGroupName "-" )
-#*    *##set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
 ##
-#*    *### invoke macro
-#*    *##chanwInvokeMacro( $chanwMacroName [ "chanwGetFQINodeMap" ] )
+#*    *### compute macro name from group name
+#**##chanwConvertToPascalCase( $chanwGroupName "-" )
+#**##set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
+##
+#**### invoke macro
+#**##chanwInvokeMacro( $chanwMacroName [ "chanwGetFQINodeMap" ] )
 #**###else
 #*    *### do nothing if no
 #**###end
@@ -2216,7 +2228,7 @@ doc*###
 《ul》
 《li》《a href=“https://github.com/wingmingchan/php-cascade-ws-ns-examples/blob/master/xml_feed/index_block_xml.php“》A web service program to produce a feed, containing XML from an index block《/a》《/li》
 《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tutorials/03%20working_with_block_xml/create_content_root_from_feed.vm“》A format that uses the LocatorTool to read indexed XML from a feed block《/a》《/li》
-《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/library/chanw_global_velocity.vm“》The library macro 《code》#chanwBuildXMLContentRoot《/code》《/a》《/li》
+《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/library/chanw_initialization.vm“》The library macro 《code》#chanw_initialization.vm《/code》《/a》《/li》
 《/ul》
 《/li》
 《li》《a href=“https://github.com/wingmingchan/velocity/blob/master/tools/sort_tool.vm“》SortTool examples《/a》《/li》
