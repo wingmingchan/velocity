@@ -17,6 +17,12 @@ $result.trim()
     $chanwGetFQINodeMap[ "group;mul-group-multiple-first;${foreach.index}" ][ $KEY_DATA ]
 #end
 
+#foreach( $count in [ 1..$chanwGetFQINodeMap[ "group;mul-group-multiple-second;0" ][ $KEY_SIZE ] ] )
+    ## output the data
+    ## when accessing the node, use $foreach.index to start with 0
+    $chanwGetFQINodeMap[ "group;mul-group-multiple-second;${foreach.index}" ][ $KEY_DATA ]
+#end
+
 #* output:
 [Lcom.hannonhill.cascade.api.asset.common.StructuredDataNode;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
@@ -27,7 +33,7 @@ $result.trim()
                                                                                                                                                                                                                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                                                                                                                 LinkedHashMap(7) {
     ["group"] == LinkedHashMap(7) {
-        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@11687d14 )
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@66b7c054 )
         ["data"] == null
         ["type"] == String(5)( "group" )
         ["size"] == Integer( 1 )
@@ -36,7 +42,7 @@ $result.trim()
         ["site"] == null
     }
     ["group;mul-group-multiple-first;0"] == LinkedHashMap(7) {
-        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@2ac32d8a )
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@39275a60 )
         ["data"] == String(7)( "First 1" )
         ["type"] == String(4)( "text" )
         ["size"] == Integer( 3 )
@@ -45,7 +51,7 @@ $result.trim()
         ["site"] == null
     }
     ["group;mul-group-multiple-first;1"] == LinkedHashMap(7) {
-        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@676476c9 )
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@759e000a )
         ["data"] == String(7)( "First 2" )
         ["type"] == String(4)( "text" )
         ["size"] == Integer( 3 )
@@ -54,7 +60,7 @@ $result.trim()
         ["site"] == null
     }
     ["group;mul-group-multiple-first;2"] == LinkedHashMap(7) {
-        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@5bcae154 )
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@4b4f37d5 )
         ["data"] == String(7)( "First 3" )
         ["type"] == String(4)( "text" )
         ["size"] == Integer( 3 )
@@ -63,7 +69,7 @@ $result.trim()
         ["site"] == null
     }
     ["group;group-single"] == LinkedHashMap(7) {
-        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@63722e1e )
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@79cfce4d )
         ["data"] == String(12)( "group single" )
         ["type"] == String(4)( "text" )
         ["size"] == Integer( 1 )
@@ -72,7 +78,7 @@ $result.trim()
         ["site"] == null
     }
     ["group;mul-group-multiple-second;0"] == LinkedHashMap(7) {
-        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@3f06bbb5 )
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@1343aab )
         ["data"] == String(8)( "Second 1" )
         ["type"] == String(4)( "text" )
         ["size"] == Integer( 2 )
@@ -81,7 +87,7 @@ $result.trim()
         ["site"] == null
     }
     ["group;mul-group-multiple-second;1"] == LinkedHashMap(7) {
-        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@57912e25 )
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@28073b75 )
         ["data"] == String(8)( "Second 2" )
         ["type"] == String(4)( "text" )
         ["size"] == Integer( 2 )
@@ -94,4 +100,8 @@ $result.trim()
             First 1
             First 2
             First 3
+
+            Second 1
+            Second 2
+
 *#
