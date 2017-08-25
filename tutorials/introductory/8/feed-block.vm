@@ -1,0 +1,31 @@
+#set( $block = $_.locateBlock( "_cascade/blocks/feed/ura-imaging", "cascade-admin-old" ) )
+$block.Class.Name
+
+#set( $feedXml = $block.FeedAsXMLElement )
+$feedXml.Class.Name
+$_SerializerTool.serialize( $feedXml, false )
+
+$_EscapeTool.xml( $_XPathTool.selectNodes( $feedXml, "address" )[ 0 ].Value )
+#* output:
+com.hannonhill.cascade.api.adapters.FeedBlockAPIAdapter
+
+org.jdom.Element
+
+<system-xml>
+	<address class="office-contact">
+		<span class="office-contact-title">URA Imaging Center Suite 105</span>
+		<br />Upstate Specialty Services at Harrison Center
+		<br />Suite 105, 550 Harrison Street
+		<br />Syracuse, NY 13202
+		<br />
+		<a href="http://www.upstate.edu/directions/550har.php">Map &amp; directions</a>
+		<br />
+		<span class="office-contact-title">Phone:</span> 315 464-7700
+		<br />
+	</address>
+</system-xml>
+
+
+			URA Imaging Center Suite 105Upstate Specialty Services at Harrison CenterSuite 105, 550 Harrison StreetSyracuse, NY 13202Map &amp; directionsPhone: 315 464-7700
+
+*#
