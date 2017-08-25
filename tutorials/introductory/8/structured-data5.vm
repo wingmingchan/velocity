@@ -1,0 +1,28 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#import( "site://_brisk/core/macros/drulykgVarDump" )
+
+#set( $block = $_.locateBlock( "_cascade/blocks/data/test-multiple-simple-text", "cascade-admin-old" ) )
+#set( $sd = $block.StructuredData )
+
+$sd.Class.Name
+#chanwGetFQINodeMap( $sd )
+#set( $result = "#drulykgVarDump( $chanwGetFQINodeMap )" )
+##$result.trim()
+
+## work with a set of multiple nodes
+## note that when counting, start with 1
+#foreach( $count in [ 1..$chanwGetFQINodeMap[ "group;mul-group-multiple-first;0" ][ $KEY_SIZE ] ] )
+    ## output the data
+    ## when accessing the node, use $foreach.index to start with 0
+    $chanwGetFQINodeMap[ "group;mul-group-multiple-first;${foreach.index}" ][ $KEY_DATA ]
+#end
+
+#* output:
+[Lcom.hannonhill.cascade.api.asset.common.StructuredDataNode;
+
+                                                                                                                                                                                                                                                                                                                                                                                                
+            First 1
+            First 2
+            First 3
+
+*#
