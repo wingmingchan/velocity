@@ -1,0 +1,27 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $block = $_.locateBlock( "_cascade/blocks/data/test-all", "cascade-admin-old" ) )
+#set( $sd = $block.StructuredData )
+#chanwGetFQINodeMap( $sd )
+
+#if( $chanwGetFQINodeMap[ "group;checkbox" ][ $KEY_SUBTYPE ] == $TYPE_CHECKBOX )
+    $chanwGetFQINodeMap[ "group;checkbox" ][ $KEY_DATA ]
+#end
+
+#if( $chanwGetFQINodeMap[ "group;block-chooser" ][ $KEY_SUBTYPE ] == $TYPE_BLOCK )
+    ## output the name of the block attached to the chooser
+    $chanwGetFQINodeMap[ "group;block-chooser" ][ $KEY_NODE ].Asset.Name
+    ## or call #chanwGetFQINodeMap again to process the block instead
+    #if( $chanwGetFQINodeMap[ "group;block-chooser" ][ $KEY_NODE ].Asset.Class.Name == $CASCADE_API_DataBlock_CLASS_NAME )
+        ## if it is a data definition block
+        #if( $chanwGetFQINodeMap[ "group;block-chooser" ][ $KEY_NODE ].Asset.StructuredData.Class.Name )
+            #chanwGetFQINodeMap( $chanwGetFQINodeMap[ "group;block-chooser" ][ $KEY_NODE ].Asset.StructuredData )
+        #end
+    #end
+#end
+
+#* output:
+    [Jogging, Swimming]
+
+    test-xhtml
+*#
