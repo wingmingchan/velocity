@@ -1753,9 +1753,13 @@ doc*###
         #end
     #elseif( $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
         #chanwGetFQINodeMap( $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData )
-        #set( $chanwGroupName = $chanwGetFQINodeMap[ "choose-type" ][ $KEY_DATA ] + "-group" )
-        ##set( $chanwGroupNode = $chanwProcessDataDefinitionBlockSystemDataStructure.getStructuredDataNodes( $chanwGroupName )[ 0 ] )
-        ##chanwGetFQINodeMap( $chanwGroupNode )
+        ## multi-functional
+        #if( $chanwGetFQINodeMap[ "choose-type" ][ $KEY_DATA ] )
+            #set( $chanwGroupName = $chanwGetFQINodeMap[ "choose-type" ][ $KEY_DATA ] + "-group" )
+        ## for single functional block, there is only one group, which is the second node
+        #else
+            #set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData[ 1 ].Identifier )
+        #end
     #end
 ##        
 #*    *### compute macro name from group name
