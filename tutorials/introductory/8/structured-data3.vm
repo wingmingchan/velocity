@@ -1,0 +1,104 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $block = $_.locateBlock( "_cascade/blocks/data/test-all", "cascade-admin-old" ) )
+#set( $sd = $block.StructuredData )
+
+#chanwRecurseNodes( $sd )
+
+#* output:
+                                Group identifier: group
+<br /> 
+                                        Text identifier: text-box
+<br /> 
+                            Text values size: 1
+<br /> 
+                                    Text value: A text box
+<br />
+<br />
+                        Text identifier: text-area
+<br /> 
+                            Text values size: 1
+<br /> 
+                                    Text value: A textarea
+<br />
+<br />
+                        Text identifier: wysiwyg
+<br /> 
+                            Text values size: 1
+<br /> 
+                                    Text value: 
+<p>A new paragraph.</p>
+<br />
+<br />
+                        Text identifier: checkbox
+<br /> 
+                            Text values size: 3
+<br /> 
+                                                                        Text value: Jogging
+<br />                                     Text value: Swimming
+<br />
+<br />
+                        Text identifier: checkbox2
+<br /> 
+                            Text values size: 0
+<br />
+<br />
+                        Text identifier: dropdown
+<br /> 
+                            Text values size: 1
+<br /> 
+                                    Text value: Option 1
+<br />
+<br />
+                        Text identifier: radio
+<br /> 
+                            Text values size: 1
+<br /> 
+                                    Text value: Maybe
+<br />
+<br />
+                        Text identifier: multiselect
+<br /> 
+                            Text values size: 3
+<br /> 
+                                                                        Text value: Year 2
+<br />                                     Text value: Year 3
+<br />
+<br />
+                        Text identifier: calendar
+<br /> 
+                            Text values size: 1
+<br /> 
+                                    Text value: 06-02-2016
+<br />
+<br />
+                        Text identifier: date-time
+<br /> 
+                            Text values size: 0
+<br />
+<br />
+                        Asset identifier: page-chooser
+<br /> 
+                        Asset path: test/velocity/test-structured-data-nodes, asset type: page
+<br />
+<br />
+                        Asset identifier: file-chooser
+<br /> 
+                        Asset path: files/test.pdf, asset type: file
+<br />
+<br />
+                        Asset identifier: block-chooser
+<br /> 
+                        Asset path: _cascade/blocks/data/test-xhtml, asset type: block
+<br />
+<br />
+                        Asset identifier: symlink-chooser
+<br /> 
+                        Asset path: test/google, asset type: symlink
+<br />
+<br />
+                        Asset identifier: linkable-chooser
+<br /> 
+                        Asset path: test/google, asset type: symlink
+<br />
+*#
