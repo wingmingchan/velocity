@@ -2,7 +2,7 @@
 
 #set( $block = $_.locateBlock( "_cascade/blocks/data/test-all", "cascade-admin-old" ) )
 #set( $sd = $block.StructuredData )
-#chanwGetFQINodeMap( $sd )
+#chanwGetFQINodeMap( $sd ) ## see structured-data3.vm for contents of the map
 
 #if( $chanwGetFQINodeMap[ "group;checkbox" ][ $KEY_SUBTYPE ] == $TYPE_CHECKBOX )
     $chanwGetFQINodeMap[ "group;checkbox" ][ $KEY_DATA ]
