@@ -176,10 +176,10 @@ ${SINGLE_HASH}chanwSetVariableToNonEmptyString( "var" [ " ", "", "content" ] )
 ${DOLLAR}var: $var
 =============================================================
 #define( $myMacroExists )
-	#macro( myMacro $var1 $var2 $var3 )
-    	#set( $str = $var1 + "-" + $var2 + "-" + $var3 )
-    	$str
-	#end
+    #macro( myMacro $var1 $var2 $var3 )
+        #set( $str = $var1 + "-" + $var2 + "-" + $var3 )
+        $str
+    #end
 #end
 #set( $macroName = "myMacro" )
 #set( $greetings = "Hello" )
@@ -1254,7 +1254,7 @@ doc*#
 ##
     #if( $chanwLocateAsset && $chanwLocateAsset != "" )
         #set( $chanwFolderPath = $chanwImportScriptFolderPath )
-    	
+        
         #if( !$chanwFolderPath.startsWith( "/" ) )
             #set( $chanwFolderPath = "/" + $chanwFolderPath )
         #end
@@ -1314,18 +1314,18 @@ should be in a list. This macro invokes 《code》#chanwInvokeMacro《/code》. 
 should be defined in a specific way like this:《/p》
 《pre》
 #define( $myMacroExists )
-	#macro( myMacro $var1 $var2 $var3 )
-    	$var1 $var2 $var3
-	#end
+    #macro( myMacro $var1 $var2 $var3 )
+        $var1 $var2 $var3
+    #end
 #end
 《/pre》
 《p》The macro definition should be wrapped inside the 《code》#define《/code》 directive, and the name of the variable
 to be defined should be the macro name plus the suffix 《code》Exists《/code》. Example:《/p》
 《pre》
 #define( $myMacroExists )
-	#macro( myMacro $var1 $var2 $var3 )
-    	$var1 $var2 $var3
-	#end
+    #macro( myMacro $var1 $var2 $var3 )
+        $var1 $var2 $var3
+    #end
 #end
 
 #set( $macroName = "myMacro" )
