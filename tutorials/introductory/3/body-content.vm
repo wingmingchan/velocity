@@ -1,0 +1,5 @@
+#macro( myMacro )
+    $bodyContent.Class.Name
+#end
+
+#@myMacro()Hello#end
