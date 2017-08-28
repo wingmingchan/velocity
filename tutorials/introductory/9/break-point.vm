@@ -1,0 +1,6 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#set( $point = 2 )
+#evaluate( "${SINGLE_HASH}define(${DOLLAR}breakAt${point})${SINGLE_HASH}end" )
+
+#if( $breakAt1 )Should stop here.#end
+#if( $breakAt2 )Have some tea.#end
