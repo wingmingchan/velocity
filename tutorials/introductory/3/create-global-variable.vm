@@ -1,7 +1,10 @@
-#macro( echoGlobalVariable )
-    $myVar
+#macro( createGlobalVariable )
+    #set( $newVar = 14 ) 
 #end
 
-#set( $myVar = 3 )
+## before the macro is invoked, $newVar is undefined
+$newVar  ## => $newVar
 
-#echoGlobalVariable  ## => 3
+## after the macro is invoked, the variable is defined
+#createGlobalVariable
+$newVar  ## => 14
