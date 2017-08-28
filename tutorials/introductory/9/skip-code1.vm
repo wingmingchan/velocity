@@ -1,0 +1,13 @@
+#set( $one = "one" )
+#set( $two = "two" )
+
+## skip this part
+#if( false )
+#set( $three = "three" )
+#set( $four = "four" )
+#end
+
+#set( $five = "five" )
+
+$one
+$three
