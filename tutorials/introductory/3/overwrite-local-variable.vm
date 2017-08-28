@@ -1,0 +1,8 @@
+#macro( createEchoGlobalVariable $myVar )
+    $myVar
+    #set( $myVar = 14 )
+    $myVar
+#end
+
+#createEchoGlobalVariable( 32 )
+$myVar  ## => 14
