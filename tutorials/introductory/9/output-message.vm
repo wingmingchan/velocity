@@ -1,0 +1,14 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#set( $folderPath = "formats/tutorial/introductory/9" )
+#set( $siteName   = "_chan_core" )
+#set( $formatName = "output-message" )
+
+#set( $one = "one" )
+#set( $two = "two" )
+#set( $three = "three" )
+
+#set( $four = "four" )
+#chanwOutputErrorMsg( $folderPath $siteName $formatName "Output message 1." "ICENEJiern" )
+
+#set( $five = "five" )
+#chanwOutputErrorMsg( $folderPath $siteName $formatName "Output message 2." "iojoigo4jri;jenrgn" )
