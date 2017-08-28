@@ -1,0 +1,11 @@
+#macro( echoGlobalVariable $myVar ) ## local created in macro
+    $myVar
+#end
+
+#set( $myVar = 3 )
+
+$myVar ## => 3
+#echoGlobalVariable( 16 )  ## => 16
+
+$myVar ## => 3
+#echoGlobalVariable  ## => 3
