@@ -1,0 +1,7 @@
+#macro( echoGlobalVariable )
+    $myVar
+#end
+
+#set( $myVar = 3 )
+
+#echoGlobalVariable  ## => 3
