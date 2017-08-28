@@ -1,0 +1,15 @@
+#set( $one = "one" )
+#set( $two = "two" )
+#set( $three = "three" )
+
+#if( $break )
+#break
+#end
+
+#set( $four = "four" )
+
+#if( $stop )
+#stop
+#end
+
+#set( $five = "five" )
