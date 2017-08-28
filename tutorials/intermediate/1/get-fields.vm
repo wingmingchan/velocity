@@ -1,0 +1,6 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#chanwGetConstantValueByClassNameConstantName('com.hannonhill.cascade.velocity.CascadeComparisonDateTool' 'MILLIS_PER_YEAR')
+$chanwGetConstantValueByClassNameConstantName
+
+#chanwGetConstantValueByClassNameConstantName('java.lang.Math' 'PI')
+$chanwGetConstantValueByClassNameConstantName
