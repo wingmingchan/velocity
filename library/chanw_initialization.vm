@@ -187,9 +187,7 @@ ${DOLLAR}var: $var
 #set( $lname     = "Doe" )
 
 ##chanwInvokeMacroIfExists( "myMacro" [ "greetings", "fname", "lname" ] )
-
-
-#set( $result = "#chanwInvokeMacroIfExists( 'myMacro' [ 'greetings', 'fname', 'lname' ] )" )
+#set( $result = "#chanwInvokeMacroIfExists( ""myMacro"" [ ""greetings"", ""fname"", ""lname"" ] )" )
 $result.trim()
 =============================================================
 《/pre》
@@ -248,6 +246,7 @@ doc*###
 #set( $COM_CASCADE_FOLDER_CONTAINED_ASSET_CLASS_NAME = "com.hannonhill.cascade.api.adapters.FolderContainedAssetAPIAdapter" )
 #set( $COM_CASCADE_METADATA_CLASS_NAME               = "com.hannonhill.cascade.api.adapters.MetadataAPIAdapter" )
 #set( $COM_CASCADE_PAGE_API_CLASS_NAME               = "com.hannonhill.cascade.api.adapters.PageAPIAdapter" )
+#set( $COM_CASCADE_SCRIPT_FORMAT_CLASS_NAME          = "com.hannonhill.cascade.api.adapters.ScriptFormatAPIAdapter" )
 #set( $COM_CASCADE_STRUCTURED_DATA_NODE_CLASS_NAME   = "com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter" )
 #set( $COM_CASCADE_STRUCTURED_DATA_LIST_CLASS_NAME   = "[Lcom.hannonhill.cascade.api.asset.common.StructuredDataNode;" )
 #set( $JAVA_LANG_INTEGER_CLASS_NAME                  = 'java.lang.Integer' )
