@@ -1,28 +1,30 @@
-#import( 'core/loaders/load_core' )
-#if( !$chanw_framework_site_name )
-    #set( $chanw_framework_site_name = $_brisk[ $BRISK_SITE_NAME ] )
-#end
+#set( $chanw_framework_site_name = "_brisk" )
 #*
-Import this single format to access all library resources.
-Example: #drulykgImportPassThrough( '/core/library/chanw_library_import' )
+Import this single format to access all library resources created by Wing.
 *#
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_initialization" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_regex_utilities" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_date_time_utilities" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_display_velocity_code" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_process_index_block" )
-#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_global_queue" )
-#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_process_xml" ) ## used by chanw_process_cascade_api
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_global_queue" ) ## used by chanw_process_cascade_api
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_process_xml" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_process_cascade_api" )
 ##
-#*
-Optional:
+#define( $chanwImportAdvanced )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_global_deque" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_global_stack" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_html_builder" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_html_builder_with_deque" )
-#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_reflect_utilities" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_rss_utilities" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_xslt_utilities" )
+#end
+#define( $chanwImportReflect )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_reflect_utilities" )
+#end
+#define( $chanwImportDatabase )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_database_utilities" )
-*#
+#end
+#define( $chanwImportVarDump )
+#import( "site://${chanw_framework_site_name}/core/macros/drulykgVarDump" )
+#end
