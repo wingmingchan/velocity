@@ -158,6 +158,10 @@ doc*###
 #set( $TYPE_PLAIN_TEXT  = "plaintext" )
 #set( $TYPE_CALENDAR    = "calendar" )
 #set( $TYPE_DATE_TIME   = "datetime" )
+#set( $TYPE_BLOCK       = "block" )
+#set( $TYPE_PAGE        = "page" )
+#set( $TYPE_FILE        = "file" )
+#set( $TYPE_SYMLINK     = "symlink" )
 ## Cascade API class strings
 #set( $CASCADE_API_DataBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
 #set( $CASCADE_API_FeedBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.FeedBlockAPIAdapter" )
@@ -899,10 +903,11 @@ doc*###
 #*doc
 《/macro》
 《documentation》
-《code》#chanwProcessStructuredDataNodes( $sd )《/code》
+《code》#chanwProcessStructuredDataNodes( $sd $sds )《/code》
 《p》Processes a structured data node or a list of structured data nodes,
 and populates two maps 《code》$chanwChildParentMap《/code》 and
-《code》$chanwChildParentMap《/code》.《/p》
+《code》$chanwChildParentMap《/code》. The 《code》$sds《/code》 variable, when defined,
+points to an 《code》org.jdom.Element《/code》 object.《/p》
 《p》For this macro to work properly, all and only identifiers of multiple fields in a data definition
 must have the prefix "mul-". This ensures that multiple nodes (even when there is only one)
 can be recognized when creating FQIs without consulting the data definition.《/p》
