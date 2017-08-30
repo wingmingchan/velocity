@@ -1,0 +1,10 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#chanwInvokeQueryWithMap( {
+    $PARAM_TYPE         : $PARAM_VALUE_METADATA_SET,
+    $PARAM_LINK         : "site://_common_assets/Page",
+    $PARAM_HAS_METADATA : [ "exclude-from-menu", [ "Yes" ] ],
+    $PARAM_INDEXABLE    : true
+} )
+
+$chanwInvokeQueryWithMap.size()
