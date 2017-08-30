@@ -1,0 +1,13 @@
+#set( $query1 = $_.query() )
+#set( $query1 = $query1.byContentType( "site://_brisk/Page" ) )
+#set( $query1 = $query1.searchAcrossAllSites() )
+
+#set( $query2 = $_.query() )
+#set( $query2 = $query2.byMetadataSet( "site://_brisk/Block" ) )
+#set( $query2 = $query2.searchAcrossAllSites() )
+
+#set( $pages = $query1.execute() )
+$pages.size()
+
+#set( $blocks = $query2.execute() )
+$blocks.size()
