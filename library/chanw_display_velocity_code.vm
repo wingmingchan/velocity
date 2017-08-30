@@ -342,6 +342,7 @@ doc*###
 《macro id=“chanwGetGlobalVariablesElement”》
 doc*###
 #macro( chanwGetGlobalVariablesElement $chanwGetGlobalVariablesElementRoot )
+    #set( $chanwGetGlobalVariablesElement = "" )
 #**##if( $chanwGetGlobalVariablesElementRoot.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
 #*    *##set( $chanwGetGlobalVariablesElement = $_XPathTool.selectSingleNode( $chanwGetGlobalVariablesElementRoot, "//global-variables" ) )
 #**##end
