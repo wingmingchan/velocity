@@ -1,0 +1,5 @@
+#set( $query1 = $_.query() )
+#set( $query2 = $_.query() )
+
+#set( $compare = $query1 == $query2 )
+$compare
