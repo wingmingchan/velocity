@@ -5,6 +5,8 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/30/2017 Updated chanwInvokeQuery with code to deal with hasMetadata.
+Added constants related to $query.
 8/21/2017 Added #chanwInvokeQueryWithMap.
 8/7/2017 Started using macro names as namespace prefixes for local parameters.
 7/21/2017 Moved global variables from chanw_global_values.
@@ -162,6 +164,24 @@ doc*###
 #set( $TYPE_PAGE        = "page" )
 #set( $TYPE_FILE        = "file" )
 #set( $TYPE_SYMLINK     = "symlink" )
+## query API parameters
+#set( $PARAM_VALUE_CONTENT_TYPE = "ContentType" )
+#set( $PARAM_VALUE_METADATA_SET = "MetadataSet" )
+#set( $PARAM_TYPE               = "type" )
+#set( $PARAM_LINK               = "link" )
+#set( $PARAM_ASSETS             = "assets" )
+#set( $PARAM_BLOCKS             = "blocks" )
+#set( $PARAM_FILES              = "files" )
+#set( $PARAM_FOLDERS            = "folders" )
+#set( $PARAM_PAGES              = "pages" )
+#set( $PARAM_SYMLINKS           = "symlinks" )
+#set( $PARAM_HAS_METADATA       = "has-metadata" )
+#set( $PARAM_DIRECTION          = "direction" )
+#set( $PARAM_MAX_RESULTS        = "max-results" )
+#set( $PARAM_SITE_NAME          = "site-name" )
+#set( $PARAM_SORT_BY            = "sort-by" )
+#set( $PARAM_INDEXABLE          = "indexable" )
+#set( $PARAM_PUBLISHABLE        = "publishable" )
 ## Cascade API class strings
 #set( $CASCADE_API_DataBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
 #set( $CASCADE_API_FeedBlock_CLASS_NAME    = "com.hannonhill.cascade.api.adapters.FeedBlockAPIAdapter" )
@@ -1450,9 +1470,10 @@ doc*###
 ##
     #set( $chanwStmt = '#set($chanwQuery=$_.query())' )
     #set( $chanwStmt = $chanwStmt + '#set($chanwInvokeQuery=' )
+    #set( $chanwStmt = $chanwStmt + '$chanwQuery.by' + $chanwInvokeQueryType + "('$chanwInvokeQueryLink')" )
 ##
     #if( $chanwInvokeQueryAssets.size() == 5 )
-        #set( $chanwStmt = $chanwStmt + '$chanwQuery.by' + $chanwInvokeQueryType + "('$chanwInvokeQueryLink')" +
+        #set( $chanwStmt = $chanwStmt + 
                        '.includeBlocks(' + $chanwInvokeQueryAssets[ 0 ] + ')' +
                        '.includeFiles(' + $chanwInvokeQueryAssets[ 1 ] + ')' +
                        '.includeFolders(' + $chanwInvokeQueryAssets[ 2 ] + ')' +
@@ -1462,8 +1483,20 @@ doc*###
     #end
 ##
     #if( $chanwInvokeQueryHasMetadata.size() == 2 )
-        #set( $chanwStmt = $chanwStmt + '.hasMetadata(' +
-            "'" + $chanwInvokeQueryHasMetadata[ 0 ] + "','" + $chanwInvokeQueryHasMetadata[ 1 ] + "'" + ')' )
+        #if( $chanwInvokeQueryHasMetadata[ 1 ].Class.Name == $JAVA_LANG_STRING_CLASS_NAME )
+            #set( $chanwStmt = $chanwStmt + '.hasMetadata(' +
+                "'" + $chanwInvokeQueryHasMetadata[ 0 ] + "','" + $chanwInvokeQueryHasMetadata[ 1 ] + "'" + ')' )
+        #elseif( $chanwInvokeQueryHasMetadata[ 1 ].Class.Name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+            #set( $chanwStmt = $chanwStmt + '.hasMetadata(' +
+                    "'" + $chanwInvokeQueryHasMetadata[ 0 ] + "',[" )
+            #foreach( $str in $chanwInvokeQueryHasMetadata[ 1 ] )
+                #set( $chanwStmt = $chanwStmt + "'" + $str + "'" )
+                #if( $foreach.count < $chanwInvokeQueryHasMetadata[ 1 ].size() )
+                    #set( $chanwStmt = $chanwStmt + "," )
+                #end
+            #end
+            #set( $chanwStmt = $chanwStmt + "])" )
+        #end
     #end
 ##
     #if( $chanwInvokeQueryMaxResults > 0 )
@@ -1494,82 +1527,82 @@ doc*###
 #end
 
 #macro( chanwInvokeQueryWithMap $chanwInvokeQueryWithMapMap )
-	#if( $chanwInvokeQueryWithMapMap[ "type" ] )
-		#set( $chanwInvokeQueryWithMapType = $chanwInvokeQueryWithMapMap[ "type" ] )
+	#if( $chanwInvokeQueryWithMapMap[ $PARAM_TYPE ] )
+		#set( $chanwInvokeQueryWithMapType = $chanwInvokeQueryWithMapMap[ $PARAM_TYPE ] )
 	#else
 		#set( $chanwInvokeQueryWithMapType = "MetadataSet" )
 	#end
 ##
-	#if( $chanwInvokeQueryWithMapMap[ "link" ] )
-		#set( $chanwInvokeQueryWithMapLink = $chanwInvokeQueryWithMapMap[ "link" ] )
+	#if( $chanwInvokeQueryWithMapMap[ $PARAM_LINK ] )
+		#set( $chanwInvokeQueryWithMapLink = $chanwInvokeQueryWithMapMap[ $PARAM_LINK ] )
 	#end
 ##
-	#if( $chanwInvokeQueryWithMapMap[ "assets" ] )
-		#set( $chanwInvokeQueryWithMapAssets = [] )
+	#if( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ] )
+		#set( $chanwInvokeQueryWithMapAssets = [] ) ## a list of five boolean values
 ##
-		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ "assets" ][ "blocks" ] ) &&
-			!$chanwInvokeQueryWithMapMap[ "assets" ][ "blocks" ] )
+		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_BLOCKS ] ) &&
+			!$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_BLOCKS ] )
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
 		#else
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( true ) )
 		#end
 ##
-		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ "assets" ][ "files" ] ) &&
-			!$chanwInvokeQueryWithMapMap[ "assets" ][ "files" ] )
+		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FILES ] ) &&
+			!$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FILES ] )
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
 		#else
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( true ) )
 		#end
 ##
-		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ "assets" ][ "folders" ] ) &&
-			!$chanwInvokeQueryWithMapMap[ "assets" ][ "folders" ] )
+		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FOLDERS ] ) &&
+			!$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FOLDERS ] )
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
 		#else
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( true ) )
 		#end
 ##
-		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ "assets" ][ "pages" ] ) &&
-			!$chanwInvokeQueryWithMapMap[ "assets" ][ "pages" ] )
+		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_PAGES ] ) &&
+			!$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_PAGES ] )
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
 		#else
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( true ) )
 		#end
 ##
-		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ "assets" ][ "symlinks" ] ) &&
-			!$chanwInvokeQueryWithMapMap[ "assets" ][ "symlinks" ] )
+		#if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_SYMLINKS ] ) &&
+			!$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_SYMLINKS ] )
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
 		#else
 			#set( $void = $chanwInvokeQueryWithMapAssets.add( true ) )
 		#end
 	#end
 ##
-	#if( $chanwInvokeQueryWithMapMap[ "has-metadata" ] &&
-		$chanwInvokeQueryWithMapMap[ "has-metadata" ].size() == 2
+	#if( $chanwInvokeQueryWithMapMap[ $PARAM_HAS_METADATA ] &&
+		$chanwInvokeQueryWithMapMap[ $PARAM_HAS_METADATA ].size() == 2
 	)
-		#set( $chanwInvokeQueryWithMapHasMetadata = $chanwInvokeQueryWithMapMap[ "has-metadata" ] )
+		#set( $chanwInvokeQueryWithMapHasMetadata = $chanwInvokeQueryWithMapMap[ $PARAM_HAS_METADATA ] )
 	#end
 ##
-	#if( $chanwInvokeQueryWithMapMap[ "max-results" ] )
-		#set( $chanwInvokeQueryWithMapMaxResults = $chanwInvokeQueryWithMapMap[ "max-results" ] )
+	#if( $chanwInvokeQueryWithMapMap[ $PARAM_MAX_RESULTS ] )
+		#set( $chanwInvokeQueryWithMapMaxResults = $chanwInvokeQueryWithMapMap[ $PARAM_MAX_RESULTS ] )
 	#end
 ##
-	#if( $chanwInvokeQueryWithMapMap[ "sort-by" ] )
-		#set( $chanwInvokeQueryWithMapSortBy = $chanwInvokeQueryWithMapMap[ "sort-by" ] )
+	#if( $chanwInvokeQueryWithMapMap[ $PARAM_SORT_BY ] )
+		#set( $chanwInvokeQueryWithMapSortBy = $chanwInvokeQueryWithMapMap[ $PARAM_SORT_BY ] )
 	#end
 ##
-	#if( $chanwInvokeQueryWithMapMap[ "direction" ] )
-		#set( $chanwInvokeQueryWithMapDirection = $chanwInvokeQueryWithMapMap[ "direction" ] )
+	#if( $chanwInvokeQueryWithMapMap[ $PARAM_DIRECTION ] )
+		#set( $chanwInvokeQueryWithMapDirection = $chanwInvokeQueryWithMapMap[ $PARAM_DIRECTION ] )
 	#end
 ##
-	#if( $chanwInvokeQueryWithMapMap[ "site-name" ] )
-		#set( $chanwInvokeQueryWithMapSiteName = $chanwInvokeQueryWithMapMap[ "site-name" ] )
+	#if( $chanwInvokeQueryWithMapMap[ $PARAM_SITE_NAME ] )
+		#set( $chanwInvokeQueryWithMapSiteName = $chanwInvokeQueryWithMapMap[ $PARAM_SITE_NAME ] )
 	#end
 ##
-	#set( $chanwInvokeQueryWithMapIndexablePublishable = [] )
+	#set( $chanwInvokeQueryWithMapIndexablePublishable = [] ) ## a list of two boolean values
 ##
-	#if( $chanwInvokeQueryWithMapMap[ "indexable" ] && $chanwInvokeQueryWithMapMap[ "publishable" ] )
-		#set( $void = $chanwInvokeQueryWithMapIndexablePublishable.add( $chanwInvokeQueryWithMapMap[ "indexable" ] ) )
-		#set( $void = $chanwInvokeQueryWithMapIndexablePublishable.add( $chanwInvokeQueryWithMapMap[ "publishable" ] ) )
+	#if( $chanwInvokeQueryWithMapMap[ $PARAM_INDEXABLE ] && $chanwInvokeQueryWithMapMap[ $PARAM_PUBLISHABLE ] )
+		#set( $void = $chanwInvokeQueryWithMapIndexablePublishable.add( $chanwInvokeQueryWithMapMap[ $PARAM_INDEXABLE ] ) )
+		#set( $void = $chanwInvokeQueryWithMapIndexablePublishable.add( $chanwInvokeQueryWithMapMap[ $PARAM_PUBLISHABLE ] ) )
 	#end
 ##
 	#chanwInvokeQuery( $chanwInvokeQueryWithMapType $chanwInvokeQueryWithMapLink 
