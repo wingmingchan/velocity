@@ -5,6 +5,7 @@ Authors: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/29/2017 Added chanwConvertArrayListToArray.
 8/25/2017 Added more code to chanwProcessDataDefinitionBlock to deal with legacy blocks.
 8/24/2017 Added code in chanwProcessBlockChooser and chanwProcessDataDefinitionBlock to deal with Cascade API objects.
 8/24/2017 Added #chanwInvokeMacroIfExists.
@@ -189,6 +190,12 @@ ${DOLLAR}var: $var
 ##chanwInvokeMacroIfExists( "myMacro" [ "greetings", "fname", "lname" ] )
 #set( $result = "#chanwInvokeMacroIfExists( ""myMacro"" [ ""greetings"", ""fname"", ""lname"" ] )" )
 $result.trim()
+=============================================================
+#chanwGetConstructor( 'java.lang.StringBuffer' [ $_FieldTool.in( "java.lang.Integer" ).TYPE ] )
+$chanwGetConstructor.Class.Name
+=============================================================
+#chanwGetMethod( 'java.lang.Math' 'abs' [ $_FieldTool.in( "java.lang.Double" ).TYPE ] )
+$chanwGetMethod.Class.Name
 =============================================================
 《/pre》
 《/div》
@@ -608,6 +615,38 @@ doc*###
 #*doc
 《/macro》
 《documentation》
+《code》#chanwConvertArrayListToArray( $list $type )《/code》
+《p》Converts an 《code》ArrayList《/code》 object to a 《code》Array《/code》 object. Example:《/p》
+《pre》
+#set( $folders = $_XPathTool.selectNodes( $contentRoot, "//system-folder" ) )
+#chanwConvertArrayListToArray( $folders )
+《/pre》
+《/documentation》
+《macro id=“chanwConvertArrayListToArray”》
+doc*###
+#macro( chanwConvertArrayListToArray $chanwConvertArrayListToArrayList $chanwConvertArrayListToArrayType )
+    #set( $chanwConvertArrayListToArray = "" )
+##
+    #if( $chanwConvertArrayListToArrayList && $chanwConvertArrayListToArrayList.size() > 0 )
+        #if( $chanwConvertArrayListToArrayType && $chanwConvertArrayListToArrayType.Class.Name == "java.lang.Class" )
+            #set( $chanwType = $chanwConvertArrayListToArrayType )
+        #else
+            #set( $chanwType = $chanwConvertArrayListToArrayList[ 0 ].Class )
+        #end
+##
+        #set( $chanwConvertArrayListToArray = $_.Class.forName( "java.lang.reflect.Array" ).getMethod(
+            "newInstance", 
+            $_.Class.forName( "java.lang.Class" ), $_FieldTool.in( "java.lang.Integer" ).TYPE ).invoke(
+            null, $chanwType, $chanwConvertArrayListToArrayList.size() ) )
+##
+        #foreach( $num in [ 1..$chanwConvertArrayListToArrayList.size() ] )
+            #set( $chanwConvertArrayListToArray[ $foreach.index ] = $chanwConvertArrayListToArrayList[ $foreach.index ] )
+        #end
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
 《code》#chanwConvertToPascalCase( $chanwMacroName $chanwDelimiter )《/code》
 《p》Converts a string, possibly with delimiters, into Pascal case. The
 《code》$chanwDelimiter《/code》 variable is treated as a marker
@@ -745,6 +784,23 @@ doc*###
 #*doc
 《/macro》
 《documentation》
+《code》#chanwGetConstructor( $className $paramTypeList )《/code》
+《p》Gets the constructor by matching the param type list. Example:《/p》
+《pre》
+#chanwGetConstructor( 'java.lang.StringBuffer' [ $_FieldTool.in( "java.lang.Integer" ).TYPE ] )
+$chanwGetConstructor.newInstance( 10000 ).Class.Name
+《/pre》
+《/documentation》
+《macro id=“chanwGetConstructor”》
+doc*###
+#macro( chanwGetConstructor $chanwGetConstructorClassName $chanwGetConstructorParamTypeList )
+    #set( $chanwGetConstructor = "" )
+    #chanwConvertArrayListToArray( $chanwGetConstructorParamTypeList )
+    #set( $chanwGetConstructor = $_.Class.forName( $chanwGetConstructorClassName ).getConstructor( $chanwConvertArrayListToArray ) )
+#end
+#*doc
+《/macro》
+《documentation》
 《code》#chanwGetConstructorByClassNameParamSize( $chanwClassName $chanwParamSize )《/code》
 《p》Returns the first constructor that accepts the specified number of parameters. Example:《/p》
 《pre》
@@ -868,7 +924,7 @@ doc*###
         #stop
     #end
 ##
-    ## get all fields
+    ## get the field value
     #set( $chanwGetConstantValueByClassNameConstantName = "" )
     #set( $chanwClassObj  = $_.Class.forName( $chanwGetConstantValueByClassNameConstantNameClassName ) )
     #set( $chanwFieldObj  = $chanwClassObj.getField( $chanwGetConstantValueByClassNameConstantNameConstantName ) )
@@ -969,6 +1025,22 @@ doc*###
 #*        *##set( $void = $chanwGetMapKeyValueReversed.put( $chanwGetMapKeyValueReversedMap.get( $key ), $key ) )
 #*    *##end
 #**##end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetMethod( $className $methodName $paramTypeList )《/code》
+《p》Gets the method by matching the param type list. Example:《/p》
+《pre》
+
+《/pre》
+《/documentation》
+《macro id=“chanwGetMethod”》
+doc*###
+#macro( chanwGetMethod $chanwGetMethodClassName $chanwGetMethodMethodName $chanwGetMethodParamTypeList )
+    #set( $chanwGetMethod = "" )
+    #chanwConvertArrayListToArray( $chanwGetMethodParamTypeList )
+    #set( $chanwGetMethod = $_.Class.forName( $chanwGetMethodClassName ).getMethod( $chanwGetMethodMethodName, $chanwConvertArrayListToArray ) )
 #end
 #*doc
 《/macro》
