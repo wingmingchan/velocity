@@ -5,6 +5,7 @@ Authors: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+8/31/2017 Rewrote chanwImportScript and fixed bugs in chanwLocateAsset.
 8/29/2017 Added chanwConvertArrayListToArray.
 8/25/2017 Added more code to chanwProcessDataDefinitionBlock to deal with legacy blocks.
 8/24/2017 Added code in chanwProcessBlockChooser and chanwProcessDataDefinitionBlock to deal with Cascade API objects.
@@ -1321,19 +1322,20 @@ doc*###
 doc*#
 #macro( chanwImportScript $chanwImportScriptFolderPath $chanwImportScriptSiteName $chanwImportScriptScriptName )
     #set( $chanwImportScript = false )
-    #chanwLocateAsset( $chanwImportScriptFolderPath $chanwImportScriptSiteName $chanwImportScriptScriptName )
+    #set( $chanwFolderPath = $chanwImportScriptFolderPath )
+    ## add slaches to folder path
+    #if( !$chanwFolderPath.startsWith( "/" ) )
+        #set( $chanwFolderPath = "/" + $chanwFolderPath )
+    #end
+    #if( !$chanwFolderPath.endsWith( "/" ) )
+        #set( $chanwFolderPath = $chanwFolderPath + "/" )
+    #end
 ##
-    #if( $chanwLocateAsset && $chanwLocateAsset != "" )
-        #set( $chanwFolderPath = $chanwImportScriptFolderPath )
-        
-        #if( !$chanwFolderPath.startsWith( "/" ) )
-            #set( $chanwFolderPath = "/" + $chanwFolderPath )
-        #end
+	#set( $chanwLocatePath = $chanwFolderPath + $chanwImportScriptScriptName )
+	#set( $chanwScriptFormat = "" )
+	#set( $chanwScriptFormat = $_.locate( $chanwLocatePath, $CASCADE_API_FORMAT_TYPE, $chanwImportScriptSiteName ) )
 ##
-        #if( !$chanwFolderPath.endsWith( "/" ) )
-            #set( $chanwFolderPath = $chanwFolderPath + "/" )
-        #end
-##
+	#if( $chanwScriptFormat != "" )
         #set( $chanwScriptPath = "site://" + $chanwImportScriptSiteName + $chanwFolderPath + $chanwImportScriptScriptName )
         #set( $chanwImportScriptPathStmt = '#import("' + $chanwScriptPath + '")' )
         ## must use evaluate here; cannot use #import directly
@@ -1538,7 +1540,6 @@ will store the empty string. Example:《/p》
 doc*###
 #macro ( chanwLocateAsset $chanwLocateAssetFolderPath $chanwLocateAssetSiteName $chanwLocateAssetAssetName $chanwLocateAssetStop )
     #if( !$chanwLocateAssetFolderPath || !$chanwLocateAssetSiteName || !$chanwLocateAssetAssetName )
-$chanwLocateAssetFolderPath $chanwLocateAssetSiteName $chanwLocateAssetAssetName $BR 1
 $CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are required: folder path, site name, and asset name.
         #stop
     #end
@@ -1547,7 +1548,6 @@ $CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are
         $chanwLocateAssetFolderPath == "" || $chanwLocateAssetSiteName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
         $chanwLocateAssetSiteName == "" || $chanwLocateAssetAssetName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
         $chanwLocateAssetAssetName == "" )
-$chanwLocateAssetFolderPath $chanwLocateAssetSiteName $chanwLocateAssetAssetName $BR 2
 $CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are required: folder path, site name, and asset name.
         #stop
     #end
@@ -1560,10 +1560,11 @@ $CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are
         #set( $chanwFolderPath = $chanwFolderPath.substring( 0, $chanwEndIndex ) )
     #end
 ##
+    #set( $chanwFolderAPI = "" )
     #set( $chanwFolderAPI   = $_.locateFolder( $chanwFolderPath, $chanwLocateAssetSiteName ) )
     #set( $chanwLocateAsset = "" )
 ##
-    #if( !$chanwFolderAPI ) ## the folder cannot be located
+    #if( $chanwFolderAPI != "" ) ## the folder cannot be located
     ## Cannot call chanwOutputErrorMsg due to recursion cap.
 chanw_initialization, chanwLocateAsset: The folder $chanwFolderPath in site $chanwLocateAssetSiteName cannot be located.
         #if( $chanwLocateAssetStop == true )
@@ -1573,7 +1574,7 @@ chanw_initialization, chanwLocateAsset: The folder $chanwFolderPath in site $cha
         #set( $chanwFolderAPIChildren = $chanwFolderAPI.getChildren() )
 ##
         #if( !$chanwFolderAPIChildren )
-#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The folder has no children." "I4345NF." )
+##chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The folder has no children." "I4345NF." )
             #if( $chanwLocateAssetStop == true )
                 #stop
             #end
