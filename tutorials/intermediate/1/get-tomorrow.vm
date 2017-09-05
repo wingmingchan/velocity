@@ -1,0 +1,6 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#chanwLocalDateFromTimestampString( $_DateTool.SystemTime )
+#set( $localDateNow = $chanwLocalDateFromTimestampString )
+#set( $localDateTomorrow = $localDateNow.plusDays( 1 ) )
+$localDateTomorrow
