@@ -1335,7 +1335,7 @@ doc*#
 	#set( $chanwScriptFormat = "" )
 	#set( $chanwScriptFormat = $_.locate( $chanwLocatePath, $CASCADE_API_FORMAT_TYPE, $chanwImportScriptSiteName ) )
 ##
-	#if( $chanwScriptFormat != "" )
+	#if( $chanwScriptFormat != "" && $chanwScriptFormat.Class.Name == $COM_CASCADE_SCRIPT_FORMAT_CLASS_NAME )
         #set( $chanwScriptPath = "site://" + $chanwImportScriptSiteName + $chanwFolderPath + $chanwImportScriptScriptName )
         #set( $chanwImportScriptPathStmt = '#import("' + $chanwScriptPath + '")' )
         ## must use evaluate here; cannot use #import directly
@@ -1540,6 +1540,7 @@ will store the empty string. Example:《/p》
 doc*###
 #macro ( chanwLocateAsset $chanwLocateAssetFolderPath $chanwLocateAssetSiteName $chanwLocateAssetAssetName $chanwLocateAssetStop )
     #if( !$chanwLocateAssetFolderPath || !$chanwLocateAssetSiteName || !$chanwLocateAssetAssetName )
+$chanwLocateAssetFolderPath $chanwLocateAssetSiteName $chanwLocateAssetAssetName $BR 1
 $CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are required: folder path, site name, and asset name.
         #stop
     #end
@@ -1548,6 +1549,7 @@ $CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are
         $chanwLocateAssetFolderPath == "" || $chanwLocateAssetSiteName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
         $chanwLocateAssetSiteName == "" || $chanwLocateAssetAssetName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
         $chanwLocateAssetAssetName == "" )
+$chanwLocateAssetFolderPath $chanwLocateAssetSiteName $chanwLocateAssetAssetName $BR 2
 $CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are required: folder path, site name, and asset name.
         #stop
     #end
@@ -1560,11 +1562,11 @@ $CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are
         #set( $chanwFolderPath = $chanwFolderPath.substring( 0, $chanwEndIndex ) )
     #end
 ##
-    #set( $chanwFolderAPI = "" )
+    #set( $chanwFolderAPI   = "" )
     #set( $chanwFolderAPI   = $_.locateFolder( $chanwFolderPath, $chanwLocateAssetSiteName ) )
     #set( $chanwLocateAsset = "" )
 ##
-    #if( $chanwFolderAPI != "" ) ## the folder cannot be located
+    #if( !$chanwFolderAPI.Class.Name || $chanwFolderAPI.Class.Name == $JAVA_LANG_STRING_CLASS_NAME ) ## the folder cannot be located
     ## Cannot call chanwOutputErrorMsg due to recursion cap.
 chanw_initialization, chanwLocateAsset: The folder $chanwFolderPath in site $chanwLocateAssetSiteName cannot be located.
         #if( $chanwLocateAssetStop == true )
