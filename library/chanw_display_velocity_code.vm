@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+9/8/2017 Removed call of chanwLocateAsset from chanwGetScriptFormatCode.
 8/7/2017 Started using macro names as namespace prefixes for local parameters.
 7/12/2017 Added import and evaluate elements.
 7/6/2017 Added code to process the evaluate element.
@@ -424,10 +425,21 @@ is stored in 《code》$chanwGetScriptFormatCode《/code》. Example:《/p》
 《macro id=“chanwGetScriptFormatCode”》
 doc*###
 #macro( chanwGetScriptFormatCode $chanwGetScriptFormatCodeFormatName $chanwGetScriptFormatCodeFolderPath $chanwGetScriptFormatCodeSiteName )
-#**##chanwLocateAsset( $chanwGetScriptFormatCodeFolderPath $chanwGetScriptFormatCodeSiteName $chanwGetScriptFormatCodeFormatName )
+    #set( $chanwFolderPath = $chanwGetScriptFormatCodeFolderPath )
+    ## add slaches to folder path
+    #if( !$chanwFolderPath.startsWith( "/" ) )
+        #set( $chanwFolderPath = "/" + $chanwFolderPath )
+    #end
+    #if( !$chanwFolderPath.endsWith( "/" ) )
+        #set( $chanwFolderPath = $chanwFolderPath + "/" )
+    #end
 ##
-#**##if( $chanwLocateAsset != "" )
-#*    *##set( $chanwGetScriptFormatCode = $chanwLocateAsset.Script )
+	#set( $chanwLocatePath = $chanwFolderPath + $chanwGetScriptFormatCodeFormatName )
+	#set( $chanwScriptFormat = "" )
+	#set( $chanwScriptFormat = $_.locate( $chanwLocatePath, $CASCADE_API_FORMAT_TYPE, $chanwGetScriptFormatCodeSiteName ) )
+##
+    #if( $chanwScriptFormat != "" && $chanwScriptFormat.Class.Name == $COM_CASCADE_SCRIPT_FORMAT_CLASS_NAME )
+#*    *##set( $chanwGetScriptFormatCode = $chanwScriptFormat.Script )
 #**##else
 #*    *##set( $chanwGetScriptFormatCode = "" )
 #**##end
