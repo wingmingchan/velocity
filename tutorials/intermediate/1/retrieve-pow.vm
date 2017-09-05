@@ -1,0 +1,9 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+$_.Class.forName( "java.lang.Math" ).getMethod( "pow", $_FieldTool.in( "java.lang.Double" ).TYPE, $_FieldTool.in( "java.lang.Double" ).TYPE ).invoke( null, 3, 2 )
+
+#chanwGetMethodByClassNameMethodNameParamTypes( "java.lang.Math" "pow" [ '$_FieldTool.in( "java.lang.Double" ).TYPE', '$_FieldTool.in( "java.lang.Double" ).TYPE' ] )
+$chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, 3, 2 )
+
+#chanwGetMethod( "java.lang.Math" "pow" [ $_FieldTool.in( "java.lang.Double" ).TYPE, $_FieldTool.in( "java.lang.Double" ).TYPE ] )
+$chanwGetMethod.invoke( null, 3, 2 )
