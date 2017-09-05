@@ -1,0 +1,16 @@
+#set( $cal1 = $_.Class.forName( 'java.util.GregorianCalendar' ).getConstructor(
+    $_FieldTool.in( "java.lang.Integer" ).TYPE,
+    $_FieldTool.in( "java.lang.Integer" ).TYPE,
+    $_FieldTool.in( "java.lang.Integer" ).TYPE
+).newInstance( 2017, 8, 29 ) )
+$cal1
+
+#set( $cal2 = $_.Class.forName( 'java.util.GregorianCalendar' ).getConstructor(
+    $_FieldTool.in( "java.lang.Integer" ).TYPE,
+    $_FieldTool.in( "java.lang.Integer" ).TYPE,
+    $_FieldTool.in( "java.lang.Integer" ).TYPE,
+    $_FieldTool.in( "java.lang.Integer" ).TYPE,
+    $_FieldTool.in( "java.lang.Integer" ).TYPE,
+    $_FieldTool.in( "java.lang.Integer" ).TYPE
+).newInstance( 2017, 8, 29, 9, 56, 21 ) )
+$cal2
