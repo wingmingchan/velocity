@@ -1,0 +1,1 @@
+$_.class.forName( "java.lang.Math" ).abs( -3.2 )
