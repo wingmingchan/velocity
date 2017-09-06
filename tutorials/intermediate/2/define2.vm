@@ -1,0 +1,6 @@
+#define( $greetings )
+Hello, World!##
+#end
+
+#set( $str = """$greetings"" is a classic example" )
+$str
