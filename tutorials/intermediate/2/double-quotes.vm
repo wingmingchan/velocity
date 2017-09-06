@@ -1,0 +1,5 @@
+#set( $str = """Hello, my name is John."" said John." )
+$str ##=> "Hello, my name is John." said John.
+
+#set( $str = """" )
+$str.length() ##=> 1
