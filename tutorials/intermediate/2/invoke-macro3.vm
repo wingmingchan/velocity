@@ -1,0 +1,17 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $option = 3 )
+#set( $macroName = "option${option}" )
+#chanwInvokeMacro(  $macroName )
+
+#macro( option1 )
+One
+#end
+
+#macro( option2 )
+Two
+#end
+
+#macro( option3 )
+Three
+#end
