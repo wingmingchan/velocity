@@ -1,0 +1,14 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $paramList = [ "param1", "param2" ] )
+
+#set( $chanwParamString = "[" )
+##
+#foreach( $varName in $paramList  )
+    #set( $chanwParamString = $chanwParamString + """" + $varName.toString() + """" )
+    #if( $foreach.count < $chanwInvokeMacroIfExistsListOfParams.size() )
+        #set( $chanwParamString = $chanwParamString + "," )
+    #end
+#end
+#set( $chanwParamString = $chanwParamString + "]" )
+$chanwParamString
