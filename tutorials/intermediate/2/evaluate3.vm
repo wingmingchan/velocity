@@ -1,0 +1,28 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#define( $myMacroExists )
+    #macro( myMacro $p1 $p2 )
+        myMacro invoked with $p1 and $p2
+    #end
+#end
+
+#set( $param1 = "Hello," )
+#set( $param2 = "World!" )
+#chanwInvokeMacroIfExists( "myMacro" [ "param1", "param2" ] )
+
+#macro( chanwInvokeMacroIfExists $macroName $paramList )
+    #set( $chanwParamString = "[" )
+##
+    #foreach( $varName in $paramList  )
+        #set( $chanwParamString = $chanwParamString + """" + $varName.toString() + """" )
+        
+        #if( $foreach.count < $paramList.size() )
+            #set( $chanwParamString = $chanwParamString + "," )
+        #end
+    #end
+    #set( $chanwParamString = $chanwParamString + "]" )  
+    $chanwParamString
+
+    #set( $chanwStmt = "${SINGLE_HASH}if(${DOLLAR}${macroName}Exists)${SINGLE_HASH}chanwInvokeMacro(""$macroName"" $chanwParamString)${SINGLE_HASH}end" )
+    $chanwStmt
+#end
