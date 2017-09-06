@@ -1,0 +1,10 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#macro( myMacro $p1 $p2 )
+    myMacro invoked with $p1 $p2
+#end
+
+#set( $param1 = "Hello," )
+#set( $param2 = "World!" )
+
+#chanwInvokeMacro( "myMacro" [ "param1", "param2" ] )
