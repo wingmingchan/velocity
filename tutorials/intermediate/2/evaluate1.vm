@@ -1,0 +1,19 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#define( $myMacroExists )
+    #macro( myMacro $p1 $p2 )
+        myMacro invoked with $p1 and $p2
+    #end
+#end
+
+#set( $param1 = "Hello," )
+#set( $param2 = "World!" )
+#chanwInvokeMacroIfExists( "myMacro" [ "param1", "param2" ] )
+
+#macro( chanwInvokeMacroIfExists $macroName $paramList )
+    #if( $myMacroExists )
+        chanwInvokeMacroIfExists invoked
+        ## invoke the macro
+        #chanwInvokeMacro( $macroName $paramList )
+    #end
+#end
