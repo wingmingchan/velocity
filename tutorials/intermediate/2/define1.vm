@@ -1,0 +1,6 @@
+#define( $greetings )
+Hello, World!##
+#end
+$greetings
+$greetings
+$greetings.Class.Name
