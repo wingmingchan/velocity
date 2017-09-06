@@ -1,0 +1,9 @@
+#macro( myMacro )
+    myMacro invoked
+#end
+
+#set( $str = "#define($callMyMacro)#myMacro#end" )
+$callMyMacro
+
+#set( $str = "#evaluate( ""#myMacro"" )" )
+$str
