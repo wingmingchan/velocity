@@ -1,0 +1,9 @@
+#define( $myMacroExists )
+#macro( myMacro )
+myMacro invoked
+#end
+#end
+
+#if( $myMacroExists )
+#myMacro
+#end
