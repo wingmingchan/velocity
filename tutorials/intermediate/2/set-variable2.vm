@@ -1,0 +1,8 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $namespace = "chanw" )
+#set( $myVarName = "MyVar" )
+#chanwSetVariable( "$namespace$myVarName" 3 )
+
+#chanwReviveGlobalVariable( $myVarName $namespace )
+$chanwReviveGlobalVariable
