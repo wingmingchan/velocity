@@ -1,0 +1,2 @@
+#set( $str = 'His name is O''Connor.' )
+$str ##=> His name is O'Connor.
