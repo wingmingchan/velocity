@@ -1,0 +1,6 @@
+#import( "site://_common_assets/formats/library/velocity/chanw_library_import" )
+
+#set( $num = 6 )
+#chanwSetVariable( "myVar${num}" "hello" )
+#chanwReviveGlobalVariable( "myVar${num}" )
+$chanwReviveGlobalVariable
