@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+9/11/2017 Added documentation to chanwDisplayEvaluatedResult.
 9/8/2017 Removed call of chanwLocateAsset from chanwGetScriptFormatCode.
 8/7/2017 Started using macro names as namespace prefixes for local parameters.
 7/12/2017 Added import and evaluate elements.
@@ -141,13 +142,13 @@ doc*###
 #chanwDisplayEvaluatedResult
 #if( $chanwDisplayDocumentationElementsShowTestResult && $chanwDisplayDocumentationElementsShowTestResult == true )<div id="show-code1"></div>#end
 #**### output introduction
-#**##if( $chanwTopDocumentationElement != "" )
+#**##if( $chanwTopDocumentationElement.Class && $chanwTopDocumentationElement != "" )
 #*    *#$_SerializerTool.serialize( $chanwTopDocumentationElement, true )
 #**##end
 ##
 #**##if( $chanwDisplayDocumentationElementsDocElements && $chanwDisplayDocumentationElementsDocElements.size() > 0 )
 #*    *### display global variables
-#*    *##if( $chanwGetGlobalVariablesElement != "" )
+#*    *##if( $chanwGetGlobalVariablesElement.Class && $chanwGetGlobalVariablesElement != "" )
 #*        *#${S_H2}Global Variables$E_H2
 #*        *#$S_PRE$_SerializerTool.serialize( $chanwGetGlobalVariablesElement, true ).trim()$E_PRE
 #*    *##end
@@ -176,16 +177,27 @@ doc*###
 #*    *##end
 ##
 #*    *### output postscript
-#*    *##if( $chanwBottomDocumentationElement != "" )
+#*    *##if( $chanwBottomDocumentationElement.Class && $chanwBottomDocumentationElement != "" )
 #*        *#$_SerializerTool.serialize( $chanwBottomDocumentationElement, true )
 #*    *##end
 #**##end
 #end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwDisplayEvaluatedResult《/code》
+《p》Displays the test result.《/p》
+《pre》
+#chanwGetScriptFormatRootElement( "20library-format" "_cascade/cuc17" "cascade-admin" )
+#chanwDisplayEvaluatedResult
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayEvaluatedResult”》
+doc*###
 #macro( chanwDisplayEvaluatedResult )
 #**##if( $chanwGetEvaluateElement )
 #*    *##if( $chanwGetEvaluateElement.getAttribute( "execute" ).Value == "true" )
 #*        *##set( $chanwCodeToBeEvaluated = $_SerializerTool.serialize( $chanwGetEvaluateElement, true ) )
-#*        *###set( $chanwCodeToBeEvaluated = $chanwCodeToBeEvaluated.replaceAll( $chanwStartChar, '<' ).replaceAll( $chanwEndChar, '>' ).replaceAll( $chanwStartQuote, '"' ).replaceAll( $chanwEndQuote, '"' ) )
 #*        *##evaluate( $chanwCodeToBeEvaluated.replaceAll( "&gt;", ">" ).replaceAll( "&lt;", "<" ).replaceAll( "&amp;&amp;", "&&" ) )
 #*    *##end
 #**##end
