@@ -559,6 +559,7 @@ stored in the global variable
 《macro id=“chanwBuildXMLContentRoot”》
 doc*###
 #macro( chanwBuildXMLContentRoot $chanwBuildXMLContentRootXmlString )
+    #set( $chanwBuildXMLContentRoot = "" )
 #**##if( !$chanwBuildXMLContentRootXmlString || $chanwBuildXMLContentRootXmlString.Class.Name != $JAVA_LANG_STRING_CLASS_NAME || $chanwBuildXMLContentRootXmlString == "" )
 #chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $CHANW_INITIALIZATION_FORMAT_NAME "An XML string is required." "nop4nvklvi4kln" )
 #*    *##stop
@@ -629,17 +630,20 @@ doc*###
     #set( $chanwConvertArrayListToArray = "" )
 ##
     #if( $chanwConvertArrayListToArrayList && $chanwConvertArrayListToArrayList.size() > 0 )
+        ## determine the type of the array to be created
         #if( $chanwConvertArrayListToArrayType && $chanwConvertArrayListToArrayType.Class.Name == "java.lang.Class" )
             #set( $chanwType = $chanwConvertArrayListToArrayType )
         #else
             #set( $chanwType = $chanwConvertArrayListToArrayList[ 0 ].Class )
         #end
 ##
+        ## create a java.lang.reflect.Array object of the right type and right size
         #set( $chanwConvertArrayListToArray = $_.Class.forName( "java.lang.reflect.Array" ).getMethod(
             "newInstance", 
             $_.Class.forName( "java.lang.Class" ), $_FieldTool.in( "java.lang.Integer" ).TYPE ).invoke(
             null, $chanwType, $chanwConvertArrayListToArrayList.size() ) )
 ##
+        ## copy data over to the array
         #foreach( $num in [ 1..$chanwConvertArrayListToArrayList.size() ] )
             #set( $chanwConvertArrayListToArray[ $foreach.index ] = $chanwConvertArrayListToArrayList[ $foreach.index ] )
         #end
@@ -1331,11 +1335,11 @@ doc*#
         #set( $chanwFolderPath = $chanwFolderPath + "/" )
     #end
 ##
-	#set( $chanwLocatePath = $chanwFolderPath + $chanwImportScriptScriptName )
-	#set( $chanwScriptFormat = "" )
-	#set( $chanwScriptFormat = $_.locate( $chanwLocatePath, $CASCADE_API_FORMAT_TYPE, $chanwImportScriptSiteName ) )
+    #set( $chanwLocatePath = $chanwFolderPath + $chanwImportScriptScriptName )
+    #set( $chanwScriptFormat = "" )
+    #set( $chanwScriptFormat = $_.locate( $chanwLocatePath, $CASCADE_API_FORMAT_TYPE, $chanwImportScriptSiteName ) )
 ##
-	#if( $chanwScriptFormat != "" && $chanwScriptFormat.Class.Name == $COM_CASCADE_SCRIPT_FORMAT_CLASS_NAME )
+    #if( $chanwScriptFormat != "" && $chanwScriptFormat.Class.Name == $COM_CASCADE_SCRIPT_FORMAT_CLASS_NAME )
         #set( $chanwScriptPath = "site://" + $chanwImportScriptSiteName + $chanwFolderPath + $chanwImportScriptScriptName )
         #set( $chanwImportScriptPathStmt = '#import("' + $chanwScriptPath + '")' )
         ## must use evaluate here; cannot use #import directly
@@ -1613,19 +1617,19 @@ doc*#
 #macro( chanwLocateAssetInAncestorFolder $chanwLocateAssetInAncestorFolderFolderPath $chanwLocateAssetInAncestorFolderSiteName $chanwLocateAssetInAncestorFolderType $chanwLocateAssetInAncestorFolderName )
     #set( $chanwLocateAssetInAncestorFolder = "" )
     #set( $chanwFolder = $_.locateFolder( $chanwLocateAssetInAncestorFolderFolderPath, $chanwLocateAssetInAncestorFolderSiteName ) )
-
+##
     #if( $chanwFolder )
         #set( $chanwChildren = $chanwFolder.Children )
-        
+##
         #foreach( $child in $chanwChildren )
             #if( $child.Identifier.Type == $chanwLocateAssetInAncestorFolderType && $child.Name == $chanwLocateAssetInAncestorFolderName )
                 #set( $chanwLocateAssetInAncestorFolder = $child )
                 #break
             #end
         #end
-        
+##
         #set( $chanwFolderParentPath = "" )
-        
+##
         #if( $chanwLocateAssetInAncestorFolder == "" )
             #set( $chanwFolderParentPath = 
                 $chanwFolder.ParentFolderIdentifier.Path.PathAsString )
@@ -1695,14 +1699,13 @@ doc*###
 #macro( chanwProcessBlockChooser $chanwProcessBlockChooserContent )
     #chanwIsInstanceOf( $chanwProcessBlockChooserContent "com.hannonhill.cascade.api.adapters.BlockAPIAdapter" )
     #set( $chanwIsBlockAPIAdapter = $chanwIsInstanceOf )
-    
     #if( $chanwIsBlockAPIAdapter )
         #set( $chanwBlockAPIAdapterClassName = $chanwProcessBlockChooserContent.Class.Name )
     #else
         #set( $chanwBlockAPIAdapterClassName = "" )
     #end
-
 #**### switch between Docuement and Element
+    #set( $chanwContentChildren = "" )
 #**##if( $chanwProcessBlockChooserContent.Class.Name == $ORG_JDOM_DOCUMENT_CLASS_NAME )
         #set( $chanwContentChildren = $chanwProcessBlockChooserContent.getContent() )
 #**##else
@@ -1710,6 +1713,7 @@ doc*###
 #**##end
 ##
 #**### plain text or code
+    #set( $chanwBlockName  = "" )
 #**##if( $chanwContentChildren.size() == 0 )
 #*    *#$_SerializerTool.serialize( $chanwProcessBlockChooserContent, true )
     #elseif( $chanwBlockAPIAdapterClassName == "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
@@ -1739,21 +1743,21 @@ doc*###
             #set( $chanwBlockName = $chanwProcessBlockChooserContent.Name )
         #end
 ##
-#*    *##if( $chanwBlockName.endsWith( 'dd-macro' ) )
+#*    *##if( $chanwBlockName.endsWith( '-dd-macro' ) )
 #*        *##chanwInvokeMacro( "chanwProcessDDBlockWithMacro" [ "chanwFirstChild" ] )
 #*    *### macro blocks
-#*    *##elseif( $chanwBlockName.endsWith( 'Macro' ) || $chanwBlockName.endsWith( 'macro' ) )
+#*    *##elseif( $chanwBlockName.endsWith( '-Macro' ) || $chanwBlockName.endsWith( '-macro' ) )
 #*        *##chanwInvokeMacro( "chanwProcessBlockWithMacro" [ "chanwFirstChild" ] )
 #*    *### text blocks
-#*    *##elseif( $chanwBlockName.endsWith( 'Text' ) || $chanwBlockName.endsWith( 'text' ) ) 
+#*    *##elseif( ( $chanwBlockName.endsWith( '-Text' ) || $chanwBlockName.endsWith( '-text' ) ) ) 
 #*        *#$_SerializerTool.serialize( $chanwProcessBlockChooserContent, true )
 #*    *### script blocks
-#*    *##elseif( $chanwBlockName.endsWith( 'Script' ) || $chanwBlockName.endsWith( 'script' )  )
+#*    *##elseif( $chanwBlockName.endsWith( '-Script' ) || $chanwBlockName.endsWith( '-script' )  )
 #*        *##chanwInvokeMacro( "chanwProcessScript" [ "chanwFirstChild" ] )
 #*    *### data definition blocks
 #*    *##elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
 #*        *##chanwProcessDataDefinitionBlock( $chanwFirstChild )
-        #elseif( $chanwBlockAPIAdapterClassName == "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
+        #elseif( $chanwBlockAPIAdapterClassName == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
             #chanwProcessDataDefinitionBlock( $chanwProcessBlockChooserContent )
 #*    *### index block
 #*    *##elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK ) 
@@ -1812,7 +1816,6 @@ doc*###
         #set( $chanwDisplayElement      = $chanwProcessDataDefinitionBlockSystemDataStructure.getChild( 'display' ) )
 ##
 #*    *##if( $chanwDisplayElement.Value.toLowerCase() == 'yes' )
-
 #*    *### determine the group to be processed
 #*        *##if( $chanwTopLevelElementSize == 2 && $chanwTypeInfoElement == "" )
 #*            *##set( $chanwGroupToBeProcessed = $_XPathTool.selectSingleNode( $chanwDisplayElement, "following-sibling::node()" ) )
@@ -1821,6 +1824,7 @@ doc*###
 #*            *##set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.Children[ 1 ].Value + "-group" )
             ## old block type
             #elseif( $chanwTypeInfoElement != "" )
+
                 #set( $chanwGroupName = $chanwTypeInfoElement.Value )
                 #chanwConvertToPascalCase( $chanwGroupName "-" )
                 #set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
@@ -1829,13 +1833,13 @@ doc*###
 #*        *##else
 #*            *##set( $chanwGroupName = "unknown" )
 #*        *##end
-
 ##
 #*    *### data retrieval
 #*        *##set( $chanwPath = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "path" ).Value )
 #*        *##set( $chanwSite = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "site" ).Value )
 #*        *##set( $chanwGroupNode = $_.locateBlock( $chanwPath, $chanwSite ).getStructuredDataNodes( $chanwGroupName )[ 0 ] )
             #chanwGetFQINodeMap( $chanwGroupNode $chanwProcessDataDefinitionBlockSystemDataStructure )
+        #else ## no code
         #end
     #elseif( $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
         #chanwGetFQINodeMap( $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData )
@@ -1846,6 +1850,7 @@ doc*###
         #else
             #set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData[ 1 ].Identifier )
         #end
+    #else ## no code
     #end
 ##
 #*    *### compute macro name from group name
