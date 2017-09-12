@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+9/8/2017 Added $chanwStartMeasurement and $chanwEndMeasurement.
 8/11/2017 Changed names like $chanwYearField to $chanwCalendarYearField.
 8/7/2017 Started using macro names as namespace prefixes for local parameters.
 7/14/2017 Added import and evaluate elements.
@@ -297,6 +298,9 @@ $chanwNextYearCalObject.add( $chanwCalendarYearField, 1 )
 #set( $chanwRuLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "ru" ) ) ## Russian
 #set( $chanwZhLocale   = $chanwGetConstructorByClassNameParamSize.newInstance( "zh" ) ) ## Chinese
 #set( $chanwZhCNLocale = $chanwGetConstructorByClassNameParamSize.newInstance( "zh-CN" ) )
+## check metrics
+#define( $chanwStartMeasurement )#set( $chanwStartTime = $_DateTool.SystemTime )#end
+#define( $chanwEndMeasurement )#set( $chanwDuration = $_DateTool.SystemTime - $chanwStartTime )$chanwDuration#end
 #set( $chanwDateTimeGlobalVariables = [
     "chanwCalendar",
     "chanwDateObj",
