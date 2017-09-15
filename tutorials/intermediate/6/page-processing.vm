@@ -1,0 +1,32 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+## the creation of components
+#set( $footer = "<footer/>" )
+#set( $main = [ "div", "div", "aside" ] )
+#set( $head = [ "meta", "title", "link" ] ) ## meta not defined
+#set( $body = [ "header", "main", "footer", "script" ] )
+#set( $title = "<title/>" )
+#set( $link = "<link/>" )
+#set( $header = "<header/>" )
+#set( $script = "<script/>" )
+#set( $html = [ "head", "body" ] )
+#set( $div = "<div/>" )
+#set( $aside = "<aside/>" )
+
+
+## the display of components
+#assemblePageComponentsRecursion( "html" ) ## pass in the root name
+
+#macro( assemblePageComponentsRecursion $name )
+    #chanwReviveGlobalVariable( $name )
+    
+    #if( $chanwReviveGlobalVariable.Class.Name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+        <$name>
+        #foreach( $part in $chanwReviveGlobalVariable )
+            #assemblePageComponentsRecursion( $part )
+        #end
+        </$name>
+    #else
+        $chanwReviveGlobalVariable
+    #end
+#end

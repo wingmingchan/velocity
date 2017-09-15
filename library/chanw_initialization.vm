@@ -1536,7 +1536,7 @@ doc*###
 《code》$stop《/code》 is not set to true, then 《code》$chanwLocateAsset《/code》
 will store the empty string. Example:《/p》
 《pre》
-#chanwLocateAsset( "formats/library/velocity" "_core" "chanw_display_velocity_code" )
+#chanwLocateAsset( "core/library/velocity/chanw" "_brisk" "chanw_display_velocity_code" )
 #set( $code = $chanwLocateAsset.Script )
 《/pre》
 《/documentation》
@@ -1667,7 +1667,7 @@ doc*###
 《p》Locates the named assets. The asset located is stored in
 《code》$chanwLocateAsset《/code》. Example:《/p》
 《pre》
-#chanwLocateAsset( "formats/library/velocity" "_core" "chanw_display_velocity_code" )
+#chanwLocateAsset( "core/library/velocity/chanw" "_brisk" "chanw_display_velocity_code" )
 #set( $code = $chanwLocateAsset.Script )
 《/pre》
 《/documentation》
@@ -1997,8 +1997,8 @@ Code inside cannot contain 《code》<《/code》, 《code》>《/code》 and
 《pre》
 <scripts>
     <code>
-#import( "site://_core/formats/library/velocity/chanw_display_velocity_code" )
-#chanwGetMacroCode( "chanw_object_creator" "formats/library/velocity" "_core" "chanwGetObjectByClassName" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw_display_velocity_code" )
+#chanwGetMacroCode( "chanw_initialization" "core/library/velocity/chanw" "_brisk" "chanwGetObjectByClassName" )
 #chanwDisplayHideVelocityCode( $chanwGetMacroCode "hide-code1" "true" "false" )
     </code>
 </scripts>
@@ -2232,7 +2232,7 @@ the parameters of an image path, image site location, and a custom map of values
 it finds if srcset image exists. If so it adds them, if not, it moves on.
 Example: 《/p》
 《pre》
-#import("site://_core/formats/custom_macros")
+#import("site://_brisk/core/library/velocity/chanw/chanw_initialization")
 #set( $image ="/images/computer-people.jpg" )
 #set( $site = "thomas-test" )
 
