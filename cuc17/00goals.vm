@@ -1,0 +1,11 @@
+#**
+Part 1: Velocity
+1. Importance of documentation and creation of documentation pages
+   - Promote reusability
+   - Unit testing
+2. XML markups within the source: code and documentation in the same place
+3. Processing the markups
+   - turning a format into an XML document
+   - SAXBuilder and $_XPathTool
+4. Unit tests
+**#
