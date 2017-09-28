@@ -1,5 +1,5 @@
 ## ex. 1
-#import( 'site://_common_assets/formats/library/velocity/chanw_library_import' )
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
 
 ## ex. 2
 #set( $suffix = 6 )
