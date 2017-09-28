@@ -8,4 +8,8 @@ Part 1: Velocity
    - turning a format into an XML document
    - SAXBuilder and $_XPathTool
 4. Unit tests
+
+Part 2: Web Services
+1. XML markups within the source
+2. PHP code within documentation to be executed
 **#
