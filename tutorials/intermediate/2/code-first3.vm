@@ -1,6 +1,8 @@
+## when the variable is not defined, treat code as string
 #set( $str = "$var" )
 $str.length() ##=> 4
 
+## when the variable is defined, code is code (interpolation)
 #set( $var = 4 )
 #set( $str = "$var" )
 $str.length() ##=> 1
