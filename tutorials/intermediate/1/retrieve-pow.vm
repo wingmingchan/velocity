@@ -1,3 +1,6 @@
+#*
+This format shows how to retrieve the pow method, taking two parameters, and invoke it, in various ways.
+*#
 #import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
 
 $_.Class.forName( "java.lang.Math" ).getMethod( "pow", $_FieldTool.in( "java.lang.Double" ).TYPE, $_FieldTool.in( "java.lang.Double" ).TYPE ).invoke( null, 3, 2 )
