@@ -1,0 +1,5 @@
+#*
+This format shows how to create a Class object representing an array.
+*#
+#set( $eleArrayClass = $_.Class.forName( "[Lorg.jdom.Element;" ) )
+$eleArrayClass
