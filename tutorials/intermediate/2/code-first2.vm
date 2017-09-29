@@ -1,3 +1,7 @@
+#*
+This format shows when #define and #evaluate is embedded in string in double quotes,
+strings are treated as code.
+*#
 #macro( myMacro )
     myMacro invoked
 #end
