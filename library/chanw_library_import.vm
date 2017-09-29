@@ -28,3 +28,12 @@ Import this single format to access all library resources created by Wing.
 #define( $chanwImportVarDump )
 #import( "site://${chanw_framework_site_name}/core/macros/drulykgVarDump" )
 #end
+#define( $chanwImportElement )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_element_utilities" )
+#end
+#define( $chanwImportServiceProvider )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_service_provider" )
+#end
+#define( $chanwImportDocXml )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_doc_xml_utilities" )
+#end

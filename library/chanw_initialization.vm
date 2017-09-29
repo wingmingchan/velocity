@@ -248,6 +248,8 @@ doc*###
 #define( $E_PRE )</pre>#end
 #define( $S_UL )<ul>#end
 #define( $E_UL )</ul>#end
+#define( $S_ROOT_TAG )<cascadeForcedRoot>#end
+#define( $E_ROOT_TAG )</cascadeForcedRoot>#end
 ## java class names used for comparison
 #set( $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
 #set( $COM_CASCADE_TEXT_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
@@ -1465,7 +1467,6 @@ doc*###
 #*    *##set( $chanwStmt = $chanwStmt.trim() )
 #*    *##set( $chanwStmt = $chanwStmt + ")" )
 #*    *##set( $chanwStmt = '#set($' + $chanwInvokeMacroWithVarForStringVarName + '="' + $chanwStmt + '")' )
-$chanwStmt
 #*    *##evaluate( $chanwStmt )
 #**##end
 #end
@@ -1697,78 +1698,88 @@ element.《/p》
 《macro id=“chanwProcessBlockChooser”》
 doc*###
 #macro( chanwProcessBlockChooser $chanwProcessBlockChooserContent )
+    ## detect the type of input
     #chanwIsInstanceOf( $chanwProcessBlockChooserContent "com.hannonhill.cascade.api.adapters.BlockAPIAdapter" )
     #set( $chanwIsBlockAPIAdapter = $chanwIsInstanceOf )
+    ##
+    ## Cascade Block API object
     #if( $chanwIsBlockAPIAdapter )
         #set( $chanwBlockAPIAdapterClassName = $chanwProcessBlockChooserContent.Class.Name )
+    ## org.jdom.Element object
     #else
         #set( $chanwBlockAPIAdapterClassName = "" )
     #end
-#**### switch between Docuement and Element
+    ## switch between Docuement and Element
     #set( $chanwContentChildren = "" )
-#**##if( $chanwProcessBlockChooserContent.Class.Name == $ORG_JDOM_DOCUMENT_CLASS_NAME )
-        #set( $chanwContentChildren = $chanwProcessBlockChooserContent.getContent() )
-#**##else
-        #set( $chanwContentChildren = $chanwProcessBlockChooserContent.getChildren() )
-#**##end
+    ## a block attached to a region
+    ##if( $chanwProcessBlockChooserContent.Class.Name == $ORG_JDOM_DOCUMENT_CLASS_NAME )
+        ##set( $chanwContentChildren = $chanwProcessBlockChooserContent.getContent() )
+    ## a block attached to a block chooser on the page
+    ##else
+    #set( $chanwContentChildren = $chanwProcessBlockChooserContent.getChildren() )
+    ##end
 ##
-#**### plain text or code
+    ## plain text or code
     #set( $chanwBlockName  = "" )
-#**##if( $chanwContentChildren.size() == 0 )
-#*    *#$_SerializerTool.serialize( $chanwProcessBlockChooserContent, true )
+    #if( $chanwContentChildren.size() == 0 ) ## no root element, must be a text block
+        $_SerializerTool.serialize( $chanwProcessBlockChooserContent, true )
+    ## TextBlockAPIAdapter
     #elseif( $chanwBlockAPIAdapterClassName == "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
         $chanwProcessBlockChooserContent.Text
-#**### at least one child
-#**##elseif( $chanwContentChildren.size() > 0 || $chanwIsBlockAPIAdapter )
+    #elseif( $chanwContentChildren.size() > 0 || $chanwIsBlockAPIAdapter )
+        ## root element exists
         #if( !$chanwIsBlockAPIAdapter && $chanwContentChildren.size() > 0 )
-#*    *### create a global variable storing the first child
-#*    *### normally the root element
-#*        *##set( $chanwFirstChild = $chanwContentChildren.get( 0 ) )
-#*        *##set( $chanwChildName  = $chanwFirstChild.Name )
-#*        *##set( $chanwChildPath  = $chanwProcessBlockChooserContent.getParent().getChild( 'path' ).Value )
-#*        *##set( $chanwBlockName  = $chanwChildPath )
+        ## create a global variable storing the first child
+        ## normally the root element
+            #set( $chanwFirstChild = $chanwContentChildren.get( 0 ) )
+            #set( $chanwChildName  = $chanwFirstChild.Name )
+            #set( $chanwChildPath  = $chanwProcessBlockChooserContent.getParent().getChild( 'path' ).Value )
+            #set( $chanwBlockName  = $chanwChildPath )
 ##
-#*        *### there is at least one slash in the path
-#*        *##set( $chanwLastIndexOfSlash = $chanwBlockName.lastIndexOf( '/' ) + 1 )
+            ## there is at least one slash in the path
+            #set( $chanwLastIndexOfSlash = $chanwBlockName.lastIndexOf( '/' ) + 1 )
 ##
-#*        *### get the name of the block
-#*        *##if( $chanwLastIndexOfSlash > -1 )
-#*            *##set( $chanwBlockName = $chanwBlockName.substring( $chanwLastIndexOfSlash ) )
-#*        *##end
+            ## get the name of the block
+            #if( $chanwLastIndexOfSlash > -1 )
+                #set( $chanwBlockName = $chanwBlockName.substring( $chanwLastIndexOfSlash ) )
+            #end
+        ## Cascade API object
         #else
-#*        *##set( $chanwFirstChild = "" )
-#*        *##set( $chanwChildName  = "" )
-#*        *##set( $chanwChildPath  = "" )
-#*        *##set( $chanwBlockName  = "" )
+            #set( $chanwFirstChild = "" )
+            #set( $chanwChildName  = "" )
+            #set( $chanwChildPath  = "" )
+            #set( $chanwBlockName  = "" )
             #set( $chanwBlockName = $chanwProcessBlockChooserContent.Name )
         #end
 ##
-#*    *##if( $chanwBlockName.endsWith( '-dd-macro' ) )
-#*        *##chanwInvokeMacro( "chanwProcessDDBlockWithMacro" [ "chanwFirstChild" ] )
-#*    *### macro blocks
-#*    *##elseif( $chanwBlockName.endsWith( '-Macro' ) || $chanwBlockName.endsWith( '-macro' ) )
-#*        *##chanwInvokeMacro( "chanwProcessBlockWithMacro" [ "chanwFirstChild" ] )
-#*    *### text blocks
-#*    *##elseif( ( $chanwBlockName.endsWith( '-Text' ) || $chanwBlockName.endsWith( '-text' ) ) ) 
-#*        *#$_SerializerTool.serialize( $chanwProcessBlockChooserContent, true )
-#*    *### script blocks
-#*    *##elseif( $chanwBlockName.endsWith( '-Script' ) || $chanwBlockName.endsWith( '-script' )  )
-#*        *##chanwInvokeMacro( "chanwProcessScript" [ "chanwFirstChild" ] )
-#*    *### data definition blocks
-#*    *##elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
-#*        *##chanwProcessDataDefinitionBlock( $chanwFirstChild )
+        ## for legacy data definition blocks
+        #if( $chanwBlockName.endsWith( '-dd-macro' ) )
+            #chanwInvokeMacro( "chanwProcessDDBlockWithMacro" [ "chanwFirstChild" ] )
+        ## macro blocks
+        #elseif( $chanwBlockName.endsWith( '-Macro' ) || $chanwBlockName.endsWith( '-macro' ) )
+            #chanwInvokeMacro( "chanwProcessBlockWithMacro" [ "chanwFirstChild" ] )
+        ## text blocks
+        #elseif( ( $chanwBlockName.endsWith( '-Text' ) || $chanwBlockName.endsWith( '-text' ) ) ) 
+            $_SerializerTool.serialize( $chanwProcessBlockChooserContent, true )
+        ## script blocks
+        #elseif( $chanwBlockName.endsWith( '-Script' ) || $chanwBlockName.endsWith( '-script' )  )
+            #chanwInvokeMacro( "chanwProcessScript" [ "chanwFirstChild" ] )
+        ## data definition blocks
+        #elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
+            #chanwProcessDataDefinitionBlock( $chanwFirstChild )
+        ## Cascade API blocks
         #elseif( $chanwBlockAPIAdapterClassName == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
             #chanwProcessDataDefinitionBlock( $chanwProcessBlockChooserContent )
-#*    *### index block
-#*    *##elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK ) 
-#*        *##chanwProcessIndexBlock( $chanwBlockName $chanwFirstChild )
-#*    *### others, preferably having -xml, -feed suffixes
-#*    *##else
-#*        *##chanwConvertToPascalCase( $chanwBlockName "-" )
-#*        *##set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
-#*        *##chanwInvokeMacro( $chanwMacroName [ "chanwFirstChild" ] )
-#*    *##end
-#**##end
+        ## index block
+        #elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_INDEX_BLOCK ) 
+            #chanwProcessIndexBlock( $chanwBlockName $chanwFirstChild )
+        ## others, preferably having -xml, -feed suffixes
+        #else
+            #chanwConvertToPascalCase( $chanwBlockName "-" )
+            #set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
+            #chanwInvokeMacro( $chanwMacroName [ "chanwFirstChild" ] )
+        #end
+    #end
 #end
 #*doc
 《/macro》
@@ -1824,7 +1835,6 @@ doc*###
 #*            *##set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.Children[ 1 ].Value + "-group" )
             ## old block type
             #elseif( $chanwTypeInfoElement != "" )
-
                 #set( $chanwGroupName = $chanwTypeInfoElement.Value )
                 #chanwConvertToPascalCase( $chanwGroupName "-" )
                 #set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )

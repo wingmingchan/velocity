@@ -1,0 +1,88 @@
+#*doc
+《code》
+《copyright》
+Authors: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+9/28/2017 Format created.
+《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+=============================================================
+#import( 'core/library/velocity/chanw/chanw_library_import' )
+$chanwImportElement$chanwImportVarDump
+$chanwImportDatabase
+$chanwImportServiceProvider
+#set( $block   = $_.locateBlock( "core/base-assets/block-row", "_brisk" ) )
+#chanwGetDDDocRootElement( $block )
+#evaluate( $_SerializerTool.serialize( $chanwGetDDDocRootElement, true ) )
+=============================================================
+《/pre》
+《/div》
+《/evaluate》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format provides macros to work with 《code》org.jdom.Element《/code》 objects.《/p》
+《/documentation》
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw_database_utilities' )
+#import( 'core/library/velocity/chanw/chanw_service_provider' )
+#*doc
+《/import》
+《documentation》
+《code》#chanwCreateElementFromMapIteration( $map_chanwCreateElementFromMapIteration )《/code》
+《p》Creates an element using the data in 《code》$map_chanwCreateElementFromMapIteration《/code》, using iteration.《/p》
+《/documentation》
+《macro id=“chanwCreateElementFromMapIteration”》
+doc*###
+#macro( chanwGetDDDocRootElement $block_chanwGetDDDocRoot )
+    #if( !$chanwConnection || $chanwConnection.isClosed() )
+        #chanwGetDatabaseStatement
+    #end
+    ## get the path of the data definition
+    #set( $chanwDDPath = $block_chanwGetDDDocRoot.DataDefinitionPath )
+    ## get the xml of the data definition
+    #chanwGetSingleValue(
+        "select xmldata from cxml_xml where id=(select xmlid from cxml_structureddatadefinition where path='$chanwDDPath' and siteid=(select id from cxml_site where name='_brisk') and iscurrentversion=1)" )
+    ## build the XML
+    #chanwGetRootElementFromXml( $chanwGetSingleValue )
+    #set( $chanwGetDDDocRootElement = $chanwGetRootElementFromXml )
+    #chanwCleanUp
+#end
+#macro( chanwGetTemplateDocRootElement $template_chanwGetTemplateDocRootElement )
+    #if( !$chanwConnection || $chanwConnection.isClosed() )
+        #chanwGetDatabaseStatement
+    #end
+    ## get the path of the data definition
+    #set( $chanwTemplateId = $template_chanwGetTemplateDocRootElement.Identifier.Id )
+    ## get the xml of the template
+    #chanwGetSingleValue(
+        "select xmldata from cxml_xml where id=(select xmlid from cxml_foldercontent where id='$chanwTemplateId')" )
+    ## build the XML
+    #chanwGetRootElementFromXml( $chanwGetSingleValue )
+    #set( $chanwGetDDDocRootElement = $chanwGetRootElementFromXml )
+    #chanwCleanUp
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwCreateElementFromMapRecursion( $map_chanwCreateElementFromMapRecursion )《/code》
+《p》Creates an element using the data in 《code》$map_chanwCreateElementFromMapRecursion《/code》, using recursion.《/p》
+《/documentation》
+《macro id=“chanwCreateElementFromMapRecursion”》
+doc*###
+#macro( chanwGetRootElementFromXml $xml_string )
+    #chanwBuildXMLContentRoot( $globalApacheStringUtils.substringBetween( $xml_string, '#*doc', 'doc*###' ) )
+    #set( $chanwGetRootElementFromXml = $chanwBuildXMLContentRoot )
+#end
+#*doc
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+doc*###

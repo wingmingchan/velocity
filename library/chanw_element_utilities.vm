@@ -1,0 +1,215 @@
+#*doc
+《code》
+《copyright》
+Authors: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+9/22/2017 Format created.
+《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+=============================================================
+#import( 'core/library/velocity/chanw/chanw_library_import' )$chanwImportElement$chanwImportVarDump
+${SINGLE_HASH}import( 'core/library/velocity/chanw/chanw_library_import' )
+${DOLLAR}chanwImportElement${DOLLAR}chanwImportVarDump
+=============================================================
+#set( $page = $_.locatePage( 'index', 'formats' ) )
+#createPageMapStructure( $page )
+
+${SINGLE_HASH}set( ${DOLLAR}page = ${DOLLAR}_.locatePage( 'index', 'formats' ) )
+${SINGLE_HASH}createPageMapStructure( ${DOLLAR}page )
+${DOLLAR}createPageMapStructure: $createPageMapStructure
+=============================================================
+#chanwCreateElementFromMapIteration( $createPageMapStructure )
+
+${SINGLE_HASH}chanwCreateElementFromMapIteration( ${DOLLAR}createPageMapStructure )
+${DOLLAR}chanwCreateElementFromMapIteration.Class: $chanwCreateElementFromMapIteration.Class
+=============================================================
+#chanwCreateElementFromMapRecursion( $createPageMapStructure )
+
+${SINGLE_HASH}chanwCreateElementFromMapRecursion( ${DOLLAR}createPageMapStructure )
+${DOLLAR}chanwCreateElementFromMapRecursion.Class: $chanwCreateElementFromMapRecursion.Class
+=============================================================
+${DOLLAR}_EscapeTool.xml( ${DOLLAR}_SerializerTool.serialize( ${DOLLAR}chanwCreateElementFromMapRecursion, false ).replaceAll( "&lt;", "${DOLLAR}{NEWLINE}&lt;" ) )
+$_EscapeTool.xml( $_SerializerTool.serialize( $chanwCreateElementFromMapRecursion, false ).replaceAll( "<", "${NEWLINE}<" ) )
+=============================================================
+《/pre》
+《/div》
+《/evaluate》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format provides macros to work with 《code》org.jdom.Element《/code》 objects.《/p》
+《/documentation》
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
+《documentation》
+《code》#chanwCreateElementFromMapIteration( $map_chanwCreateElementFromMapIteration )《/code》
+《p》Creates an element using the data in 《code》$map_chanwCreateElementFromMapIteration《/code》, using iteration.《/p》
+《/documentation》
+《macro id=“chanwCreateElementFromMapIteration”》
+doc*###
+#macro( chanwCreateElementFromMapIteration $map_chanwCreateElementFromMapIteration )
+    ## children must be a list of elements
+    #if( $map_chanwCreateElementFromMapIteration.Class.Name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+        Not a map.
+        #stop
+    #end
+##
+    ## from data map to parent element
+    #if( !$chanwMapParentMap )
+        #set( $chanwMapParentMap = {} )
+    #end
+##
+    ## the root element
+    #chanwCreateElementFromString( $map_chanwCreateElementFromMapIteration[ "name" ] "" )
+    ## store the root
+    #set( $chanwCreateElementFromMapIteration = $chanwCreateElementFromString )
+##
+    ## enqueue all top-level children
+    #if( $map_chanwCreateElementFromMapIteration[ "content" ].size() > 0 )
+        #foreach( $child in $map_chanwCreateElementFromMapIteration[ "content" ] )
+            ## a dummy key to keep maps distinct
+            #set( $child[ $foreach.index ] = $foreach.index )
+            #set( $chanwMapParentMap[ $child ] = $chanwCreateElementFromList )
+            #chanwEnqueueGlobalQueue( $chanwGlobalQueue $child )
+        #end
+    #end
+##
+    #foreach( $num in [ $map_chanwCreateElementFromMapIteration[ "content" ].size()..5000 ] )
+        ## get a map
+        #chanwDequeueGlobalQueue( $chanwGlobalQueue ) ## a map
+##
+        #if( $chanwDequeueGlobalQueue[ "content" ].Class.Name == $JAVA_LANG_STRING_CLASS_NAME )
+            ## create the element
+            #chanwCreateElementFromString( $chanwDequeueGlobalQueue[ "name" ] $chanwDequeueGlobalQueue[ "content" ] )
+            ## add element to parent
+            #set( $dummy = $chanwMapParentMap[ $chanwDequeueGlobalQueue ].addContent( $chanwCreateElementFromString ) )
+        #else
+            ## create the element
+            #chanwCreateElementFromString( $chanwDequeueGlobalQueue[ "name" ] "" )
+##
+            ## add element to parent
+            #set( $dummy = $chanwMapParentMap[ $chanwDequeueGlobalQueue ].addContent( $chanwCreateElementFromString ) )
+            ## enqueue all children
+            #foreach( $child in $chanwDequeueGlobalQueue[ "content" ] )
+                ## a dummy key to keep maps distinct
+                #set( $child[ $num ] = $num )
+                #chanwEnqueueGlobalQueue( $chanwGlobalQueue $child ) ## a map
+                #set( $chanwMapParentMap[ $child ] = $chanwCreateElementFromString )
+            #end
+        #end
+        ## get out if the queue is empty
+        #chanwSizeGlobalQueue( $chanwGlobalQueue )
+##
+        #if( $chanwSizeGlobalQueue == 0 )
+            #break
+        #end
+    #end ## foreach
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwCreateElementFromMapRecursion( $map_chanwCreateElementFromMapRecursion )《/code》
+《p》Creates an element using the data in 《code》$map_chanwCreateElementFromMapRecursion《/code》, using recursion.《/p》
+《/documentation》
+《macro id=“chanwCreateElementFromMapRecursion”》
+doc*###
+#macro( chanwCreateElementFromMapRecursion $map_chanwCreateElementFromMapRecursion )
+    #if( $map_chanwCreateElementFromMapRecursion[ "content" ].Class.Name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+        ## the element
+        #chanwCreateElementFromString( $map_chanwCreateElementFromMapRecursion[ "name" ] "" )
+##
+        #if( !$chanwCreateElementFromMapRecursion.Class.Name ) ## called the first time
+            ## store the root
+            #set( $chanwCreateElementFromMapRecursion = $chanwCreateElementFromString )
+            #set( $chanwCurrentRoot = $chanwCreateElementFromString )
+        #else
+            ## recursive calls
+            #set( $dummy = $chanwCurrentRoot.addContent( $chanwCreateElementFromString ) )
+            #set( $chanwCurrentRoot = $chanwCreateElementFromString )
+        #end
+##
+        #set( $size = $map_chanwCreateElementFromMapRecursion[ "content" ].size() )
+##
+        #foreach( $child in $map_chanwCreateElementFromMapRecursion[ "content" ] )
+            #chanwCreateElementFromMapRecursion( $child )
+##
+            #if( $foreach.count == $size )
+                #set( $chanwCurrentRoot = $chanwCurrentRoot.Parent )
+            #end
+        #end
+    #elseif( $map_chanwCreateElementFromMapRecursion[ "content" ].Class.Name == $JAVA_LANG_STRING_CLASS_NAME )
+        #chanwCreateElementFromString( $map_chanwCreateElementFromMapRecursion[ "name" ] $map_chanwCreateElementFromMapRecursion[ "content" ] )
+        #set( $dummy = $chanwCurrentRoot.addContent( $chanwCreateElementFromString ) )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwCreateElementFromString( $name_chanwCreateElementFromString $text_chanwCreateElementFromString )《/code》
+《p》Creates an element.《/p》
+《/documentation》
+《macro id=“chanwCreateElementFromString”》
+doc*###
+#macro( chanwCreateElementFromString $name_chanwCreateElementFromString $text_chanwCreateElementFromString )
+    #chanwGetConstructorByClassNameParamSize( 'org.jdom.Element' 1 )
+    #set( $chanwCreateElementFromString = $chanwGetConstructorByClassNameParamSize.newInstance( $name_chanwCreateElementFromString ) )
+    ## insert text to element
+    #if( $text_chanwCreateElementFromString.trim() != "" )
+        #set( $chanwCreateElementFromString = $chanwCreateElementFromString.setText( $text_chanwCreateElementFromString.trim() ) )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#createPageMapStructure( $page_createPageMapStructure )《/code》
+《p》Creates a map storing data from a page Cascade API object. The resulting map then can
+be passed into 《code》#chanwCreateElementFromMapIteration《/code》 or 《code》#chanwCreateElementFromMapRecursion《/code》
+to create an element.《/p》
+《/documentation》
+《macro id=“createPageMapStructure”》
+doc*###
+#macro( createPageMapStructure $page_createPageMapStructure )
+    #set( $createPageMapStructure = { "name":"system-page", "content":[ 
+        { "name":"name", "content":$page_createPageMapStructure.Name },
+        { "name":"is-published", "content":"${page.ShouldBePublished}" },
+        { "name":"last-published-on", "content":"${page.LastPublishedOn.Time}" },
+        { "name":"last-published-by", "content":$page_createPageMapStructure.LastPublishedBy },
+        { "name":"title", "content":$page_createPageMapStructure.Metadata.Title },
+        { "name":"display-name", "content":$page_createPageMapStructure.Metadata.DisplayName },
+        { "name":"path", "content":"/${page.Path}" },
+        { "name":"site", "content":$page_createPageMapStructure.Site.Name },
+        { "name":"link", "content":"site://${page.Site.Name}/${page.Path}" },
+        { "name":"created-by", "content":$page_createPageMapStructure.CreatedBy },
+        { "name":"created-on", "content":"${page.CreatedOn.Time}" },
+        { "name":"last-modified-by", "content":$page_createPageMapStructure.LastModifiedBy },
+        { "name":"last-modified", "content":"${page.LastModified.Time}" } ] } )
+##
+    #foreach( $df in $page_createPageMapStructure.Metadata.DynamicFields )
+        #set( $chanwDFMap = {} )
+        #set( $chanwDFMap[ "name" ] = "dynamic-metadata" )
+        #set( $chanwDFMap[ "content" ] = [ { "name":"name", "content":$df.Name } ] )
+        #set( $chanwDFValues = $df.Values )
+    ##
+        #if( $chanwDFValues.size() > 0 )
+            #foreach( $value in $chanwDFValues )
+                #if( $value.trim() != "" )
+                    #set( $dummy = $chanwDFMap[ "content" ].add( { "name":"value", "content":$value } ) )
+                #end
+            #end
+        #end
+        #set( $dummy = $createPageMapStructure[ "content" ].add( $chanwDFMap ) )
+    #end
+#end
+#*doc
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+doc*###

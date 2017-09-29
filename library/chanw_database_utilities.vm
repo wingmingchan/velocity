@@ -37,6 +37,7 @@ ${DOLLAR}chanwGetNumberOfRecordsInTable: $chanwGetNumberOfRecordsInTable
 #chanwGetAllTableNames
 $chanwGetAllTableNames
 =============================================================
+#chanwCleanUp
 《/pre》
 《/div》
 《/evaluate》
@@ -893,6 +894,15 @@ doc*###
 ##
     #if( !$chanwGetResultSet )
         No result set returned
+    #end
+#end
+
+#macro( chanwGetSingleValue $sql_chanwGetSingleValue )
+    #set( $chanwGetSingleValue = "" )
+    #chanwGetResultSet( $sql_chanwGetSingleValue )
+##
+    #if( $chanwGetResultSet.next() )
+        #set( $chanwGetSingleValue = $chanwGetResultSet.getString( 1 ) )
     #end
 #end
 #*doc
