@@ -1,3 +1,6 @@
+#*
+This format shows how to retrieve a static method and invoke it.
+*#
 $_.Class.forName( "java.lang.Integer" ).getMethod( 
     "parseInt", 
     $_.Class.forName( "java.lang.String" ) ).invoke( null, "3" ).Class.Name
