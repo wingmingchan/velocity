@@ -1,0 +1,3 @@
+$contentRoot.Class.Name  ## org.jdom.Element
+$contentRoot.Name
+$contentRoot.Parent.Class.Name ## org.jdom.Document
