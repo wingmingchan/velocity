@@ -1,0 +1,3 @@
+## two equivalent ways to retrieve text value of a node
+$_XPathTool.selectNodes( $contentRoot, "setup-group/contact" )[ 0 ].getChildText( "siteContactPerson" )
+$_XPathTool.selectNodes( $contentRoot, "setup-group/contact/siteContactPerson" )[ 0 ].Value
