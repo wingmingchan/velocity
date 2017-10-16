@@ -1824,15 +1824,23 @@ doc*###
         #set( $chanwTopLevelElementSize = $chanwProcessDataDefinitionBlockSystemDataStructure.Children.size() )
         #set( $chanwTypeInfoElement     = "" )
         #set( $chanwTypeInfoElement     = $chanwProcessDataDefinitionBlockSystemDataStructure.getChild( 'block-type' ) )
+        #set( $chanwDisplayElement      = "" )
         #set( $chanwDisplayElement      = $chanwProcessDataDefinitionBlockSystemDataStructure.getChild( 'display' ) )
+        #set( $chanwChooseTypeElement   = "" )
+        #set( $chanwChooseTypeElement   = $chanwProcessDataDefinitionBlockSystemDataStructure.getChild( 'choose-type' ) )
 ##
-#*    *##if( $chanwDisplayElement.Value.toLowerCase() == 'yes' )
+#*    *##if( $chanwDisplayElement.Value.toLowerCase() != 'no' )
 #*    *### determine the group to be processed
-#*        *##if( $chanwTopLevelElementSize == 2 && $chanwTypeInfoElement == "" )
+            ## only a group
+            #if( $chanwTopLevelElementSize == 1 && $chanwDisplayElement == "" )
+                #set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.Children[ 0 ].Value )
+            ## group with display
+#*        *##elseif( $chanwTopLevelElementSize == 2 && $chanwTypeInfoElement == "" && $chanwDisplayElement.Value.toLowerCase() == 'yes' )
 #*            *##set( $chanwGroupToBeProcessed = $_XPathTool.selectSingleNode( $chanwDisplayElement, "following-sibling::node()" ) )
 #*            *##set( $chanwGroupName = $chanwGroupToBeProcessed.Name )
-#*        *##elseif( $chanwTopLevelElementSize > 2 && $chanwTypeInfoElement == "" )
-#*            *##set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.Children[ 1 ].Value + "-group" )
+#*        *##elseif( $chanwTopLevelElementSize > 2 && $chanwTypeInfoElement == "" && $chanwChooseTypeElement != "" )
+#*            *###set( $chanwGroupName = $chanwProcessDataDefinitionBlockSystemDataStructure.Children[ 1 ].Value + "-group" )
+                #set( $chanwGroupName = $chanwChooseTypeElement.Value + "-group" )
             ## old block type
             #elseif( $chanwTypeInfoElement != "" )
                 #set( $chanwGroupName = $chanwTypeInfoElement.Value )
@@ -2254,6 +2262,9 @@ $thomaspeGetSrcSetCode
 《macro id=“thomaspeGetSrcSetCode”》
 doc*###
 #macro( thomaspeGetSrcSetCode $thomaspeGetSrcSetCodeImagePath $thomaspeGetSrcSetCodeImageSiteName $thomaspeGetSrcSetCodeMap )
+    #set( $thomaspeGetSrcSetCodeInternalView = [] )
+    #set( $thomaspeGetSrcSetCodeInternalViewExternalFile = [] )
+    #set( $thomaspeGetSrcSetCodeExternalView = [] )
     ## replace ".jpg" with array of replacements in order of priority
     ##set( $thomaspeGetSrcSetCode = "srcset='" )
     #set( $thomaspeEachImage = [] )
@@ -2262,9 +2273,10 @@ doc*###
         #set( $thomaspeImageOptionsFound = false )   
         #foreach( $imageSize in $thomaspeGetSrcSetCodeMap[ $imageOptions ] )
             #set( $thomaspeNewImagePath = $thomaspeGetSrcSetCodeImagePath.replaceAll( ".jpg", $imageSize ) )
-            #if( !$_PropertyTool.isNull(
-                $_.locateFile( $thomaspeNewImagePath, $thomaspeGetSrcSetCodeImageSiteName ) ) &&
-                !$thomaspeImageOptionsFound )
+            #if(
+                $_.locateFile( $thomaspeNewImagePath, $thomaspeGetSrcSetCodeImageSiteName ).Class.Name &&
+                !$thomaspeImageOptionsFound
+            )
                 #set( $thomaspeImageOptionsFound = true )
                 #set( $thomaspeWrittenOut =  " " )
                 #set( $thomaspeWrittenOut =  " " + $S_SYSTEM_ASSET_LOCAL +
@@ -2272,6 +2284,13 @@ doc*###
                     $thomaspeNewImagePath + $E_SYSTEM_ASSET_LOCAL + " " +
                     $imageOptions )    
                 #set( $void = $thomaspeEachImage.add( $thomaspeWrittenOut ) )
+##
+                ## Use &#91; and &#93; to prevent the conversion to "/renderfile"
+                ## when this is surrounded by #protect tags
+                #set( $void = $thomaspeGetSrcSetCodeInternalView.add( "${S_SYSTEM_ASSET}site://${thomaspeGetSrcSetCodeImageSiteName}/${thomaspeNewImagePath}${E_SYSTEM_ASSET} ${imageOptions}" ) )
+                #set( $void = $thomaspeGetSrcSetCodeInternalViewExternalFile.add( "&#91;system-asset&#93;site://${thomaspeGetSrcSetCodeImageSiteName}/${thomaspeNewImagePath}&#91;/system-asset&#93; ${imageOptions}" ) )
+                #set( $void = $thomaspeGetSrcSetCodeExternalView.add( "site://${thomaspeGetSrcSetCodeImageSiteName}/${thomaspeNewImagePath} ${imageOptions}" ) )
+##
                 ##set( $thomaspeGetSrcSetCode =
                 ##    $thomaspeGetSrcSetCode + " " + $S_SYSTEM_ASSET_LOCAL +
                 ##    "site://" + $thomaspeGetSrcSetCodeImageSiteName +
