@@ -2,7 +2,7 @@
 #import( "site://_brisk/core/macros/drulykgInvokeMacro" )
 #import( "site://_brisk/core/macros/drulykgShallowMerge" )
 $chanwStartMeasurement
-#**#
+#*
 ## test with String objects 6 milliseconds
 #chanwCreateTree( "html" )
 #chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ "head", "body" ] )
@@ -10,13 +10,14 @@ $chanwStartMeasurement
 #chanwAddChildren( $chanwObjectNodeMap[ "body" ] [ "header", "site-nav", "breadcrumbs", "pre-main", "main", "post-main", "footer" ] )
 ##chanwTraverseTreePreOrder( $chanwObjectNodeMap[ "html" ] 'displayTreeNode' [] )
 #chanwTraverseTreeBreadthFirst( $chanwObjectNodeMap[ "html" ] 'displayTreeNode' [] )
+*#
 #**#
-#*
 ## test with Cascade API objects 736 milliseconds
 #set( $folder = $_.locateFolder( "/", "formats" ) )
 #chanwCreateTree( $folder )
-#chanwTraverseTreePreOrder( $chanwObjectNodeMap[ $folder ] 'displayTreeNode' [] )
-*#
+##chanwTraverseTreePreOrder( $chanwObjectNodeMap[ $folder ] 'displayTreeNode' [] )
+#chanwTraverseTreeBreadthFirst( $chanwObjectNodeMap[ $folder ] 'displayTreeNode' [] )
+#**#
 #*
 ## test with Element objects 10 milliseconds
 #set( $page = $_XPathTool.selectSingleNode( $contentRoot, "system-page" ) )
@@ -39,13 +40,13 @@ Time taken: $chanwEndMeasurement
     #if( $chanwIsInstanceOf )
         $node.UserObject
     #else
-        #if( $node.UserObject.Identifier )
-            $node.UserObject.Identifier
-        #elseif( $node.UserObject.Name )
+        #if( $node.UserObject.Name )
             $node.UserObject.Name
             #if( $node.Leaf && $node.UserObject.Class.Name == "org.jdom.Element" )
                 $node.UserObject.Value
             #end
+        #elseif( $node.UserObject.Identifier )
+            $node.UserObject.Identifier
         #end
     #end
 #end
