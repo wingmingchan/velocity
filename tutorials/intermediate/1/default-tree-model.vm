@@ -1,0 +1,93 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#import( "site://_brisk/core/macros/drulykgInvokeMacro" )
+#import( "site://_brisk/core/macros/drulykgShallowMerge" )
+$chanwStartMeasurement
+#*
+## test with String objects 6 milliseconds
+#chanwCreateTree( "html" )
+#chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ "head", "body" ] )
+#chanwAddChildren( $chanwObjectNodeMap[ "head" ] [ "meta", "title", "link" ] )
+#chanwAddChildren( $chanwObjectNodeMap[ "body" ] [ "header", "site-nav", "breadcrumbs", "pre-main", "main", "post-main", "footer" ] )
+#chanwTraverseTreePreOrder( $chanwObjectNodeMap[ "html" ] 'displayTreeNode' [] )
+*#
+#*
+## test with Cascade API objects 736 milliseconds
+#set( $folder = $_.locateFolder( "/", "formats" ) )
+#chanwCreateTree( $folder )
+#chanwTraverseTreePreOrder( $chanwObjectNodeMap[ $folder ] 'displayTreeNode' [] )
+*#
+#*
+## test with Element objects 10 milliseconds
+#set( $page = $_XPathTool.selectSingleNode( $contentRoot, "system-page" ) )
+#chanwCreateTree( $page )
+#chanwTraverseTreePreOrder( $chanwObjectNodeMap[ $page ] 'displayTreeNode' [] )
+*#
+#*
+## test with StructuredDataNodeAPIAdapter objects 59 milliseconds
+#set( $page = $_.locatePage( "index", "formats" ) )
+#chanwCreateTree( $page )
+#chanwAddChildren( $chanwObjectNodeMap[ $page ] $page.StructuredData )
+#chanwTraverseTreePreOrder( $chanwObjectNodeMap[ $page ] 'displayTreeNode' [] )
+*#
+$chanwEndMeasurement
+
+## a client-supplied macro
+#macro( displayTreeNode $node )
+    #chanwIsInstanceOf( $node.UserObject "java.lang.String" )
+    ## String
+    #if( $chanwIsInstanceOf )
+        $node.UserObject
+    #else
+        #if( $node.UserObject.Identifier )
+            $node.UserObject.Identifier
+        #elseif( $node.UserObject.Name )
+            $node.UserObject.Name
+            #if( $node.Leaf && $node.UserObject.Class.Name == "org.jdom.Element" )
+                $node.UserObject.Value
+            #end
+        #end
+    #end
+#end
+
+#macro( chanwAddChildren $node_chanwAddChildren $list_chanwAddChildren )
+    #foreach( $child in $list_chanwAddChildren )
+        #chanwCreateNode( $child )
+        #set( $chanwObjectNodeMap[ $child ] = $chanwCreateNode )
+        #set( $void = $node_chanwAddChildren.add( $chanwCreateNode ) )
+        #if( $child.Children )
+            #set( $chanwParent = $chanwCreateNode )
+            #chanwAddChildren( $chanwParent $child.Children )
+        #end
+    #end
+#end
+
+#macro( chanwCreateNode $obj_chanwCreateNode )
+    #chanwGetConstructor( "javax.swing.tree.DefaultMutableTreeNode" [ $_.Class.forName( "java.lang.Object" ) ] )
+    #set( $chanwCreateNode = $chanwGetConstructor.newInstance( $obj_chanwCreateNode ) )
+    #if( !$chanwObjectNodeMap )
+        #set( $chanwObjectNodeMap = {} )
+    #end
+    #set( $chanwObjectNodeMap[ $obj_chanwCreateNode ] = $chanwCreateNode )
+#end
+
+#macro( chanwCreateTree $rootNode_chanwCreateTree )
+    #if( $rootNode_chanwCreateTree.Class.Name != "javax.swing.tree.TreeNode" )
+        #chanwCreateNode( $rootNode_chanwCreateTree )
+        #set( $chanwRootNode = $chanwCreateNode )
+    #else
+        #set( $chanwRootNode = $rootNode_chanwCreateTree )
+    #end
+    #chanwGetConstructor( "javax.swing.tree.DefaultTreeModel" [ $_.Class.forName( "javax.swing.tree.TreeNode" ) ] )
+    #set( $chanwCreateTree = $chanwGetConstructor.newInstance( $chanwRootNode ) )
+    #if( $rootNode_chanwCreateTree.Children )
+        #chanwAddChildren( $chanwRootNode $rootNode_chanwCreateTree.Children )
+    #end
+#end
+
+#macro( chanwTraverseTreePreOrder $node_chanwTraverseTreePreOrder $macroName_chanwTraverseTreePreOrder $paramList_chanwTraverseTreePreOrder )
+#drulykgShallowMerge( { 'jeijlkjeleil' : $node_chanwTraverseTreePreOrder } $paramList_chanwTraverseTreePreOrder )
+#drulykgInvokeMacro( $macroName_chanwTraverseTreePreOrder $drulykgShallowMerge )
+#foreach( $child in $node_chanwTraverseTreePreOrder.children() )
+#chanwTraverseTreePreOrder( $child $macroName_chanwTraverseTreePreOrder $paramList_chanwTraverseTreePreOrder )
+#end
+#end
