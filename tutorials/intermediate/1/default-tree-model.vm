@@ -35,9 +35,7 @@ Time taken: $chanwEndMeasurement
 
 ## a client-supplied macro
 #macro( displayTreeNode $node )
-    #chanwIsInstanceOf( $node.UserObject "java.lang.String" )
-    ## String
-    #if( $chanwIsInstanceOf )
+    #if( $node.UserObject.Class.Name == "java.lang.String" )
         $node.UserObject
     #else
         #if( $node.UserObject.Name )
