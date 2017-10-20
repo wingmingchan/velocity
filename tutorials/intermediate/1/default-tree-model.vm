@@ -2,14 +2,15 @@
 #import( "site://_brisk/core/macros/drulykgInvokeMacro" )
 #import( "site://_brisk/core/macros/drulykgShallowMerge" )
 $chanwStartMeasurement
-#*
+#**#
 ## test with String objects 6 milliseconds
 #chanwCreateTree( "html" )
 #chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ "head", "body" ] )
 #chanwAddChildren( $chanwObjectNodeMap[ "head" ] [ "meta", "title", "link" ] )
 #chanwAddChildren( $chanwObjectNodeMap[ "body" ] [ "header", "site-nav", "breadcrumbs", "pre-main", "main", "post-main", "footer" ] )
-#chanwTraverseTreePreOrder( $chanwObjectNodeMap[ "html" ] 'displayTreeNode' [] )
-*#
+##chanwTraverseTreePreOrder( $chanwObjectNodeMap[ "html" ] 'displayTreeNode' [] )
+#chanwTraverseTreeBreadthFirst( $chanwObjectNodeMap[ "html" ] 'displayTreeNode' [] )
+#**#
 #*
 ## test with Cascade API objects 736 milliseconds
 #set( $folder = $_.locateFolder( "/", "formats" ) )
@@ -29,7 +30,7 @@ $chanwStartMeasurement
 #chanwAddChildren( $chanwObjectNodeMap[ $page ] $page.StructuredData )
 #chanwTraverseTreePreOrder( $chanwObjectNodeMap[ $page ] 'displayTreeNode' [] )
 *#
-$chanwEndMeasurement
+Time taken: $chanwEndMeasurement
 
 ## a client-supplied macro
 #macro( displayTreeNode $node )
@@ -81,6 +82,24 @@ $chanwEndMeasurement
     #set( $chanwCreateTree = $chanwGetConstructor.newInstance( $chanwRootNode ) )
     #if( $rootNode_chanwCreateTree.Children )
         #chanwAddChildren( $chanwRootNode $rootNode_chanwCreateTree.Children )
+    #end
+#end
+
+#macro( chanwTraverseTreeBreadthFirst $node_chanwTraverseTreeBreadthFirst $macroName_chanwTraverseTreeBreadthFirst $paramList_chanwTraverseTreeBreadthFirst )
+    #chanwEnqueueGlobalQueue( $chanwGlobalQueue $node_chanwTraverseTreeBreadthFirst )
+    #foreach( $num in [ 1..5000 ] )
+        #chanwDequeueGlobalQueue( $chanwGlobalQueue )
+        #drulykgShallowMerge( { 'jeijlkjeleil' : $chanwDequeueGlobalQueue } $paramList_chanwTraverseTreeBreadthFirst )
+        #drulykgInvokeMacro( $macroName_chanwTraverseTreeBreadthFirst $drulykgShallowMerge )
+        #if( $chanwDequeueGlobalQueue.getChildCount() > 0 )
+            #foreach( $child in $chanwDequeueGlobalQueue.children() )
+                #chanwEnqueueGlobalQueue( $chanwGlobalQueue $child )
+            #end
+        #end
+        #chanwSizeGlobalQueue( $chanwGlobalQueue )
+        #if( $chanwSizeGlobalQueue == 0 )
+            #break
+        #end
     #end
 #end
 
