@@ -71,7 +71,7 @@ $chanwEndMeasurement
 #end
 
 #macro( chanwCreateTree $rootNode_chanwCreateTree )
-    #if( $rootNode_chanwCreateTree.Class.Name != "javax.swing.tree.TreeNode" )
+    #if( $rootNode_chanwCreateTree.Class.Name != "javax.swing.tree.DefaultMutableTreeNode" )
         #chanwCreateNode( $rootNode_chanwCreateTree )
         #set( $chanwRootNode = $chanwCreateNode )
     #else
