@@ -1,0 +1,18 @@
+#*doc
+<code>
+<documentation>
+<h2>myMacro</h2>
+<p>Prints the String "Hello".</p>
+<pre>
+#myMacro
+</pre>
+</documentation>
+<macro id="myMacro">
+doc*###
+#macro( myMacro )
+    Hello
+#end
+#*doc
+</macro>
+</code>
+doc*###
