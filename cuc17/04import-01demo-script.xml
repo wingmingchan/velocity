@@ -1,6 +1,6 @@
 <!-- Question 3: Can you turn an XML block into a format? -->
 <scripts>
-	<code>
+    <code>
 #import( 'site://cascade-admin/_cascade/cuc17/01demo' )
     </code>
 </scripts>
