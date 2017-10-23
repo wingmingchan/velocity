@@ -1,0 +1,5 @@
+## Question 4: Can you turn a format, kind of, into an XML block?
+#macro( myMacro )
+    Hello
+#end
+#myMacro
