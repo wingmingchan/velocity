@@ -1,0 +1,4 @@
+## Question 2: Can you locate a format using the Locator Tool? And what can you do with the located format?
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
+#chanwLocateAsset( "_cascade/cuc17" "cascade-admin" "01demo" )
+#evaluate( $chanwLocateAsset.Script )
