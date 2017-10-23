@@ -1,0 +1,44 @@
+#*doc
+《code》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+#myMacro1( "Hello, World!" )
+#myMacro2( 16 )
+《/pre》
+《/div》
+《/evaluate》
+《documentation》
+《h2》myMacro1《/h2》
+《p》Prints the String $msg.《/p》
+《pre》
+#myMacro
+《/pre》
+《/documentation》
+《macro id=“myMacro1”》
+doc*###
+#macro( myMacro1 $msg )
+    $msg
+#end
+#*doc
+《/macro》
+《documentation》
+《h2》myMacro2《/h2》
+《p》Prints the number $num.《/p》
+《pre》
+#myMacro2( 3 )
+《/pre》
+《/documentation》
+《macro id=“myMacro2”》
+doc*###
+#macro( myMacro2 $num )
+    #if( $num < 0 )
+        #break
+    #end
+    $num
+#end
+#*doc
+《/macro》
+《/code》
+doc*###
