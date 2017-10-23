@@ -1,0 +1,21 @@
+#*
+<code>
+<documentation>
+<h2>myMacro</h2>
+<p>Prints the input number if equal to or larger than 0.</p>
+<pre>
+#myMacro
+</pre>
+</documentation>
+<macro id="myMacro">
+*#
+#macro( myMacro $num )
+    #if( $num < 0 )
+        #break
+    #end
+    $num
+#end
+#*
+</macro>
+</code>
+*#
