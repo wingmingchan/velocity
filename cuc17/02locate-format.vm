@@ -1,6 +1,10 @@
 ## Question 2: Can you locate a format using the Locator Tool? And what can you do with the located format?
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+$chanwStartMeasurement
 #set( $format = $_.locate(
     "_cascade/cuc17/01demo",
     $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FORMAT,
     "cascade-admin" ) )
 #evaluate( $format.Script )
+
+Time taken: $chanwEndMeasurement
