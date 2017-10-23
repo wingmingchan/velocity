@@ -1,0 +1,8 @@
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
+
+#chanwLocateAsset( "_cascade/cuc17" "cascade-admin" "15macro-with-less-than" )
+
+#set( $xml = $chanwLocateAsset.Script )
+#set( $xml = $xml.replaceAll( $chanwStartDoc, "" ).replaceAll( $chanwEndDoc, "" ) )
+##$_EscapeTool.xml( $xml )
+$xml  ## crash!!!
