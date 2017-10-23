@@ -1,0 +1,6 @@
+## Question 4: Can you turn a format, kind of, into an XML block?
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
+
+#set( $xml = $_.locate( "_cascade/cuc17/08simple-macro-with-documentation", $CASCADE_API_FORMAT_TYPE, "cascade-admin" ).Script )
+#set( $xml = $xml.replaceAll( $chanwStartDoc, "" ).replaceAll( $chanwEndDoc, "" ) )
+$xml
