@@ -1,0 +1,4 @@
+#import( 'site://cascade-admin/_cascade/cuc17/10process-simple-macro-xml' )
+
+#set( $doc = $_XPathTool.selectNodes( $chanwBuildXMLContentRoot, "documentation" )[ 0 ] )
+$_SerializerTool.serialize( $doc, true )
