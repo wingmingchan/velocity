@@ -1,0 +1,2 @@
+#evaluate( $_XPathTool.selectNodes( $_.locateBlock(
+    "_cascade/cuc17/04import-01demo-script" ).XMLAsXMLElement, "//code" )[ 0 ].Value )
