@@ -2,7 +2,7 @@
 《code》
 《documentation》
 《h2》myMacro《/h2》
-《p》Prints the number $num.《/p》
+《p》Prints the input number if equal to or larger than 0.《/p》
 《pre》
 #myMacro
 《/pre》
