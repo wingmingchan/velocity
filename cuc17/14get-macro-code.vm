@@ -1,0 +1,4 @@
+#import( 'site://cascade-admin/_cascade/cuc17/10process-simple-macro-xml' )
+
+#set( $code = $_XPathTool.selectNodes( $chanwBuildXMLContentRoot, "macro[@id='myMacro']" )[ 0 ].Value )
+$code
