@@ -1,0 +1,4 @@
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
+
+#chanwGetScriptFormatRootElement( "17macro-with-less-than-with-unicode" "_cascade/cuc17" "cascade-admin" )
+$chanwGetScriptFormatRootElement.Class.Name
