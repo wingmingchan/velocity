@@ -1,0 +1,4 @@
+#import( 'site://cascade-admin/_cascade/cuc17/10process-simple-macro-xml' )
+
+#set( $example = $_XPathTool.selectNodes( $chanwBuildXMLContentRoot, "documentation/pre" )[ 0 ].Value )
+$example
