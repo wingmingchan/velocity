@@ -1,0 +1,21 @@
+#*doc
+《code》
+《documentation》
+《h2》myMacro《/h2》
+《p》Prints the number $num.《/p》
+《pre》
+#myMacro
+《/pre》
+《/documentation》
+《macro id=“myMacro”》
+doc*###
+#macro( myMacro $num )
+    #if( $num < 0 )
+        #break
+    #end
+    $num
+#end
+#*doc
+《/macro》
+《/code》
+doc*###
