@@ -1,6 +1,8 @@
-<!-- Question 3: Can you turn an XML block into a format? -->
+<!-- Question 3: Can you turn an XML block into a format?
+Why do we want to do this? Well, so that we can attach a format to a block chooser!
+-->
 <scripts>
-    <code>
+	<code>
 #import( 'site://cascade-admin/_cascade/cuc17/01demo' )
     </code>
 </scripts>
