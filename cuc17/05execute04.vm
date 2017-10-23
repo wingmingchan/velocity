@@ -1,0 +1,3 @@
+## select the block before testing!!!
+#set( $code = $_XPathTool.selectNodes( $contentRoot, "code" )[ 0 ].Value )
+#evaluate( $code )
