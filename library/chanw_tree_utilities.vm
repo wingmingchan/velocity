@@ -1,0 +1,198 @@
+#*doc
+《code》
+《copyright》
+Author: Wing Ming Chan
+Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+10/25/2017 Added chanwSwapNodes.
+10/23/2017 Format created.
+《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+《/pre》
+《/div》
+《/evaluate》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format provides macros to work with trees. When objects are passed into the
+macro named 《code》#chanwCreateNode《/code》 is invoked, the object will be used as
+the key, and the node created as the value, of an entry in the map named 《code》$chanwObjectNodeMap《/code》.
+If the object passed in is a map, which contains a 《code》name《/code》 entry, then the value
+of 《code》name《/code》 will be used as the key pointing to the node created. This facilitates quick access
+of nodes using String keys like 《code》$chanwObjectNodeMap[ "html" ]《/code》.《/p》
+《/documentation》
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
+《global-variables》
+doc*###
+
+#*doc
+《/global-variables》
+《documentation》
+《code》#《/code》
+《p》《/p》
+《/documentation》
+《macro id=“chanwAddChildren”》
+doc*###
+#macro( chanwAddChildren $node_chanwAddChildren $list_chanwAddChildren )
+    #foreach( $child in $list_chanwAddChildren )
+        #chanwCreateNode( $child )
+        #set( $chanwObjectNodeMap[ $child ] = $chanwCreateNode )
+        #set( $void = $node_chanwAddChildren.add( $chanwCreateNode ) )
+        #if( $child.Children )
+            #set( $chanwParent = $chanwCreateNode )
+            #chanwAddChildren( $chanwParent $child.Children )
+        #end
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwCreateNode( $obj )《/code》
+《p》Creates a node out of the supplied object. If the object is already a node, this macro
+does not do anything.《/p》
+《/documentation》
+《macro id=“chanwCreateNode”》
+doc*###
+#macro( chanwCreateNode $obj_chanwCreateNode )
+    #if( $obj_chanwCreateNode.Class.Name == $JAVAX_SWING_TREE_DEFAULT_MUTABLE_TREE_NODE_CLASS_NAME )
+        #set( $chanwCreateNode = $obj_chanwCreateNode )
+    #else
+        #if( !$chanwObjectNodeMap )
+            #set( $chanwObjectNodeMap = {} )
+        #end
+        #chanwGetConstructor( "javax.swing.tree.DefaultMutableTreeNode" [ $_.Class.forName( $JAVA_LANG_OBJECT_CLASS_NAME ) ] )
+        #set( $chanwCreateNode = $chanwGetConstructor.newInstance( $obj_chanwCreateNode ) )
+        #if( $obj_chanwCreateNode[ "name" ] )
+            #set( $chanwObjectNodeMap[ $obj_chanwCreateNode[ "name" ] ] = $chanwCreateNode )
+        #else
+            #set( $chanwObjectNodeMap[ $obj_chanwCreateNode ] = $chanwCreateNode )
+        #end
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwCreateTree( $rootNode )《/code》
+《p》Creates a tree out of the supplied object (which will be converted
+into a node first).《/p》
+《/documentation》
+《macro id=“chanwCreateTree”》
+doc*###
+#macro( chanwCreateTree $rootNode_chanwCreateTree )
+    #if( $rootNode_chanwCreateTree.Class.Name != $JAVAX_SWING_TREE_DEFAULT_MUTABLE_TREE_NODE_CLASS_NAME )
+        #chanwCreateNode( $rootNode_chanwCreateTree )
+        #set( $chanwRootNode = $chanwCreateNode )
+    #else
+        #set( $chanwRootNode = $rootNode_chanwCreateTree )
+    #end
+    #chanwGetConstructor( "javax.swing.tree.DefaultTreeModel" [ $_.Class.forName( $JAVAX_SWING_TREE_TREE_NODE_CLASS_NAME ) ] )
+    #set( $chanwCreateTree = $chanwGetConstructor.newInstance( $chanwRootNode ) )
+    #if( $rootNode_chanwCreateTree.Children )
+        #chanwAddChildren( $chanwRootNode $rootNode_chanwCreateTree.Children )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwDisplayTreeNodeRecursively( $node $stripRoot )《/code》
+《p》Displays a tree with a specific structure, like an XHTML tree. If 《code》$stripRoot《/code》,
+defaulted to 《code》false《/code》, is set to 《code》true《/code》, then the startString and
+endString will not be output.《/p》
+《/documentation》
+《macro id=“chanwCreateTree”》
+doc*###
+#macro( chanwDisplayTreeNodeRecursively $node_chanwDisplayTreeNodeRecursively $stripRoot_chanwDisplayTreeNodeRecursively )
+#if( !$chanwDisplayTreeNodeRecursivelyCounter )
+#set( $chanwDisplayTreeNodeRecursivelyCounter = 0 )
+#else
+#set( $chanwDisplayTreeNodeRecursivelyCounter = $chanwDisplayTreeNodeRecursivelyCounter + 1 )
+#end
+#if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ "startString" ] )
+$node_chanwDisplayTreeNodeRecursively.UserObject[ "startString" ]
+#end
+#if( $node_chanwDisplayTreeNodeRecursively.Leaf && $node_chanwDisplayTreeNodeRecursively.UserObject[ "code" ] )
+#evaluate( $node_chanwDisplayTreeNodeRecursively.UserObject[ "code" ] )
+#end
+#if( $node_chanwDisplayTreeNodeRecursively.children() )
+#foreach( $child in $node_chanwDisplayTreeNodeRecursively.children() )
+#chanwDisplayTreeNodeRecursively( $child )
+#end
+#end
+#if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ "endString" ] )
+$node_chanwDisplayTreeNodeRecursively.UserObject[ "endString" ]
+#end
+#set( $chanwDisplayTreeNodeRecursivelyCounter = $chanwDisplayTreeNodeRecursivelyCounter - 1 )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwSwapNodes( $node1 $node2 )《/code》
+《p》Swaps two nodes, both possibly the root nodes of subtrees.《/p》
+《/documentation》
+《macro id=“chanwTraverseTreeBreadthFirst”》
+doc*###
+#macro( chanwSwapNodes $node1_chanwSwapNodes $node2_chanwSwapNodes )
+    #set( $chanwParent1 = $node1_chanwSwapNodes.Parent )
+    #set( $chanwIndex1  = $chanwParent1.getIndex( $node1_chanwSwapNodes ) )
+    #set( $chanwParent2 = $node2_chanwSwapNodes.Parent )
+    #set( $chanwIndex2  = $chanwParent2.getIndex( $node2_chanwSwapNodes ) )
+    #set( $void = $chanwParent1.insert( $node2_chanwSwapNodes, $chanwIndex1 ) )
+    #set( $void = $chanwParent2.insert( $node1_chanwSwapNodes, $chanwIndex2 ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#《/code》
+《p》#chanwTraverseTreeBreadthFirst( $node $macroName $paramList )《/code》
+《p》Traverses the tree using breadth first traversal, and applies the named macro, possibly
+with a list of parameters, to every node visited.《/p》
+《/documentation》
+《macro id=“chanwTraverseTreeBreadthFirst”》
+doc*###
+#macro( chanwTraverseTreeBreadthFirst $node_chanwTraverseTreeBreadthFirst $macroName_chanwTraverseTreeBreadthFirst $paramList_chanwTraverseTreeBreadthFirst )
+#chanwEnqueueGlobalQueue( $chanwGlobalQueue $node_chanwTraverseTreeBreadthFirst )
+#foreach( $num in [ 1..5000 ] )
+#chanwDequeueGlobalQueue( $chanwGlobalQueue )
+#drulykgShallowMerge( { 'jeijlkjeleil' : $chanwDequeueGlobalQueue } $paramList_chanwTraverseTreeBreadthFirst )
+#drulykgInvokeMacro( $macroName_chanwTraverseTreeBreadthFirst $drulykgShallowMerge )
+#if( $chanwDequeueGlobalQueue.getChildCount() > 0 )
+#foreach( $child in $chanwDequeueGlobalQueue.children() )
+#chanwEnqueueGlobalQueue( $chanwGlobalQueue $child )
+#end
+#end
+#chanwSizeGlobalQueue( $chanwGlobalQueue )
+#if( $chanwSizeGlobalQueue == 0 )
+#break
+#end
+#end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwTraverseTreePreOrder( $node $macroName $paramList )《/code》
+《p》Traverses the tree using preorder traversal, and applies the named macro, possibly
+with a list of parameters, to every node visited.《/p》
+《/documentation》
+《macro id=“chanwTraverseTreePreOrder”》
+doc*###
+#macro( chanwTraverseTreePreOrder $node_chanwTraverseTreePreOrder $macroName_chanwTraverseTreePreOrder $paramList_chanwTraverseTreePreOrder )
+#drulykgShallowMerge( { 'jeijlkjeleil' : $node_chanwTraverseTreePreOrder } $paramList_chanwTraverseTreePreOrder )
+#drulykgInvokeMacro( $macroName_chanwTraverseTreePreOrder $drulykgShallowMerge )
+#foreach( $child in $node_chanwTraverseTreePreOrder.children() )
+#chanwTraverseTreePreOrder( $child $macroName_chanwTraverseTreePreOrder $paramList_chanwTraverseTreePreOrder )
+#end
+#end
+#*doc
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+doc*###
