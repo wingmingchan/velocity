@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+10/26/2017 Added test of ancestor to chanwSwapNodes.
 10/25/2017 Added chanwSwapNodes.
 10/23/2017 Format created.
 《/copyright》
@@ -140,6 +141,11 @@ $node_chanwDisplayTreeNodeRecursively.UserObject[ "endString" ]
 《macro id=“chanwTraverseTreeBreadthFirst”》
 doc*###
 #macro( chanwSwapNodes $node1_chanwSwapNodes $node2_chanwSwapNodes )
+    #if( $node1_chanwSwapNodes.isNodeAncestor( $node2_chanwSwapNodes ) ||
+         $node2_chanwSwapNodes.isNodeAncestor( $node1_chanwSwapNodes ) )
+        Can't swap the two nodes.
+        #break
+    #end
     #set( $chanwParent1 = $node1_chanwSwapNodes.Parent )
     #set( $chanwIndex1  = $chanwParent1.getIndex( $node1_chanwSwapNodes ) )
     #set( $chanwParent2 = $node2_chanwSwapNodes.Parent )
