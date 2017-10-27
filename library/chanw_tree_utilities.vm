@@ -5,6 +5,8 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+10/27/2017 Rewritten chanwTraverseTreeBreadthFirst and chanwTraverseTreePreorder,
+using Java Enumeration.
 10/26/2017 Added test of ancestor to chanwSwapNodes.
 10/25/2017 Added chanwSwapNodes.
 10/23/2017 Format created.
@@ -71,7 +73,7 @@ doc*###
         #end
         #chanwGetConstructor( "javax.swing.tree.DefaultMutableTreeNode" [ $_.Class.forName( $JAVA_LANG_OBJECT_CLASS_NAME ) ] )
         #set( $chanwCreateNode = $chanwGetConstructor.newInstance( $obj_chanwCreateNode ) )
-        #if( $obj_chanwCreateNode[ "name" ] )
+        #if( $obj_chanwCreateNode[ "name" ].Class.Name )
             #set( $chanwObjectNodeMap[ $obj_chanwCreateNode[ "name" ] ] = $chanwCreateNode )
         #else
             #set( $chanwObjectNodeMap[ $obj_chanwCreateNode ] = $chanwCreateNode )
@@ -164,37 +166,35 @@ with a list of parameters, to every node visited.《/p》
 《macro id=“chanwTraverseTreeBreadthFirst”》
 doc*###
 #macro( chanwTraverseTreeBreadthFirst $node_chanwTraverseTreeBreadthFirst $macroName_chanwTraverseTreeBreadthFirst $paramList_chanwTraverseTreeBreadthFirst )
-#chanwEnqueueGlobalQueue( $chanwGlobalQueue $node_chanwTraverseTreeBreadthFirst )
-#foreach( $num in [ 1..5000 ] )
-#chanwDequeueGlobalQueue( $chanwGlobalQueue )
-#drulykgShallowMerge( { 'jeijlkjeleil' : $chanwDequeueGlobalQueue } $paramList_chanwTraverseTreeBreadthFirst )
-#drulykgInvokeMacro( $macroName_chanwTraverseTreeBreadthFirst $drulykgShallowMerge )
-#if( $chanwDequeueGlobalQueue.getChildCount() > 0 )
-#foreach( $child in $chanwDequeueGlobalQueue.children() )
-#chanwEnqueueGlobalQueue( $chanwGlobalQueue $child )
-#end
-#end
-#chanwSizeGlobalQueue( $chanwGlobalQueue )
-#if( $chanwSizeGlobalQueue == 0 )
-#break
-#end
-#end
+    #set( $chanwBFEnumeration = $node_chanwTraverseTreeBreadthFirst.breadthFirstEnumeration() )
+    #set( $chanwParamList = [] )
+    #set( $dummy = $chanwParamList.add( "node" ) )
+    #if( $paramList_chanwTraverseTreeBreadthFirst.size() > 0 )
+        #set( $dummy = $chanwParamList.addAll( $paramList_chanwTraverseTreeBreadthFirst ) )
+    #end
+    #foreach( $node in $chanwBFEnumeration )
+        #chanwInvokeMacro( $macroName_chanwTraverseTreeBreadthFirst $chanwParamList )
+    #end
 #end
 #*doc
 《/macro》
 《documentation》
-《code》#chanwTraverseTreePreOrder( $node $macroName $paramList )《/code》
+《code》#chanwTraverseTreePreorder( $node $macroName $paramList )《/code》
 《p》Traverses the tree using preorder traversal, and applies the named macro, possibly
 with a list of parameters, to every node visited.《/p》
 《/documentation》
-《macro id=“chanwTraverseTreePreOrder”》
+《macro id=“chanwTraverseTreePreorder”》
 doc*###
-#macro( chanwTraverseTreePreOrder $node_chanwTraverseTreePreOrder $macroName_chanwTraverseTreePreOrder $paramList_chanwTraverseTreePreOrder )
-#drulykgShallowMerge( { 'jeijlkjeleil' : $node_chanwTraverseTreePreOrder } $paramList_chanwTraverseTreePreOrder )
-#drulykgInvokeMacro( $macroName_chanwTraverseTreePreOrder $drulykgShallowMerge )
-#foreach( $child in $node_chanwTraverseTreePreOrder.children() )
-#chanwTraverseTreePreOrder( $child $macroName_chanwTraverseTreePreOrder $paramList_chanwTraverseTreePreOrder )
-#end
+#macro( chanwTraverseTreePreorder $node_chanwTraverseTreePreorder $macroName_chanwTraverseTreePreorder $paramList_chanwTraverseTreePreorder )
+    #set( $chanwPEnumeration = $node_chanwTraverseTreePreorder.preorderEnumeration() )
+    #set( $chanwParamList = [] )
+    #set( $dummy = $chanwParamList.add( "node" ) )
+    #if( $paramList_chanwTraverseTreePreorder.size() > 0 )
+        #set( $dummy = $chanwParamList.addAll( $paramList_chanwTraverseTreePreorder ) )
+    #end
+    #foreach( $node in $chanwPEnumeration )
+        #chanwInvokeMacro( $macroName_chanwTraverseTreePreorder $chanwParamList )
+    #end
 #end
 #*doc
 《/macro》
