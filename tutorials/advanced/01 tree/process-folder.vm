@@ -1,0 +1,42 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+$chanwStartMeasurement
+#set( $folder = $_.locateFolder("formats", "_chan_core") )
+#chanwCreateNode( $folder )
+#set( $chanwObjectNodeMap[ $folder.Identifier.Id ] = $chanwCreateNode )
+
+#chanwEnqueueGlobalQueue( $chanwGlobalQueue $folder )
+#iterateFolder
+#set( $pEnum = $chanwObjectNodeMap[ $folder.Identifier.Id ].postorderEnumeration() )
+#foreach( $item in $pEnum )
+    $item.UserObject.Path
+#end
+$chanwEndMeasurement
+
+#macro( iterateFolder )
+    ## start a while loop
+    #foreach( $num in [ 1..5000 ] )
+        ## dequeue
+        #chanwDequeueGlobalQueue( $chanwGlobalQueue )
+        ## process the item
+        #chanwCreateNode( $chanwDequeueGlobalQueue )
+        #set( $chanwObjectNodeMap[ $chanwDequeueGlobalQueue.Identifier.Id ] = $chanwCreateNode )
+        ## if the parent exists; the root does not have a parent
+        #if( $chanwObjectNodeMap[ $chanwDequeueGlobalQueue.ParentFolderIdentifier.Id ] )
+            $chanwObjectNodeMap[ $chanwDequeueGlobalQueue.ParentFolderIdentifier.Id ].add( $chanwCreateNode )
+        #end
+##
+        ## if a folder, enqueue all children
+        #if( $chanwDequeueGlobalQueue.Identifier.Type == "folder" )
+            #foreach( $child in $chanwDequeueGlobalQueue.Children )
+                #chanwEnqueueGlobalQueue( $chanwGlobalQueue $child )
+            #end
+        #end
+##
+        ## get out if the queue is empty
+        #chanwSizeGlobalQueue( $chanwGlobalQueue )
+##
+        #if( $chanwSizeGlobalQueue == 0 )
+            #break
+        #end
+    #end
+#end
