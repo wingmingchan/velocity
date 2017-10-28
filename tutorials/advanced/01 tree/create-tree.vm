@@ -1,0 +1,8 @@
+## create a DefaultMutableTreeNode object
+#set( $root = $_.class.forName( "javax.swing.tree.DefaultMutableTreeNode" ).getConstructor(
+    $_.class.forName( "java.lang.Object" ) ).newInstance( 1 ) )
+$root.Class
+## create a DefaultTreeModel object
+#set( $tree = $_.class.forName( "javax.swing.tree.DefaultTreeModel" ).getConstructor(
+    $_.class.forName( "javax.swing.tree.TreeNode" ) ).newInstance( $root ) )
+$tree.Class
