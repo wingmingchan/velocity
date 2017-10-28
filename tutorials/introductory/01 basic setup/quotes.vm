@@ -1,0 +1,15 @@
+## single quotes within double quotes are OK
+#set( $str1 = "Pete's code" )
+$str1
+
+## double quotes within single quotes are OK
+#set( $str2 = 'What do you mean by "simple"?' )
+$str2
+
+## to escape single quotes within single quotes
+#set( $str3 = 'Pete''s code' )
+$str3
+
+## to escape double quotes within double quotes
+#set( $str4 = "What do you mean by ""simple""?" )
+$str4
