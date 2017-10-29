@@ -1,0 +1,23 @@
+#import( "formats/tutorial/advanced/2/system-page-tree" )
+
+#set( $newMap = {
+    $TREE_NODE_NAME      : "whatever",
+    $TREE_NODE_START_TAG : "<whatever>",
+    $TREE_NODE_END_TAG   : "</whatever>",
+    $TREE_NODE_CODE      : "Whatever"
+} )
+#chanwCreateNode( $newMap )
+
+## insert a new node
+#set( $void = $chanwObjectNodeMap[ "system-page" ].insert( $chanwCreateNode, 3 ) )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "system-page" ] )
+
+======================
+## remove the unwanted node
+#set( $void = $chanwObjectNodeMap[ "system-page" ].remove( $chanwObjectNodeMap[ "whatever" ] ) )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "system-page" ] )
+
+======================
+## swap link and last-modified
+#chanwSwapNodes( $chanwObjectNodeMap[ "link" ] $chanwObjectNodeMap[ "last-modified" ] )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "system-page" ] )
