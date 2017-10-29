@@ -1,0 +1,12 @@
+#import( "formats/tutorial/advanced/2/system-page-tree" )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "system-page" ] )
+
+====================
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "system-page" ] true )
+
+====================
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "last-modified-by" ] )
+
+====================
+#set( $user = "#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ ""last-modified-by"" ] true )" )
+$user
