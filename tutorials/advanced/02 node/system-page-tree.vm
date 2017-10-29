@@ -1,0 +1,30 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+##$chanwStartMeasurement
+
+#set( $nodeMap = {
+    $TREE_NODE_NAME      : "system-page",
+    $TREE_NODE_START_TAG : "<system-page id=""9a1416488b7f08ee5d439b31921d08b6"">",
+    $TREE_NODE_END_TAG   : "</system-page>"
+} )
+
+#chanwCreateNode( $nodeMap )
+#set( $root = $chanwCreateNode )
+#chanwAddChildren( $root [
+    { $TREE_NODE_NAME : "name", $TREE_NODE_START_TAG : "<name>", $TREE_NODE_END_TAG : "</name>", $TREE_NODE_CODE : "index" },
+    { $TREE_NODE_NAME : "is-published", $TREE_NODE_START_TAG : "<is-published>", $TREE_NODE_END_TAG : "</is-published>", $TREE_NODE_CODE : "true" },
+    { $TREE_NODE_NAME : "last-published-on", $TREE_NODE_START_TAG : "<last-published-on>", $TREE_NODE_END_TAG : "</last-published-on>", $TREE_NODE_CODE : "1508547695570" },
+    { $TREE_NODE_NAME : "last-published-by", $TREE_NODE_START_TAG : "<last-published-by>", $TREE_NODE_END_TAG : "</last-published-by>", $TREE_NODE_CODE : "chanw" },
+    { $TREE_NODE_NAME : "title", $TREE_NODE_START_TAG : "<title>", $TREE_NODE_END_TAG : "</title>", $TREE_NODE_CODE : "Formats" },
+    { $TREE_NODE_NAME : "display-name", $TREE_NODE_START_TAG : "<display-name>", $TREE_NODE_END_TAG : "</display-name>", $TREE_NODE_CODE : "Formats" },
+    { $TREE_NODE_NAME : "path", $TREE_NODE_START_TAG : "<path>", $TREE_NODE_END_TAG : "</path>", $TREE_NODE_CODE : "/index" },
+    { $TREE_NODE_NAME : "site", $TREE_NODE_START_TAG : "<site>", $TREE_NODE_END_TAG : "</site>", $TREE_NODE_CODE : "formats" },
+    { $TREE_NODE_NAME : "link", $TREE_NODE_START_TAG : "<link>", $TREE_NODE_END_TAG : "</link>", $TREE_NODE_CODE : "site://formats/index" },
+    { $TREE_NODE_NAME : "created-by", $TREE_NODE_START_TAG : "<created-by>", $TREE_NODE_END_TAG : "</created-by>", $TREE_NODE_CODE : "chanw" },
+    { $TREE_NODE_NAME : "created-on", $TREE_NODE_START_TAG : "<created-on>", $TREE_NODE_END_TAG : "</created-on>", $TREE_NODE_CODE : "1501528593981" },
+    { $TREE_NODE_NAME : "last-modified-by", $TREE_NODE_START_TAG : "<last-modified-by>", $TREE_NODE_END_TAG : "</last-modified-by>", $TREE_NODE_CODE : "chanw" },
+    { $TREE_NODE_NAME : "last-modified", $TREE_NODE_START_TAG : "<last-modified>", $TREE_NODE_END_TAG : "</last-modified>", $TREE_NODE_CODE : "1508336133389" }
+] )
+
+##chanwDisplayTreeNodeRecursively( $root )
+##Time taken: $chanwEndMeasurement
