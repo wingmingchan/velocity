@@ -1,0 +1,4 @@
+#chanwCreateNode( { $TREE_NODE_NAME : "header", $TREE_NODE_START_TAG : "<header>",  $TREE_NODE_END_TAG : "</header>" } )
+#chanwAddChildren( $chanwObjectNodeMap[ "header" ] [ 
+    { $TREE_NODE_NAME : "logo", $TREE_NODE_START_TAG : "<div>",  $TREE_NODE_END_TAG : "</div>", $TREE_NODE_CODE : "put the logo here" },
+    { $TREE_NODE_NAME : "site-title", $TREE_NODE_START_TAG : "<div>",  $TREE_NODE_END_TAG : "</div>", $TREE_NODE_CODE : "put the site title here" } ] )
