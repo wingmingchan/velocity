@@ -1,0 +1,2 @@
+#import( "formats/tutorial/advanced/4/app_constants" )
+#chanwImportScript( $APP_SCAFFOLDS_FOLDER_PATH "_chan_core" $DEFAULT_TREE_NAME )
