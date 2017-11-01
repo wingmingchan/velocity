@@ -1,0 +1,103 @@
+## create global data structures
+#set( $pageElementMap = {} )
+
+#macro( initialize )
+    ## deal with the tree
+    #insertHeaderNode
+    ## process DEFAULT
+    #processDEFAULT
+    
+    ## where should H1 go?
+    #if( $h1BeforeBreadcrumbs )
+        #set( $breadcrumbsIndex = $chanwObjectNodeMap[ "body" ].getIndex( $chanwObjectNodeMap[ "breadcrumbs" ] ) )
+        #chanwCreateNode( { $TREE_NODE_NAME : "h1", $TREE_NODE_CODE : "#outputH1" } )
+        #set( $void = $chanwObjectNodeMap[ "body" ].insert( $chanwObjectNodeMap[ "h1" ], $breadcrumbsIndex ) )
+    #end
+    ## create breadcrumbs
+    #createBreadcrumbs
+#end
+
+#macro( createBreadcrumbs )
+    #set( $pageElementMap[ "breadcrumbs" ] = "<div id=""breadcrumbs"">Home</div>" )
+#end
+
+#macro( createFooter )
+    #chanwInvokeMacro( "${design_namespace}CreateFooter" )
+
+    #macro( blueCreateFooter )
+        #set( $pageElementMap[ "footer" ] = "<footer>Footer for the blue design</footer>" )
+    #end
+    
+    #macro( redCreateFooter )
+        #set( $pageElementMap[ "footer" ] = "<footer>Footer for the red design</footer>" )
+    #end
+    
+    #macro( whiteCreateFooter )
+        #blueCreateFooter
+    #end
+#end
+
+#macro( createH1 )
+    #set( $pageElementMap[ "h1" ] = "<h1>Put the H1 here.</h1>" )
+#end
+
+#macro( createPageContents )
+    #set( $pageElementMap[ "pageContents" ] = "<p>Some text from the WYSIWYG.</p>" )
+#end
+
+#macro( insertHeaderNode )
+    #set( $void = $chanwObjectNodeMap[ "body" ].insert( $chanwObjectNodeMap[ "header" ], 0 ) )
+#end
+
+#macro( outputBreadcrumbs )
+$pageElementMap[ "breadcrumbs" ]
+#end
+
+#macro( outputFooter )
+    #if( $_PropertyTool.isNull( $pageElementMap[ "footer" ] ) )
+        #createFooter
+    #end
+    $pageElementMap[ "footer" ]
+#end
+
+#macro( outputH1 )
+    #if( $pageElementMap[ "h1" ].Class )
+$pageElementMap[ "h1" ]
+    #end
+#end
+
+#macro( outputMain )
+    #if( !$h1BeforeBreadcrumbs )
+$pageElementMap[ "h1" ]
+    #end
+    #outputPageContents
+#end
+
+#macro( outputLink )
+    <link href="/assets/plug-ins/bootstrap/3.3.6/css/bootstrap.css" media="all" rel="stylesheet" type="text/css"/>
+#end
+
+#macro( outputMeta )
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+#end
+
+#macro( outputPageContents )
+$pageElementMap[ "pageContents" ]
+#end
+
+#macro( outputScript )
+    <script src="/assets/plug-ins/jquery/1.12.4/jquery.js" type="text/javascript"></script>
+#end
+
+#macro( outputSiteNav )
+    <nav>Put the site nav here</nav>
+#end
+
+#macro( outputTitle )
+    <title>My Wonderful Page</title>
+#end
+
+#macro( processDEFAULT )
+    #createH1
+    #createPageContents
+#end
