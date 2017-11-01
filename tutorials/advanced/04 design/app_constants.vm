@@ -1,0 +1,16 @@
+#set( $APP_FOLDER_PATH                = "formats/tutorial/advanced/4/" )
+#set( $APP_COMPONENTS_FOLDER_NAME     = "components" )
+#set( $APP_COMPONENTS_FOLDER_PATH     = "${APP_FOLDER_PATH}${APP_COMPONENTS_FOLDER_NAME}" )
+#set( $APP_COMPONENTS_FOLDER_PATH_WS  = "${APP_COMPONENTS_FOLDER_PATH}/" )
+#set( $APP_SCAFFOLDS_FOLDER_NAME      = "scaffolds" )
+#set( $APP_SCAFFOLDS_FOLDER_PATH      = "${APP_FOLDER_PATH}${APP_SCAFFOLDS_FOLDER_NAME}" )
+#set( $APP_SCAFFOLDS_FOLDER_PATH_WS   = "${APP_SCAFFOLDS_FOLDER_PATH}/" )
+#set( $APP_SITE_DESIGN_FOLDER_NAME    = "site_designs" )
+#set( $APP_SITE_DESIGN_FOLDER_PATH    = "${APP_FOLDER_PATH}${APP_SITE_DESIGN_FOLDER_NAME}" )
+#set( $APP_SITE_DESIGN_FOLDER_PATH_WS = "${APP_SITE_DESIGN_FOLDER_PATH}/" )
+
+#set( $DESIGN_ENTRY_FORMAT_NAME       = "design-entry" )
+
+#set( $DEFAULT_TREE_NAME              = "default-tree" )
+#set( $HEADER_TREE_NAME               = "header-tree" )
+#set( $CUSTOMIZED_DESIGN_TREE_NAME    = "customized-tree" )
