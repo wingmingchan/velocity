@@ -18,7 +18,21 @@
 #end
 
 #macro( createBreadcrumbs )
-    #set( $pageElementMap[ "breadcrumbs" ] = "<div id=""breadcrumbs"">Home</div>" )
+    #if( !$siteConfigMap[ 'pagesWithoutBreadcrumbs' ].contains( $currentPagePath ) )
+        #chanwInvokeMacro( "${design_namespace}CreateBreadcrumbs" )
+    #end
+
+    #macro( blueCreateBreadcrumbs )
+        #set( $pageElementMap[ "breadcrumbs" ] = "<div id=""breadcrumbs"">Blue Home</div>" )
+    #end
+    
+    #macro( redCreateBreadcrumbs )
+        #set( $pageElementMap[ "breadcrumbs" ] = "<div id=""breadcrumbs"">Red Home</div>" )
+    #end
+    
+    #macro( whiteCreateBreadcrumbs )
+        #set( $pageElementMap[ "breadcrumbs" ] = "<div id=""breadcrumbs"">White Home</div>" )
+    #end
 #end
 
 #macro( createFooter )
@@ -50,7 +64,9 @@
 #end
 
 #macro( outputBreadcrumbs )
+    #if( !$_PropertyTool.isNull( $pageElementMap[ "breadcrumbs" ] ) )
 $pageElementMap[ "breadcrumbs" ]
+    #end
 #end
 
 #macro( outputFooter )
