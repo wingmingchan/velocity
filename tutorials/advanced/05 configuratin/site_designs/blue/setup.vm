@@ -1,0 +1,12 @@
+#set( $siteConfigMap = {} )
+
+#set( $siteConfigMap[ 'htmlAttributes' ]    = "xmlns=""http://www.w3.org/1999/xhtml""" )
+#set( $siteConfigMap[ 'headAttributes' ]    = "" )
+#set( $siteConfigMap[ 'bodyAttributes' ]    = "data-offset=""100"" data-spy=""scroll"" data-target="".navbar-collapse""" )
+
+#set( $siteConfigMap[ 'siteTitleString' ]   = "" )
+#set( $siteConfigMap[ 'siteContactPerson' ] = "" )
+#set( $siteConfigMap[ 'siteContactEmail' ]  = "" )
+
+#set( $siteConfigMap[ 'pagesWithoutBreadcrumbs' ] = [] )
+#set( $siteConfigMap[ 'pagesWithoutFolderNav' ]   = [] )
