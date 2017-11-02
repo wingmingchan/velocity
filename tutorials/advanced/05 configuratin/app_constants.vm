@@ -1,4 +1,4 @@
-#set( $APP_FOLDER_PATH                = "formats/tutorial/advanced/4/" )
+#set( $APP_FOLDER_PATH                = "formats/tutorial/advanced/5/" )
 #set( $APP_COMPONENTS_FOLDER_NAME     = "components" )
 #set( $APP_COMPONENTS_FOLDER_PATH     = "${APP_FOLDER_PATH}${APP_COMPONENTS_FOLDER_NAME}" )
 #set( $APP_COMPONENTS_FOLDER_PATH_WS  = "${APP_COMPONENTS_FOLDER_PATH}/" )
@@ -8,6 +8,7 @@
 #set( $APP_SITE_DESIGN_FOLDER_NAME    = "site_designs" )
 #set( $APP_SITE_DESIGN_FOLDER_PATH    = "${APP_FOLDER_PATH}${APP_SITE_DESIGN_FOLDER_NAME}" )
 #set( $APP_SITE_DESIGN_FOLDER_PATH_WS = "${APP_SITE_DESIGN_FOLDER_PATH}/" )
+#set( $APP_SITE_SETUP_FORMAT_NAME     = "setup" )
 
 #set( $DESIGN_ENTRY_FORMAT_NAME       = "design-entry" )
 

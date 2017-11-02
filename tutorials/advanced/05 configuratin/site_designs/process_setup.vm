@@ -1,0 +1,5 @@
+#set( $siteSetup = $_.locate( "formats/tutorial/advanced/5/mySite/site_setup",
+    $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_FORMAT, "_chan_core" ) )
+#if( !$_PropertyTool.isNull( $siteSetup ) )
+    #evaluate( $siteSetup.Script )
+#end
