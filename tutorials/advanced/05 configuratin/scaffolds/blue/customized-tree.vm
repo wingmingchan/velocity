@@ -1,7 +1,7 @@
-#chanwCreateNode( { $TREE_NODE_NAME : "html", $TREE_NODE_START_TAG : "<html>", $TREE_NODE_END_TAG : "</html>" } )
+#chanwCreateNode( { $TREE_NODE_NAME : "html", $TREE_NODE_START_TAG : "<html $!{siteConfigMap[ 'htmlAttributes' ]}>", $TREE_NODE_END_TAG : "</html>" } )
 #chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ 
-    { $TREE_NODE_NAME : "head", $TREE_NODE_START_TAG : "<head>",  $TREE_NODE_END_TAG : "</head>" },
-    { $TREE_NODE_NAME : "body", $TREE_NODE_START_TAG : "<body>",  $TREE_NODE_END_TAG : "</body>" } ] )
+    { $TREE_NODE_NAME : "head", $TREE_NODE_START_TAG : "<head $!{siteConfigMap[ 'headAttributes' ]}>",  $TREE_NODE_END_TAG : "</head>" },
+    { $TREE_NODE_NAME : "body", $TREE_NODE_START_TAG : "<body $!{siteConfigMap[ 'bodyAttributes' ]}>",  $TREE_NODE_END_TAG : "</body>" } ] )
 #chanwAddChildren( $chanwObjectNodeMap[ "head" ] [
     { $TREE_NODE_NAME : "meta", $TREE_NODE_CODE : "#outputMeta" }, 
     { $TREE_NODE_NAME : "link", $TREE_NODE_CODE : "#outputLink" },
