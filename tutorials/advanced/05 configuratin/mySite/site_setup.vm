@@ -1,0 +1,10 @@
+#set( $siteConfigMap[ 'siteLocalCSS' ]       = "site://formats/_extra/local.css" )
+#set( $siteConfigMap[ 'siteTitleString' ]    = "Formats" )
+#set( $siteConfigMap[ 'siteContactPerson' ]  = "Wing Ming Chan" )
+#set( $siteConfigMap[ 'siteContactEmail' ]   = "chanw" )
+#set( $siteConfigMap[ 'pagesWithoutBreadcrumbs' ] = [ "index" ] )
+
+#define( $importLocallyDefinedTree )
+#import( "formats/tutorial/advanced/5/scaffolds/blue/customized-tree" )
+#chanwSwapNodes( $chanwObjectNodeMap[ "footer" ] $chanwObjectNodeMap[ "contact" ] )
+#end
