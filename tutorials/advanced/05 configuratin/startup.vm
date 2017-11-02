@@ -1,6 +1,8 @@
 #import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
-#import( "formats/tutorial/advanced/4/app_constants" )
+#import( "formats/tutorial/advanced/5/app_constants" )
 
 #set( $design_namespace = "blue" )
+## to fake it
+##set( $currentPagePath = "index" )
 
 #import( "${APP_SITE_DESIGN_FOLDER_PATH_WS}${design_namespace}/${DESIGN_ENTRY_FORMAT_NAME}" )
