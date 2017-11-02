@@ -1,0 +1,6 @@
+#import( "formats/tutorial/advanced/4/app_constants" )
+#chanwImportScript( $APP_SCAFFOLDS_FOLDER_PATH "_chan_core" $DEFAULT_TREE_NAME )
+
+#set( $scriptIndex = $chanwObjectNodeMap[ "body" ].getIndex( $chanwObjectNodeMap[ "script" ] ) )
+#chanwCreateNode( { $TREE_NODE_NAME : "contact", $TREE_NODE_START_TAG : "<div id=""contact"">", $TREE_NODE_END_TAG : "</div>", $TREE_NODE_CODE : "" } )
+#set( $void = $chanwObjectNodeMap[ "body" ].insert( $chanwCreateNode, $scriptIndex ) )
