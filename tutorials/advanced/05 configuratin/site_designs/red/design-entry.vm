@@ -1,4 +1,5 @@
-#import( "formats/tutorial/advanced/4/app_constants" )
+#import( "formats/tutorial/advanced/5/app_constants" )
+#chanwImportScript( "${APP_SITE_DESIGN_FOLDER_PATH_WS}${design_namespace}" "_chan_core" $APP_SITE_SETUP_FORMAT_NAME )
 #chanwImportScript( "${APP_SCAFFOLDS_FOLDER_PATH_WS}${design_namespace}" "_chan_core" $CUSTOMIZED_DESIGN_TREE_NAME )
 #chanwImportScript( "${APP_SCAFFOLDS_FOLDER_PATH_WS}${design_namespace}" "_chan_core" $HEADER_TREE_NAME )
 #import( "${APP_COMPONENTS_FOLDER_PATH_WS}page-element-macros" )
