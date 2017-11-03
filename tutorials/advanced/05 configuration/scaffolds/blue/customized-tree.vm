@@ -1,4 +1,4 @@
-#chanwCreateNode( { $TREE_NODE_NAME : "html", $TREE_NODE_START_TAG : "<html $!{siteConfigMap[ 'htmlAttributes' ]}>", $TREE_NODE_END_TAG : "</html>" } )
+#chanwCreateNode( { $TREE_NODE_NAME : "html", $TREE_NODE_START_TAG : "<html $!{siteConfigMap[ 'htmlAttributes' ]}>", $TREE_NODE_END_TAG : "</html>", $TREE_NODE_CODE : "#initialize" } )
 #chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ 
     { $TREE_NODE_NAME : "head", $TREE_NODE_START_TAG : "<head $!{siteConfigMap[ 'headAttributes' ]}>",  $TREE_NODE_END_TAG : "</head>" },
     { $TREE_NODE_NAME : "body", $TREE_NODE_START_TAG : "<body $!{siteConfigMap[ 'bodyAttributes' ]}>",  $TREE_NODE_END_TAG : "</body>" } ] )
@@ -13,4 +13,3 @@
     { $TREE_NODE_NAME : "footer", $TREE_NODE_CODE : "#outputFooter" },
     { $TREE_NODE_NAME : "contact", $TREE_NODE_START_TAG : "<div id=""contact"">", $TREE_NODE_END_TAG : "</div>", $TREE_NODE_CODE : "" },
     { $TREE_NODE_NAME : "script", $TREE_NODE_CODE : "#outputScript" } ] )
-#set( $chanwObjectNodeMap[ "html" ].UserObject[ $TREE_NODE_CODE ] = "#initialize" )
