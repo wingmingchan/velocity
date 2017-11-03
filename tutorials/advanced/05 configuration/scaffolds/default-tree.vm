@@ -1,6 +1,6 @@
 #import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
 
-#chanwCreateNode( { $TREE_NODE_NAME : "html", $TREE_NODE_START_TAG : "<html>", $TREE_NODE_END_TAG : "</html>" } )
+#chanwCreateNode( { $TREE_NODE_NAME : "html", $TREE_NODE_START_TAG : "<html $!{siteConfigMap[ 'htmlAttributes' ]}>", $TREE_NODE_END_TAG : "</html>", $TREE_NODE_CODE : "#initialize" } )
 #chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ 
     { $TREE_NODE_NAME : "head", $TREE_NODE_START_TAG : "<head>",  $TREE_NODE_END_TAG : "</head>" },
     { $TREE_NODE_NAME : "body", $TREE_NODE_START_TAG : "<body>",  $TREE_NODE_END_TAG : "</body>" } ] )
@@ -14,4 +14,3 @@
     { $TREE_NODE_NAME : "main", $TREE_NODE_START_TAG : "<main>", $TREE_NODE_END_TAG : "</main>", $TREE_NODE_CODE : "#outputMain" },
     { $TREE_NODE_NAME : "footer", $TREE_NODE_CODE : "#outputFooter" },
     { $TREE_NODE_NAME : "script", $TREE_NODE_CODE : "#outputScript" } ] )
-#set( $chanwObjectNodeMap[ "html" ].UserObject[ $TREE_NODE_CODE ] = "#initialize" )
