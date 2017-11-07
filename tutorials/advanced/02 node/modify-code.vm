@@ -1,9 +1,10 @@
 #import( "formats/tutorial/advanced/2/system-page-tree" )
 
-#set( $chanwObjectNodeMap[ "last-modified-by" ].UserObject[ "code" ] = "doej" )
+#set( $chanwObjectNodeMap[ "last-modified-by" ].UserObject[ $TREE_NODE_TEXT ] = "doej" )
 #chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "system-page" ] )
 
 ====================
-#set( $chanwObjectNodeMap[ "last-modified-by" ].UserObject[ "code" ] = "#createLastModifiedBy" )
+#set( $chanwObjectNodeMap[ "last-modified-by" ].UserObject[ $TREE_NODE_TEXT ] = "" )
+#set( $chanwObjectNodeMap[ "last-modified-by" ].UserObject[ $TREE_NODE_CODE ] = "#createLastModifiedBy" )
 #macro( createLastModifiedBy )thomaspe#end
 #chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "system-page" ] )
