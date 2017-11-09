@@ -1,15 +1,20 @@
-#chanwCreateNode( { $TREE_NODE_NAME : "html", $TREE_NODE_START_TAG : "<html $!{siteConfigMap[ 'htmlAttributes' ]}>", $TREE_NODE_END_TAG : "</html>", $TREE_NODE_CODE : "#initialize" } )
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#chanwCreateNode( { $TREE_NODE_NAME : "html", $TREE_NODE_START_TAG : "<html $!{siteConfigMap[ 'htmlAttributes' ]}>", $TREE_NODE_END_TAG : "</html>", $TREE_NODE_CODE : '#initialize' } )
 #chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ 
-    { $TREE_NODE_NAME : "head", $TREE_NODE_START_TAG : "<head $!{siteConfigMap[ 'headAttributes' ]}>",  $TREE_NODE_END_TAG : "</head>" },
-    { $TREE_NODE_NAME : "body", $TREE_NODE_START_TAG : "<body $!{siteConfigMap[ 'bodyAttributes' ]}>",  $TREE_NODE_END_TAG : "</body>" } ] )
+    { $TREE_NODE_NAME : "head", $TREE_NODE_START_TAG : "<head>",  $TREE_NODE_END_TAG : "</head>" },
+    { $TREE_NODE_NAME : "body", $TREE_NODE_START_TAG : "<body>",  $TREE_NODE_END_TAG : "</body>" } ] )
 #chanwAddChildren( $chanwObjectNodeMap[ "head" ] [
-    { $TREE_NODE_NAME : "meta", $TREE_NODE_CODE : "#outputMeta" }, 
-    { $TREE_NODE_NAME : "link", $TREE_NODE_CODE : "#outputLink" },
-    { $TREE_NODE_NAME : "title", $TREE_NODE_CODE : "#outputTitle" } ] )
+    { $TREE_NODE_NAME : "meta", $TREE_NODE_CODE :  '#outputMeta' }, 
+    { $TREE_NODE_NAME : "title", $TREE_NODE_CODE : '#outputTitle' }, 
+    { $TREE_NODE_NAME : "link", $TREE_NODE_CODE :  '#outputLink' } ] )
 #chanwAddChildren( $chanwObjectNodeMap[ "body" ] [
-    { $TREE_NODE_NAME : "siteNav", $TREE_NODE_CODE : "#outputSiteNav" },
-    { $TREE_NODE_NAME : "breadcrumbs", $TREE_NODE_CODE : "#outputBreadcrumbs" },
-    { $TREE_NODE_NAME : "main", $TREE_NODE_START_TAG : "<main>", $TREE_NODE_END_TAG : "</main>", $TREE_NODE_CODE : "#outputMain" },
-    { $TREE_NODE_NAME : "footer", $TREE_NODE_CODE : "#outputFooter" },
-    { $TREE_NODE_NAME : "contact", $TREE_NODE_START_TAG : "<div id=""contact"">", $TREE_NODE_END_TAG : "</div>", $TREE_NODE_CODE : "" },
-    { $TREE_NODE_NAME : "script", $TREE_NODE_CODE : "#outputScript" } ] )
+    { $TREE_NODE_NAME : "siteNav", $TREE_NODE_CODE : '#outputSiteNav' },
+    { $TREE_NODE_NAME : "h1", $TREE_NODE_CODE : "#outputH1" },
+    { $TREE_NODE_NAME : "breadcrumbs", $TREE_NODE_CODE : '#outputBreadcrumbs' },
+    { $TREE_NODE_NAME : "main", $TREE_NODE_START_TAG : "<main>", $TREE_NODE_END_TAG : "</main>" },
+    { $TREE_NODE_NAME : "footer", $TREE_NODE_CODE :      '#outputFooter' },
+    { $TREE_NODE_NAME : "script", $TREE_NODE_CODE :      '#outputScript' } ] )
+#chanwAddChildren( $chanwObjectNodeMap[ "main" ] [
+    { $TREE_NODE_NAME : "pageContent", $TREE_NODE_CODE : '#outputPageContents' }
+] )
