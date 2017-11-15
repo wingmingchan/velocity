@@ -1,0 +1,25 @@
+#chanwCreateNode( { 
+    $TREE_NODE_NAME : "html", 
+    $TREE_NODE_START_TAG : "<html $!siteConfigMap['htmlAttributes']>", 
+    $TREE_NODE_END_TAG : "</html>" } )
+#chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ 
+    { $TREE_NODE_NAME : "head", $TREE_NODE_START_TAG : "<head $!siteConfigMap['headAttributes']>",  $TREE_NODE_END_TAG : "</head>" },
+    { $TREE_NODE_NAME : "body", $TREE_NODE_START_TAG : "<body $!siteConfigMap['bodyAttributes']><section id=""mainContent"">",  $TREE_NODE_END_TAG : "</section></body>" } ] )
+#chanwAddChildren( $chanwObjectNodeMap[ "head" ] [
+    { $TREE_NODE_NAME : "meta",  $TREE_NODE_CODE :  '#outputPageElement(''meta'')' }, 
+    { $TREE_NODE_NAME : "title", $TREE_NODE_CODE :  '#outputPageElement(''title'')' }, 
+    { $TREE_NODE_NAME : "link",  $TREE_NODE_CODE :  '#outputPageElement(''link'')' } ] )
+
+#chanwAddChildren( $chanwObjectNodeMap[ "body" ] [
+    { $TREE_NODE_NAME : "googleTagManager", $TREE_NODE_CODE : '#outputPageElement(''googleTagManager'')' },
+    { $TREE_NODE_NAME : "navBar",           $TREE_NODE_CODE : '#outputPageElement(''navBar'')' },
+    { $TREE_NODE_NAME : "blueButton",       $TREE_NODE_CODE : '#outputPageElement(''blueButton'')' },
+    { $TREE_NODE_NAME : "breadcrumbs",      $TREE_NODE_CODE : '#outputPageElement(''breadcrumbs'')' },
+    { $TREE_NODE_NAME : "contact",          $TREE_NODE_CODE : '#outputPageElement(''contact'')' },
+    { $TREE_NODE_NAME : "footer",           $TREE_NODE_CODE : '#outputPageElement(''footer'')' },
+    { $TREE_NODE_NAME : "script",           $TREE_NODE_CODE : '#outputPageElement(''script'')' }
+] )
+
+#import( "site://_brisk/app/site_designs/hh/hh-left-center-main-tree" )
+#set( $contactIndex = $chanwObjectNodeMap[ "body" ].getIndex( $chanwObjectNodeMap[ "contact" ] ) )
+#set( $void = $chanwObjectNodeMap[ "body" ].insert( $chanwObjectNodeMap[ "main" ], $contactIndex ) ) ## always before contact
