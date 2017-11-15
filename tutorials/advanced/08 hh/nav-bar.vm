@@ -1,0 +1,84 @@
+<div class="navbar yamm navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <a class="btn btn-light btn-demo video" href="https://my.spectate.com/cascade-installedcloud-inquiry-form-hannon-hill-cascade-form"><i aria-hidden="true" class="fa fa-television" style="color:goldenrod;"></i> Request a Demo</a>
+     </div>
+    <div class="container nav-container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button">
+                <span class="sr-only">Navigation</span>
+                <span class="icon-bar"> </span>
+                <span class="icon-bar"> </span>
+                <span class="icon-bar"> </span>
+            </button>
+            <a class="navbar-brand" href="https://www.hannonhill.com/index.html">
+                <img alt="Hannon Hill Logo" class="logoFix" src="https://www.hannonhill.com/_assets/images/logo-no-shadow.png"/>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse col-sm-8">
+            <ul class="nav navbar-nav navbar-right">
+                                                    <li>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" name="Products">Products<b class="caret"> </b></a>
+        <ul class="dropdown-menu">
+                                            <li><a href="https://www.hannonhill.com/products/cascade-cms/index.html">Cascade CMS</a></li>
+                                            <li><a href="https://www.hannonhill.com/products/spectate/index.html">Spectate</a></li>
+                </ul>
+    </li>
+                                                                    <li>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" name="Support">Support<b class="caret"> </b></a>
+        <ul class="dropdown-menu">
+                                            <li><a href="index.html">Technical Support</a></li>
+                                            <li><a href="../professional-services/index.html">Professional Services</a></li>
+                                            <li><a href="../training/cascade-training/index.html">Training</a></li>
+                </ul>
+    </li>
+                                                                    <li>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" name="Our Customers">Our Customers<b class="caret"> </b></a>
+        <ul class="dropdown-menu">
+                                            <li><a href="https://www.hannonhill.com/our-customers/testimonials.html">Testimonials</a></li>
+                                            <li><a href="https://www.hannonhill.com/our-customers/case-studies/index.html">Case Studies</a></li>
+                                            <li><a href="https://www.hannonhill.com/our-customers/real-world-examples/index.html">Real World Examples</a></li>
+                                            <li><a href="https://www.hannonhill.com/our-customers/studio.html">Design Studio</a></li>
+                                            <li><a href="https://www.hannonhill.com/our-customers/customers-by-industry/index.html">Customers by Industry</a></li>
+                </ul>
+    </li>
+                                                                    <li>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" name="Resources">Resources<b class="caret"> </b></a>
+        <ul class="dropdown-menu">
+                                            <li><a href="https://www.hannonhill.com/resources/blog/index.html">Blog</a></li>
+                                            <li><a href="https://www.hannonhill.com/resources/white-papers/index.html">White Papers</a></li>
+                                            <li><a href="https://www.hannonhill.com/resources/news-and-events/index.html">News &amp; Events</a></li>
+                                            <li><a href="http://www.hannonhill.com/resources/exchange/index.html">Cascade Exchange</a></li>
+                </ul>
+    </li>
+                                                                    <li>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" name="About Us">About Us<b class="caret"> </b></a>
+        <ul class="dropdown-menu">
+                                            <li><a href="https://www.hannonhill.com/about-us/about-hannon-hill.html">About Hannon Hill</a></li>
+                                            <li><a href="https://www.hannonhill.com/about-us/meet-the-team/index.html">Meet the Leadership Team</a></li>
+                                            <li><a href="https://www.hannonhill.com/about-us/founders-statement.html">Founder's Statement</a></li>
+                                            <li><a href="https://www.hannonhill.com/about-us/partners/index.html">Our Partners</a></li>
+                                            <li><a href="https://www.hannonhill.com/about-us/join-our-team/index.html">Join Our Team</a></li>
+                </ul>
+    </li>
+                                                                    <li><a href="https://www.hannonhill.com/community/index.html">Community</a></li>
+                                                  <li>
+            <a class="dropdown-toggle icon-alone" data-toggle="dropdown" href="#"><i class="fa fa-search" aria-hidden="true"></i><span class="screen-reader-text">Search Dropdown</span></a>
+            <ul class="dropdown-menu search-min-form">
+              <li>
+                <form action="../../search/index.html" class="navbar-form search" id="quick-search search-form" name="search" role="search">
+                  <div class="">
+                  <div class="input-group">
+                    <input accesskey="4" class="form-control" id="search-text-box" name="q" placeholder="search" title="Search" type="text"/>
+                    <span class="input-group-btn">
+                      <button class="btn btn-primary nogoli main-color pull-right" form="quick-search search-form" title="Submit" type="submit">Go!</button>
+                    </span>
+                  </div>
+                </div>  
+              </form>
+            </li>    
+          </ul>
+        </li>
+            </ul>
+        </div>
+    </div>
+</div>
