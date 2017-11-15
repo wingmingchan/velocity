@@ -1,0 +1,16 @@
+#chanwCreateNode( {
+    $TREE_NODE_NAME : "main",
+    $TREE_NODE_START_TAG : "<section id=""mainContent""><div class=""container"">",
+    $TREE_NODE_END_TAG : "</div></section>"
+} )
+
+#chanwAddChildren( $chanwObjectNodeMap[ "main" ] [
+    { $TREE_NODE_NAME : "h1",       $TREE_NODE_CODE : '#outputPageElement(''h1'')' },
+    { $TREE_NODE_NAME : "prePage",  $TREE_NODE_CODE : '#outputPageElement(''prePage'')' },
+    { $TREE_NODE_NAME : "page",     $TREE_NODE_START_TAG : '<div class="row">',
+                                    $TREE_NODE_END_TAG : '</div>', $TREE_NODE_CODE : '#resolveClassName' }
+] )
+
+#chanwAddChildren( $chanwObjectNodeMap[ "page" ] [
+    { $TREE_NODE_NAME : "middleElement", $TREE_NODE_CODE : '#setPageElement(''bottomContent'')#outputPageElement(''middleElement'')' }
+] )
