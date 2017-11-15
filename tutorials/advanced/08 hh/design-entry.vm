@@ -1,0 +1,41 @@
+#setHhConstants
+## get page contents
+#set( $pageElementMap = {} )
+##
+#set( $page = $_XPathTool.selectNodes( $contentRoot, "calling-page/system-page" )[ 0 ] )
+#set( $pageSystemDataStructure = $_XPathTool.selectNodes( $page, "system-data-structure" )[ 0 ] )
+##
+## the design setup
+#chanwImportScript( "${_brisk[ $BRISK_SITE_DESIGNS_FOLDER_PATH_NTS ]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] $APP_SETUP_FORMAT_NAME )
+#processSiteSetup
+## the site setup
+#chanwImportScript( "/" $currentPageSiteName $APP_SETUP_FORMAT_NAME )
+## the folder setup
+#set( $folderSetupFormatExists = false )
+#chanwLocateAssetInAncestorFolder(
+    $currentPage.ParentFolder.Path $currentPageSiteName "format" $FOLDER_SETUP_FORMAT_NAME )
+##
+#if( $chanwLocateAssetInAncestorFolder != "" && $chanwLocateAssetInAncestorFolder.ParentFolder.Path != "/" )
+    #set( $folderSetupFormatExists = true )
+    #chanwImportScript( "${chanwLocateAssetInAncestorFolder.ParentFolder.Path}" $currentPageSiteName $APP_SETUP_FORMAT_NAME )
+#end
+## the page setup: in hh_macros
+##
+
+
+## app custom macros
+#chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "hh_macros" )
+##
+#set( $tree_name = "left-center" )
+#chanwImportScript( $HH_TREE_FOLDER_PATH $_brisk[ $BRISK_SITE_NAME ] "design-tree" )
+#resolvePageTreeName
+##<h1>$tree_name</h1>
+
+#if( $tree_name != "inherited" )
+    #set( $mainIndex = $chanwObjectNodeMap[ "body" ].getIndex( $chanwObjectNodeMap[ "main" ] ) )
+    #set( $void = $chanwObjectNodeMap[ "body" ].remove( $chanwObjectNodeMap[ "main" ] ) )
+    #chanwImportScript( $HH_TREE_FOLDER_PATH $_brisk[ $BRISK_SITE_NAME ] "hh-${tree_name}-main-tree" )
+    #set( $void = $chanwObjectNodeMap[ "body" ].insert( $chanwObjectNodeMap[ "main" ], $mainIndex ) )
+#end
+
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "html" ] )
