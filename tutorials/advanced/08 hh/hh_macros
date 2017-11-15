@@ -1,0 +1,233 @@
+#macro( resolveClassName )
+	#if( $tree_name == "center" )
+	    #set( $middleCssClass = $siteConfigMap[ 'middleCenterWithNoTopLeftNoBottomRightCssClass' ] )
+	#elseif( $tree_name == "left-center" )
+		#set( $topCssClass    = $siteConfigMap[ 'topLeftCssClass' ] )
+		#set( $middleCssClass = $siteConfigMap[ 'middleCenterWithNoBottomRightCssClass' ] )
+	#elseif( $tree_name == "center-right" )
+	    #set( $middleCssClass = $siteConfigMap[ 'middleCenterWithNoTopLeftCssClass' ] )
+		#set( $bottomCssClass = $siteConfigMap[ 'bottomRightCssClass' ] )
+	#else
+		#set( $topCssClass    = "col-md-4" )
+	    #set( $middleCssClass = "col-md-4" )
+		#set( $bottomCssClass = "col-md-4" )
+	#end
+#end
+
+#macro( resolvePageTreeName )
+    ## this macro is called after upstateProcessSetupBlock, and $tree_name is already defined there
+    ## $page_tree_name is always defined on the page
+    #set( $page_tree_name = $currentPage.Metadata.getDynamicField( "tree-picker" ).Value )
+    #if( $page_tree_name != "inherited" )
+        #set( $tree_name = $page_tree_name )
+    #end
+    #resolveRowColumnCssClass
+#end
+
+#macro( generateBottomContent )
+    #upstateProcessBlockChooser( $pageSystemDataStructure "bottom-group/mul-bottom-group-chooser" )
+#end
+
+#macro( generateBottomElement )
+    #chanwInvokeMacro( "${design_namespace}GenerateBottomElement" )
+    
+    #macro( hhGenerateBottomElement )
+        #set( $bc = "#setPageElement('bottomContent')" )
+    <${bottomElement} class="$!{bottomCssClass}">
+    #outputPageElement('bottomContent')
+    </${bottomElement}>
+    #end
+#end
+
+#macro( generateMiddleContent )
+    $_SerializerTool.serialize( $_XPathTool.selectNodes( $pageSystemDataStructure, "main-group/wysiwyg" )[ 0 ], true )
+#end
+
+#macro( generateMiddleElement )
+    #chanwInvokeMacro( "${design_namespace}GenerateMiddleElement" )
+    
+    #macro( hhGenerateMiddleElement )
+    <${middleElement} class="$!{middleCssClass}">
+    #outputPageElement('middleContent')
+    </${middleElement}>
+    #end
+
+#end
+
+#macro( generateTopContent )
+    #upstateProcessBlockChooser( $pageSystemDataStructure "top-group/mul-top-group-chooser" )
+#end
+
+#macro( generateTopElement )
+    #chanwInvokeMacro( "${design_namespace}GenerateTopElement" )
+    
+    #macro( hhGenerateTopElement )
+    <${topElement} class="$!{topCssClass}">
+    #outputPageElement('topContent')
+    </${topElement}>
+    #end
+#end
+
+#macro( generatePrePage )
+#end
+
+#macro( outputPageElement $elementName_outputPageElement $options_outputPageElement )
+##
+    ## Is the currently rendered page not supposed to contain this element?
+    #if( !$siteConfigMap[ 'skipPageElement' ][ $elementName_outputPageElement ].contains( $currentPagePath ) )
+##
+        ## Set this element
+        #setPageElement( $elementName_outputPageElement $options_outputPageElement )
+##
+        ## Output this element
+        $pageElementMap[ "${elementName_outputPageElement}Content" ]
+    #end
+#end
+##
+## Macro which is used to set items in $pageElementMap
+#macro( setPageElement $elementName_setPageElement $options_setPageElement )
+##
+    ## Set $pageElementMap if the item is not already set or
+    ## if the invoker wants it forced
+    #if(
+        !$pageElementMap[ "${elementName_setPageElement}Content" ].Class.Name ||
+    	$options_setPageElement[ 'forceSet' ] == true
+    )
+##
+        ## Set the $pageElementMap item to the output of the "generate"
+        ## macro which is called.
+        ## $options_setPageElement[ 'paramsForGenerate' ] can be used to
+        ## pass a list of parameters to the "generate" macro so we use
+        ## #drulykgInvokeMacro and blindly pass in $options_setPageElement[ 'paramsForGenerate' ]
+        ## because #drulykgInvokeMacro does nothing with nulls/undefined variables.
+    	#set( $pageElementMap[ "${elementName_setPageElement}Content" ] = " 
+    		#drulykgInvokeMacro(
+    			""generate${globalApacheStringUtils.capitalize( $elementName_setPageElement )}""
+                $options_setPageElement[ 'paramsForGenerate' ]
+    		)
+    	")
+    #end
+#end
+
+#macro( generateBlueButton )
+    #chanwInvokeMacro( "${design_namespace}GenerateBlueButton" )
+
+    #macro( hhGenerateBlueButton )
+    #chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "blue-button" )
+    #end
+#end
+
+#macro( generateBreadcrumbs )
+    #chanwInvokeMacro( "${design_namespace}GenerateBreadcrumbs" )
+
+    #macro( hhGenerateBreadcrumbs )
+    <div class="container breadcrumbs">Put breadcrumbs code here</div>
+    ##chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "breadcrumbs" )
+    #end
+#end
+
+#macro( generateContact )
+    #chanwInvokeMacro( "${design_namespace}GenerateContact" )
+
+    #macro( hhGenerateContact )
+    #chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "contact" )
+    #end
+#end
+
+#macro( generateFooter )
+    #chanwInvokeMacro( "${design_namespace}GenerateFooter" )
+
+    #macro( hhGenerateFooter )
+    #chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "footer" )
+    #end
+#end
+
+#macro( generateGoogleTagManager )
+    #chanwInvokeMacro( "${design_namespace}GenerateGoogleTagManager" )
+
+    #macro( hhGenerateGoogleTagManager )
+    #chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "google-tag-manager" )
+    #end
+#end
+
+#macro( generateH1 )
+    #chanwInvokeMacro( "${design_namespace}GenerateH1" )
+
+    #macro( hhGenerateH1 )
+    <div class="row"><div class="col-xs-12">
+    <h1>$_EscapeTool.xml( $pageSystemDataStructure.getChild( "main-group" ).getChild( "h1" ).Value )</h1>
+    </div></div>
+    #end
+#end
+
+#macro( generateLink )
+    #chanwInvokeMacro( "${design_namespace}GenerateLink" )
+
+    #macro( hhGenerateLink )
+    #chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "link" )
+    #end
+#end
+
+#macro( generateMeta )
+    #chanwInvokeMacro( "${design_namespace}GenerateMeta" )
+
+    #macro( hhGenerateMeta )
+    #chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "meta" )
+    #end
+#end
+
+#macro( generateNavBar )
+    #chanwInvokeMacro( "${design_namespace}GenerateNavBar" )
+
+    #macro( hhGenerateNavBar )
+    #chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "nav-bar" )
+    #end
+#end
+
+#macro( generatePageContent )
+    #set( $pageElementMap[ 'pageContent' ] = "#hhProcessPageSystemDataStructure" )
+    $pageElementMap[ 'pageContent' ]
+#end
+
+#macro( generateTitle )
+    #chanwInvokeMacro( "${design_namespace}GenerateTitle" )
+
+    #macro( hhGenerateTitle )
+    #chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "title" )
+    #end
+#end
+
+#macro( generateScript )
+    #chanwInvokeMacro( "${design_namespace}GenerateScript" )
+
+    #macro( hhGenerateScript )
+    #chanwImportScript( "${_brisk[$BRISK_SITE_DESIGNS_FOLDER_PATH_NTS]}/${design_namespace}" $_brisk[ $BRISK_SITE_NAME ] "script" )
+    #end
+#end
+
+#macro( hhProcessPageSystemDataStructure )
+    <div class="container">
+    <div class="row">
+    <h1>$_EscapeTool.xml( $pageSystemDataStructure.getChild( "main-group" ).getChild( "h1" ).Value )</h1>
+    $_SerializerTool.serialize( $pageSystemDataStructure.getChild( "main-group" ).getChild( "wysiwyg" ), true )
+    </div>
+    </div>
+#end
+
+#macro( upstateProcessBlockChooser $rootElement_upstateProcessBlockChooser $xPath_upstateProcessBlockChooser $preString_upstateProcessBlockChooser $postString_upstateProcessBlockChooser )
+    #set( $choosers = "" )
+    #set( $choosers = $_XPathTool.selectNodes( $rootElement_upstateProcessBlockChooser, $xPath_upstateProcessBlockChooser ) )
+##
+    #if( $choosers.size() > 0 )
+        #foreach( $chooser in $choosers )
+            #set( $chooserContent = "" )
+            #set( $chooserContent = $chooser.getChild( "content" ) )
+##        
+            #if( $chooserContent != "" )
+                #if( $preString_upstateProcessBlockChooser && $preString_upstateProcessBlockChooser != "" )$preString_upstateProcessBlockChooser#end
+                #chanwProcessBlockChooser( $chooserContent )
+                #if( $postString_upstateProcessBlockChooser && $postString_upstateProcessBlockChooser != "" )$postString_upstateProcessBlockChooser#end
+            #end
+        #end
+    #end
+#end
