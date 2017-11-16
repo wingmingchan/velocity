@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+11/16/2017 Added #chanwGetRecordListFromSql.
 10/2/2017 Added #chanwGetColumnLabelsFromRS and fixed a bug in #chanwGetHTMLTableFromResultSet.
 8/7/2017 Started using macro names as namespace prefixes for local parameters.
 8/3/2017 Fixed a bug in #chanwGetAllTableNames.
@@ -889,6 +890,23 @@ doc*###
 #*doc
 《/macro》
 《documentation》
+《code》#chanwGetRecordListFromSql( $sql )《/code》
+《p》Returns a list of lists, containing values of the result set. The outer
+list stores lists representing rows, and each inner list stores values of a row. Example:《/p》
+《pre》
+#chanwGetRecordListFromSql( "SELECT * FROM CXML_ASSETFACTORY" )
+《/pre》
+《/documentation》
+《macro id=“chanwGetRecordListFromSql”》
+doc*###
+#macro( chanwGetRecordListFromSql $sql_chanwGetRecordListFromSql )
+    #chanwGetResultSet( $sql_chanwGetRecordListFromSql )
+    #chanwGetRecordListFromResultSet( $chanwGetResultSet )
+    #set( $chanwGetRecordListFromSql = $chanwGetRecordListFromResultSet )
+#end
+#*doc
+《/macro》
+《documentation》
 《code》#chanwGetResultSet( $sql )《/code》
 《p》Returns the result set associated with the SQL statement. The result set is stored in
 《code》$chanwGetResultSet《/code》. Example:《/p》
@@ -913,7 +931,18 @@ doc*###
         No result set returned
     #end
 #end
-
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetSingleValue( $sql )《/code》
+《p》Returns a single value. The result set is stored in
+《code》$chanwGetSingleValue《/code》. Example:《/p》
+《pre》
+#chanwGetSingleValue( "SELECT count(*) FROM CXML_ASSETFACTORY" )
+《/pre》
+《/documentation》
+《macro id=“chanwGetSingleValue”》
+doc*###
 #macro( chanwGetSingleValue $sql_chanwGetSingleValue )
     #set( $chanwGetSingleValue = "" )
     #chanwGetResultSet( $sql_chanwGetSingleValue )
