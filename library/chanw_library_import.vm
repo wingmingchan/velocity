@@ -3,6 +3,7 @@
 Import this single format to access all library resources created by Wing.
 *#
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_initialization" )
+#import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_tree_utilities" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_regex_utilities" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_date_time_utilities" )
 #import( "site://${chanw_framework_site_name}/core/library/velocity/chanw/chanw_display_velocity_code" )

@@ -5,6 +5,8 @@ Authors: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+10/29/2017 Add $DefaultMutableTreeNodeConstructor.
+10/23/2017 Added tree-related constants.
 8/31/2017 Rewrote chanwImportScript and fixed bugs in chanwLocateAsset.
 8/29/2017 Added chanwConvertArrayListToArray.
 8/25/2017 Added more code to chanwProcessDataDefinitionBlock to deal with legacy blocks.
@@ -259,6 +261,7 @@ doc*###
 #set( $COM_CASCADE_SCRIPT_FORMAT_CLASS_NAME          = "com.hannonhill.cascade.api.adapters.ScriptFormatAPIAdapter" )
 #set( $COM_CASCADE_STRUCTURED_DATA_NODE_CLASS_NAME   = "com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter" )
 #set( $COM_CASCADE_STRUCTURED_DATA_LIST_CLASS_NAME   = "[Lcom.hannonhill.cascade.api.asset.common.StructuredDataNode;" )
+#set( $JAVA_LANG_OBJECT_CLASS_NAME                   = 'java.lang.Object' )
 #set( $JAVA_LANG_INTEGER_CLASS_NAME                  = 'java.lang.Integer' )
 #set( $JAVA_LANG_BOOLEAN_CLASS_NAME                  = 'java.lang.Boolean' )
 #set( $JAVA_LANG_STRING_CLASS_NAME                   = 'java.lang.String' )
@@ -272,6 +275,9 @@ doc*###
 #set( $JAVA_UTIL_HASHMAP_CLASS_NAME                  = 'java.util.HashMap' )
 #set( $JAVA_UTIL_DATE_CLASS_NAME                     = 'java.util.Date' )
 #set( $JAVA_UTIL_GREGORIAN_CALENDAR_CLASS_NAME       = 'java.util.GregorianCalendar' )
+#set( $JAVAX_SWING_TREE_TREE_NODE_CLASS_NAME         = "javax.swing.tree.TreeNode" )
+#set( $JAVAX_SWING_TREE_DEFAULT_MUTABLE_TREE_NODE_CLASS_NAME = "javax.swing.tree.DefaultMutableTreeNode" )
+#set( $JAVAX_SWING_TREE_DEFAULT_TREE_MODEL_CLASS_NAME = "javax.swing.tree.DefaultTreeModel" )
 #set( $ORG_JDOM_DOCUMENT_CLASS_NAME                  = 'org.jdom.Document' )
 #set( $ORG_JDOM_ELEMENT_CLASS_NAME                   = 'org.jdom.Element' )
 ## Cascade API types
@@ -284,6 +290,10 @@ doc*###
 #set( $CASCADE_API_REFERENCE_TYPE = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_REFERENCE )
 #set( $CASCADE_API_SYMLINK_TYPE   = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_SYMLINK )
 #set( $CASCADE_API_TEMPLATE_TYPE  = $_FieldTool.in( "com.hannonhill.cascade.model.dom.identifier.EntityTypes" ).TYPE_TEMPLATE )
+## constructors
+#set( $DefaultMutableTreeNodeConstructor = $_.class.forName( "javax.swing.tree.DefaultMutableTreeNode" ).getConstructor(
+    $_.class.forName( "java.lang.Object" ) ) )
+## maps to generate code
 #set( $CASCADE_TYPE_ELEMENT_MAP   = {
     'system-block'         : $CASCADE_API_BLOCK_TYPE,
     'system-index-block'   : $CASCADE_API_BLOCK_TYPE,

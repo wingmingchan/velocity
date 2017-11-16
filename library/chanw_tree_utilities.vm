@@ -5,6 +5,8 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+11/4/2017 Added $TREE_NODE_TEXT and related code
+10/29/2017 Use $DefaultMutableTreeNodeConstructor defined in chanw_initialization.
 10/27/2017 Rewritten chanwTraverseTreeBreadthFirst and chanwTraverseTreePreorder,
 using Java Enumeration.
 10/26/2017 Added test of ancestor to chanwSwapNodes.
@@ -35,7 +37,11 @@ doc*###
 《/import》
 《global-variables》
 doc*###
-
+#set( $TREE_NODE_NAME      = "name" )
+#set( $TREE_NODE_START_TAG = "startString" )
+#set( $TREE_NODE_END_TAG   = "endString" )
+#set( $TREE_NODE_CODE      = "code" )
+#set( $TREE_NODE_TEXT      = "text" )
 #*doc
 《/global-variables》
 《documentation》
@@ -71,10 +77,9 @@ doc*###
         #if( !$chanwObjectNodeMap )
             #set( $chanwObjectNodeMap = {} )
         #end
-        #chanwGetConstructor( "javax.swing.tree.DefaultMutableTreeNode" [ $_.Class.forName( $JAVA_LANG_OBJECT_CLASS_NAME ) ] )
-        #set( $chanwCreateNode = $chanwGetConstructor.newInstance( $obj_chanwCreateNode ) )
+        #set( $chanwCreateNode = $DefaultMutableTreeNodeConstructor.newInstance( $obj_chanwCreateNode ) )
         #if( $obj_chanwCreateNode[ "name" ].Class.Name )
-            #set( $chanwObjectNodeMap[ $obj_chanwCreateNode[ "name" ] ] = $chanwCreateNode )
+            #set( $chanwObjectNodeMap[ $obj_chanwCreateNode[ $TREE_NODE_NAME ] ] = $chanwCreateNode )
         #else
             #set( $chanwObjectNodeMap[ $obj_chanwCreateNode ] = $chanwCreateNode )
         #end
@@ -110,7 +115,7 @@ doc*###
 defaulted to 《code》false《/code》, is set to 《code》true《/code》, then the startString and
 endString will not be output.《/p》
 《/documentation》
-《macro id=“chanwCreateTree”》
+《macro id=“chanwDisplayTreeNodeRecursively”》
 doc*###
 #macro( chanwDisplayTreeNodeRecursively $node_chanwDisplayTreeNodeRecursively $stripRoot_chanwDisplayTreeNodeRecursively )
 #if( !$chanwDisplayTreeNodeRecursivelyCounter )
@@ -118,20 +123,19 @@ doc*###
 #else
 #set( $chanwDisplayTreeNodeRecursivelyCounter = $chanwDisplayTreeNodeRecursivelyCounter + 1 )
 #end
-#if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ "startString" ] )
-$node_chanwDisplayTreeNodeRecursively.UserObject[ "startString" ]
-#end
-#if( $node_chanwDisplayTreeNodeRecursively.Leaf && $node_chanwDisplayTreeNodeRecursively.UserObject[ "code" ] )
-#evaluate( $node_chanwDisplayTreeNodeRecursively.UserObject[ "code" ] )
-#end
+#if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_START_TAG ] )
+$node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_START_TAG ]#end
+#if( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_CODE ] )
+#evaluate( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_CODE ] )#end
+#if( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_TEXT ] )
+$node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_TEXT ]#end
 #if( $node_chanwDisplayTreeNodeRecursively.children() )
 #foreach( $child in $node_chanwDisplayTreeNodeRecursively.children() )
 #chanwDisplayTreeNodeRecursively( $child )
 #end
 #end
-#if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ "endString" ] )
-$node_chanwDisplayTreeNodeRecursively.UserObject[ "endString" ]
-#end
+#if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_END_TAG ] )
+$node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_END_TAG ]#end
 #set( $chanwDisplayTreeNodeRecursivelyCounter = $chanwDisplayTreeNodeRecursivelyCounter - 1 )
 #end
 #*doc
@@ -140,7 +144,7 @@ $node_chanwDisplayTreeNodeRecursively.UserObject[ "endString" ]
 《code》#chanwSwapNodes( $node1 $node2 )《/code》
 《p》Swaps two nodes, both possibly the root nodes of subtrees.《/p》
 《/documentation》
-《macro id=“chanwTraverseTreeBreadthFirst”》
+《macro id=“chanwSwapNodes”》
 doc*###
 #macro( chanwSwapNodes $node1_chanwSwapNodes $node2_chanwSwapNodes )
     #if( $node1_chanwSwapNodes.isNodeAncestor( $node2_chanwSwapNodes ) ||
