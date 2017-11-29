@@ -1,17 +1,17 @@
 #macro( resolveClassName )
-	#if( $tree_name == "center" )
-	    #set( $middleCssClass = $siteConfigMap[ 'middleCenterWithNoTopLeftNoBottomRightCssClass' ] )
-	#elseif( $tree_name == "left-center" )
-		#set( $topCssClass    = $siteConfigMap[ 'topLeftCssClass' ] )
-		#set( $middleCssClass = $siteConfigMap[ 'middleCenterWithNoBottomRightCssClass' ] )
-	#elseif( $tree_name == "center-right" )
-	    #set( $middleCssClass = $siteConfigMap[ 'middleCenterWithNoTopLeftCssClass' ] )
-		#set( $bottomCssClass = $siteConfigMap[ 'bottomRightCssClass' ] )
-	#else
-		#set( $topCssClass    = "col-md-4" )
-	    #set( $middleCssClass = "col-md-4" )
-		#set( $bottomCssClass = "col-md-4" )
-	#end
+    #if( $tree_name == "center" )
+        #set( $middleCssClass = $siteConfigMap[ 'middleCenterWithNoTopLeftNoBottomRightCssClass' ] )
+    #elseif( $tree_name == "left-center" )
+        #set( $topCssClass    = $siteConfigMap[ 'topLeftCssClass' ] )
+        #set( $middleCssClass = $siteConfigMap[ 'middleCenterWithNoBottomRightCssClass' ] )
+    #elseif( $tree_name == "center-right" )
+        #set( $middleCssClass = $siteConfigMap[ 'middleCenterWithNoTopLeftCssClass' ] )
+        #set( $bottomCssClass = $siteConfigMap[ 'bottomRightCssClass' ] )
+    #else
+        #set( $topCssClass    = "col-md-4" )
+        #set( $middleCssClass = "col-md-4" )
+        #set( $bottomCssClass = "col-md-4" )
+    #end
 #end
 
 #macro( resolvePageTreeName )
@@ -91,7 +91,7 @@
     ## if the invoker wants it forced
     #if(
         !$pageElementMap[ "${elementName_setPageElement}Content" ].Class.Name ||
-    	$options_setPageElement[ 'forceSet' ] == true
+        $options_setPageElement[ 'forceSet' ] == true
     )
 ##
         ## Set the $pageElementMap item to the output of the "generate"
@@ -100,12 +100,12 @@
         ## pass a list of parameters to the "generate" macro so we use
         ## #drulykgInvokeMacro and blindly pass in $options_setPageElement[ 'paramsForGenerate' ]
         ## because #drulykgInvokeMacro does nothing with nulls/undefined variables.
-    	#set( $pageElementMap[ "${elementName_setPageElement}Content" ] = " 
-    		#drulykgInvokeMacro(
-    			""generate${globalApacheStringUtils.capitalize( $elementName_setPageElement )}""
+        #set( $pageElementMap[ "${elementName_setPageElement}Content" ] = " 
+            #drulykgInvokeMacro(
+                ""generate${globalApacheStringUtils.capitalize( $elementName_setPageElement )}""
                 $options_setPageElement[ 'paramsForGenerate' ]
-    		)
-    	")
+            )
+        ")
     #end
 #end
 
