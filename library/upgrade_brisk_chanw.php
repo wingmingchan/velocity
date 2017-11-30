@@ -10,7 +10,6 @@ This program reads source code from the Upstate server,
 and updates all library formats by wing.
 */
 
-//require_once('auth_chanw.php');      // to production
 require_once('auth_tutorial7.php');  // to sandbox
 
 use cascade_ws_AOHS      as aohs;
@@ -23,7 +22,11 @@ use cascade_ws_exception as e;
 try
 {
     u\DebugUtility::setTimeSpaceLimits();
+    
+    // trim leading and trailing slashes and space
+	$library_folder_path = trim( $library_folder_path, '/ ' );
 
+	// retrieve library folder
     $velocity_folder = $cascade->getAsset(
         a\Folder::TYPE, $library_folder_path, $site_name
     );
