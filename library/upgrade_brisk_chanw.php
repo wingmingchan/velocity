@@ -24,9 +24,9 @@ try
     u\DebugUtility::setTimeSpaceLimits();
     
     // trim leading and trailing slashes and space
-	$library_folder_path = trim( $library_folder_path, '/ ' );
+    $library_folder_path = trim( $library_folder_path, '/ ' );
 
-	// retrieve library folder
+    // retrieve library folder
     $velocity_folder = $cascade->getAsset(
         a\Folder::TYPE, $library_folder_path, $site_name
     );
