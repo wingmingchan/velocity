@@ -1,5 +1,5 @@
 <?php
-// last run: 06/08/2017
+// last run: 11/30/2017
 $start_time = time();
 $site_name           = "_brisk";                      // name of the site to be upgraded
 $library_folder_path = "core/library/velocity/chanw"; // name of the site to be upgraded
