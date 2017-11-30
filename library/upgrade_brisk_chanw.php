@@ -133,7 +133,9 @@ function pushSource( $site_name, $asset, $source_path )
         if( $type == a\XmlBlock::TYPE )
         {
             $source_content = str_replace( 
-                "_common_assets", $site_name, $source_content );
+                "_brisk", $site_name, $source_content );
+            $source_content = str_replace( 
+                "core/library/velocity/chanw", $library_folder_path, $source_content );
             $asset->setXml( $source_content )->edit();
         }
         else
