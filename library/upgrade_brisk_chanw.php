@@ -106,7 +106,7 @@ try
             );
         }
         $source_path = $source . $library_format_name . ".xml";
-        pushSource( $site_name, $format, $source_path );
+        pushSource( $site_name, $library_folder_path, $format, $source_path );
     }
     
     u\DebugUtility::outputDuration( $start_time );
@@ -122,33 +122,22 @@ catch( \Error $er )
     u\DebugUtility::outputDuration( $start_time );
 }
 
-function pushSource( $site_name, $asset, $source_path )
+function pushSource( $site_name, $library_folder_path, $asset, $source_path )
 {
     $source_content = file_get_contents( $source_path );
 
     if( $source_content != "" )
     {
-        $type = $asset->getType();
-        
-        if( $type == a\XmlBlock::TYPE )
-        {
-            $source_content = str_replace( 
-                "_brisk", $site_name, $source_content );
-            $source_content = str_replace( 
-                "core/library/velocity/chanw", $library_folder_path, $source_content );
-            $asset->setXml( $source_content )->edit();
-        }
-        else
-        {
-            $source_content = str_replace( "<code>", "", $source_content );
-            $source_content = str_replace( "</code>", "", $source_content );
-            $source_content = str_replace( "&lt;", "<", $source_content );
-            $source_content = str_replace( "&gt;", ">", $source_content );
-            $source_content = str_replace( "&amp;", "&", $source_content );
-            $source_content = str_replace( 
-                "_common_assets", $site_name, $source_content );
-            $asset->setScript( $source_content )->edit();
-        }
+        $source_content = str_replace( "<code>", "", $source_content );
+        $source_content = str_replace( "</code>", "", $source_content );
+        $source_content = str_replace( "&lt;", "<", $source_content );
+        $source_content = str_replace( "&gt;", ">", $source_content );
+        $source_content = str_replace( "&amp;", "&", $source_content );
+        $source_content = str_replace( 
+            "_brisk", $site_name, $source_content );
+        $source_content = str_replace( 
+            "core/library/velocity/chanw", $library_folder_path, $source_content );
+        $asset->setScript( $source_content )->edit();
     }
 }
 ?>
