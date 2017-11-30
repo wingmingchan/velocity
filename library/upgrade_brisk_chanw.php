@@ -2,7 +2,7 @@
 // last run: 11/30/2017
 $start_time = time();
 $site_name           = "_brisk";                      // name of the site to be upgraded
-$library_folder_path = "core/library/velocity/chanw"; // name of the site to be upgraded
+$library_folder_path = "core/library/velocity/chanw"; // path of the folder to be upgraded
 $source = "http://www.upstate.edu/standard-model/source/";
 
 /*
