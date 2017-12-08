@@ -40,15 +40,21 @@ doc*###
 《/documentation》
 《macro id=“chanwGetDDDocRootElement”》
 doc*###
-#macro( chanwGetDDDocRootElement $block_chanwGetDDDocRoot )
+#macro( chanwGetDDDocRootElement $block_chanwGetDDDocRoot $siteName_chanwGetDDDocRoot )
     #if( !$chanwConnection || $chanwConnection.isClosed() )
         #chanwGetDatabaseStatement
     #end
     ## get the path of the data definition
     #set( $chanwDDPath = $block_chanwGetDDDocRoot.DataDefinitionPath )
+    ## get the site name
+    #if( $siteName_chanwGetDDDocRoot.Class.Name && $siteName_chanwGetDDDocRoot.Class.Name == $JAVA_LANG_STRING_CLASS_NAME && $siteName_chanwGetDDDocRoot.trim() != "" )
+        #set( $chanwSiteName = $siteName_chanwGetDDDocRoot.trim() )
+    #else
+        #set( $chanwSiteName = '_brisk' )
+    #end
     ## get the xml of the data definition
     #chanwGetSingleValue(
-        "select xmldata from cxml_xml where id=(select xmlid from cxml_structureddatadefinition where path='$chanwDDPath' and siteid=(select id from cxml_site where name='_brisk') and iscurrentversion=1)" )
+        "select xmldata from cxml_xml where id=(select xmlid from cxml_structureddatadefinition where path='$chanwDDPath' and siteid=(select id from cxml_site where name='${chanwSiteName}') and iscurrentversion=1)" )
     ## build the XML
     #chanwGetRootElementFromXml( $chanwGetSingleValue )
     #set( $chanwGetDDDocRootElement = $chanwGetRootElementFromXml )
