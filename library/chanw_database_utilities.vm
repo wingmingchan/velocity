@@ -36,8 +36,8 @@ ${SINGLE_HASH}chanwGetNumberOfRecordsInTable( "cxml_foldercontent" )
 #chanwGetNumberOfRecordsInTable( "cxml_foldercontent" )
 ${DOLLAR}chanwGetNumberOfRecordsInTable: $chanwGetNumberOfRecordsInTable
 =============================================================
-#chanwGetAllTableNames
-$chanwGetAllTableNames
+##chanwGetAllTableNames
+##$chanwGetAllTableNames
 =============================================================
 #chanwCleanUp
 《/pre》
@@ -50,7 +50,7 @@ of the format using this library format, put in 《code》#chanwCleanUp《/code�
 as the last line of the code.《/p》
 《p class=“text_red”》Important: Before importing the library, set the variable
 《code》$chanwOracleDB《/code》 to 《code》false《/code》 if your database is
-MySql:《/p》
+MySql or Microsoft SQL Server:《/p》
 《pre》#set( $chanwOracleDB = false )
 #import( 'site://mycore/formats/library/velocity/chanw_library_import' )
 《/pre》

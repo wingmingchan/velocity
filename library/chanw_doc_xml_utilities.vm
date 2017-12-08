@@ -13,7 +13,7 @@ Modification history:
 《pre》
 =============================================================
 #import( 'core/library/velocity/chanw/chanw_library_import' )
-$chanwImportElement$chanwImportVarDump
+$chanwImportDocXml
 $chanwImportDatabase
 $chanwImportServiceProvider
 #set( $block   = $_.locateBlock( "core/base-assets/block-row", "_brisk" ) )
@@ -25,7 +25,7 @@ $chanwImportServiceProvider
 《/evaluate》
 《documentation id=“top”》
 《h2》Introduction《/h2》
-《p》This format provides macros to work with 《code》org.jdom.Element《/code》 objects.《/p》
+《p》This format provides macros to create documentation for data definitions and templates.《/p》
 《/documentation》
 《import》
 doc*###
@@ -35,10 +35,10 @@ doc*###
 #*doc
 《/import》
 《documentation》
-《code》#chanwCreateElementFromMapIteration( $map_chanwCreateElementFromMapIteration )《/code》
-《p》Creates an element using the data in 《code》$map_chanwCreateElementFromMapIteration《/code》, using iteration.《/p》
+《code》#chanwGetDDDocRootElement( $block_chanwGetDDDocRoot )《/code》
+《p》Creates a root element by processing the documentational comments in a data definition.《/p》
 《/documentation》
-《macro id=“chanwCreateElementFromMapIteration”》
+《macro id=“chanwGetDDDocRootElement”》
 doc*###
 #macro( chanwGetDDDocRootElement $block_chanwGetDDDocRoot )
     #if( !$chanwConnection || $chanwConnection.isClosed() )
@@ -54,6 +54,14 @@ doc*###
     #set( $chanwGetDDDocRootElement = $chanwGetRootElementFromXml )
     #chanwCleanUp
 #end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetTemplateDocRootElement( $template_chanwGetTemplateDocRootElement )《/code》
+《p》Creates a root element by processing the documentational comments in a template.《/p》
+《/documentation》
+《macro id=“chanwGetTemplateDocRootElement”》
+doc*###
 #macro( chanwGetTemplateDocRootElement $template_chanwGetTemplateDocRootElement )
     #if( !$chanwConnection || $chanwConnection.isClosed() )
         #chanwGetDatabaseStatement
@@ -71,13 +79,13 @@ doc*###
 #*doc
 《/macro》
 《documentation》
-《code》#chanwCreateElementFromMapRecursion( $map_chanwCreateElementFromMapRecursion )《/code》
-《p》Creates an element using the data in 《code》$map_chanwCreateElementFromMapRecursion《/code》, using recursion.《/p》
+《code》#chanwGetRootElementFromXml( $xml_chanwGetRootElementFromXml )《/code》
+《p》Creates a root element by processing an xml string.《/p》
 《/documentation》
-《macro id=“chanwCreateElementFromMapRecursion”》
+《macro id=“chanwGetRootElementFromXml”》
 doc*###
-#macro( chanwGetRootElementFromXml $xml_string )
-    #chanwBuildXMLContentRoot( $globalApacheStringUtils.substringBetween( $xml_string, '#*doc', 'doc*###' ) )
+#macro( chanwGetRootElementFromXml $xml_chanwGetRootElementFromXml )
+    #chanwBuildXMLContentRoot( $globalApacheStringUtils.substringBetween( $xml_chanwGetRootElementFromXml, '#*doc', 'doc*###' ) )
     #set( $chanwGetRootElementFromXml = $chanwBuildXMLContentRoot )
 #end
 #*doc

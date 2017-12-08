@@ -13,18 +13,11 @@ using Java Enumeration.
 10/25/2017 Added chanwSwapNodes.
 10/23/2017 Format created.
 《/copyright》
-《evaluate execute=“true”》
-《div id=“hide-code1”》
-《h2》Test Code and Results《/h2》
-《pre》
-#import( 'core/library/velocity/chanw/chanw_initialization' )
-《/pre》
-《/div》
-《/evaluate》
+
 《documentation id=“top”》
 《h2》Introduction《/h2》
-《p》This format provides macros to work with trees. When objects are passed into the
-macro named 《code》#chanwCreateNode《/code》 is invoked, the object will be used as
+《p》This format provides macros to work with trees. When an object is passed into the
+macro named 《code》#chanwCreateNode《/code》, the object will be used as
 the key, and the node created as the value, of an entry in the map named 《code》$chanwObjectNodeMap《/code》.
 If the object passed in is a map, which contains a 《code》name《/code》 entry, then the value
 of 《code》name《/code》 will be used as the key pointing to the node created. This facilitates quick access
@@ -45,8 +38,8 @@ doc*###
 #*doc
 《/global-variables》
 《documentation》
-《code》#《/code》
-《p》《/p》
+《code》#chanwAddChildren( $node $list )《/code》
+《p》Adds all the items in the list as children to the node.《/p》
 《/documentation》
 《macro id=“chanwAddChildren”》
 doc*###
@@ -162,8 +155,7 @@ doc*###
 #*doc
 《/macro》
 《documentation》
-《code》#《/code》
-《p》#chanwTraverseTreeBreadthFirst( $node $macroName $paramList )《/code》
+《code》#chanwTraverseTreeBreadthFirst( $node $macroName $paramList )《/code》
 《p》Traverses the tree using breadth first traversal, and applies the named macro, possibly
 with a list of parameters, to every node visited.《/p》
 《/documentation》
