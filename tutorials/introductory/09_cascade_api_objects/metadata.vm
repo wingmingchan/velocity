@@ -1,0 +1,32 @@
+#set( $block = $_.locateBlock( "_cascade/blocks/code/test-metadata", "formats" ) )
+#set( $m     = $block.Metadata )
+
+$m.DisplayName
+$m.Title
+$m.Summary
+$m.Description
+$m.Author
+$m.Keywords
+$m.Teaser
+$m.StartDate
+$m.EndDate
+$m.ReviewDate
+
+#set( $dfs = $m.DynamicFields )
+##
+#foreach( $df in $m.DynamicFields )
+$df.Name
+#if( $df.Checkbox || $df.Multiselect )
+$df.Values.size()
+#foreach( $value in $df.Values )
+$value
+#end
+#else
+$df.Value
+#end
+#end
+
+#set( $languages = $m.getDynamicField( "languages" ) )
+#if( $languages.Multiselect )
+$languages.Values.size()
+#end
