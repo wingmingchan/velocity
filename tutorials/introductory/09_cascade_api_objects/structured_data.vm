@@ -1,0 +1,51 @@
+#set( $block = $_.locateBlock( "_cascade/blocks/data/test-all-fields", "formats" ) )
+#set( $sd    = $block.StructuredData )
+
+#set( $groupNode = $block.getStructuredDataNode( "group" ) )
+$groupNode.isGroup()
+$groupNode.Children.size()
+
+#set( $fileNode = $block.getStructuredDataNode( "group/file" ) )
+#if( $fileNode.isAsset() && $fileNode.Asset.Class.Name )
+$fileNode.Asset.Class.Name
+$fileNode.Asset.Path
+#else
+No file attached to chooser
+#end
+
+$fileNode.AssetIdentifier.Type
+
+#set( $pageNode = $block.getStructuredDataNode( "group/page" ) )
+#if( $pageNode.isAsset() && $pageNode.Asset.Class.Name )
+$pageNode.Asset.Class.Name
+$pageNode.Asset.Path
+$pageNode.AssetIdentifier.Class.Name
+$pageNode.AssetIdentifier.Type
+$pageNode.AssetIdentifier.Id
+#else
+No page attached to chooser
+#end
+
+#set( $calendarNode = $block.getStructuredDataNode( "group/calendar" ) )
+#if( $calendarNode.isText() )
+$calendarNode.TextNodeOptions.Class.Name
+#if( $calendarNode.TextNodeOptions.Calendar )
+A calendar node
+- $calendarNode.TextValue
+#end
+#end
+
+#set( $checkboxNode = $block.getStructuredDataNode( "group/checkbox" ) )
+#if( $checkboxNode.isText() && $checkboxNode.TextNodeOptions.Checkbox )
+    $checkboxNode.TextValues.size()
+#end
+
+#set( $wysiwygNode = $block.getStructuredDataNode( "group/wysiwyg" ) )
+#if( $wysiwygNode.isText() && $wysiwygNode.TextNodeOptions.Wysiwyg )
+    $wysiwygNode.TextValue
+#end
+
+#set( $datetimeNode = $block.getStructuredDataNode( "group/datetime" ) )
+#if( $datetimeNode.isText() && $datetimeNode.TextNodeOptions.Datetime )
+    $datetimeNode.TextValue
+#end
