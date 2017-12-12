@@ -1,0 +1,23 @@
+## a text block
+#set( $block = $_.locateBlock( "_cascade/blocks/code/test-text", "formats" ) )
+$block.Text
+
+## an XML block
+#set( $block = $_.locateBlock( "_cascade/blocks/script/advanced-lesson-1-code-script", "formats" ) )
+$block.XML
+$block.XMLAsXMLElement.Class.Name
+
+## a feed block
+#set( $block = $_.locateBlock( "bluepages/bp-feed/feed1", "Upstate-Globals" ) )
+$_EscapeTool.xml( $block.FeedURL )
+$block.Feed
+$block.FeedAsXMLElement.Class.Name
+
+## XHTML block
+#set( $block = $_.locateBlock( "_cascade/blocks/data/xhtml", "formats" ) )
+#if( $block.StructuredData.Class.Name )
+A data definition block
+#else
+$block.XHTML
+$block.XHTMLAsXMLElement.Class.Name
+#end
