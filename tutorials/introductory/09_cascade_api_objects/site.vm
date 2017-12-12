@@ -1,6 +1,9 @@
 #set( $site = $currentPage.Site )
 $site.Class.Name
 $site.Url
-$site.NamingRuleCase     ## LOWER
-$site.NamingRuleSpacing  ## HYPHEN
-$site.NamingRuleAssets.size()   ## 2
+$site.NamingRuleCase
+$site.NamingRuleSpacing
+$site.NamingRuleAssets.size()
+
+#set( $isLower = ( $site.NamingRuleCase == "LOWER" ) )
+$isLower
