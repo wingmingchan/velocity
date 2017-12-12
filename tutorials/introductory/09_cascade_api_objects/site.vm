@@ -1,0 +1,6 @@
+#set( $site = $currentPage.Site )
+$site.Class.Name
+$site.Url
+$site.NamingRuleCase     ## LOWER
+$site.NamingRuleSpacing  ## HYPHEN
+$site.NamingRuleAssets.size()   ## 2
