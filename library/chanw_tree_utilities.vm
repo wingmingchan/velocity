@@ -103,6 +103,30 @@ doc*###
 #*doc
 《/macro》
 《documentation》
+《code》#chanwDisplayTree( $node )《/code》
+《p》Displays a tree with its node names properly indented. This macro is provided mainly for debugging.《/p》
+《/documentation》
+《macro id=“chanwDisplayTree”》
+doc*###
+#macro( chanwDisplayTree $node_chanwDisplayTree )
+#if( !$chanwDisplayTreeCounter )
+#set( $chanwDisplayTreeCounter = 0 )
+#else
+#set( $chanwDisplayTreeCounter = $chanwDisplayTreeCounter + 1 )
+#end
+#set( $chanwSpace = "  " )
+$node.UserObject[ $TREE_NODE_NAME ]
+#if( $node_chanwDisplayTree.children() )
+#foreach( $child in $node_chanwDisplayTree.children() )
+#foreach( $num in [ 0 .. $chanwDisplayTreeCounter ] )$chanwSpace#end#chanwDisplayTree( $child )#end
+#end
+#if( $chanwDisplayTreeCounter > 0 )
+#set( $chanwDisplayTreeCounter = $chanwDisplayTreeCounter - 1 )
+#end
+#end
+#*doc
+《/macro》
+《documentation》
 《code》#chanwDisplayTreeNodeRecursively( $node $stripRoot )《/code》
 《p》Displays a tree with a specific structure, like an XHTML tree. If 《code》$stripRoot《/code》,
 defaulted to 《code》false《/code》, is set to 《code》true《/code》, then the startString and
@@ -110,6 +134,7 @@ endString will not be output.《/p》
 《/documentation》
 《macro id=“chanwDisplayTreeNodeRecursively”》
 doc*###
+##
 #macro( chanwDisplayTreeNodeRecursively $node_chanwDisplayTreeNodeRecursively $stripRoot_chanwDisplayTreeNodeRecursively )
 #if( !$chanwDisplayTreeNodeRecursivelyCounter )
 #set( $chanwDisplayTreeNodeRecursivelyCounter = 0 )
