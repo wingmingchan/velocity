@@ -115,7 +115,7 @@ doc*###
 #set( $chanwDisplayTreeCounter = $chanwDisplayTreeCounter + 1 )
 #end
 #set( $chanwSpace = "  " )
-$node.UserObject[ $TREE_NODE_NAME ]
+$node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]
 #if( $node_chanwDisplayTree.children() )
 #foreach( $child in $node_chanwDisplayTree.children() )
 #foreach( $num in [ 0 .. $chanwDisplayTreeCounter ] )$chanwSpace#end#chanwDisplayTree( $child )#end
