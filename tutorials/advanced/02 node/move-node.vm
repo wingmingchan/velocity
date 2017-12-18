@@ -1,0 +1,21 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#chanwCreateNode( { "name" : 1 } )
+#set( $root = $chanwCreateNode )
+#chanwAddChildren( $chanwObjectNodeMap[ 1 ] [
+    { "name" : 2 },
+    { "name" : 3 },
+    { "name" : 4 }
+] )
+#chanwAddChildren( $chanwObjectNodeMap[ 2 ] [
+    { "name" : 5 },
+    { "name" : 6 }
+] )
+#chanwAddChildren( $chanwObjectNodeMap[ 3 ] [
+    { "name" : 7 },
+    { "name" : 8 },
+    { "name" : 9 }
+] )
+
+$chanwObjectNodeMap[ 1 ].insert( $chanwObjectNodeMap[ 8 ], 1 )
+#chanwDisplayTree( $chanwObjectNodeMap[ 1 ] )
