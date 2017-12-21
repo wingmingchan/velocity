@@ -105,7 +105,7 @@ doc*###
 #**##chanwReinitializeDisplayVelocityCodeGlobalVariables
 ##
 #**### the $chanwDisplayDocumentationWithSource variable is a bool defaulted to true
-#**##if( $_PropertyTool.isNull( $chanwDisplayDocumentationWithSource ) || $chanwDisplayDocumentationWithSource == "true" || $chanwDisplayDocumentationWithSource == true ) 
+#**##if( !$chanwDisplayDocumentationWithSource.Class.Name || $chanwDisplayDocumentationWithSource == "true" || $chanwDisplayDocumentationWithSource == true ) 
 #*    *##set( $chanwWithSource = true )
 #**### don't assign $chanwDisplayDocumentationWithSource because it can be a string
 #**##else

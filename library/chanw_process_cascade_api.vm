@@ -1575,35 +1575,35 @@ doc*###
     #if( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ] )
         #set( $chanwInvokeQueryWithMapAssets = [] ) ## a list of five boolean values
 ##
-        #if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_BLOCKS ] ) &&
+        #if( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_BLOCKS ].Class.Name &&
             !$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_BLOCKS ] )
             #set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
         #else
             #set( $void = $chanwInvokeQueryWithMapAssets.add( true ) )
         #end
 ##
-        #if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FILES ] ) &&
+        #if( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FILES ].Class.Name &&
             !$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FILES ] )
             #set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
         #else
             #set( $void = $chanwInvokeQueryWithMapAssets.add( true ) )
         #end
 ##
-        #if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FOLDERS ] ) &&
+        #if( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FOLDERS ].Class.Name &&
             !$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_FOLDERS ] )
             #set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
         #else
             #set( $void = $chanwInvokeQueryWithMapAssets.add( true ) )
         #end
 ##
-        #if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_PAGES ] ) &&
+        #if( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_PAGES ].Class.Name &&
             !$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_PAGES ] )
             #set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
         #else
             #set( $void = $chanwInvokeQueryWithMapAssets.add( true ) )
         #end
 ##
-        #if( !$_PropertyTool.isNull( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_SYMLINKS ] ) &&
+        #if( $chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_SYMLINKS ].Class.Name &&
             !$chanwInvokeQueryWithMapMap[ $PARAM_ASSETS ][ $PARAM_SYMLINKS ] )
             #set( $void = $chanwInvokeQueryWithMapAssets.add( false ) )
         #else

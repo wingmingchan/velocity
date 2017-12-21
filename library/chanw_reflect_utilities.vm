@@ -70,7 +70,7 @@ point to this library format.《/p》
 《macro id=“chanwDisplayClassAPI”》
 doc*###
 #macro( chanwDisplayClassAPI $chanwDisplayClassAPIObj $chanwDisplayClassAPIHeading $chanwDisplayClassAPIWithH2 )
-    #if( $_PropertyTool.isNull( $chanwDisplayClassAPIObj ) )
+    #if( !$chanwDisplayClassAPIObj.Class.Name )
         No parameter supplied.
         #stop
     #end

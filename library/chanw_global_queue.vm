@@ -39,7 +39,7 @@ Current size: $size$BR
 #chanwRemainingCapacityGlobalQueue( $queue )
 #set( $remainingCapacity = $chanwRemainingCapacityGlobalQueue )
 #set( $item = $_ )
-#if( $remainingCapacity > 0 && !$_PropertyTool.isNull( $item ) )
+#if( $remainingCapacity > 0 && $item.Class.Name )
 #chanwEnqueueGlobalQueue( $queue $item )
 #else
 #break
@@ -95,7 +95,7 @@ $E_PRE
     
     #set( $item = $_ )
     
-    #if( $remainingCapacity > 0 && !$_PropertyTool.isNull( $item ) )
+    #if( $remainingCapacity > 0 && $item.Class.Name )
         #chanwEnqueueGlobalQueue( $queue $item )
     #else
         #break
@@ -152,7 +152,7 @@ doc*###
 《macro id=“chanwEnqueueGlobalQueue”》
 doc*###
 #macro( chanwEnqueueGlobalQueue $chanwGlobalQueue $chanwEnqueueGlobalQueueValue )
-    #if( $_PropertyTool.isNull( $chanwEnqueueGlobalQueueValue ) )
+    #if( !$chanwEnqueueGlobalQueueValue.Class.Name )
 #chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Null value not allowed." "4FR,NFKNRK,t" )
         #stop
     #end

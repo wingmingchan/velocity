@@ -792,7 +792,7 @@ Created by Peter. Example:《/p》
 《macro id=“chanwGetFilePath”》
 doc*###
 #macro( chanwGetFilePath $chanwGetFilePathFile $chanwGetFilePathSite $chanwGetFilePathDefault )
-#**##if( $_PropertyTool.isNull( $_.locateFile( $chanwGetFilePathFile, $chanwGetFilePathSite ) ) )
+#**##if( !$_.locateFile( $chanwGetFilePathFile, $chanwGetFilePathSite ).Class.Name )
 #*    *#$chanwGetFilePathDefault
 #**##else
 #*    *#$chanwGetFilePathFile
@@ -1141,7 +1141,7 @@ doc*###
 #**##foreach( $var in $chanwGetNodeSetsMap.keySet() )
 #*    *##set( $chanwNodeSet = $_XPathTool.selectNodes( $chanwGetNodeSetsNode, $chanwGetNodeSetsMap[ $var ] ) )
 ##
-#*    *##if( $_PropertyTool.isNull( $chanwNodeSet ) )
+#*    *##if( !$chanwNodeSet.Class.Name )
 #*        *##set( $chanwNodeSet = "" )
 #*    *##end
 ##
@@ -1495,7 +1495,7 @@ $chanwIsInstanceOf$BR## output false
 《macro id=“chanwIsInstanceOf”》
 doc*###
 #macro( chanwIsInstanceOf $chanwIsInstanceOfObj $chanwIsInstanceOfClassName )
-#if( $_PropertyTool.isNull( $chanwIsInstanceOfObj ) )
+#if( !$chanwIsInstanceOfObj.Class.Name )
 #chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "The object cannot be null." "msg487548" )
 #stop
 #end
@@ -2127,13 +2127,13 @@ doc*###
     #end
 ##
     ## escape defaulted to true
-    #if( $_PropertyTool.isNull( $chanwSetVariableEscape ) || $chanwSetVariableEscape )
+    #if( !$chanwSetVariableEscape.Class.Name || $chanwSetVariableEscape == true )
         #set( $chanwEscapeValue = true )
     #else
         #set( $chanwEscapeValue = false )
     #end
 ##
-    #if( $_PropertyTool.isNull( $chanwSetVariableVal ) )
+    #if( !$chanwSetVariableVal.Class.Name )
         #set( $chanwValue = "" )## default value
     #elseif( $chanwSetVariableVal.class.name == "java.lang.String" )
         #if( $chanwEscapeValue )
@@ -2245,7 +2245,7 @@ doc*###
     #set( $thomaspeGetFeedPhoto = "" )
 ##
     #foreach( $file in $fileList )
-        #if( !$_PropertyTool.isNull( $_.locateFile( $file , $thomaspeGetFeedPhotoSite ) ) )
+        #if( $_.locateFile( $file , $thomaspeGetFeedPhotoSite ).Class.Name )
             #set( $thomaspeGetFeedPhoto = $file )
             #break
         #end

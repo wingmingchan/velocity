@@ -210,7 +210,7 @@ doc*###
 《macro id=“chanwAddFirstGlobalDeque”》
 doc*###
 #macro( chanwAddFirstGlobalDeque $chanwGlobalDeque $chanwAddFirstGlobalDequeValue )
-    #if( $_PropertyTool.isNull( $chanwAddFirstGlobalDequeValue ) )
+    #if( !$chanwAddFirstGlobalDequeValue.Class.Name )
 #chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Null not allow." "NO9V4PBRNLI" )
         #stop
     #end
@@ -226,7 +226,7 @@ doc*###
 《macro id=“chanwAddLastGlobalDeque”》
 doc*###
 #macro( chanwAddLastGlobalDeque $chanwGlobalDeque $chanwAddLastGlobalDequeValue )
-    #if( $_PropertyTool.isNull( $chanwAddLastGlobalDequeValue ) )
+    #if( !$chanwAddLastGlobalDequeValue.Class.Name )
 #chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Null not allow." "[9G[H9BIO;NM" )
         #stop
     #end

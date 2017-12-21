@@ -101,7 +101,7 @@ doc*###
 《macro id=“chanwPushGlobalStack”》
 doc*###
 #macro( chanwPushGlobalStack $chanwGlobalStack $chanwPushGlobalStackValue )
-    #if( $_PropertyTool.isNull( $chanwPushGlobalStackValue ) )
+    #if( !$chanwPushGlobalStackValue.Class.Name )
 Null not allow
         #stop
     #end

@@ -70,7 +70,7 @@ doc*###
 
     #set( $chanwElementName = $chanwCreateElementWithTextMap[ 'name' ] )
     
-    #if( $_PropertyTool.isNull( $chanwElementName ) )
+    #if( !$chanwElementName.Class.Name )
         The name cannot be null.
         #stop
     #end
@@ -97,7 +97,7 @@ doc*###
 
     #set( $chanwElementName = $chanwCreateEmptyElementMap[ 'name' ] )
     
-    #if( $_PropertyTool.isNull( $chanwElementName ) )
+    #if( !$chanwElementName.Class.Name )
         The name cannot be null.
         #stop
     #end
