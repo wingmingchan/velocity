@@ -132,7 +132,7 @@ doc*###
     "sqlCachepathWithUppercaseChar"
 ] )
 ##
-#if( $_PropertyTool.isNull( $chanwOracleDB ) )
+#if( !$chanwOracleDB.Class.Name )
     #set( $chanwOracleDB = true )  ## defaulted to Oracle
 #end
 ##
@@ -847,7 +847,7 @@ doc*###
 #macro( chanwGetRecordListFromResultSet $chanwGetRecordListFromResultSetRs $chanwGetRecordListFromResultSetWithColNames )
     #chanwCheckResultSet( $chanwGetRecordListFromResultSetRs )
 ##
-    #if( !$_PropertyTool.isNull( $chanwGetRecordListFromResultSetWithColNames ) && $chanwGetRecordListFromResultSetWithColNames )
+    #if( $chanwGetRecordListFromResultSetWithColNames.Class.name && $chanwGetRecordListFromResultSetWithColNames == true )
         #set( $chanwWithColNames = true ) 
     #else
         #set( $chanwWithColNames = false ) ## defaulted to false
