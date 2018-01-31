@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+1/31/2018 Added 
 11/4/2017 Added $TREE_NODE_TEXT and related code
 10/29/2017 Use $DefaultMutableTreeNodeConstructor defined in chanw_initialization.
 10/27/2017 Rewritten chanwTraverseTreeBreadthFirst and chanwTraverseTreePreorder,
@@ -52,6 +53,21 @@ doc*###
             #set( $chanwParent = $chanwCreateNode )
             #chanwAddChildren( $chanwParent $child.Children )
         #end
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwAssembleTree( $map )《/code》
+《p》Imports all formats given in the map to generate a tree.《/p》
+《/documentation》
+《macro id=“chanwAssembleTree”》
+doc*###
+#macro( chanwAssembleTree $map_chanwAssembleTree )
+    #set( $nodes = $map_chanwAssembleTree.keySet() )
+    
+    #foreach( $node in $nodes )
+        #chanwImportScriptByFullPath( $map_chanwAssembleTree[ $node ] )
     #end
 #end
 #*doc
@@ -155,6 +171,18 @@ $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_TEXT ]#end
 #if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_END_TAG ] )
 $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_END_TAG ]#end
 #set( $chanwDisplayTreeNodeRecursivelyCounter = $chanwDisplayTreeNodeRecursivelyCounter - 1 )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwImportScriptByFullPath( $path )《/code》
+《p》Imports a format of the path.《/p》
+《/documentation》
+《macro id=“chanwImportScriptByFullPath”》
+doc*###
+#macro( chanwImportScriptByFullPath $path_chanwImportScriptByFullPath )
+    #set( $import_code = '#import("$path_chanwImportScriptByFullPath")' )
+    #evaluate( $import_code )
 #end
 #*doc
 《/macro》
