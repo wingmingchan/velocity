@@ -1,0 +1,50 @@
+## ex. 1
+## retrieve the Class object of any random class
+#set( $class_obj = $_.Class.forName( "org.jdom.Element" ) )
+$class_obj.Class.Name
+
+#set( $class_obj = $_.Class.forName( "java.util.Locale" ) )
+$class_obj.Class.Name
+
+## ex. 2
+## retrieve constructors
+#set( $constructors = $_.Class.forName( "java.util.Locale" ).getConstructors() )
+$constructors.Class.Name ## an array
+
+## ex. 3
+## display size of parameters
+$constructors[ 0 ].getParameterCount()
+
+## ex. 4
+## display parameter type information
+#foreach( $type in $constructors[ 0 ].getParameterTypes() )
+    $type.Name
+#end
+
+## ex. 5
+#set( $locale = $constructors[ 0 ].newInstance( "en" ) )
+$locale.Class.Name
+
+## ex. 6
+## create a URL object
+#foreach( $constructor in $_.Class.forName( "java.net.URL" ).getConstructors() )
+    #if( $constructor.getParameterCount() == 1 && $constructor.getParameterTypes()[ 0 ].Name == "java.lang.String" )
+        #set( $url = $constructor.newInstance( "https://www.google.com/" ) )
+    #end
+#end
+$url.Class.Name
+
+## ex. 7
+#set( $iStream = $url.openStream() )
+$iStream.Class.Name
+
+## ex. 8
+#foreach( $constructor in $_.Class.forName( "java.util.Scanner" ).getConstructors() )
+    #if( $constructor.getParameterCount() == 1 && $constructor.getParameterTypes()[ 0 ].Name == "java.io.InputStream" )
+        #set( $scanner = $constructor.newInstance( $iStream ) )
+    #end
+#end
+$scanner.Class.Name
+
+## ex. 9
+$_EscapeTool.xml( $scanner.useDelimiter( "\\A" ).next() )
