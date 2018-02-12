@@ -1,0 +1,26 @@
+## ex. 1
+$contentRoot.Name
+
+## ex. 2
+#set( $pages = $_XPathTool.selectNodes( $contentRoot, "//system-page" ) )
+$pages.size()
+
+## ex. 3
+#set( $page = $_XPathTool.selectNodes( $contentRoot, "calling-page/system-page" )[ 0 ] )
+$page.getChild( "name" ).Value
+
+## ex. 4
+#set( $pages = $_XPathTool.selectNodes( $contentRoot, "calling-page/system-page" ) )
+$pages.Class.Name
+
+## ex. 5
+#set( $pages = $contentRoot.getChildren( "system-page" ) )
+$pages.Class.Name
+
+## ex. 6
+## get the current page
+#set( $cur_page = $_XPathTool.selectNodes( $contentRoot, "//system-page[@current]" )[ 0 ] )
+## get all ancestor folders
+#set( $folders = $_XPathTool.selectNodes( $cur_page, "ancestor::node()[name]" ) )
+## or
+#set( $folders = $_XPathTool.selectNodes( $cur_page, "ancestor::node()[@id]" ) )
