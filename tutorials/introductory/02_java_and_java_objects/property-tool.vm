@@ -1,0 +1,5 @@
+#set( $greetings = "Hello, World!" )
+$greetings.Class.Name
+
+$_PropertyTool.outputProperties( $greetings )
+$_PropertyTool.outputProperties( $_PropertyTool )
