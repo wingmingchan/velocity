@@ -1,0 +1,21 @@
+#set( $first = "first" )
+$first
+
+#set( $_blah = "blah" )
+$_blah
+
+#set( $_blah2 = "blah again" )
+$_blah2
+
+## initial dash not allowed
+##set( $-dash = "dash" )
+## OK
+#set( $my-dash = "dash" )
+$my-dash
+#set( $my- = "dash" )
+$my-
+
+## Unicode not allowed
+##set( $变量 = "dash" )
+
+$_PropertyTool.outputProperties( $object )
