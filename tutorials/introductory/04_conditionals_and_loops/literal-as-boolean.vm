@@ -1,0 +1,11 @@
+#if( 3 )
+An integer is true!
+#else
+An integer is false! ## this is output
+#end
+
+#if( [ 1..4 ] )
+A literal list is true!
+#else
+A literal list is false! ## this is output
+#end
