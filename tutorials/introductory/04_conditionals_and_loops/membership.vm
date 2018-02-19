@@ -1,0 +1,21 @@
+#set( $number1 = {
+    1 : "one",
+    2 : "two",
+    3 : "three"
+} )
+
+#set( $number2 = {
+    2 : "two",
+    1 : "one",
+    3 : "three"
+} )
+$number1.keySet()
+$number2.keySet()
+
+#if( $number1.keySet() == $number2.keySet() ) ## true
+The two key sets are equal.
+#end
+
+#if( $number1 == $number2 ) ## true
+The two maps are equal
+#end
