@@ -1,0 +1,7 @@
+#set( $children = $contentRoot.getChildren( "system-page" ) )
+
+#if( $children.size() > 0 )
+## process system-page elements
+#else
+Nothing to process.
+#end
