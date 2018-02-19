@@ -1,0 +1,13 @@
+#if( $condition )
+An undefined variable is true!
+#else
+An undefined variable is false! ## this is output
+#end
+
+#set( $condition = "" )
+
+#if( $condition )
+A defined variable is true! ## this is output
+#else
+A defined variable is false!
+#end
