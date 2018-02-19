@@ -1,0 +1,9 @@
+#set( $number = {
+    1 : "one",
+    2 : "two",
+    3 : "three"
+} )
+
+#foreach( $value in $number.values() )
+$value
+#end
