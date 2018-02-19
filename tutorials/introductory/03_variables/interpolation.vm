@@ -1,0 +1,10 @@
+#set( $var1 = 'one' )
+#set( $var2 = 'two' )
+#set( $var3 = 'three' )
+
+#set( $result1 = '$var1, $var2, and $var3' )
+$result1 ## => $var1, $var2, and $var3
+#set( $result2 = "${var1}, ${var2}, and ${var3}" )
+$result2 ## => one, two, and three
+#set( $result3 = "${var1}self" )
+$result3
