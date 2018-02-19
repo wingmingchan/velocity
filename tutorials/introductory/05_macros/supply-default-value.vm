@@ -1,7 +1,7 @@
 #macro( myMacro $num )
     #set( $myDefault = $num )
 	
-    #if( !$num || $num.Class.Name != "java.lang.Integer" )
+    #if( !$num.Class.Name || $num.Class.Name != "java.lang.Integer" )
         #set( $myDefault = 0 )
     #end
     
