@@ -1,0 +1,5 @@
+#if( "Hello" )
+A String is true!
+#else
+A String is false! ## this is output
+#end
