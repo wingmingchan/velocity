@@ -1,0 +1,8 @@
+#define( $defineMacro )
+#macro( myMacro )
+myMacro invoked
+#end
+#end
+
+#set( $result = "#myMacro" )
+$result
