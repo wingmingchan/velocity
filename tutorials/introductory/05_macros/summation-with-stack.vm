@@ -1,0 +1,16 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_global_stack" )
+
+#summation( 10 )
+$summation
+
+#macro( summation $num ) ## positive integers only
+    #if( $num > 1 )
+        #chanwPushGlobalStack( $chanwGlobalStack $num )
+        #set( $minusOne = $num - 1 )
+        #summation( $minusOne )
+        #chanwPopGlobalStack( $chanwGlobalStack )
+        #set( $summation = $chanwPopGlobalStack + $summation )
+    #else
+        #set( $summation = $num )
+    #end
+#end
