@@ -1,0 +1,10 @@
+#set( $children = $contentRoot.getChildren( "system-data-definition" ) )
+
+#if( $children )
+Always true.
+#end
+
+#if( $children.size() > 0 )
+## proceed
+Process the children
+#end
