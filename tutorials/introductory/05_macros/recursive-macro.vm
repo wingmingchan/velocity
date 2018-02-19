@@ -1,0 +1,9 @@
+#recursiveMacro( 20 )
+
+#macro( recursiveMacro $num ) ## positive integers only
+    $num
+    #if( $num > 1 )
+        #set( $minusOne = $num - 1 )
+        #recursiveMacro( $minusOne )
+    #end
+#end
