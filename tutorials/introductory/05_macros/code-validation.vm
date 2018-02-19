@@ -1,0 +1,7 @@
+#if( false )
+#macro( myMacro )
+myMacro invoked
+#end
+#end
+
+#myMacro
