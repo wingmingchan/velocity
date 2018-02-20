@@ -1,4 +1,6 @@
-#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
+#import( "site://_brisk/core/library/velocity/chanw/chanw_process_xml" )
 
-#chanwProcessSystemDataStructure( $contentRoot )
+#set( $page = $_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page" ) )
+
+#chanwProcessSystemDataStructure( $page [ "wysiwyg" ] )
 #chanwDisplayMapKeys( $chanwXmlXPathTextMap true )
