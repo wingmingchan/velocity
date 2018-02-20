@@ -17,7 +17,7 @@ added documentation.
 《h2》Test Code and Results《/h2》
 《pre》
 =============================================================
-#import( 'core/library/velocity/chanw/chanw_global_macros' )
+#import( 'core/library/velocity/chanw/chanw_initialization' )
 #import( 'core/library/velocity/chanw/chanw_rss_utilities' )
 ${SINGLE_HASH}chanwCreateElementFromNameText( "div" "text" )
 ${DOLLAR}_EscapeTool.xml( ${DOLLAR}chanwCreateElementFromNameText )

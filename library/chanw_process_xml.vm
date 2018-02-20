@@ -66,6 +66,39 @@ doc*###
 #chanwCleanUpMaps
 #*doc
 《documentation》
+《code》#chanwDisplayXmlTree( $node )《/code》
+《p》Displays a tree rooted at the node.《/p》
+《/documentation》
+《macro id=“chanwDisplayXmlTree”》
+doc*###
+#macro( chanwDisplayXmlTree $node_chanwDisplayXmlTree )
+#if( !$node_chanwDisplayXmlTree.Class.Name || $node_chanwDisplayXmlTree.Class.Name != "org.jdom.Element" )
+No node is passed in.
+#break
+#end
+##
+## used to keep track of the level of the nodes
+#if( !$chanwDisplayXmlTreeCounter )
+#set( $chanwDisplayXmlTreeCounter = 0 )
+#else
+#set( $chanwDisplayXmlTreeCounter = $chanwDisplayXmlTreeCounter + 1 )
+#end
+## for formatting the tree
+#set( $chanwSpace = "   " )
+## output the name of the node
+$node_chanwDisplayXmlTree.Name
+#if( $node_chanwDisplayXmlTree.getChildren().size() > 0 )
+#foreach( $child in $node_chanwDisplayXmlTree.getChildren() )
+#foreach( $num in [ 0 .. $chanwDisplayXmlTreeCounter ] )$chanwSpace#end#chanwDisplayXmlTree( $child )#end
+#end
+## adjusting the counter of levels
+#if( $chanwDisplayXmlTreeCounter > 0 )
+#set( $chanwDisplayXmlTreeCounter = $chanwDisplayXmlTreeCounter - 1 )
+#end
+#end
+#*doc
+《/macro》
+《documentation》
 《code》#chanwProcessSystemDataStructure( $element $wysiwyg_ids )《/code》
 《p》Processes a 《code》system-data-structure《/code》 object (a 《code》org.jdom.Element《/code》 object).
 This can be the entry point of the library format. Note that the element passed in does not have to be

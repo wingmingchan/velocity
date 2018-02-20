@@ -2,9 +2,10 @@
 《code》
 《copyright》
 Author: Wing Ming Chan
-Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+2/19/2018 Fixed a bug in chanwProcessStructuredDataNodes.
 9/8/2017 Added documentation of #chanwInvokeQueryWithMap.
 8/30/2017 Updated chanwInvokeQuery with code to deal with hasMetadata.
 Added constants related to $query.
@@ -986,16 +987,14 @@ doc*###
             #chanwGetTextNodeSubType( $node )
             #set( $void = $chanwNodeAttributes.put( $KEY_SUBTYPE, $chanwGetTextNodeSubType ) )
 ##
-            #if( $node.TextValues )
+            #if( $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_PLAIN_TEXT || $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_DROPDOWN ||
+                $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_RADIO )
+                #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $_EscapeTool.xml( $node.TextValue ) ) )
+            #elseif( $child.TextNodeOptions.isWysiwyg() )
+                #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $node.TextValues[ 0 ] ) )
+            #elseif( $node.TextValues.Class.Name )
                 #chanwGetTextValues( $node.TextValues )
-##
-                #if( $chanwGetTextValues.size() > 1 )
-                    #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues ) )
-                #elseif( $chanwGetTextValues.size() == 1 )
-                    #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues[ 0 ] ) )
-                #end
-            #else
-                #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $node.TextValue ) )
+                #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues ) )
             #end
         #else ## asset
             #set( $void = $chanwNodeAttributes.put( $KEY_TYPE, 'asset' ) )
@@ -1075,18 +1074,16 @@ doc*###
                     #chanwGetTextNodeSubType( $child )
                     #set( $void = $chanwNodeAttributes.put( $KEY_SUBTYPE, $chanwGetTextNodeSubType ) )
 ##
-                    #if( $child.TextValues )
+                    #if( $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_PLAIN_TEXT || $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_DROPDOWN || 
+                        $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_RADIO )
+                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $_EscapeTool.xml( $child.TextValue ) ) )
+                    #elseif( $child.TextNodeOptions.isWysiwyg() )
+                    ##$_EscapeTool.xml( $child.TextValues[ 0 ] )
+                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $child.TextValues[ 0 ] ) )
+                    #elseif( $child.TextValues.Class.Name )
                         #chanwGetTextValues( $child.TextValues )
 ##
-                        #if( $chanwGetTextValues.size() > 1 )
-                            #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues ) )
-                        #elseif( $chanwGetTextValues.size() == 1 )
-                            #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues[ 0 ] ) )
-                        #end
-                    #elseif( $child.TextNodeOptions.isWysiwyg() )
-                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $child.TextValue ) )
-                    #else
-                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $_EscapeTool.xml( $child.TextValue ) ) )
+                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues ) )
                     #end
                 #else ## group
                     #set( $void = $chanwNodeAttributes.put( $KEY_TYPE, 'group' ) )
