@@ -1,0 +1,1 @@
+$_XPathTool.selectSingleNode( $contentRoot, "calling-page/system-page/dynamic-metadata[4]/value" ).Value
