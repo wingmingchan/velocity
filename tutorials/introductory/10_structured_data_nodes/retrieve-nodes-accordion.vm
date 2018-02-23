@@ -1,0 +1,7 @@
+#set( $block = $_.locateBlock( "_cascade/blocks/data/thread_directors-clinical_science", "com" ) )
+#set( $nodes = $block.StructuredData )
+$nodes.size() ##=> 4
+
+#set( $groups = $block.getStructuredDataNodes( "h2-wysiwyg-group" ) )
+$groups.Class.Name
+$groups.size() ##=> 3
