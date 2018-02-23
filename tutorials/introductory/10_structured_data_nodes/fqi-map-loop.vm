@@ -5,7 +5,7 @@
 #set( $group = $block.getStructuredDataNode( "slide-show-group" ) )
 #chanwGetFQINodeMap( $group )
 
-## display all image files in the slide
+## display all image files in the slideshow
 <div class="slideshow" id="slideshow">
 #foreach( $count in [ 1..$chanwGetFQINodeMap[ "slide-show-group;mul-image;0" ][ $KEY_SIZE ] ] )
     #set( $filePath = $chanwGetFQINodeMap[ "slide-show-group;mul-image;${foreach.index};selectimage" ][ $KEY_DATA ] )
