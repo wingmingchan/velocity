@@ -1,0 +1,13 @@
+#set( $block = $_.locateBlock( "_cascade/blocks/data/latin-wysiwyg", "formats" ) )
+#set( $nodes = $block.StructuredData )
+$nodes.Class.Name ##=> [Lcom.hannonhill.cascade.api.asset.common.StructuredDataNode;
+$nodes.size()     ##=> 2
+
+#set( $group = $block.getStructuredDataNode( "wysiwyg-group" ) )
+$group.Identifier ##=> wysiwyg-group
+
+#set( $checkbox = $block.getStructuredDataNode( "wysiwyg-group/admin-options" ) )
+$checkbox.Identifier ##=> admin-options
+
+#set( $checkboxes = $block.getStructuredDataNodes( "wysiwyg-group/admin-options" ) )
+$checkboxes[ 0 ].Identifier ##=> admin-options
