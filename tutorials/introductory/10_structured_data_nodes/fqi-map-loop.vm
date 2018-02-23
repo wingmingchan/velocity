@@ -1,0 +1,20 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#import( "site://_brisk/core/macros/drulykgVarDump" )
+
+#set( $block = $_.locateBlock( "_cascade/blocks/data/hospital-home-slideshow", "hospital" ) )
+#set( $group = $block.getStructuredDataNode( "slide-show-group" ) )
+#chanwGetFQINodeMap( $group )
+
+## display all image files in the slide
+#foreach( $count in [ 1..$chanwGetFQINodeMap[ "slide-show-group;mul-image;0" ][ $KEY_SIZE ] ] )
+    $chanwGetFQINodeMap[ "slide-show-group;mul-image;${foreach.index};selectimage" ][ $KEY_DATA ]
+#end
+
+#* output:
+
+    images/stroke-home-image.jpg
+    images/home-bratslavsky-cancer.jpg
+    images/uh-downtown-night-pano.jpg
+    images/upstate-transport-helicopter.jpg
+    images/home-slider-gch.jpg
+*#
