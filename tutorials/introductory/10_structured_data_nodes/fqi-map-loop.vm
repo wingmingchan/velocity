@@ -8,30 +8,29 @@
 ## display all image files in the slideshow
 <div class="slideshow" id="slideshow">
 #foreach( $count in [ 1..$chanwGetFQINodeMap[ "slide-show-group;mul-image;0" ][ $KEY_SIZE ] ] )
-    #set( $filePath = $chanwGetFQINodeMap[ "slide-show-group;mul-image;${foreach.index};selectimage" ][ $KEY_DATA ] )
-    #set( $altText  = $chanwGetFQINodeMap[ "slide-show-group;mul-image;${foreach.index};altText" ][ $KEY_DATA ] )
     <div class="slide">
-    <img src="$filePath" alt="${altText}" />
+    <img src="${chanwGetFQINodeMap[ "slide-show-group;mul-image;$foreach.index;selectimage" ][ $KEY_DATA ]}"
+        alt="${chanwGetFQINodeMap[ "slide-show-group;mul-image;$foreach.index;altText" ][ $KEY_DATA ]}" />
     </div>
 #end
 </div>
 #* output:
 
 <div class="slideshow" id="slideshow">
-    <div class="slide">
-        <img src="images/stroke-home-image.jpg" alt="Upstate Comprehensive Stroke Center" />
-    </div>
-    <div class="slide">
-        <img src="images/home-bratslavsky-cancer.jpg" alt="Upstate Cancer Center" />
-    </div>
-    <div class="slide">
-        <img src="images/uh-downtown-night-pano.jpg" alt="Upstate University Hospital" />
-    </div>
-    <div class="slide">
-        <img src="images/upstate-transport-helicopter.jpg" alt="Upstate Trauma Center" />
-    </div>
-    <div class="slide">
-        <img src="images/home-slider-gch.jpg" alt="Golisano Children's Hospital" />
-    </div>
+	<div class="slide">
+		<img src="images/stroke-home-image.jpg" alt="Upstate Comprehensive Stroke Center" />
+	</div>
+	<div class="slide">
+		<img src="images/home-bratslavsky-cancer.jpg" alt="Upstate Cancer Center" />
+	</div>
+	<div class="slide">
+		<img src="images/uh-downtown-night-pano.jpg" alt="Upstate University Hospital" />
+	</div>
+	<div class="slide">
+		<img src="images/upstate-transport-helicopter.jpg" alt="Upstate Trauma Center" />
+	</div>
+	<div class="slide">
+		<img src="images/home-slider-gch.jpg" alt="Golisano Children's Hospital" />
+	</div>
 </div>
 *#
