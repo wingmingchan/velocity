@@ -1,0 +1,267 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#import( "site://_brisk/core/macros/drulykgVarDump" )
+
+#set( $block = $_.locateBlock( "_cascade/blocks/data/hospital-home-slideshow", "hospital" ) )
+#set( $group = $block.getStructuredDataNode( "slide-show-group" ) )
+#chanwGetFQINodeMap( $group )
+#set( $result = "#drulykgVarDump( $chanwGetFQINodeMap )" )
+$result.trim()
+
+#* output:
+
+    ["slide-show-group"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@46ccc37b )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;style"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@59af4a83 )
+        ["data"] == String(8)( "Homepage" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(5)( "radio" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;caption-yes"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@88f5691 )
+        ["data"] == ArrayList(array)(1) [
+            [0] == String(27)( "Show Description as Caption" )
+        ]
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(8)( "checkbox" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;0"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@63703229 )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 5 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;1"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@1a6651d1 )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 5 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;2"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@39ce2751 )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 5 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;3"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@e9a6759 )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 5 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;4"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@51016990 )
+        ["data"] == null
+        ["type"] == String(5)( "group" )
+        ["size"] == Integer( 5 )
+        ["subtype"] == null
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;0;selectimage"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@27d2b1a5 )
+        ["data"] == String(28)( "images/stroke-home-image.jpg" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "file" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@7459f0d1 )
+    }
+    ["slide-show-group;mul-image;0;altText"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@65f848cd )
+        ["data"] == String(35)( "Upstate Comprehensive Stroke Center" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;0;subheadline"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@229f6dbd )
+        ["data"] == String(47)( "Exceeding the Highest Standards for Stroke Care" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;0;image-link"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@7ecd732e )
+        ["data"] == String(5)( "index" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "page" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@28a9f975 )
+    }
+    ["slide-show-group;mul-image;1;selectimage"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@75dc3956 )
+        ["data"] == String(34)( "images/home-bratslavsky-cancer.jpg" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "file" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@24a3b7fc )
+    }
+    ["slide-show-group;mul-image;1;altText"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@57d7fa43 )
+        ["data"] == String(21)( "Upstate Cancer Center" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;1;subheadline"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@42f08020 )
+        ["data"] == String(55)( "Caring for Patients. Searching for Cures. Saving Lives." )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;1;image-link"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@618aab3 )
+        ["data"] == String(5)( "index" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "page" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@205c72a8 )
+    }
+    ["slide-show-group;mul-image;2;selectimage"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@4fd237a0 )
+        ["data"] == String(33)( "images/uh-downtown-night-pano.jpg" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "file" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@1bb8c10a )
+    }
+    ["slide-show-group;mul-image;2;altText"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@59215d00 )
+        ["data"] == String(27)( "Upstate University Hospital" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;2;subheadline"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@596b2da3 )
+        ["data"] == String(101)( " Our philosophy is centered around meeting and exceeding the needs of our patients and their families" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;2;image-link"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@1ad173e2 )
+        ["data"] == String(11)( "about/index" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "page" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@7c3de159 )
+    }
+    ["slide-show-group;mul-image;3;selectimage"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@54cf32cb )
+        ["data"] == String(39)( "images/upstate-transport-helicopter.jpg" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "file" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@4598a575 )
+    }
+    ["slide-show-group;mul-image;3;altText"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@68d659ae )
+        ["data"] == String(21)( "Upstate Trauma Center" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;3;subheadline"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@5367016f )
+        ["data"] == String(46)( "The region's only level one trauma center" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;3;image-link"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@2585165f )
+        ["data"] == String(23)( "healthcare/trauma/index" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "page" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@612465c )
+    }
+    ["slide-show-group;mul-image;4;selectimage"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@7b9688ae )
+        ["data"] == String(26)( "images/home-slider-gch.jpg" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "file" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@5bff7705 )
+    }
+    ["slide-show-group;mul-image;4;altText"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@1e7aad42 )
+        ["data"] == String(33)( "Golisano Children's Hospital" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;4;subheadline"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@41236076 )
+        ["data"] == String(47)( "The Region's Only Children's Hospital" )
+        ["type"] == String(4)( "text" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(9)( "plaintext" )
+        ["content"] == null
+        ["site"] == null
+    }
+    ["slide-show-group;mul-image;4;image-link"] == LinkedHashMap(7) {
+        ["node"] == StructuredDataNodeAPIAdapter( com.hannonhill.cascade.api.adapters.StructuredDataNodeAPIAdapter@460ee870 )
+        ["data"] == String(5)( "index" )
+        ["type"] == String(5)( "asset" )
+        ["size"] == Integer( 1 )
+        ["subtype"] == String(4)( "page" )
+        ["content"] == null
+        ["site"] == SiteAPIAdapter( com.hannonhill.cascade.api.adapters.SiteAPIAdapter@485b720a )
+    }
+}
+*#
