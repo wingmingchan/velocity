@@ -1,0 +1,12 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $block = $_.locateBlock( "_cascade/blocks/data/all-fields", "formats" ) )
+#set( $node = $block.getStructuredDataNode( "group" ) )
+#chanwDisplayStructuredDataNode( $node )
+
+#* output:
+
+Identifier: group
+Type: Group
+Number of Children: 14
+*#
