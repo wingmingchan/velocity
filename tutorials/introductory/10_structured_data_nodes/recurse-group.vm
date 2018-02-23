@@ -1,0 +1,84 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $block = $_.locateBlock( "_cascade/blocks/data/all-fields", "formats" ) )
+#set( $node = $block.getStructuredDataNode( "group" ) )
+#chanwRecurseGroup( $node )
+
+#* output:
+
+Identifier: group
+Type: Group
+Number of Children: 14
+
+Identifier: text
+Type: Text
+Subtype: PlainText
+Text Value: Hello
+Text Values: [ Hello ]
+
+Identifier: multiline
+Type: Text
+Subtype: PlainText
+Text Values: [  ]
+
+Identifier: wysiwyg
+Type: Text
+Subtype: Wysiwyg
+Text Value: 
+<p>Some contents.</p>
+Text Values: [ 
+<p>Some contents.</p> ]
+
+Identifier: checkbox
+Type: Text
+Subtype: Checkbox
+Text Values: [  ]
+
+Identifier: dropdown
+Type: Text
+Subtype: Dropdown
+Text Value: Deux
+Text Values: [ Deux ]
+
+Identifier: radio
+Type: Text
+Subtype: Radio
+Text Value: No
+Text Values: [ No ]
+
+Identifier: multiselect
+Type: Text
+Subtype: Multiselect
+Text Values: [  ]
+
+Identifier: calendar
+Type: Text
+Subtype: Calendar
+Text Value: 02-07-2018
+Text Values: [ 02-07-2018 ]
+
+Identifier: datetime
+Type: Text
+Subtype: Datetime
+Text Value: 1519560000000
+Text Values: [ 1519560000000 ]
+
+Identifier: page-chooser
+Type: Asset
+Asset ID: 9a13b3198b7f08ee5d439b31fa8691c5
+Asset Path: velocity/courses/introductory-course/v-introductory-lesson07
+Asset Type: com.hannonhill.cascade.api.adapters.PageAPIAdapter
+Site: formats
+
+Identifier: file-chooser
+Type: Asset
+
+Identifier: block-chooser
+Type: Asset
+
+Identifier: symlink-chooser
+Type: Asset
+
+Identifier: linkable-chooser
+Type: Asset
+*#
