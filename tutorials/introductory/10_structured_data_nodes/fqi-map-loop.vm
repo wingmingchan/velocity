@@ -7,7 +7,7 @@
 
 ## display all image files in the slide
 #foreach( $count in [ 1..$chanwGetFQINodeMap[ "slide-show-group;mul-image;0" ][ $KEY_SIZE ] ] )
-        #set( $filePath = $chanwGetFQINodeMap[ "slide-show-group;mul-image;${foreach.index};selectimage" ][ $KEY_DATA ] )
+    #set( $filePath = $chanwGetFQINodeMap[ "slide-show-group;mul-image;${foreach.index};selectimage" ][ $KEY_DATA ] )
     <img src="$filePath" />
 #end
 
