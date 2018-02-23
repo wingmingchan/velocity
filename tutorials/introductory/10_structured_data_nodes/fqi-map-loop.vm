@@ -1,5 +1,4 @@
 #import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
-#import( "site://_brisk/core/macros/drulykgVarDump" )
 
 #set( $block = $_.locateBlock( "_cascade/blocks/data/hospital-home-slideshow", "hospital" ) )
 #set( $group = $block.getStructuredDataNode( "slide-show-group" ) )
