@@ -1,0 +1,9 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $block = $_.locateBlock( "_cascade/blocks/data/hospital-home-slideshow", "hospital" ) )
+#set( $group = $block.getStructuredDataNode( "slide-show-group" ) )
+##chanwGetFQINodeMap( $block.StructuredData )
+#chanwGetFQINodeMap( $group )
+$chanwGetFQINodeMap.keySet()
+
+$chanwGetFQINodeMap[ "slide-show-group;mul-image;0;altText" ][ "data" ]
