@@ -17,20 +17,20 @@
 #* output:
 
 <div class="slideshow" id="slideshow">
-	<div class="slide">
-		<img src="images/stroke-home-image.jpg" alt="Upstate Comprehensive Stroke Center" />
-	</div>
-	<div class="slide">
-		<img src="images/home-bratslavsky-cancer.jpg" alt="Upstate Cancer Center" />
-	</div>
-	<div class="slide">
-		<img src="images/uh-downtown-night-pano.jpg" alt="Upstate University Hospital" />
-	</div>
-	<div class="slide">
-		<img src="images/upstate-transport-helicopter.jpg" alt="Upstate Trauma Center" />
-	</div>
-	<div class="slide">
-		<img src="images/home-slider-gch.jpg" alt="Golisano Children's Hospital" />
-	</div>
+    <div class="slide">
+        <img src="images/stroke-home-image.jpg" alt="Upstate Comprehensive Stroke Center" />
+    </div>
+    <div class="slide">
+        <img src="images/home-bratslavsky-cancer.jpg" alt="Upstate Cancer Center" />
+    </div>
+    <div class="slide">
+        <img src="images/uh-downtown-night-pano.jpg" alt="Upstate University Hospital" />
+    </div>
+    <div class="slide">
+        <img src="images/upstate-transport-helicopter.jpg" alt="Upstate Trauma Center" />
+    </div>
+    <div class="slide">
+        <img src="images/home-slider-gch.jpg" alt="Golisano Children's Hospital" />
+    </div>
 </div>
 *#
