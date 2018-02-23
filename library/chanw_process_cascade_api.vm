@@ -349,6 +349,73 @@ $key: #evaluate( "$$key" )$BR
 #*doc
 《/macro》
 《documentation》
+《code》#chanwDisplayStringArray( $array )《/code》
+《p》Displays all Strings in the array.《/p》
+《p》Examples:《/p》
+《pre》
+#chanwDisplayStringArray( $array )
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayStringArray”》
+doc*###
+#macro( chanwDisplayStringArray $array_chanwDisplayStringArray )[ #foreach( $item in $array_chanwDisplayStringArray )$item#if( $foreach.hasNext() ), #end#end ]#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwDisplayStructuredDataNode( $node )《/code》
+《p》Displays information of the node.《/p》
+《p》Examples:《/p》
+《pre》
+#chanwDisplayStructuredDataNode( $node )
+《/pre》
+《/documentation》
+《macro id=“chanwDisplayStructuredDataNode”》
+doc*###
+#macro( chanwDisplayStructuredDataNode $node_chanwDisplayStructuredDataNode $br_chanwDisplayStructuredDataNode )
+#if( !$node_chanwDisplayStructuredDataNode.Class.Name || $node_chanwDisplayStructuredDataNode.Class.Name != $COM_CASCADE_STRUCTURED_DATA_NODE_CLASS_NAME )
+No strutured data node is passed in.
+#break
+#end
+#if( $br_chanwDisplayStructuredDataNode.Class.Name && $br_chanwDisplayStructuredDataNode.Class.Name == $JAVA_LANG_BOOLEAN_CLASS_NAME )
+#set( $chanwWithBr = $br_chanwDisplayStructuredDataNode )
+#else## default to false
+#set( $chanwWithBr = false )
+#end
+
+Identifier: $node_chanwDisplayStructuredDataNode.Identifier#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+#*    group    *##if( $node_chanwDisplayStructuredDataNode.isGroup() )
+Type: Group#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+Number of Children: $node_chanwDisplayStructuredDataNode.Children.size()#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+#*    asset    *#
+#elseif( $node_chanwDisplayStructuredDataNode.isAsset() )
+Type: Asset#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+#if( $node_chanwDisplayStructuredDataNode.Asset.Class.Name )
+#set( $chanwAssetIdentifier = $node_chanwDisplayStructuredDataNode.AssetIdentifier )
+Asset ID: $chanwAssetIdentifier.Id#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+Asset Path: $node_chanwDisplayStructuredDataNode.Asset.Identifier.Path.PathAsString#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+Asset Type: $node_chanwDisplayStructuredDataNode.Asset.Class.Name#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+Site: $node_chanwDisplayStructuredDataNode.Asset.Site.Name#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+#end
+#*    text    *#
+#else
+Type: Text#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+#set( $chanwTextOptions = $node_chanwDisplayStructuredDataNode.TextNodeOptions )
+#set( $chanwTextSubTypes = [ "Radio", "PlainText", "Checkbox", "Multiselect", "Wysiwyg", "Dropdown", "Calendar", "Datetime" ] )
+#foreach( $subType in $chanwTextSubTypes )
+#set( $chanwCode = '#if( $chanwTextOptions.is' + $subType + '())Subtype: ' + $subType + '#if( $chanwWithBr )$BR#else$chanwNEWLINE#end#end' )
+#evaluate( $chanwCode )
+#end
+#if( $node_chanwDisplayStructuredDataNode.TextValue.Class.Name )
+Text Value: $node_chanwDisplayStructuredDataNode.TextValue#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+#end
+#if( $node_chanwDisplayStructuredDataNode.TextValues.Class.Name )
+Text Values: #chanwDisplayStringArray( $node_chanwDisplayStructuredDataNode.TextValues )#if( $chanwWithBr )$BR#else$chanwNEWLINE#end
+#end
+#end
+#end
+#*doc
+《/macro》
+《documentation》
 《code》#chanwGetAssetId( $asset )《/code》
 《p》Returns the Id string of the asset.《/p》
 《p》Examples:《/p》
@@ -1077,8 +1144,7 @@ doc*###
                     #if( $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_PLAIN_TEXT || $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_DROPDOWN || 
                         $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_RADIO )
                         #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $_EscapeTool.xml( $child.TextValue ) ) )
-                    #elseif( $child.TextNodeOptions.isWysiwyg() )
-                    ##$_EscapeTool.xml( $child.TextValues[ 0 ] )
+                    #elseif( $child.TextNodeOptions.isWysiwyg() && $child.TextValues.Class.Name && $child.TextValues.size() > 0 )
                         #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $child.TextValues[ 0 ] ) )
                     #elseif( $child.TextValues.Class.Name )
                         #chanwGetTextValues( $child.TextValues )
@@ -1113,13 +1179,14 @@ doc*###
 《/documentation》
 《macro id=“chanwRecurseGroup”》
 doc*###
-#macro( chanwRecurseGroup $chanwRecurseGroupGroupName )
-    Group identifier: $chanwRecurseGroupGroupName.Identifier$BR 
+#macro( chanwRecurseGroup $chanwRecurseGroupGroupNode $chanwRecurseGroupWithBr )
+    #chanwDisplayStructuredDataNode( $chanwRecurseGroupGroupNode $chanwRecurseGroupWithBr )
+    ##Group identifier: $chanwRecurseGroupGroupName.Identifier$BR 
 ##
-    #set( $chanwChildren = $chanwRecurseGroupGroupName.Children )
+    #set( $chanwChildren = $chanwRecurseGroupGroupNode.Children )
 ##
     #if( $chanwChildren.size() > 0 )      
-        #chanwRecurseNodes( $chanwChildren )
+        #chanwRecurseNodes( $chanwChildren $chanwRecurseGroupWithBr )
     #end
 #end
 #*doc
@@ -1145,6 +1212,9 @@ doc*###
     #end
 ##
     #foreach( $child in $chanwRecurseNodesNodes )
+        #if( $child.isGroup() )#chanwRecurseGroup( $child )
+        #else#chanwDisplayStructuredDataNode( $child $chanwRecurseGroupWithBr )#end
+#*
         #if( $child.isText() )
             Text identifier: $child.Identifier$BR 
 ##
@@ -1162,6 +1232,7 @@ doc*###
             Asset path: $asset.Identifier.Path.PathAsString, asset type: $asset.Identifer.Type$BR 
         #end
         $BR
+*#
     #end
 #end
 #*doc
