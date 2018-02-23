@@ -1,20 +1,37 @@
 #import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#import( "site://_brisk/core/macros/drulykgVarDump" )
 
 #set( $block = $_.locateBlock( "_cascade/blocks/data/hospital-home-slideshow", "hospital" ) )
 #set( $group = $block.getStructuredDataNode( "slide-show-group" ) )
 #chanwGetFQINodeMap( $group )
 
 ## display all image files in the slide
+<div class="slideshow" id="slideshow">
 #foreach( $count in [ 1..$chanwGetFQINodeMap[ "slide-show-group;mul-image;0" ][ $KEY_SIZE ] ] )
     #set( $filePath = $chanwGetFQINodeMap[ "slide-show-group;mul-image;${foreach.index};selectimage" ][ $KEY_DATA ] )
-    <img src="$filePath" />
+    #set( $altText  = $chanwGetFQINodeMap[ "slide-show-group;mul-image;${foreach.index};altText" ][ $KEY_DATA ] )
+    <div class="slide">
+    <img src="$filePath" alt="${altText}" />
+    </div>
 #end
-
+</div>
 #* output:
 
-<img src="images/stroke-home-image.jpg" />
-<img src="images/home-bratslavsky-cancer.jpg" />
-<img src="images/uh-downtown-night-pano.jpg" />
-<img src="images/upstate-transport-helicopter.jpg" />
-<img src="images/home-slider-gch.jpg" />
+<div class="slideshow" id="slideshow">
+	<div class="slide">
+		<img src="images/stroke-home-image.jpg" alt="Upstate Comprehensive Stroke Center" />
+	</div>
+	<div class="slide">
+		<img src="images/home-bratslavsky-cancer.jpg" alt="Upstate Cancer Center" />
+	</div>
+	<div class="slide">
+		<img src="images/uh-downtown-night-pano.jpg" alt="Upstate University Hospital" />
+	</div>
+	<div class="slide">
+		<img src="images/upstate-transport-helicopter.jpg" alt="Upstate Trauma Center" />
+	</div>
+	<div class="slide">
+		<img src="images/home-slider-gch.jpg" alt="Golisano Children's Hospital" />
+	</div>
+</div>
 *#
