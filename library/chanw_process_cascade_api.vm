@@ -1057,8 +1057,8 @@ doc*###
             #if( $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_PLAIN_TEXT || $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_DROPDOWN ||
                 $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_RADIO )
                 #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $_EscapeTool.xml( $node.TextValue ) ) )
-            #elseif( $child.TextNodeOptions.isWysiwyg() )
-                #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $node.TextValues[ 0 ] ) )
+            #elseif( $node.TextNodeOptions.isWysiwyg() )
+                #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $node.TextValue ) )
             #elseif( $node.TextValues.Class.Name )
                 #chanwGetTextValues( $node.TextValues )
                 #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $chanwGetTextValues ) )
@@ -1144,8 +1144,8 @@ doc*###
                     #if( $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_PLAIN_TEXT || $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_DROPDOWN || 
                         $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_RADIO )
                         #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $_EscapeTool.xml( $child.TextValue ) ) )
-                    #elseif( $child.TextNodeOptions.isWysiwyg() && $child.TextValues.Class.Name && $child.TextValues.size() > 0 )
-                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $child.TextValues[ 0 ] ) )
+                    #elseif( $child.TextNodeOptions.isWysiwyg()  )
+                        #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $child.TextValue ) )
                     #elseif( $child.TextValues.Class.Name )
                         #chanwGetTextValues( $child.TextValues )
 ##
