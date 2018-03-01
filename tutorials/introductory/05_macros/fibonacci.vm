@@ -1,0 +1,54 @@
+#import( 'site://_brisk/core/library/velocity/chanw/chanw_date_time_utilities' )
+$chanwStartMeasurement
+#fibonacci( 20 )
+
+$fibonacci
+Time taken: $chanwEndMeasurement milliseconds
+
+#macro( fibonacci $term )
+    ## initial setup
+    #set( $ANSWER    = "answer" )
+    #set( $MINUS_ONE = "minusOne" )
+    #set( $MINUS_TWO = "minusTwo" )
+    #set( $TEMP      = "temp" )
+##
+    #if( !$fibonacciMap.Class.Name )
+        #set( $fibonacciMap = {} )
+    #end
+    ## inner map
+    #if( !$fibonacciMap[ $term ].Class.Name )
+        #set( $fibonacciMap[ $term ] = {} )
+    #end
+##
+    ## avoid doing unnecessary work if the answer is there
+    #if( $fibonacciMap[ $term ][ $ANSWER ].Class.Name )
+        #break
+    #end
+##
+    #if( $term == 1 || $term == 2 )
+        #if( !$fibonacciMap[ $term ][ $ANSWER ].Class.Name )
+            #set( $fibonacciMap[ $term ][ $ANSWER ] = 1 )
+        #end
+    #else
+        ## $term is not global and never changes
+        #set( $minusOne = $term - 1 )
+        #set( $minusTwo = $term - 2 )
+        ## store $minusOne and $minusTwo for the current $term
+        #if( !$fibonacciMap[ $term ][ $MINUS_ONE ].Class.Name )
+            #set( $fibonacciMap[ $term ][ $MINUS_ONE ] = $minusOne )
+        #end
+        #if( !$fibonacciMap[ $term ][ $MINUS_TWO ].Class.Name )
+            #set( $fibonacciMap[ $term ][ $MINUS_TWO ] = $minusTwo )
+        #end
+        ## find the answer of $term
+        #if( !$fibonacciMap[ $term ][ $ANSWER ].Class.Name )
+            Invoking macro with $fibonacciMap[ $term ][ $MINUS_ONE ]
+            #fibonacci( $fibonacciMap[ $term ][ $MINUS_ONE ] )
+            #set( $fibonacciMap[ $term ][ $TEMP ] = $fibonacci )
+            Invoking macro with $fibonacciMap[ $term ][ $MINUS_TWO ]
+            #fibonacci( $fibonacciMap[ $term ][ $MINUS_TWO ] )
+            #set( $fibonacciMap[ $term ][ $ANSWER ] = $fibonacci + $fibonacciMap[ $term ][ $TEMP ] )
+        #end
+    #end
+    #set( $fibonacci = $fibonacciMap[ $term ][ $ANSWER ] )
+#end
