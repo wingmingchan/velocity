@@ -1,9 +1,9 @@
 #import( 'site://_brisk/core/library/velocity/chanw/chanw_date_time_utilities' )
 $chanwStartMeasurement
-#fibonacci( 20 )
+#fibonacci( 180 )
 
 $fibonacci
-Time taken: $chanwEndMeasurement milliseconds
+Time taken: $chanwEndMeasurement seconds
 
 #macro( fibonacci $term )
     ## initial setup
@@ -18,11 +18,6 @@ Time taken: $chanwEndMeasurement milliseconds
     ## inner map
     #if( !$fibonacciMap[ $term ].Class.Name )
         #set( $fibonacciMap[ $term ] = {} )
-    #end
-##
-    ## avoid doing unnecessary work if the answer is there
-    #if( $fibonacciMap[ $term ][ $ANSWER ].Class.Name )
-        #break
     #end
 ##
     #if( $term == 1 || $term == 2 )
