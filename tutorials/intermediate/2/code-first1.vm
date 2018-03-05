@@ -1,5 +1,0 @@
-#*
-This format shows that even though "#set($var=4)" looks like a string, it is treated as code.
-*#
-#set( $str = "#set($var=4)" )
-$var

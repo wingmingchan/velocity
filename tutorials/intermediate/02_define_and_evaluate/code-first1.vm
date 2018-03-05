@@ -1,0 +1,8 @@
+#*
+This format shows that even though "#set($var=4)" looks like a String, it is treated as code.
+The variable $str is defined and stores the empty String.
+*#
+#set( $str = "#set($var=4)" )
+$var            ##=> 4
+$str.Class.Name ##=> java.lang.String
+-$str -         ##=> - -
