@@ -1,3 +1,0 @@
-$_.class.forName( 
-    "java.lang.Math" ).getMethod( 
-    "abs", $_FieldTool.in( "java.lang.Double" ).TYPE ).invoke( null, -3.2 )

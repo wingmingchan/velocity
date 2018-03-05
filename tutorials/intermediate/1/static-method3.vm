@@ -1,4 +1,0 @@
-#set( $chanwInstantNow       = $_.Class.forName( "java.time.Instant" ).now() )
-$chanwInstantNow.Class.Name
-#set( $chanwLocalDateNow     = $_.Class.forName( "java.time.LocalDate" ).now() )
-$chanwLocalDateNow.Class.Name
