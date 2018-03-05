@@ -1,0 +1,22 @@
+#*
+This format shows how to create a tree of three nodes.
+*#
+## step 1: get the Class object
+#set( $dmtnClassObj = $_.Class.forName( "javax.swing.tree.DefaultMutableTreeNode" ) )
+$dmtnClassObj.Class.Name ##=> java.lang.Class, this is a Class object
+$dmtnClassObj.Name       ##=> javax.swing.tree.DefaultMutableTreeNode, the class represented
+
+## step 2: get the constructor
+#set( $dmtnConstructor = $dmtnClassObj.getConstructor() )
+$dmtnConstructor.Class.Name ##=> java.lang.reflect.Constructor
+$dmtnConstructor.Name ##=> javax.swing.tree.DefaultMutableTreeNode, name of the constructor
+
+## step 3: create three tree nodes
+#set( $rootNode = $dmtnConstructor.newInstance() )
+$rootNode.Class.Name ##=> javax.swing.tree.DefaultMutableTreeNode
+#set( $leftChild = $dmtnConstructor.newInstance() )
+#set( $rightChild = $dmtnConstructor.newInstance() )
+
+## step 4: attach the children to the root
+#set( $void = $root.add( $leftChild ) )
+#set( $void = $root.add( $rightChild ) )
