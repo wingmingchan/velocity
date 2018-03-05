@@ -1,0 +1,7 @@
+#*
+This format shows how to create an ArrayList object by calling the default constructor.
+*#
+#set( $list = $_.Class.forName( "java.util.ArrayList" ).getConstructor().newInstance() )
+#set( $void = $list.add( 1 ) )
+#set( $void = $list.add( 2 ) )
+$list ##=> [1, 2]
