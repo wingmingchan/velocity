@@ -1,0 +1,26 @@
+#*
+This format shows how to create an int array.
+*#
+## start with an ArrayList containing java.lang.Integer objects
+#set( $list = [ 1, 2, 3, 4, 5 ] )
+
+## the primitive type int
+#set( $intType = $_FieldTool.in( "java.lang.Integer" ).TYPE )
+
+## create an array of int and of right size
+#set( $intArray = $_.Class.forName( "java.lang.reflect.Array" ).getMethod(
+    "newInstance",
+    $intType.Class, 
+    $intType ).invoke(
+        null, $intType, $list.size() ) )
+        
+## copy data from the ArrayList to the array
+#foreach( $item in $list )
+    #set( $intArray[ $foreach.index ] = $item )
+#end
+$intArray.Class.Name
+$intArray.size()
+
+#foreach( $item in $intArray )
+    $item
+#end
