@@ -1,0 +1,10 @@
+#*
+This format shows how to create a StringBuffer object.
+*#
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+$_.Class.forName( 'java.lang.StringBuffer' ).getConstructor( $_FieldTool.in( "java.lang.Integer" ).TYPE ).newInstance( 10000 ).Class.Name
+
+#chanwGetConstructor( 'java.lang.StringBuffer' [ $_FieldTool.in( "java.lang.Integer" ).TYPE ] )
+$chanwGetConstructor.Class.Name
+$chanwGetConstructor.newInstance( 10000 ).Class.Name
