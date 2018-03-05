@@ -1,0 +1,23 @@
+#*
+This format shows how to retrieve constructors and methods and use them.
+*#
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+## parameters to be passed into the constructor
+#set( $timeZoneLocaleList = [ $_.Class.forName( "java.util.TimeZone" ), $_.Class.forName( "java.util.Locale" ) ] )
+#chanwGetConstructor( "java.util.GregorianCalendar" $timeZoneLocaleList )
+$chanwGetConstructor.Class.Name
+## use the constructor to create a GregorianCalendar object
+#set( $gc = $chanwGetConstructor.newInstance( $chanwNYTimeZone, $chanwEnUSLocale ) )
+$gc
+
+#set( $oneDoubleList = [ $_FieldTool.in( "java.lang.Double" ).TYPE ] )
+#set( $twoDoubleList = [ $_FieldTool.in( "java.lang.Double" ).TYPE, $_FieldTool.in( "java.lang.Double" ).TYPE ] )
+
+## test java.lang.Math.pow
+#chanwGetMethod( "java.lang.Math" "pow" $twoDoubleList )
+$chanwGetMethod.invoke( null, 3.1, 2 )
+
+## test java.lang.Math.abs
+#chanwGetMethod( "java.lang.Math" "abs" $oneDoubleList )
+$chanwGetMethod.invoke( null, -3.1 )
