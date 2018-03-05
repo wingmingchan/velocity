@@ -1,0 +1,10 @@
+#*
+This format shows how to retrieve a constructor and create an object.
+*#
+## get the Class objects of parameters
+#set( $timeZoneClassObj = $_.Class.forName( "java.util.TimeZone" ))
+#set( $localeClassObj = $_.Class.forName( "java.util.Locale" ) )
+## retrieve the constructor
+#set( $gCalendarConstructor = $_.Class.forName( "java.util.GregorianCalendar" ).getConstructor(
+    $timeZoneClassObj, $localeClassObj ) )
+$gCalendarConstructor.Class.Name
