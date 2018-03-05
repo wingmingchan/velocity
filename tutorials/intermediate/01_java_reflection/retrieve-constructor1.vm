@@ -1,0 +1,16 @@
+#*
+This format shows how to retrieve a constructor and create an object.
+*#
+## get all constructors
+#set( $constructors = $_.Class.forName( "java.lang.StringBuffer" ).getConstructors() )
+$constructors.size() ##=> 4
+
+#foreach( $constructor in $constructors )
+    #if( $constructor.getParameterCount() == 1 && $constructor.getParameterTypes()[ 0 ] == $_FieldTool.in( "java.lang.Integer" ).TYPE )
+        #set( $myConstructor = $constructor )
+        #break
+    #end
+#end
+
+#set( $myBuffer = $myConstructor.newInstance( 10000 ) )
+$myBuffer.Class.Name
