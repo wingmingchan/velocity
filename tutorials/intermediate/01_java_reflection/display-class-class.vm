@@ -1,0 +1,4 @@
+#*
+This format shows how to display the Class name of a Class object.
+*#
+$_.Class.Class.Name ##=> java.lang.Class
