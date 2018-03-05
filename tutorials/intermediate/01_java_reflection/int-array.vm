@@ -1,0 +1,6 @@
+#*
+This format shows how create a Class object representing an array of int.
+*#
+#set( $intArrayClass = $_.Class.forName( "[I" ) )
+$intArrayClass            ##=> class [I
+$intArrayClass.Class.Name ##=> java.lang.Class
