@@ -1,0 +1,13 @@
+#define( $macroInvocation )
+#myMacro
+#end
+
+## output the global variable
+#macro( myMacro )
+$myVar
+#end
+
+#set( $myVar = 3 )
+$macroInvocation ##=> 3
+#set( $myVar = 12 )
+$macroInvocation ##=> 12
