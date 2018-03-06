@@ -1,0 +1,12 @@
+#define( $myMacroExists )
+#macro( myMacro )
+myMacro invoked
+#end
+#end
+
+## the macro name comes from somewhere
+#set( $macroName = "myMacro" )
+
+## test if macro is defined
+#set( $code = '#if($' + $macroName + 'Exists)' + '#' + $macroName + '#end' )
+#evaluate( $code )
