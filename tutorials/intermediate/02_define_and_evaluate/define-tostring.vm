@@ -1,0 +1,5 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+#set( $map = {} )
+#chanwSetVariable( "map['hey']" "that" )
+$map
