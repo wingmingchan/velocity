@@ -1,10 +1,11 @@
 #*doc
 《code》
 《copyright》
-Authors: Wing Ming Chan
-Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+Authors: Wing Ming Chan, German Drulyk
+Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>, German Drulyk <drulykg@upstate.edu>
 MIT Licensed
 Modification history:
+3/9/2018 Updated #chanwCreateElementFromString
 9/22/2017 Format created.
 《/copyright》
 《evaluate execute=“true”》
@@ -48,6 +49,11 @@ doc*###
 #import( 'core/library/velocity/chanw/chanw_initialization' )
 #*doc
 《/import》
+《global-variables》
+doc*###
+#set( $drulykgValidElementNameRegex = "^(?i)(?!xml)[a-z_]+[a-z\d-_]*$" )
+#*doc
+《/global-variables》
 《documentation》
 《code》#chanwCreateElementFromMapIteration( $map_chanwCreateElementFromMapIteration )《/code》
 《p》Creates an element using the data in 《code》$map_chanwCreateElementFromMapIteration《/code》, using iteration.《/p》
@@ -158,11 +164,48 @@ doc*###
 《macro id=“chanwCreateElementFromString”》
 doc*###
 #macro( chanwCreateElementFromString $name_chanwCreateElementFromString $text_chanwCreateElementFromString )
-    #chanwGetConstructorByClassNameParamSize( 'org.jdom.Element' 1 )
-    #set( $chanwCreateElementFromString = $chanwGetConstructorByClassNameParamSize.newInstance( $name_chanwCreateElementFromString ) )
-    ## insert text to element
-    #if( $text_chanwCreateElementFromString.trim() != "" )
-        #set( $chanwCreateElementFromString = $chanwCreateElementFromString.setText( $text_chanwCreateElementFromString.trim() ) )
+##
+    ## Always assume this macro failed unless told otherwise
+    ## The invoker should be checking the value of this to find out
+    ## whether or not the macro ran into issues creating the JDOM
+    #set( $chanwCreateElementFromString = false )
+##
+    ## Store an error message
+    #set( $chanwCreateElementFromStringError = '' )
+##
+    ## Make sure that the invoker supplied an object
+    #if( $name_chanwCreateElementFromString.Class.Name )
+##
+        ## Store $name_chanwCreateElementFromString into a separate variable because we plan to always force
+        ## the object into its string representation but we do not want to globalize $name_chanwCreateElementFromString
+        ## because it will affect future invocations
+        #set( $name_chanwCreateElementFromString2 = "${name_chanwCreateElementFromString}" )
+##
+        ## .trim() the forced string
+        #set( $name_chanwCreateElementFromString2 = $name_chanwCreateElementFromString2.trim() )
+##
+        ## Make sure we do not have an empty string
+        #if( $name_chanwCreateElementFromString2 != '' )
+##
+            ## Is this string a safe element name?
+            #if( $name_chanwCreateElementFromString2.matches( $drulykgValidElementNameRegex ) == true )
+##
+                ## Construct the JDOM
+                #chanwGetConstructor( 'org.jdom.Element' [ $JAVA_LANG_STRING_CLASS_NAME.Class ] )
+                #set( $chanwCreateElementFromString = $chanwGetConstructor.newInstance( $name_chanwCreateElementFromString2 ) )
+##
+                ## Did the invoker want to set some text?
+                #if( $text_chanwCreateElementFromString.Class.Name )
+                    #set( $chanwCreateElementFromString = $chanwCreateElementFromString.setText( "${text_chanwCreateElementFromString}" ) )
+                #end
+            #else
+                #set( $chanwCreateElementFromStringError = '"' + $name_chanwCreateElementFromString2 + '" is an invalid XML element name' )
+            #end
+        #else
+            #set( $chanwCreateElementFromStringError = 'Parameter #1 evaluated to an empty string' )
+        #end
+    #else
+        #set( $chanwCreateElementFromStringError = 'Parameter #1 is null' )
     #end
 #end
 #*doc
