@@ -1,0 +1,161 @@
+#*doc
+《code》
+《copyright》
+Author: Wing Ming Chan
+Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+3/8/2018 Format created.
+《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+
+《/pre》
+《/div》
+《/evaluate》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines macros to invoke web services.《/p》
+《/documentation》
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw_initialization' )
+#*doc
+《/import》
+《global-variables》
+doc*###
+#set( $chanwXsltUtilitiesGlobalVariables = [
+    "chanwGetUrl",
+    "chanwGetUrlContents",
+    "chanwGetScanner",
+    "chanwGetWSAssetJSON",
+    "chanwGetWSAssetRootElement",
+    "chanwReturnXMLString"
+] )
+#set( $ASSET_FACTORY_TYPE                      = "assetfactory" )
+#set( $ASSET_FACTORY_CONTAINER_TYPE            = "assetfactorycontainer" )
+#set( $CLOUD_TRANSPORT_TYPE                    = "transport_cloud" )
+#set( $CONNECTOR_CONTAINER_TYPE                = "connectorcontainer" )
+#set( $CONTENT_TYPE_TYPE                       = "contenttype" )
+#set( $CONTENT_TYPE_CONTAINER_TYPE             = "contenttypecontainer" )
+#set( $DATA_DEFINITION_TYPE                    = "datadefinition" )
+#set( $DATA_DEFINITION_CONTAINER_TYPE          = "datadefinitioncontainer" )
+#set( $DATA_DEFINITION_BLOCK_TYPE              = "block_XHTML_DATADEFINITION" )
+#set( $DATABASE_TRANSPORT_TYPE                 = "transport_db" )
+#set( $DESTINATION_TYPE                        = "destination" )
+#set( $FEED_BLOCK_TYPE                         = "block_FEED" )
+#set( $FILE_TYPE                               = "file" )
+#set( $FOLDER_TYPE                             = "folder" )
+#set( $FS_TRANSPORT_TYPE                       = "transport_fs" )
+#set( $FTP_TRANSPORT_TYPE                      = "transport_ftp" )
+#set( $GOOGLE_ANALYTICS_CONNECTOR_TYPE         = "googleanalyticsconnector" )
+#set( $GROUP_TYPE                              = "group" )
+#set( $INDEX_BLOCK_TYPE                        = "block_INDEX" )
+#set( $METADATASET_TYPE                        = "metadataset" )
+#set( $METADATASET_CONTAINER_TYPE              = "metadatasetcontainer" )
+#set( $PAGE_TYPE                               = "page" )
+#set( $PAGE_CONFIGURATION_SET_TYPE             = "pageconfiguration" )
+#set( $PAGE_CONFIGURATION_SET_CONTAINER_TYPE   = "pageconfigurationsetcontainer" )
+#set( $PUBLISH_SET_TYPE                        = "publishset" )
+#set( $PUBLISH_SET_CONTAINER_TYPE              = "publishsetcontainer" )
+#set( $REFERENCE_TYPE                          = "reference" )
+#set( $ROLE_TYPE                               = "role" )
+#set( $SCRIPT_FORMAT_TYPE                      = "format_SCRIPT" )
+#set( $SITE_TYPE                               = "site" )
+#set( $SITE_DESTINATION_CONTAINER_TYPE         = "sitedestinationcontainer" )
+#set( $SYMLINK_TYPE                            = "symlink" )
+#set( $TEMPLATE_TYPE                           = "template" )
+#set( $TEXT_BLOCK_TYPE                         = "block_TEXT" )
+#set( $TRANSPORT_CONTAINER_TYPE                = "transportcontainer" )
+#set( $TWITTER_CONNECTOR_TYPE                  = "twitterconnector" )
+#set( $USER_TYPE                               = "user" )
+#set( $WORDPRESS_CONNECTOR_TYPE                = "wordpressconnector" )
+#set( $WORKFLOW_DEFINITION_TYPE                = "workflowdefinition" )
+#set( $WORKFLOW_DEFINITION_CONTAINER_TYPE      = "workflowdefinitioncontainer" )
+#set( $XML_BLOCK_TYPE                          = "block_XML" )
+#set( $XSLT_FORMAT_TYPE                        = "format_XSLT" )
+#*doc
+《/global-variables》
+《documentation》
+《code》#chanwGetScanner( $url )《/code》
+《p》Returns a 《code》java.util.Scanner《/code》 object,
+wrapping up a 《code》java.io.InputStream《/code》 object.《/p》
+《/documentation》
+《macro id=“chanwGetScanner”》
+doc*###
+#macro( chanwGetScanner $url_chanwGetScanner )
+    #set( $chanwGetScanner = "" )
+    #chanwGetUrl( $url_chanwGetScanner )
+    #set( $chanwInputStream = $chanwGetUrl.openStream() )
+    #chanwGetConstructor( "java.util.Scanner" [ $_.Class.forName( "java.io.InputStream" ) ] )
+    #set( $chanwGetScanner = $chanwGetConstructor.newInstance( $chanwInputStream ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetUrl( $url )《/code》
+《p》Returns a 《code》java.net.URL《/code》 object, wrapping up a URL String.《/p》
+《/documentation》
+《macro id=“chanwGetUrl”》
+doc*###
+#macro( chanwGetUrl $url_chanwGetUrl )
+    #set( $chanwGetUrl = "" )
+    #chanwGetConstructor( "java.net.URL" [ $JAVA_LANG_STRING_CLASS_NAME.Class ] )
+    #set( $chanwGetUrl = $chanwGetConstructor.newInstance( $url_chanwGetUrl ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetUrlContents( $url )《/code》
+《p》Returns a String containing the page contents of the URL.《/p》
+《/documentation》
+《macro id=“chanwGetUrlContents”》
+doc*###
+#macro( chanwGetUrlContents $url_chanwGetUrlContents $return_chanwGetUrlContents )
+    #if( !$return_chanwGetUrlContents.Class.Name || $return_chanwGetUrlContents == true )
+        #set( $chanwReturnXMLString = true )
+    #else
+        #set( $chanwReturnXMLString = false )
+    #end
+    #set( $chanwGetUrlContents = "" )
+    #chanwGetScanner( $url_chanwGetUrlContents )
+    #if( $chanwReturnXMLString == true )
+        #set( $chanwGetUrlContents = $chanwGetScanner.useDelimiter( "\\A" ).next() )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetWSAssetJSON( $url )《/code》
+《p》Returns a JSON String representing the page contents of the URL. The JSON String is generated from the WS library.《/p》
+《/documentation》
+《macro id=“chanwGetWSAssetJSON”》
+doc*###
+#macro( chanwGetWSAssetJSON $url_chanwGetWSAssetJSON )
+    #set( $chanwGetWSAssetRootElement = "" )
+    #chanwGetUrlContents( $url_chanwGetWSAssetJSON )
+    #set( $chanwGetWSAssetJSON = $chanwGetUrlContents )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetWSAssetRootElement( $url )《/code》
+《p》Returns a 《code》org.jdom.Element《/code》 object representing the page contents of the URL.
+Note that the page contents must be well-formated XML.《/p》
+《/documentation》
+《macro id=“chanwGetWSAssetRootElement”》
+doc*###
+#macro( chanwGetWSAssetRootElement $url_chanwGetWSAssetRootElement )
+    #set( $chanwGetWSAssetRootElement = "" )
+    #chanwGetUrlContents( $url_chanwGetWSAssetRootElement )
+    #chanwBuildXMLContentRoot( $chanwGetUrlContents )
+    #set( $chanwGetWSAssetRootElement = $chanwBuildXMLContentRoot )
+#end
+#*doc
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+doc*###
