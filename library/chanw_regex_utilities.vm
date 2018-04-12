@@ -1,13 +1,14 @@
 #*doc
 《code》
 《copyright》
-Author: Wing Ming Chan
-Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+Authors: Wing Ming Chan, German Drulyk
+Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>, German Drulyk <drulykg@upstate.edu>
 MIT Licensed
 Modification history:
+4/10/2018 Added #drulykgQuoteCaptureGroup and #drulykgQuoteTerm()
 8/9/2017 Started using macro names as namespace prefixes for local parameters.
 8/3/2017 Added $chanwMessageFormatClassObject, #chanwGetChoiceFormatObject, #chanwGetDecimalFormatObject,
-#chanwGetMessageFormatObject, #chanwGetSimpleDateFormatObject.
+#chanwGetMessageFormatObject, #drulykgQuoteCaptureGroup.
 7/12/2017 Added the import element.
 7/6/2017 Added the evaluate element.
 7/4/2017 Format created
@@ -248,6 +249,53 @@ doc*###
             #set( $void = $chanwSearchStringKeyInMap.put( $key, $chanwSearchStringKeyInMapMap[ $key ] ) )##
         #end
     #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#drulykgQuoteCaptureGroup( $string_drulykgQuoteCaptureGroup )《/code》
+《p》Applies 《code》java.util.regex.Matcher.quoteReplacement()《/code》
+to the input and stores the resulting string in 《code》$drulykgQuoteCaptureGroup《/code》
+so that it can be used directly in the replacement parameter of
+《code》java.lang.String.replaceAll()《/code》《/p》
+《pre》
+#set( $s = 'The sandwhich costs 5. The french fries cost 2.' )
+#drulykgQuoteCaptureGroup( '$' )
+$s.replaceAll( '([0-9]+)', "${drulykgQuoteCaptureGroup}$1" )
+
+## The code above produces
+The sandwhich costs $5. The french fries cost $2.
+《/pre》
+《/documentation》
+《macro id=“drulykgQuoteCaptureGroup”》
+doc*###
+#macro( drulykgQuoteCaptureGroup $string_drulykgQuoteCaptureGroup )
+    #chanwGetMatcherObject( '' '' )
+    #set( $drulykgQuoteCaptureGroup = $chanwGetMatcherObject.quoteReplacement( "$!{string_drulykgQuoteCaptureGroup}" ) )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#drulykgQuoteTerm( $string_drulykgQuoteTerm )《/code》
+《p》Applies 《code》java.util.regex.Pattern.quote()《/code》
+to the input and stores the resulting string in 《code》$drulykgQuoteTerm《/code》
+so that it can be used directly in the regex parameter of
+《code》java.lang.String.replaceAll()《/code》《/p》
+《p》This allows you to supply literal strings for use in regex searching.《/p》
+《pre》
+#set( $s = 'In regex [a-z] is the lowercase range of a through z.' )
+#drulykgQuoteTerm( '[a-z]' )
+$s.replaceAll( "(${drulykgQuoteTerm})", "**$1**" )
+
+## The code above produces
+In regex **[a-z]** is the lowercase range of a through z.
+《/pre》
+《/documentation》
+《macro id=“drulykgQuoteTerm”》
+doc*###
+#macro( drulykgQuoteTerm $string_drulykgQuoteTerm )
+    #chanwGetPatternObject( '' )
+    #set( $drulykgQuoteTerm = $chanwGetPatternObject.quote( "$!{string_drulykgQuoteTerm}" ) )
 #end
 #*doc
 《/macro》

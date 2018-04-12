@@ -21,21 +21,24 @@ Import this single format to access all library resources created by Wing.
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_rss_utilities" )
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_xslt_utilities" )
 #end
-#define( $chanwImportReflect )
-#import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_reflect_utilities" )
-#end
 #define( $chanwImportDatabase )
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_database_utilities" )
 #end
-#define( $chanwImportVarDump )
-#import( "site://${chanw_framework_site_name}/core/macros/drulykgVarDump" )
+#define( $chanwImportDocXml )
+#import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_doc_xml_utilities" )
 #end
 #define( $chanwImportElement )
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_element_utilities" )
 #end
+#define( $chanwImportReflect )
+#import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_reflect_utilities" )
+#end
 #define( $chanwImportServiceProvider )
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_service_provider" )
 #end
-#define( $chanwImportDocXml )
-#import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_doc_xml_utilities" )
+#define( $chanwImportVarDump )
+#import( "site://${chanw_framework_site_name}/core/macros/drulykgVarDump" )
+#end
+#define( $chanwImportWS )
+#import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw_ws_utilities" )
 #end

@@ -51,7 +51,7 @@ doc*###
 《/import》
 《global-variables》
 doc*###
-#set( $drulykgValidElementNameRegex = "^(?i)(?!xml)[a-z_]+[a-z\d-_]*$" )
+#set( $drulykgValidElementNameRegex = '(?i)(?!xml)[a-z_]+[a-z\d-_]*' )
 #*doc
 《/global-variables》
 《documentation》
@@ -188,7 +188,7 @@ doc*###
         #if( $name_chanwCreateElementFromString2 != '' )
 ##
             ## Is this string a safe element name?
-            #if( $name_chanwCreateElementFromString2.matches( $drulykgValidElementNameRegex ) == true )
+            #if( $name_chanwCreateElementFromString2.matches( "^${drulykgValidElementNameRegex}$" ) == true )
 ##
                 ## Construct the JDOM
                 #chanwGetConstructor( 'org.jdom.Element' [ $JAVA_LANG_STRING_CLASS_NAME.Class ] )

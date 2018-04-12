@@ -2,7 +2,7 @@
 《code》
 《copyright》
 Authors: Wing Ming Chan
-Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>, German Drulyk <drulykg@upstate.edu>
 MIT Licensed
 Modification history:
 10/29/2017 Add $DefaultMutableTreeNodeConstructor.
@@ -32,6 +32,14 @@ ${DOUBLE_HASH} display the code
 #chanwDisplayEvaluateCode( $code false )
 ${DOUBLE_HASH} evaluate the code
 #chanwDisplayEvaluateCode( $code true )
+=============================================================
+#chanwBuildXMLContentRoot( '<element>Hello, World!</element>' )
+
+${SINGLE_HASH}chanwBuildXMLContentRoot( '&lt;element>Hello, World!&lt;/element>' )
+${DOLLAR}chanwBuildXMLContentRoot.Value: $chanwBuildXMLContentRoot.Value
+=============================================================
+#chanwCallJavaMethod( 'globalApacheStringUtils', 'repeat( "*", 20 )' )
+$chanwCallJavaMethod
 =============================================================
 ${SINGLE_HASH}chanwGetFolderContainedAssetName( ${DOLLAR}currentPage )
 #chanwGetFolderContainedAssetName( $currentPage )
@@ -557,9 +565,9 @@ doc*###
 #*doc
 《/global-variables》
 《documentation》
-《code》#chanwBuildXMLContentRoot( $xml_string )《/code》
+《code》#chanwBuildXMLContentRoot( $chanwBuildXMLContentRootXmlString )《/code》
 《p》Creates an 《code》org.jdom.Element《/code》 object out of an XML string.
-The variable 《code》$xml_string《/code》 should contain a valid XML string
+The variable 《code》$chanwBuildXMLContentRootXmlString《/code》 should contain a valid XML string
 with a root element. The resulting 《code》org.jdom.Element《/code》 object is
 stored in the global variable
 《code》$chanwBuildXMLContentRoot《/code》. Example:《/p》
@@ -590,8 +598,9 @@ doc*###
 《/macro》
 《documentation》
 《code》#chanwCallJavaMethod( $javaObjName $methodName )《/code》
-《p》Calls the named method through the Java object. The second string can be
-any string containing acceptable Java code. Examples:《/p》
+《p》Calls the named method through the Java object. The first string should be
+the name of the variable (without $) referencing the calling object, and
+the second string can be any string containing acceptable Java code. Examples:《/p》
 《pre》
 #chanwCallJavaMethod( '_DateTool' 'getCalendar()' )
 
@@ -630,7 +639,7 @@ doc*###
 《/macro》
 《documentation》
 《code》#chanwConvertArrayListToArray( $list $type )《/code》
-《p》Converts an 《code》ArrayList《/code》 object to a 《code》Array《/code》 object. Example:《/p》
+《p》Converts an 《code》ArrayList《/code》 object to an 《code》Array《/code》 object. Example:《/p》
 《pre》
 #set( $folders = $_XPathTool.selectNodes( $contentRoot, "//system-folder" ) )
 #chanwConvertArrayListToArray( $folders )
