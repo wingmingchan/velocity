@@ -1,0 +1,29 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+
+## retrieve the Locale constructor
+#chanwGetConstructor( "java.util.Locale" [ $JAVA_UTIL_DATE_CLASS_NAME.Class ] )
+#set( $localeConstructor = $chanwGetConstructor )
+#set( $frLocale = $localeConstructor.newInstance( "fr" ) )
+#set( $zhLocale = $localeConstructor.newInstance( "zh" ) )
+#set( $deLocale = $localeConstructor.newInstance( "de" ) )
+#set( $ruLocale = $localeConstructor.newInstance( "ru" ) )
+
+## English: May
+$_DateTool.format( "MMM", $_DateTool.getSystemDate() )
+## Chinese: 五月
+$_DateTool.format( "MMM", $_DateTool.getSystemDate(), $zhLocale )
+## French: mai
+$_DateTool.format( "MMM", $_DateTool.getSystemDate(), $frLocale )
+## German: Mai
+$_DateTool.format( "MMM", $_DateTool.getSystemDate(), $deLocale )
+## Russian: Май
+$_DateTool.format( "MMM", $_DateTool.getSystemDate(), $ruLocale )
+
+## retrieve the getTimeZone method
+#chanwGetMethod( "java.util.TimeZone" "getTimeZone" [ $JAVA_UTIL_DATE_CLASS_NAME.Class ] )
+#set( $timeZoneMethod = $chanwGetMethod )
+#set( $londonTZ = $timeZoneMethod.invoke( null, "Europe/London" ) )
+## 02 May 2018, 09-44-35
+$_DateTool.format( "dd MMM yyyy, HH-mm-ss", $_DateTool.getSystemDate() )
+## 02 mai 2018, 14-44-35
+$_DateTool.format( "dd MMM yyyy, HH-mm-ss", $_DateTool.getSystemDate(), $frLocale, $londonTZ )
