@@ -31,7 +31,7 @@ Modification history:
 《pre》
 =============================================================
 $DOUBLE_HASH Display the number of entries in the cxml_foldercontent table
-#import( 'site://_brisk/core/library/velocity/chanw/chanw_database_utilities' )
+#import( 'site://_rebuilt/core/library/velocity/chanw/chanw_database_utilities' )
 ${SINGLE_HASH}chanwGetNumberOfRecordsInTable( "cxml_foldercontent" )
 #chanwGetNumberOfRecordsInTable( "cxml_foldercontent" )
 ${DOLLAR}chanwGetNumberOfRecordsInTable: $chanwGetNumberOfRecordsInTable

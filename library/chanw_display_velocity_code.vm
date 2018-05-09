@@ -44,7 +44,7 @@ documentation because the contents of documentation go through
 《p》The map 《code》$chanwMacroNameDocumentationMap《/code》 is used to store
 macro-documentation element pairs. For example, after
 《code》#chanwGetScriptFormatRootElement( "chanw_initialization"
-"core/library/velocity/chanw" "_brisk" )《/code》 is executed, the map
+"core/library/velocity/chanw" "_rebuilt" )《/code》 is executed, the map
 stores the following:《/p》
 《pre》
 {

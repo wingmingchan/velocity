@@ -5,7 +5,8 @@ Authors: Wing Ming Chan
 Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>, German Drulyk <drulykg@upstate.edu>
 MIT Licensed
 Modification history:
-10/29/2017 Add $DefaultMutableTreeNodeConstructor.
+5/7/2018 Added code to automatically process blocks as Cascade API objects.
+10/29/2017 Added $DefaultMutableTreeNodeConstructor.
 10/23/2017 Added tree-related constants.
 8/31/2017 Rewrote chanwImportScript and fixed bugs in chanwLocateAsset.
 8/29/2017 Added chanwConvertArrayListToArray.
@@ -77,8 +78,8 @@ ${SINGLE_HASH}chanwLocateAsset( "core/library/velocity/chanw" ${DOLLAR}chanw_fra
 #chanwLocateAsset( "core/library/velocity/chanw" $chanw_framework_site_name "chanw_display_velocity_code" )
 ${DOLLAR}chanwLocateAsset.Class.Name: $chanwLocateAsset.Class.Name
 =============================================================
-${SINGLE_HASH}chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" ${DOLLAR}CASCADE_API_FORMAT_TYPE "_brisk" )
-#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" $CASCADE_API_FORMAT_TYPE "_brisk" )
+${SINGLE_HASH}chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" ${DOLLAR}CASCADE_API_FORMAT_TYPE "_rebuilt" )
+#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" $CASCADE_API_FORMAT_TYPE "_rebuilt" )
 ${DOLLAR}chanwLocateAssetWithFullPath.Class.Name: $chanwLocateAssetWithFullPath.Class.Name
 =============================================================
 ${SINGLE_HASH}chanwOutputErrorMsg( ${DOLLAR}CHANW_LIBRARY_FOLDER_PATH ${DOLLAR}chanw_framework_site_name ${DOLLAR}CHANW_INITIALIZATION_FORMAT_NAME "Should show a test string." "fri4;sglk4ikFIO;RK" )
@@ -220,7 +221,7 @@ the library, macros to retrieved constructors, and other supporting macros.《/p
 《global-variables》
 doc*###
 #if( !$chanw_framework_site_name )
-    #set( $chanw_framework_site_name = '_brisk' )
+    #set( $chanw_framework_site_name = '_rebuilt' )
 #end
 #set( $CHANW_INITIALIZATION_FORMAT_NAME = "chanw_initialization" )
 #set( $CHANW_LIBRARY_FOLDER_PATH        = "core/library/velocity/chanw" )
@@ -1556,7 +1557,7 @@ doc*###
 《code》$stop《/code》 is not set to true, then 《code》$chanwLocateAsset《/code》
 will store the empty string. Example:《/p》
 《pre》
-#chanwLocateAsset( "core/library/velocity/chanw" "_brisk" "chanw_display_velocity_code" )
+#chanwLocateAsset( "core/library/velocity/chanw" "_rebuilt" "chanw_display_velocity_code" )
 #set( $code = $chanwLocateAsset.Script )
 《/pre》
 《/documentation》
@@ -1670,7 +1671,7 @@ doc*#
 《code》$chanwLocateAssetWithFullPath《/code》. If the asset cannot be located, then
 《code》$chanwLocateAssetWithFullPath《/code》 will store the empty string. Example:《/p》
 《pre》
-#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" $CASCADE_API_FORMAT_TYPE "_brisk" )
+#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" $CASCADE_API_FORMAT_TYPE "_rebuilt" )
 #set( $code = $chanwLocateAssetWithFullPath.Script )
 《/pre》
 《/documentation》
@@ -1687,20 +1688,24 @@ doc*###
 《p》Locates the named assets. The asset located is stored in
 《code》$chanwLocateAsset《/code》. Example:《/p》
 《pre》
-#chanwLocateAsset( "core/library/velocity/chanw" "_brisk" "chanw_display_velocity_code" )
+#chanwLocateAsset( "core/library/velocity/chanw" "_rebuilt" "chanw_display_velocity_code" )
 #set( $code = $chanwLocateAsset.Script )
 《/pre》
 《/documentation》
 《macro id=“chanwOutputErrorMsg”》
 doc*###
-#macro( chanwOutputErrorMsg $chanwOutputErrorMsgParentPath $chanwOutputErrorMsgSiteName $chanwOutputErrorMsgFormatName $chanwOutputErrorMsgMsg $chanwOutputErrorMsgUniqueId )
+#macro( chanwOutputErrorMsg $chanwOutputErrorMsgParentPath $chanwOutputErrorMsgSiteName $chanwOutputErrorMsgFormatName $chanwOutputErrorMsgMsg $chanwOutputErrorMsgUniqueId $chanwOutputErrorMsgStop )
     #chanwLocateAsset( $chanwOutputErrorMsgParentPath $chanwOutputErrorMsgSiteName $chanwOutputErrorMsgFormatName )
     #set( $chanwScript = $chanwLocateAsset.Script )
     #set( $chanwScriptArray = $chanwScript.split( "\r" ) )
 ##
 #foreach( $line in $chanwScriptArray )
 #if( $line.contains( $chanwOutputErrorMsgUniqueId ) )
-$chanwOutputErrorMsgParentPath/$chanwOutputErrorMsgFormatName, line $foreach.count: $chanwOutputErrorMsgMsg
+## Wrap output in [system-view:internal] so that an error is never published
+${S_SYSTEM_VIEW_INTERNAL}${_EscapeTool.xml( "site://${chanwOutputErrorMsgSiteName}/${chanwOutputErrorMsgParentPath}/${chanwOutputErrorMsgFormatName}, line ${foreach.count}: ${chanwOutputErrorMsgMsg}" )}${E_SYSTEM_VIEW_INTERNAL}
+#if( $chanwOutputErrorMsgStop == true )
+#stop
+#end
 #break
 #end
 #end
@@ -1773,16 +1778,28 @@ doc*###
 ##
         ## for legacy data definition blocks
         #if( $chanwBlockName.endsWith( '-dd-macro' ) )
-            #chanwInvokeMacro( "chanwProcessDDBlockWithMacro" [ "chanwFirstChild" ] )
+            #if( !$chanwIsBlockAPIAdapter )
+                #chanwInvokeMacro( "chanwProcessDDBlockWithMacro" [ "chanwFirstChild" ] )
+            #else
+            
+            #end
         ## macro blocks
         #elseif( $chanwBlockName.endsWith( '-Macro' ) || $chanwBlockName.endsWith( '-macro' ) )
-            #chanwInvokeMacro( "chanwProcessBlockWithMacro" [ "chanwFirstChild" ] )
+            #if( !$chanwIsBlockAPIAdapter )
+                #chanwInvokeMacro( "chanwProcessBlockWithMacro" [ "chanwFirstChild" ] )
+            #else
+                #chanwInvokeMacro( "chanwProcessBlockWithMacro" [ "chanwProcessBlockChooserContent" ] )
+            #end
         ## text blocks
         #elseif( ( $chanwBlockName.endsWith( '-Text' ) || $chanwBlockName.endsWith( '-text' ) ) ) 
             $_SerializerTool.serialize( $chanwProcessBlockChooserContent, true )
         ## script blocks
         #elseif( $chanwBlockName.endsWith( '-Script' ) || $chanwBlockName.endsWith( '-script' )  )
-            #chanwInvokeMacro( "chanwProcessScript" [ "chanwFirstChild" ] )
+            #if( !$chanwIsBlockAPIAdapter )
+                #chanwInvokeMacro( "chanwProcessScript" [ "chanwFirstChild" ] )
+            #else
+                #chanwInvokeMacro( "chanwProcessScript" [ "chanwProcessBlockChooserContent" ] )
+            #end
         ## data definition blocks
         #elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
             #chanwProcessDataDefinitionBlock( $chanwFirstChild )
@@ -1815,11 +1832,15 @@ doc*###
 #macro( chanwProcessBlockWithMacro $chanwProcessBlockWithMacroFirstChild )
 #**##set( $chanwMacroName = "" )
 #**##set( $chanwDynamicMetadata = "" )
+#if( $chanwProcessBlockWithMacroFirstChild.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
 #**##set( $chanwDynamicMetadata = $_XPathTool.selectSingleNode( $chanwProcessBlockWithMacroFirstChild.Parent.Parent, "dynamic-metadata[name='macro']" ) )
-##
 #**##if( $chanwDynamicMetadata != "" )
 #*    *##set( $chanwMacroName = $chanwDynamicMetadata.getChild( 'value' ).Value )
 #**##end
+##
+#else
+#set( $chanwMacroName = $chanwProcessBlockWithMacroFirstChild.Metadata.getDynamicField( "macro" ).Value )
+#end
 ##
 #**##if( $chanwMacroName == "" )
 #*    *##set( $chanwMacroName = "processUnknown" )
@@ -2034,8 +2055,8 @@ Code inside cannot contain 《code》<《/code》, 《code》>《/code》 and
 《pre》
 <scripts>
     <code>
-#import( "site://_brisk/core/library/velocity/chanw/chanw_display_velocity_code" )
-#chanwGetMacroCode( "chanw_initialization" "core/library/velocity/chanw" "_brisk" "chanwGetObjectByClassName" )
+#import( "site://_rebuilt/core/library/velocity/chanw/chanw_display_velocity_code" )
+#chanwGetMacroCode( "chanw_initialization" "core/library/velocity/chanw" "_rebuilt" "chanwGetObjectByClassName" )
 #chanwDisplayHideVelocityCode( $chanwGetMacroCode "hide-code1" "true" "false" )
     </code>
 </scripts>
@@ -2045,10 +2066,16 @@ Code inside cannot contain 《code》<《/code》, 《code》>《/code》 and
 doc*###
 #macro( chanwProcessScript $chanwProcessScriptFirstChild )
 #**### allow only one code element, and process it first
+#if( $chanwProcessScriptFirstChild.Class.Name == $ORG_JDOM_ELEMENT_CLASS_NAME )
 #**##set( $chanwCode = $chanwProcessScriptFirstChild.getChild( 'code' ) )
+#else
+#chanwBuildXMLContentRoot( $chanwProcessScriptFirstChild.XML )
+#set( $chanwCode = $chanwBuildXMLContentRoot.getChild( 'code' ) )
+#end
 ##
-#**##if( $chanwCode )
+#**##if( $chanwCode.Class.Name )
 #*    *##set( $chanCodeStmt = $chanwCode.Value.replaceAll(  '&lt;', '<' ).replaceAll( '&gt;', '>' ).replaceAll( '-aa-', '&&' ) )
+
 #*    *##evaluate( $chanCodeStmt )
 #**##end
 #end
@@ -2269,7 +2296,7 @@ the parameters of an image path, image site location, and a custom map of values
 it finds if srcset image exists. If so it adds them, if not, it moves on.
 Example: 《/p》
 《pre》
-#import("site://_brisk/core/library/velocity/chanw/chanw_initialization")
+#import("site://_rebuilt/core/library/velocity/chanw/chanw_initialization")
 #set( $image ="/images/computer-people.jpg" )
 #set( $site = "thomas-test" )
 
