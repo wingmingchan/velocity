@@ -132,7 +132,8 @@ doc*###
 The 《code》$haystack《/code》 is the String to be matched. If the match is successful, 《code》$chanwGetMatchedStrings["uniqueMatchedStrings"]《/code》
 stores all unique matched Strings in 《code》$haystack《/code》. 《code》$chanwGetMatchedStrings["allMatchedStrings"]《/code》, on the other hand,
 stores all instances of matched Strings, using indexes as keys. If there are groups defined in 《code》$needle《/code》, then these matched groups
-can be replaced by the empty String and the result stored in 《code》$chanwGetMatchedStrings["matchedStringsWithoutGroups"]《/code》.《/p》
+can be replaced by the empty String and the result stored in 《code》$chanwGetMatchedStrings["matchedStringsWithoutGroups"]《/code》. The parameter
+《code》$groups《/code》 (a list of integers) specifies which matched group(s) should be skipped from the output.《/p》
 《pre》
 #import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
 
