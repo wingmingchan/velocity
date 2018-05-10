@@ -148,6 +148,14 @@ $chanwGetMatchedStrings
 #chanwGetMatchedStrings( "(col-)(\w+)(-\w+)" "col-ms-3 col-xs-6 col-lg-12 hidden no-show" [ 1, 3 ] )
 ## output: {uniqueMatchedStrings=[col-ms-3, col-xs-6, col-lg-12], matchedStringsWithoutGroups=[ms, xs, lg], allMatchedStrings={0=col-ms-3, 9=col-xs-6, 18=col-lg-12}}
 $chanwGetMatchedStrings
+
+#chanwGetMatchedStrings( "(col-)(\w+)(-\w+)" "col-ms-3 col-xs-6 col-lg-12 hidden no-show" [ 1, 2, 3 ] )
+## output: {uniqueMatchedStrings=[col-ms-3, col-xs-6, col-lg-12], matchedStringsWithoutGroups=[], allMatchedStrings={0=col-ms-3, 9=col-xs-6, 18=col-lg-12}}
+$chanwGetMatchedStrings
+
+## exception thrown because group 3 is not defined in the regex
+#chanwGetMatchedStrings( "(col-)(\w+)-\w+" "col-ms-3 col-xs-6 col-lg-12 hidden no-show" [ 3 ] )
+$chanwGetMatchedStrings
 《/pre》
 《/documentation》
 《macro id=“chanwGetMatchedStrings”》
