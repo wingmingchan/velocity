@@ -126,21 +126,29 @@ doc*###
 《/macro》
 《documentation》
 《code》#chanwGetMatchedStrings( $needle $haystack $groups )《/code》
-《p》Returns a map containing three entries: 《code》uniqueMatchedString《/code》 (a list), 《code》matchedStringWithoutGroups《/code》
+《p》Returns a map containing three entries: 《code》uniqueMatchedStrings《/code》 (a list), 《code》matchedStringWithoutGroups《/code》
 (a list), and 《code》allMatchedStrings《/code》 (a map). The 《code》$needle《/code》 should be a pattern, possibly with groups.
-The 《code》$haystack《/code》 is the String to be matched. If the match is successful, 《code》$chanwGetMatchedStrings["uniqueMatchedString"]《/code》
+The 《code》$haystack《/code》 is the String to be matched. If the match is successful, 《code》$chanwGetMatchedStrings["uniqueMatchedStrings"]《/code》
 stores all unique matched Strings in 《code》$haystack《/code》. 《code》$chanwGetMatchedStrings["allMatchedStrings"]《/code》, on the other hand,
 stores all instances of matched Strings, using indexes as keys. If there are groups defined in 《code》$needle《/code》, then these matched groups
-can be replaced by the empty String and stored in 《code》$chanwGetMatchedStrings["matchedStringWithoutGroups"]《/code》.《/p》
+can be replaced by the empty String and the result stored in 《code》$chanwGetMatchedStrings["matchedStringWithoutGroups"]《/code》.《/p》
 《pre》
+#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+$chanwStartMeasurement
 
+#chanwGetMatchedStrings( "(col-)\S+" "col-ms-3 col-xs-6 col-lg-12 hidden no-show" )
+## output: {uniqueMatchedStrings=[col-ms-3, col-xs-6, col-lg-12], matchedStringWithoutGroups=[col-ms-3, col-xs-6, col-lg-12], allMatchedStrings={0=col-ms-3, 9=col-xs-6, 18=col-lg-12}}
+$chanwGetMatchedStrings
+#chanwGetMatchedStrings( "(col-)\S+" "col-ms-3 col-xs-6 col-lg-12 hidden no-show" [ 1 ] )
+## output: {uniqueMatchedStrings=[col-ms-3, col-xs-6, col-lg-12], matchedStringWithoutGroups=[ms-3, xs-6, lg-12], allMatchedStrings={0=col-ms-3, 9=col-xs-6, 18=col-lg-12}}
+$chanwGetMatchedStrings
 《/pre》
 《/documentation》
 《macro id=“chanwGetMatchedStrings”》
 doc*###
 #macro( chanwGetMatchedStrings $needle_chanwGetMatchedStrings $haystack_chanwGetMatchedStrings $groupsToBeSkipped_chanwGetMatchedStrings )
     #set( $chanwGetMatchedStrings = {
-        "uniqueMatchedString"        : [],
+        "uniqueMatchedStrings"       : [],
         "matchedStringWithoutGroups" : [],
         "allMatchedStrings"          : {}
     } )
@@ -151,7 +159,7 @@ doc*###
     #set( $found = $chanwGetMatcherObject.find() )
 ##
     #if( $found )
-        #set( $chanwStringWithPattern = $allHTML.substring( $chanwGetMatcherObject.start(), $chanwGetMatcherObject.end() ) )
+        #set( $chanwStringWithPattern = $haystack_chanwGetMatchedStrings.substring( $chanwGetMatcherObject.start(), $chanwGetMatcherObject.end() ) )
     	#set( $chanwGetMatchedStrings[ "allMatchedStrings" ][ $chanwGetMatcherObject.start() ] = $chanwStringWithPattern )
         #set( $chanwStringWithoutPattern = $chanwStringWithPattern )
 ##
@@ -161,8 +169,8 @@ doc*###
             #end
         #end
 ##
-        #if( !$chanwGetMatchedStrings[ "uniqueMatchedString" ].contains( $chanwStringWithPattern ) )
-            #set( $dummy = $chanwGetMatchedStrings[ "uniqueMatchedString" ].add( $chanwStringWithPattern ) )
+        #if( !$chanwGetMatchedStrings[ "uniqueMatchedStrings" ].contains( $chanwStringWithPattern ) )
+            #set( $dummy = $chanwGetMatchedStrings[ "uniqueMatchedStrings" ].add( $chanwStringWithPattern ) )
         #end
 ##
         #if( !$chanwGetMatchedStrings[ "matchedStringWithoutGroups" ].contains( $chanwStringWithoutPattern ) )
