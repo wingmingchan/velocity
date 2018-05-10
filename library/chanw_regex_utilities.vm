@@ -5,6 +5,7 @@ Authors: Wing Ming Chan, German Drulyk
 Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>, German Drulyk <drulykg@upstate.edu>
 MIT Licensed
 Modification history:
+5/10/2018 Added #chanwGetMatchedStrings.
 4/10/2018 Added #drulykgQuoteCaptureGroup and #drulykgQuoteTerm()
 8/9/2017 Started using macro names as namespace prefixes for local parameters.
 8/3/2017 Added $chanwMessageFormatClassObject, #chanwGetChoiceFormatObject, #chanwGetDecimalFormatObject,
