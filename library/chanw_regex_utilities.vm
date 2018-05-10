@@ -125,6 +125,57 @@ doc*###
 #*doc
 《/macro》
 《documentation》
+《code》#chanwGetMatchedStrings( $needle $haystack $groups )《/code》
+《p》Returns a map containing three entries: 《code》uniqueMatchedString《/code》 (a list), 《code》matchedStringWithoutGroups《/code》
+(a list), and 《code》allMatchedStrings《/code》 (a map). The 《code》$needle《/code》 should be a pattern, possibly with groups.
+The 《code》$haystack《/code》 is the String to be matched. If the match is successful, 《code》$chanwGetMatchedStrings["uniqueMatchedString"]《/code》
+stores all unique matched Strings in 《code》$haystack《/code》. 《code》$chanwGetMatchedStrings["allMatchedStrings"]《/code》, on the other hand,
+stores all instances of matched Strings, using indexes as keys. If there are groups defined in 《code》$needle《/code》, then these matched groups
+can be replaced by the empty String and stored in 《code》$chanwGetMatchedStrings["matchedStringWithoutGroups"]《/code》.《/p》
+《pre》
+
+《/pre》
+《/documentation》
+《macro id=“chanwGetMatchedStrings”》
+doc*###
+#macro( chanwGetMatchedStrings $needle_chanwGetMatchedStrings $haystack_chanwGetMatchedStrings $groupsToBeSkipped_chanwGetMatchedStrings )
+    #set( $chanwGetMatchedStrings = {
+        "uniqueMatchedString"        : [],
+        "matchedStringWithoutGroups" : [],
+        "allMatchedStrings"          : {}
+    } )
+    #chanwGetMatcherObject( $needle_chanwGetMatchedStrings $haystack_chanwGetMatchedStrings )
+##
+#foreach( $num in [ 0..50000 ] )
+    #set( $found = false )
+    #set( $found = $chanwGetMatcherObject.find() )
+##
+    #if( $found )
+        #set( $chanwStringWithPattern = $allHTML.substring( $chanwGetMatcherObject.start(), $chanwGetMatcherObject.end() ) )
+    	#set( $chanwGetMatchedStrings[ "allMatchedStrings" ][ $chanwGetMatcherObject.start() ] = $chanwStringWithPattern )
+        #set( $chanwStringWithoutPattern = $chanwStringWithPattern )
+##
+        #if( $groupsToBeSkipped_chanwGetMatchedStrings.Class.Name && $groupsToBeSkipped_chanwGetMatchedStrings.Class.Name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+            #foreach( $group in $groupsToBeSkipped_chanwGetMatchedStrings )
+                #set( $chanwStringWithoutPattern = $chanwStringWithoutPattern.replace( $chanwGetMatcherObject.group( $group ), "" ) )
+            #end
+        #end
+##
+        #if( !$chanwGetMatchedStrings[ "uniqueMatchedString" ].contains( $chanwStringWithPattern ) )
+            #set( $dummy = $chanwGetMatchedStrings[ "uniqueMatchedString" ].add( $chanwStringWithPattern ) )
+        #end
+##
+        #if( !$chanwGetMatchedStrings[ "matchedStringWithoutGroups" ].contains( $chanwStringWithoutPattern ) )
+            #set( $dummy = $chanwGetMatchedStrings[ "matchedStringWithoutGroups" ].add( $chanwStringWithoutPattern ) )
+        #end
+    #else
+        #break
+    #end
+#end
+#end
+#*doc
+《/macro》
+《documentation》
 《code》#chanwGetMatcherObject( $pString $str )《/code》
 《p》Stores a 《code》Matcher《/code》 object in the variable 《code》$chanwGetMatcherObject《/code》
 object, matching the input String 《code》$str《/code》.《/p》
