@@ -73,6 +73,7 @@ these classes can be called.《/p》
 《import》
 doc*###
 #import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw_date_time_utilities' )
 #*doc
 《/import》
 《global-variables》
@@ -247,9 +248,9 @@ $chanwGetPatternObject.toString()
 doc*###
 #macro( chanwGetPatternObject $chanwGetPatternObjectPString )##
     #set( $chanwGetPatternObject = "" )
-    #set( $chanwParamList = [ '${JAVA_LANG_STRING_CLASS_NAME}.Class' ] )##
-    #chanwGetMethodByClassNameMethodNameParamTypes( 'java.util.regex.Pattern' 'compile' $paramList )##
-    #set( $chanwGetPatternObject = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, $chanwGetPatternObjectPString ) )##
+    #set( $chanwParamList = [ $JAVA_LANG_STRING_CLASS_NAME.Class ] )
+    #chanwGetMethod( 'java.util.regex.Pattern' 'compile' $chanwParamList )
+    #set( $chanwGetPatternObject = $chanwGetMethod.invoke( null, $chanwGetPatternObjectPString ) )
 #end##
 #*doc
 《/macro》
