@@ -73,7 +73,6 @@ these classes can be called.《/p》
 《import》
 doc*###
 #import( 'core/library/velocity/chanw/chanw_initialization' )
-#import( 'core/library/velocity/chanw/chanw_date_time_utilities' )
 #*doc
 《/import》
 《global-variables》
@@ -169,32 +168,36 @@ doc*###
     } )
     #chanwGetMatcherObject( $needle_chanwGetMatchedStrings $haystack_chanwGetMatchedStrings )
 ##
-#foreach( $num in [ 0..50000 ] )
-    #set( $found = false )
-    #set( $found = $chanwGetMatcherObject.find() )
+    #foreach( $num in [ 0..50000 ] )
+        #set( $found = false )
+        #set( $found = $chanwGetMatcherObject.find() )
 ##
-    #if( $found )
-        #set( $chanwStringWithPattern = $haystack_chanwGetMatchedStrings.substring( $chanwGetMatcherObject.start(), $chanwGetMatcherObject.end() ) )
-    	#set( $chanwGetMatchedStrings[ "allMatchedStrings" ][ $chanwGetMatcherObject.start() ] = $chanwStringWithPattern )
-        #set( $chanwStringWithoutPattern = $chanwStringWithPattern )
+        #if( $found )
+            #set( $chanwStringWithPattern = $haystack_chanwGetMatchedStrings.substring( $chanwGetMatcherObject.start(), $chanwGetMatcherObject.end() ) )
+    	    #set( $chanwGetMatchedStrings[ "allMatchedStrings" ][ $chanwGetMatcherObject.start() ] = $chanwStringWithPattern )
+            #set( $chanwStringWithoutPattern = $chanwStringWithPattern )
 ##
-        #if( $groupsToBeSkipped_chanwGetMatchedStrings.Class.Name && $groupsToBeSkipped_chanwGetMatchedStrings.Class.Name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
-            #foreach( $group in $groupsToBeSkipped_chanwGetMatchedStrings )
-                #set( $chanwStringWithoutPattern = $chanwStringWithoutPattern.replace( $chanwGetMatcherObject.group( $group ), "" ) )
+            #if( $groupsToBeSkipped_chanwGetMatchedStrings.Class.Name && $groupsToBeSkipped_chanwGetMatchedStrings.Class.Name == $JAVA_UTIL_ARRAY_LIST_CLASS_NAME )
+                #foreach( $group in $groupsToBeSkipped_chanwGetMatchedStrings )
+                    #set( $chanwStringWithoutPattern = $chanwStringWithoutPattern.replace( $chanwGetMatcherObject.group( $group ), "" ) )
+                #end
             #end
-        #end
 ##
-        #if( !$chanwGetMatchedStrings[ "uniqueMatchedStrings" ].contains( $chanwStringWithPattern ) )
-            #set( $dummy = $chanwGetMatchedStrings[ "uniqueMatchedStrings" ].add( $chanwStringWithPattern ) )
-        #end
+            #if( !$chanwGetMatchedStrings[ "uniqueMatchedStrings" ].contains( $chanwStringWithPattern ) )
+                #set( $dummy = $chanwGetMatchedStrings[ "uniqueMatchedStrings" ].add( $chanwStringWithPattern ) )
+                
+            #end
 ##
-        #if( !$chanwGetMatchedStrings[ "matchedStringsWithoutGroups" ].contains( $chanwStringWithoutPattern ) )
-            #set( $dummy = $chanwGetMatchedStrings[ "matchedStringsWithoutGroups" ].add( $chanwStringWithoutPattern ) )
+            #if( !$chanwGetMatchedStrings[ "matchedStringsWithoutGroups" ].contains( $chanwStringWithoutPattern ) )
+                #set( $dummy = $chanwGetMatchedStrings[ "matchedStringsWithoutGroups" ].add( $chanwStringWithoutPattern ) )
+            #end
+            #set( $chanwTempMap = $chanwGetMatchedStrings )
+        #else
+            #break
         #end
-    #else
-        #break
     #end
-#end
+    #set( $chanwGetMatchedStrings = "" )
+    #set( $chanwGetMatchedStrings = $chanwTempMap )
 #end
 #*doc
 《/macro》
