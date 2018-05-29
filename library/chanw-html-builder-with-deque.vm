@@ -22,7 +22,7 @@ The builder ensures that all tags are closed and nested properly.
 It will also avoid unneccessary whitespace characters.
 When using these macros, do it inside out, layer by layer.《/p》
 《p》Example code:《/p》
-《pre》#import( 'site://_core/formats/library/velocity/chanw_html_builder_with_deque' )
+《pre》#import( 'site://_core/formats/library/velocity/chanw-html-builder-with-deque' )
 
 ## create an img element
 #chanwCreateEmptyElement( { 'name':'img', 'src':'/images/photo.jpg', 'class':'img-responsive', 'alt':'Photo' } )
@@ -39,7 +39,7 @@ When using these macros, do it inside out, layer by layer.《/p》
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_global_deque' )
+#import( 'core/library/velocity/chanw/chanw-global-deque' )
 #*doc
 《/import》
 《global-variables》

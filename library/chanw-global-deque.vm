@@ -12,8 +12,8 @@ Modification history:
 《div id=“hide-code1”》
 《h2》Test Code and Results《/h2》
 《pre》
-#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
-#import( 'site://_brisk/core/library/velocity/chanw/chanw_global_deque' )##
+#import( 'site://_brisk/core/library/velocity/chanw/chanw-library-import' )
+#import( 'site://_brisk/core/library/velocity/chanw/chanw-global-deque' )##
 ${SINGLE_HASH}set( ${DOLLAR}deque = ${DOLLAR}chanwGlobalDeque )
 #set( $deque = $chanwGlobalDeque )
 ${SINGLE_HASH}chanwAddLastGlobalDeque( ${DOLLAR}deque "1" )
@@ -85,7 +85,7 @@ $item.Class.Name $item
 《h2》Introduction《/h2》
 《p》This format defines a global deque. Example:《/p》
 《pre》
-#import( 'site://_brisk/core/library/velocity/chanw/chanw_global_deque' )
+#import( 'site://_brisk/core/library/velocity/chanw/chanw-global-deque' )
 $chanwGlobalDeque
 #set( $deque = $chanwGlobalDeque )
 #chanwAddLastGlobalDeque( $deque "1" )
@@ -167,7 +167,7 @@ $E_PRE
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》

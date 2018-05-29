@@ -14,16 +14,16 @@ Modification history:
 《div id=“hide-code1”》
 《h2》Test Code and Results《/h2》
 《pre》
-${SINGLE_HASH}import( 'core/library/velocity/chanw/chanw_initialization' )
-${SINGLE_HASH}import( 'core/library/velocity/chanw/chanw_xslt_utilities' )
+${SINGLE_HASH}import( 'core/library/velocity/chanw/chanw-initialization' )
+${SINGLE_HASH}import( 'core/library/velocity/chanw/chanw-xslt-utilities' )
 ${SINGLE_HASH}chanwLocateAsset(  "_cascade/blocks/data" "standard-model" "data-block-processing" )
 ${SINGLE_HASH}set( ${DOLLAR}xsl = ${DOLLAR}chanwLocateAsset.XSL )
 ${SINGLE_HASH}set( ${DOLLAR}block = ${DOLLAR}_.locateBlock( "_cascade/blocks/data/faked-dd-block", "standard-model" ) )
 ${SINGLE_HASH}set( ${DOLLAR}xml = ${DOLLAR}block.XML )
 ${SINGLE_HASH}chanwGetTransformedString( ${DOLLAR}xsl ${DOLLAR}xml )
 ${DOLLAR}chanwGetTransformedString
-#import( 'core/library/velocity/chanw/chanw_initialization' )
-#import( 'core/library/velocity/chanw/chanw_xslt_utilities' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
+#import( 'core/library/velocity/chanw/chanw-xslt-utilities' )
 #chanwLocateAsset(  "_cascade/blocks/data" "standard-model" "data-block-processing" )
 #set( $xsl = $chanwLocateAsset.XSL )
 #set( $block = $_.locateBlock( "_cascade/blocks/data/faked-dd-block", "standard-model" ) )
@@ -43,7 +43,7 @@ relying on external library.《/p》
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》

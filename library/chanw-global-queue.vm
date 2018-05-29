@@ -12,8 +12,8 @@ Modification history:
 《div id=“hide-code1”》
 《h2》Test Code and Results《/h2》
 《pre》
-#import( 'site://_brisk/core/library/velocity/chanw/chanw_library_import' )
-#import( 'site://_brisk/core/library/velocity/chanw/chanw_global_queue' )##
+#import( 'site://_brisk/core/library/velocity/chanw/chanw-library-import' )
+#import( 'site://_brisk/core/library/velocity/chanw/chanw-global-queue' )##
 #set( $queue = $chanwGlobalQueue )
 #chanwEnqueueGlobalQueue( $queue $_ )
 #chanwEnqueueGlobalQueue( $queue $_PropertyTool )
@@ -56,7 +56,7 @@ Current size: $size$BR
 《h2》Introduction《/h2》
 《p》This format defines a global queue. Example:《/p》
 《pre》
-#import( 'site://_core/formats/library/velocity/chanw_global_queue' )
+#import( 'site://_core/formats/library/velocity/chanw-global-queue' )
 
 #set( $queue = $chanwGlobalQueue )
 #chanwEnqueueGlobalQueue( $queue $_ )
@@ -112,7 +112,7 @@ $E_PRE
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》

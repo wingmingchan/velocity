@@ -21,7 +21,7 @@ Modification history:
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》

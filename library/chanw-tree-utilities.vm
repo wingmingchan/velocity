@@ -7,7 +7,7 @@ MIT Licensed
 Modification history:
 1/31/2018 Added 
 11/4/2017 Added $TREE_NODE_TEXT and related code
-10/29/2017 Use $DefaultMutableTreeNodeConstructor defined in chanw_initialization.
+10/29/2017 Use $DefaultMutableTreeNodeConstructor defined in chanw-initialization.
 10/27/2017 Rewritten chanwTraverseTreeBreadthFirst and chanwTraverseTreePreorder,
 using Java Enumeration.
 10/26/2017 Added test of ancestor to chanwSwapNodes.
@@ -26,7 +26,7 @@ of nodes using String keys like 《code》$chanwObjectNodeMap[ "html" ]《/code�
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》

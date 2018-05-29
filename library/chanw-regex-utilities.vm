@@ -72,7 +72,7 @@ these classes can be called.《/p》
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》
@@ -135,7 +135,7 @@ stores all instances of matched Strings, using indexes as keys. If there are gro
 can be replaced by the empty String and the result stored in 《code》$chanwGetMatchedStrings["matchedStringsWithoutGroups"]《/code》. The parameter
 《code》$groups《/code》 (a list of integers) specifies which matched group(s) should be skipped from the output.《/p》
 《pre》
-#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
 
 #chanwGetMatchedStrings( "(col-)\S+" "col-ms-3 col-xs-6 col-lg-12 hidden no-show" )
 ## output: {uniqueMatchedStrings=[col-ms-3, col-xs-6, col-lg-12], matchedStringsWithoutGroups=[col-ms-3, col-xs-6, col-lg-12], allMatchedStrings={0=col-ms-3, 9=col-xs-6, 18=col-lg-12}}

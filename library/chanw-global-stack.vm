@@ -19,8 +19,7 @@ Modification history:
 《h2》Introduction《/h2》
 《p》This format defines a global stack. Example:《/p》
 《pre》
-#import( 'site://_common_assets/core/libraries/chanw_global_values' )
-#import( 'site://_common_assets/core/libraries/chanw_global_stack' )
+#import( 'site://_common_assets/core/libraries/chanw-global-stack' )
 
 #foreach( $num in [ 1..10 ] )
     #chanwPushGlobalStack( $chanwGlobalStack $num )
@@ -40,7 +39,7 @@ Modification history:
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》
@@ -87,7 +86,7 @@ doc*###
 doc*###
 #macro( chanwPeekGlobalStack $chanwGlobalStack )
     #if( $chanwGlobalStack.get( $chanwSTACK_DATA ).empty() )
-#chanwOutputErrorMsg( "core/library/velocity/chanw/chanw_global_stack" "Stack is empty" "msg120376" )
+#chanwOutputErrorMsg( "core/library/velocity/chanw/chanw-global-stack" "Stack is empty" "msg120376" )
     #else
         #set( $chanwPeekGlobalStack = $chanwGlobalStack.get( $chanwSTACK_DATA ).peek() )
     #end

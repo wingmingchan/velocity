@@ -30,7 +30,7 @@ ${DOLLAR}chanwDayDuration: $chanwDayDuration
 ${DOLLAR}chanwMonthDuration: $chanwMonthDuration
 ${DOLLAR}chanwYearDuration: $chanwYearDuration
 =============================================================
-#import( 'site://_brisk/core/library/velocity/chanw/chanw_date_time_utilities' )
+#import( 'site://_brisk/core/library/velocity/chanw/chanw-date-time-utilities' )
 ${DOLLAR}chanwYearField: $chanwCalendarYearField
 ${SINGLE_HASH}chanwLocalDateFromCalendar( ${DOLLAR}chanwCalendarObject )
 #chanwLocalDateFromCalendar( $chanwCalendarObject )
@@ -178,7 +178,7 @@ object).《/p》
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》

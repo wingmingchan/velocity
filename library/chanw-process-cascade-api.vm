@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+5/23/2018 Added $KEY_ASSET.
 2/19/2018 Fixed a bug in chanwProcessStructuredDataNodes.
 9/8/2017 Added documentation of #chanwInvokeQueryWithMap.
 8/30/2017 Updated chanwInvokeQuery with code to deal with hasMetadata.
@@ -139,12 +140,13 @@ when using the LocatorTool.《/p》
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_global_queue' )
+#import( 'core/library/velocity/chanw/chanw-global-queue' )
 #*doc
 《/import》
 《global-variables》
 doc*###
 ## cascade structured data keys
+#set( $KEY_ASSET        = "asset" )
 #set( $KEY_DATA         = "data" )
 #set( $KEY_FQI          = "fqi" )
 #set( $KEY_NODE         = "node" )
@@ -678,8 +680,11 @@ $chanwGetFQINodeMap[ "outer;middle" ][ $KEY_SIZE ]
 《/documentation》
 《macro id=“chanwGetFQINodeMap”》
 doc*###
-#macro( chanwGetFQINodeMap $chanwGetFQINodeMapSd $chanwGetFQINodeMapSds )
+#macro( chanwGetFQINodeMap $chanwGetFQINodeMapSd $chanwGetFQINodeMapSds $chanwchanwGetFQINodeMapAsset )
     #set( $chanwGetFQINodeMap = {} )
+    #if( $chanwchanwGetFQINodeMapAsset.Class.Name )
+        #set( $chanwGetFQINodeMap[ $KEY_ASSET ] = $chanwchanwGetFQINodeMapAsset )
+    #end
 ##
     #chanwProcessStructuredDataNodes( $chanwGetFQINodeMapSd $chanwGetFQINodeMapSds )
 ##

@@ -17,7 +17,7 @@ Modification history:
 《h2》Test Code and Results《/h2》
 《pre》
 $DOUBLE_HASH Display the code of chanwMatches
-#chanwGetMacroCode( "chanw_regex_utilities" "formats/library/velocity" "_master" "chanwMatches" )
+#chanwGetMacroCode( "chanw-regex-utilities" "formats/library/velocity" "_master" "chanwMatches" )
 $_EscapeTool.xml( $chanwGetMacroCode )
 《/pre》
 《/div》
@@ -43,8 +43,8 @@ documentation because the contents of documentation go through
 《code》$_EscapeTool.xml《/code》.《/p》
 《p》The map 《code》$chanwMacroNameDocumentationMap《/code》 is used to store
 macro-documentation element pairs. For example, after
-《code》#chanwGetScriptFormatRootElement( "chanw_initialization"
-"core/library/velocity/chanw" "_rebuilt" )《/code》 is executed, the map
+《code》#chanwGetScriptFormatRootElement( "chanw-initialization"
+"core/library/velocity/chanw" "_brisk" )《/code》 is executed, the map
 stores the following:《/p》
 《pre》
 {
@@ -58,7 +58,7 @@ etc.
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》
@@ -95,7 +95,7 @@ doc*###
 This macro should be used as an entry point to this library format. Example:《/p》
 《pre》
 #chanwDisplayDocumentation(
-    "chanw_display_velocity_code" "formats/library/velocity" "_common_assets" )
+    "chanw-display-velocity-code" "formats/library/velocity" "_common_assets" )
 《/pre》
 《/documentation》
 《macro id=“chanwDisplayDocumentation”》
@@ -250,7 +250,7 @@ doc*###
 《code》#chanwDisplayMacroCode( $format_name $folder_path $site_name $macro_name )《/code》
 《p》Displays the code of the macro bearing the ID. Example:《/p》
 《pre》
-#chanwDisplayMacroCode( "chanw_display_velocity_code" "formats/library/velocity"
+#chanwDisplayMacroCode( "chanw-display-velocity-code" "formats/library/velocity"
     "_common_assets" "chanwDisplayMacroCode" )
 《/pre》
 《/documentation》
@@ -269,7 +269,7 @@ doc*###
 《code》#chanwDisplayMacroDocumentation( $format_name $folder_path $site_name $macro_name )《/code》
 《p》Displays the documentation of the macro bearing the ID. Example:《/p》
 《pre》
-#chanwDisplayMacroDocumentation( "chanw_display_velocity_code" "formats/library/velocity"
+#chanwDisplayMacroDocumentation( "chanw-display-velocity-code" "formats/library/velocity"
     "_common_assets" "chanwDisplayMacroCode" )
 《/pre》
 《/documentation》
@@ -291,9 +291,7 @@ doc*###
 path of the block into two (the parent folder path and the name of the block).
 This macro invokes 《code》#chanwDisplayHideVelocityCode《/code》. Example:《/p》
 《pre》
-#chanwDisplayScriptBlockCode(
-    "formats/library/velocity/chanw_global_code_templates" "_common_assets"
-    "hide-code1" )
+
 《/pre》
 《/documentation》
 《macro id=“chanwDisplayScriptBlockCode”》
@@ -311,11 +309,7 @@ The elements are stored in a map named
 《code》$chanwDocumentationMacroNameMap《/code》, with macro names as keys.
 Example:《/p》
 《pre》
-#chanwGetScriptFormatRootElement(
-    "chanw_global_macros" "formats/library/velocity" "_common_assets" )
-#chanwGetDocumentationElements( $chanwGetScriptFormatRootElement )
-$chanwGetDocumentationElements.size()
-$chanwMacroNameDocumentationMap
+
 《/pre》
 《/documentation》
 《macro id=“chanwGetDocumentationElements”》
@@ -386,7 +380,7 @@ doc*###
 《code》$chanwGetMacroCode《/code》. Example:《/p》
 《pre》
 ## a String element
-#chanwGetMacroCode( "chanw_display_velocity_code" "formats/library/velocity"
+#chanwGetMacroCode( "chanw-display-velocity-code" "formats/library/velocity"
     "_common_assets" "chanwDisplayDocumentation" )
 $chanwGetMacroCode.Class.Name
 $_EscapeTool.xml( $chanwGetMacroCode )
@@ -409,7 +403,7 @@ doc*###
 is stored in 《code》$chanwGetMacroDocumentation《/code》. Example:《/p》
 《pre》
 ## an org.jdom.Element
-#chanwGetMacroDocumentation( "chanw_display_velocity_code" "formats/library/velocity"
+#chanwGetMacroDocumentation( "chanw-display-velocity-code" "formats/library/velocity"
 "_common_assets" "chanwDisplayDocumentation" )
 $_SerializerTool.serialize( $chanwGetMacroDocumentation, true )
 《/pre》
@@ -466,7 +460,7 @@ values in global variables. This is the starting point of this library format.
 Example:《/p》
 《pre》
 #chanwGetScriptFormatRootElement(
-    "chanw_display_velocity_code" "formats/library/velocity" "_common_assets" )
+    "chanw-display-velocity-code" "formats/library/velocity" "_common_assets" )
 #if( $chanwGetDocumentationElements != "" )
     $chanwGetDocumentationElements.size()
 #end
@@ -511,9 +505,7 @@ doc*###
 《code》org.jdom.Element《/code》 object is stored in
 《code》$chanwGetXMLBlockRootElement《/code》. Example:《/p》
 《pre》
-#chanwGetXMLBlockRootElement( "formats/library/velocity/chanw_global_code_templates"
-    "_common_assets" )
-$chanwGetXMLBlockRootElement.Class.Name
+
 《/pre》
 《/documentation》
 《macro id=“chanwGetXMLBlockRootElement”》

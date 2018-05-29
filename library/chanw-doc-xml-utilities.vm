@@ -12,7 +12,7 @@ Modification history:
 《h2》Test Code and Results《/h2》
 《pre》
 =============================================================
-#import( 'core/library/velocity/chanw/chanw_library_import' )
+#import( 'core/library/velocity/chanw/chanw-library-import' )
 $chanwImportDocXml
 $chanwImportDatabase
 $chanwImportServiceProvider
@@ -29,9 +29,9 @@ $chanwImportServiceProvider
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
-#import( 'core/library/velocity/chanw/chanw_database_utilities' )
-#import( 'core/library/velocity/chanw/chanw_service_provider' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
+#import( 'core/library/velocity/chanw/chanw-database-utilities' )
+#import( 'core/library/velocity/chanw/chanw-service-provider' )
 #*doc
 《/import》
 《documentation》

@@ -46,7 +46,7 @@ $systemFolderIsPublished
 《/pre》
 《p》Output:《/p》
 《pre》
-chanw_process_index_block
+chanw-process-index-block
 true
 brisk
 true
@@ -54,7 +54,7 @@ true
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》
@@ -272,7 +272,7 @@ doc*###
 There is code and a code template used to generate four macros: 《code》#chanwProcessRSSItem《/code》,
 《code》#chanwProcessSystemBlock《/code》, 《code》#chanwProcessSystemFile《/code》, and 《code》#chanwProcessSystemSymlink《/code》.
 《p》The four macros generated each creates a set of global variables. The variable names are defined in
-《code》chanw_global_values《/code》. For example, the global variables associated with 《code》#chanwProcessSystemBlock《/code》
+《code》chanw-initialization《/code》. For example, the global variables associated with 《code》#chanwProcessSystemBlock《/code》
 are defined as:《/p》
 《pre》
 #set( $systemBlockVarElementMap = {

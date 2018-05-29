@@ -19,12 +19,12 @@ Modification history:
 《p》This format defines macros to process XML.
 Use this format to process any 《code》system-data-structure《/code》 element or
 any node without a fixed structure.
-Use 《code》chanw_process_index_block《/code》 to process a page/folder created
+Use 《code》chanw-process-index-block《/code》 to process a page/folder created
 by an index block.《/p》
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》

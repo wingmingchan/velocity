@@ -31,7 +31,7 @@ Modification history:
 《pre》
 =============================================================
 $DOUBLE_HASH Display the number of entries in the cxml_foldercontent table
-#import( 'site://_rebuilt/core/library/velocity/chanw/chanw_database_utilities' )
+#import( 'site://_brisk/core/library/velocity/chanw/chanw-database-utilities' )
 ${SINGLE_HASH}chanwGetNumberOfRecordsInTable( "cxml_foldercontent" )
 #chanwGetNumberOfRecordsInTable( "cxml_foldercontent" )
 ${DOLLAR}chanwGetNumberOfRecordsInTable: $chanwGetNumberOfRecordsInTable
@@ -52,14 +52,14 @@ as the last line of the code.《/p》
 《code》$chanwOracleDB《/code》 to 《code》false《/code》 if your database is
 MySql or Microsoft SQL Server:《/p》
 《pre》#set( $chanwOracleDB = false )
-#import( 'site://mycore/formats/library/velocity/chanw_library_import' )
+#import( 'site://mycore/formats/library/velocity/chanw-library-import' )
 《/pre》
 《p》Also note that table names used in SQL statement are case-sensitive.
 Use uppercase for Oracle, and lowercase for MySql.《/p》
 《/documentation》
 《import》
 doc*###
-#import( 'core/library/velocity/chanw/chanw_initialization' )
+#import( 'core/library/velocity/chanw/chanw-initialization' )
 #*doc
 《/import》
 《global-variables》
@@ -225,7 +225,7 @@ columns. The resulting code is stored in 《code》$globalStringBuffer《/code�
 To build a one-column list, use 《code》#chanwGetDatabaseList《/code》 instead.
 Example:《/p》
 《pre》
-#import( 'site://_core/formats/library/velocity/chanw_library_import' )
+#import( 'site://_core/formats/library/velocity/chanw-library-import' )
 
 #set( $sql  = "SELECT userName, email, fullName FROM cxml_user" )
 #chanwGetResultSet( $sql )

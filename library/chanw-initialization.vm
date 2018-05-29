@@ -123,16 +123,6 @@ ${SINGLE_HASH}chanwConvertToPascalCase( "xml-group" "-" )
 #chanwConvertToPascalCase( "xml-group" "-" )
 ${DOLLAR}chanwConvertToPascalCase: $chanwConvertToPascalCase
 =============================================================
-${SINGLE_HASH}if( ${DOLLAR}contentRoot )
-${SINGLE_HASH}set( ${DOLLAR}f = ${DOLLAR}contentRoot.getChild( "system-folder" ) )
-${SINGLE_HASH}chanwGetCascadeObjectFromElement( ${DOLLAR}f )
-#if( $contentRoot )
-#set( $f = $contentRoot.getChild( "system-folder" ) )
-#chanwGetCascadeObjectFromElement( $f )
-${DOLLAR}chanwGetCascadeObjectFromElement.Name:       $chanwGetCascadeObjectFromElement.Name
-${DOLLAR}chanwGetCascadeObjectFromElement.Class.Name: $chanwGetCascadeObjectFromElement.Class.Name
-#end
-${SINGLE_HASH}end
 =============================================================
 ${SINGLE_HASH}set( ${DOLLAR}myFile = "${SINGLE_HASH}chanwGetFilePath( 'images/computer-people-700x350.jpg' 'thomas-test' 'images/default.jpg' )" )
 #set( $myFile = "#chanwGetFilePath( 'images/computer-people-700x350.jpg' 'thomas-test' 'images/default.jpg' )" )
@@ -1701,7 +1691,6 @@ doc*###
     #set( $chanwScript  = $chanwFormat.Script )
     #set( $chanwScriptArray = $chanwScript.split( "\r" ) )
 ##
-#*
 #foreach( $line in $chanwScriptArray )
 #if( $line.contains( $chanwOutputErrorMsgUniqueId ) )
 ## Wrap output in [system-view:internal] so that an error is never published
@@ -1710,7 +1699,6 @@ ${S_SYSTEM_VIEW_INTERNAL}${_EscapeTool.xml( "site://${chanwOutputErrorMsgSiteNam
 #break
 #end
 #end##foreach
-*#
 #end
 #*doc
 《/macro》
