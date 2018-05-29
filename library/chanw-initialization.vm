@@ -74,12 +74,12 @@ ${SINGLE_HASH}chanwIsInstanceOf( [] "java.util.concurrent.BlockingDeque" )
 #chanwIsInstanceOf( [] "java.util.concurrent.BlockingDeque" )
 ${DOLLAR}chanwIsInstanceOf: $chanwIsInstanceOf
 =============================================================
-${SINGLE_HASH}chanwLocateAsset( "core/library/velocity/chanw" ${DOLLAR}chanw_framework_site_name "chanw_display_velocity_code" )
-#chanwLocateAsset( "core/library/velocity/chanw" $chanw_framework_site_name "chanw_display_velocity_code" )
+${SINGLE_HASH}chanwLocateAsset( "core/library/velocity/chanw" ${DOLLAR}chanw_framework_site_name "chanw-display-velocity-code" )
+#chanwLocateAsset( "core/library/velocity/chanw" $chanw_framework_site_name "chanw-display-velocity-code" )
 ${DOLLAR}chanwLocateAsset.Class.Name: $chanwLocateAsset.Class.Name
 =============================================================
-${SINGLE_HASH}chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" ${DOLLAR}CASCADE_API_FORMAT_TYPE "_brisk" )
-#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" $CASCADE_API_FORMAT_TYPE "_brisk" )
+${SINGLE_HASH}chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw-initialization" ${DOLLAR}CASCADE_API_FORMAT_TYPE "_brisk" )
+#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw-initialization" $CASCADE_API_FORMAT_TYPE "_brisk" )
 ${DOLLAR}chanwLocateAssetWithFullPath.Class.Name: $chanwLocateAssetWithFullPath.Class.Name
 =============================================================
 ${SINGLE_HASH}chanwOutputErrorMsg( ${DOLLAR}CHANW_LIBRARY_FOLDER_PATH ${DOLLAR}chanw_framework_site_name ${DOLLAR}CHANW_INITIALIZATION_FORMAT_NAME "Should show a test string." "fri4;sglk4ikFIO;RK" )
@@ -223,7 +223,7 @@ doc*###
 #if( !$chanw_framework_site_name )
     #set( $chanw_framework_site_name = '_brisk' )
 #end
-#set( $CHANW_INITIALIZATION_FORMAT_NAME = "chanw_initialization" )
+#set( $CHANW_INITIALIZATION_FORMAT_NAME = "chanw-initialization" )
 #set( $CHANW_LIBRARY_FOLDER_PATH        = "core/library/velocity/chanw" )
 ## number used in loops
 #set( $INTEGER_MAX_VALUE = 50000 )
@@ -1557,7 +1557,7 @@ doc*###
 《code》$stop《/code》 is not set to true, then 《code》$chanwLocateAsset《/code》
 will store the empty string. Example:《/p》
 《pre》
-#chanwLocateAsset( "core/library/velocity/chanw" "_brisk" "chanw_display_velocity_code" )
+#chanwLocateAsset( "core/library/velocity/chanw" "_brisk" "chanw-display-velocity-code" )
 #set( $code = $chanwLocateAsset.Script )
 《/pre》
 《/documentation》
@@ -1593,7 +1593,7 @@ $CHANW_INITIALIZATION_FORMAT_NAME, chanwLocateAsset: Three non-empty strings are
 ##
     #if( !$chanwFolderAPI.Class.Name || $chanwFolderAPI.Class.Name == $JAVA_LANG_STRING_CLASS_NAME ) ## the folder cannot be located
     ## Cannot call chanwOutputErrorMsg due to recursion cap.
-chanw_initialization, chanwLocateAsset: The folder $chanwFolderPath in site $chanwLocateAssetSiteName cannot be located.
+Error 1596: chanw-initialization, chanwLocateAsset: The folder $chanwFolderPath in site $chanwLocateAssetSiteName cannot be located.
         #if( $chanwLocateAssetStop == true )
             #stop
         #end
@@ -1671,7 +1671,7 @@ doc*#
 《code》$chanwLocateAssetWithFullPath《/code》. If the asset cannot be located, then
 《code》$chanwLocateAssetWithFullPath《/code》 will store the empty string. Example:《/p》
 《pre》
-#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw_initialization" $CASCADE_API_FORMAT_TYPE "_brisk" )
+#chanwLocateAssetWithFullPath( "core/library/velocity/chanw/chanw-initialization" $CASCADE_API_FORMAT_TYPE "_brisk" )
 #set( $code = $chanwLocateAssetWithFullPath.Script )
 《/pre》
 《/documentation》
@@ -1688,27 +1688,29 @@ doc*###
 《p》Locates the named assets. The asset located is stored in
 《code》$chanwLocateAsset《/code》. Example:《/p》
 《pre》
-#chanwLocateAsset( "core/library/velocity/chanw" "_brisk" "chanw_display_velocity_code" )
+#chanwLocateAsset( "core/library/velocity/chanw" "_brisk" "chanw-display-velocity-code" )
 #set( $code = $chanwLocateAsset.Script )
 《/pre》
 《/documentation》
 《macro id=“chanwOutputErrorMsg”》
 doc*###
 #macro( chanwOutputErrorMsg $chanwOutputErrorMsgParentPath $chanwOutputErrorMsgSiteName $chanwOutputErrorMsgFormatName $chanwOutputErrorMsgMsg $chanwOutputErrorMsgUniqueId $chanwOutputErrorMsgStop )
-    #chanwLocateAsset( $chanwOutputErrorMsgParentPath $chanwOutputErrorMsgSiteName $chanwOutputErrorMsgFormatName )
-    #set( $chanwScript = $chanwLocateAsset.Script )
+    ##chanwLocateAsset( $chanwOutputErrorMsgParentPath $chanwOutputErrorMsgSiteName $chanwOutputErrorMsgFormatName )
+    #set( $chanwFormat = $_.locate( "${chanwOutputErrorMsgParentPath}/${chanwOutputErrorMsgFormatName}", $CASCADE_API_FORMAT_TYPE,$chanwOutputErrorMsgSiteName ) )
+    ##set( $chanwScript = $chanwLocateAsset.Script )
+    #set( $chanwScript  = $chanwFormat.Script )
     #set( $chanwScriptArray = $chanwScript.split( "\r" ) )
 ##
+#*
 #foreach( $line in $chanwScriptArray )
 #if( $line.contains( $chanwOutputErrorMsgUniqueId ) )
 ## Wrap output in [system-view:internal] so that an error is never published
 ${S_SYSTEM_VIEW_INTERNAL}${_EscapeTool.xml( "site://${chanwOutputErrorMsgSiteName}/${chanwOutputErrorMsgParentPath}/${chanwOutputErrorMsgFormatName}, line ${foreach.count}: ${chanwOutputErrorMsgMsg}" )}${E_SYSTEM_VIEW_INTERNAL}
-#if( $chanwOutputErrorMsgStop == true )
-#stop
-#end
+#if( $chanwOutputErrorMsgStop == true )#stop#end
 #break
 #end
-#end
+#end##foreach
+*#
 #end
 #*doc
 《/macro》
@@ -1748,7 +1750,7 @@ doc*###
     #if( $chanwContentChildren.size() == 0 ) ## no root element, must be a text block
         $_SerializerTool.serialize( $chanwProcessBlockChooserContent, true )
     ## TextBlockAPIAdapter
-    #elseif( $chanwBlockAPIAdapterClassName == "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
+    #elseif( $chanwBlockAPIAdapterClassName == $COM_CASCADE_TEXT_BLOCK_API_CLASS_NAME )
         $chanwProcessBlockChooserContent.Text
     #elseif( $chanwContentChildren.size() > 0 || $chanwIsBlockAPIAdapter )
         ## root element exists
@@ -1801,6 +1803,8 @@ doc*###
                 #chanwInvokeMacro( "chanwProcessScript" [ "chanwProcessBlockChooserContent" ] )
             #end
         ## data definition blocks
+        #elseif( $chanwBlockAPIAdapterClassName == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
+            #chanwProcessDataDefinitionBlock( $chanwProcessBlockChooserContent )
         #elseif( $chanwChildName == $cascadeXML_ELEMENT_SYSTEM_DATA_STRUCTURE )
             #chanwProcessDataDefinitionBlock( $chanwFirstChild )
         ## Cascade API blocks
@@ -1813,7 +1817,8 @@ doc*###
         #else
             #chanwConvertToPascalCase( $chanwBlockName "-" )
             #set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
-            #chanwInvokeMacro( $chanwMacroName [ "chanwFirstChild" ] )
+            ##chanwInvokeMacro( $chanwMacroName [ "chanwFirstChild" ] )
+            #chanwInvokeMacro( $chanwMacroName [ "chanwProcessBlockChooserContent" ] )
         #end
     #end
 #end
@@ -1895,14 +1900,15 @@ doc*###
 #*    *### data retrieval
 #*        *##set( $chanwPath = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "path" ).Value )
 #*        *##set( $chanwSite = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "site" ).Value )
-#*        *##set( $chanwGroupNode = $_.locateBlock( $chanwPath, $chanwSite ).getStructuredDataNodes( $chanwGroupName )[ 0 ] )
-            #chanwGetFQINodeMap( $chanwGroupNode $chanwProcessDataDefinitionBlockSystemDataStructure )
+#*        *##set( $chanwDDBlock   = $_.locateBlock( $chanwPath, $chanwSite ) )
+#*        *##set( $chanwGroupNode = $chanwDDBlock.getStructuredDataNodes( $chanwGroupName )[ 0 ] )
+            #chanwGetFQINodeMap( $chanwGroupNode $chanwProcessDataDefinitionBlockSystemDataStructure $chanwDDBlock )
         #else ## no code
         #end
     #elseif( $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
-        #chanwGetFQINodeMap( $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData )
+        ## added the third parameter 5/23/2018
+        #chanwGetFQINodeMap( $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData [] $chanwProcessDataDefinitionBlockSystemDataStructure )
         #set( $chanwTypeInfo = $chanwGetFQINodeMap[ "block-type" ][ $KEY_DATA ] )
-        
         ## multi-functional
         #if( $chanwGetFQINodeMap[ "choose-type" ][ $KEY_DATA ].Class.Name )
             #set( $chanwGroupName = $chanwGetFQINodeMap[ "choose-type" ][ $KEY_DATA ] + "-group" )
@@ -2060,8 +2066,8 @@ Code inside cannot contain 《code》<《/code》, 《code》>《/code》 and
 《pre》
 <scripts>
     <code>
-#import( "site://_brisk/core/library/velocity/chanw/chanw_display_velocity_code" )
-#chanwGetMacroCode( "chanw_initialization" "core/library/velocity/chanw" "_brisk" "chanwGetObjectByClassName" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-display-velocity-code" )
+#chanwGetMacroCode( "chanw-initialization" "core/library/velocity/chanw" "_brisk" "chanwGetObjectByClassName" )
 #chanwDisplayHideVelocityCode( $chanwGetMacroCode "hide-code1" "true" "false" )
     </code>
 </scripts>
@@ -2247,9 +2253,11 @@ message.《/p》
 《/documentation》
 《macro id=“drulykgImportPassThrough”》
 doc*###
+#*
 #macro( drulykgImportPassThrough $drulykgImportPassThroughPath )
     #import( $drulykgImportPassThroughPath )
 #end
+*#
 #*doc
 《/macro》
 《documentation》
@@ -2301,7 +2309,7 @@ the parameters of an image path, image site location, and a custom map of values
 it finds if srcset image exists. If so it adds them, if not, it moves on.
 Example: 《/p》
 《pre》
-#import("site://_brisk/core/library/velocity/chanw/chanw_initialization")
+#import("site://_brisk/core/library/velocity/chanw/chanw-initialization")
 #set( $image ="/images/computer-people.jpg" )
 #set( $site = "thomas-test" )
 
