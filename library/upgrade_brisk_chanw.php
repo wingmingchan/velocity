@@ -1,7 +1,7 @@
 <?php
-// last run: 11/30/2017
+// last run: 05/29/2018
 $start_time = time();
-$site_name           = "_brisk";                      // name of the site to be upgraded
+$site_name           = "_wing";                      // name of the site to be upgraded
 $library_folder_path = "core/library/velocity/chanw"; // path of the folder to be upgraded
 $source = "http://www.upstate.edu/standard-model/source/";
 
@@ -10,7 +10,7 @@ This program reads source code from the Upstate server,
 and updates all library formats by wing.
 */
 
-require_once('auth_tutorial7.php');  // to sandbox
+require_once('auth_REST_SOAP.php');  // to sandbox
 
 use cascade_ws_AOHS      as aohs;
 use cascade_ws_constants as c;
@@ -31,63 +31,30 @@ try
         a\Folder::TYPE, $library_folder_path, $site_name
     );
     
-    // delete unused blocks and formats
-    $blocks_to_be_deleted = array(
-        "chanw_global_values_code",
-        "chanw_global_velocity_code",
-        "chanw_object_creator_code",
-        "chanw_global_code_templates"
-    );
-    
-    $formats_to_be_deleted = array(
-        "chanw_global_utility_objects",
-        "chanw_structured_data_worker",
-        "chanw_global_macros",
-        "chanw_global_values",
-        "chanw_local_date_time_utilities",
-        "chanw_setup_global_variables",
-        "chanw_object_creator",
-
-    );
-    
-    foreach( $blocks_to_be_deleted as $block_to_be_deleted )
-    {
-        $cascade->deleteXmlBlock(
-            $velocity_folder->getPath() . "/" . $block_to_be_deleted,
-            $site_name );
-    }
-    
-    foreach( $formats_to_be_deleted as $format_to_be_deleted )
-    {
-        $cascade->deleteScriptFormat(
-            $velocity_folder->getPath() . "/" . $format_to_be_deleted,
-            $site_name );
-    }
-    
     $library_format_names = array(
-        "chanw_database_utilities",
-        "chanw_date_time_utilities",
-        "chanw_display_velocity_code",
-        "chanw_doc_xml_utilities",
-        "chanw_element_utilities",
-        "chanw_global_deque",
-        "chanw_global_queue",
-        "chanw_global_stack",
-        "chanw_html_builder",
-        "chanw_html_builder_with_deque",
-        "chanw_initialization",
-        "chanw_library_import",
-        "chanw_process_cascade_api",
-        "chanw_process_index_block",
-        "chanw_process_xml",
-        "chanw_reflect_utilities",
-        "chanw_regex_utilities",
-        "chanw_rss_utilities",
-        "chanw_xslt_utilities",
-        "chanw_service_provider",
-        "chanw_tree_utilities",
-        "chanw_xslt_utilities",
-        "upstate_database"
+        "chanw-database-utilities",
+        "chanw-date-time-utilities",
+        "chanw-display-velocity-code",
+        "chanw-doc-xml-utilities",
+        "chanw-element-utilities",
+        "chanw-global-deque",
+        "chanw-global-queue",
+        "chanw-global-stack",
+        "chanw-html-builder",
+        "chanw-html-builder-with-deque",
+        "chanw-initialization",
+        "chanw-library-import",
+        "chanw-process-cascade-api",
+        "chanw-process-index-block",
+        "chanw-process-xml",
+        "chanw-reflect-utilities",
+        "chanw-regex-utilities",
+        "chanw-rss-utilities",
+        "chanw-service-provider",
+        "chanw-tree-utilities",
+        "chanw-ws-utilities",
+        "chanw-xslt-utilities",
+        "upstate-database"
     );
     
     // create formats needed and push the contents
