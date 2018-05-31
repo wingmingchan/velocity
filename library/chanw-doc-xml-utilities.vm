@@ -5,6 +5,7 @@ Authors: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+5/30/2018 Added chanwGetXmlCode.
 9/28/2017 Format created.
 《/copyright》
 《evaluate execute=“true”》
@@ -41,6 +42,7 @@ doc*###
 《macro id=“chanwGetDDDocRootElement”》
 doc*###
 #macro( chanwGetDDDocRootElement $block_chanwGetDDDocRoot $siteName_chanwGetDDDocRoot )
+#*
     #if( !$chanwConnection || $chanwConnection.isClosed() )
         #chanwGetDatabaseStatement
     #end
@@ -55,10 +57,11 @@ doc*###
     ## get the xml of the data definition
     #chanwGetSingleValue(
         "select xmldata from cxml_xml where id=(select xmlid from cxml_structureddatadefinition where path='$chanwDDPath' and siteid=(select id from cxml_site where name='${chanwSiteName}') and iscurrentversion=1)" )
+*#
+    #chanwGetXmlCode( $block_chanwGetDDDocRoot $siteName_chanwGetDDDocRoot )
     ## build the XML
     #chanwGetRootElementFromXml( $chanwGetSingleValue )
     #set( $chanwGetDDDocRootElement = $chanwGetRootElementFromXml )
-    #chanwCleanUp
 #end
 #*doc
 《/macro》
@@ -69,6 +72,7 @@ doc*###
 《macro id=“chanwGetTemplateDocRootElement”》
 doc*###
 #macro( chanwGetTemplateDocRootElement $template_chanwGetTemplateDocRootElement )
+#*
     #if( !$chanwConnection || $chanwConnection.isClosed() )
         #chanwGetDatabaseStatement
     #end
@@ -77,10 +81,11 @@ doc*###
     ## get the xml of the template
     #chanwGetSingleValue(
         "select xmldata from cxml_xml where id=(select xmlid from cxml_foldercontent where id='$chanwTemplateId')" )
+*#
+    #chanwGetXmlCode( $template_chanwGetTemplateDocRootElement )
     ## build the XML
     #chanwGetRootElementFromXml( $chanwGetSingleValue )
     #set( $chanwGetDDDocRootElement = $chanwGetRootElementFromXml )
-    #chanwCleanUp
 #end
 #*doc
 《/macro》
@@ -93,6 +98,41 @@ doc*###
 #macro( chanwGetRootElementFromXml $xml_chanwGetRootElementFromXml )
     #chanwBuildXMLContentRoot( $globalApacheStringUtils.substringBetween( $xml_chanwGetRootElementFromXml, '#*doc', 'doc*###' ) )
     #set( $chanwGetRootElementFromXml = $chanwBuildXMLContentRoot )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetXmlCode( $asset_chanwGetXmlCode $siteName_chanwGetXmlCode )《/code》
+《p》Gets the xml string of an asset. The asset passed in can be a data definition block or a template.
+The xml string retrieve for a data definition block is the xml of the corresponding data definition.《/p》
+《/documentation》
+《macro id=“chanwGetXmlCode”》
+doc*###
+#macro( chanwGetXmlCode $asset_chanwGetXmlCode $siteName_chanwGetXmlCode )
+    #if( !$chanwConnection || $chanwConnection.isClosed() )
+        #chanwGetDatabaseStatement
+    #end
+    ## determine the type of asset
+    #set( $chanwAssetType = "" )
+    #if( $asset_chanwGetXmlCode.Class.Name == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME || $asset_chanwGetXmlCode.Class.Name == $COM_CASCADE_PAGE_API_CLASS_NAME )
+        #set( $chanwDDPath = $asset_chanwGetXmlCode.DataDefinitionPath )
+        #if( $siteName_chanwGetXmlCode.Class.Name && $siteName_chanwGetXmlCode.Class.Name == $JAVA_LANG_STRING_CLASS_NAME && $siteName_chanwGetXmlCode.trim() != "" )
+            #set( $chanwSiteName = $siteName_chanwGetXmlCode.trim() )
+        #else
+            #set( $chanwSiteName = '_brisk' )
+        #end
+        #set( $chanwSql = "select xmldata from cxml_xml where id=(select xmlid from cxml_structureddatadefinition where path='$chanwDDPath' and siteid=(select id from cxml_site where name='${chanwSiteName}') and iscurrentversion=1)" )
+    #else ## template
+        #set( $chanwTemplateId = $asset_chanwGetXmlCode.Identifier.Id )
+        #set( $chanwSql = "select xmldata from cxml_xml where id=(select xmlid from cxml_foldercontent where id='$chanwTemplateId')" )
+    #end
+    #set( $chanwGetSingleValue = "" )
+    #set( $chanwGetXmlCode     = "" )
+    #chanwGetSingleValue( $chanwSql )
+    #if( $chanwGetSingleValue.trim() != "" )
+        #set( $chanwGetXmlCode = $chanwGetSingleValue )
+    #end
+    #chanwCleanUp
 #end
 #*doc
 《/macro》

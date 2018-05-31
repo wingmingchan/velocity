@@ -5,8 +5,8 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
-1/31/2018 Added 
-11/4/2017 Added $TREE_NODE_TEXT and related code
+5/31/2018 Added chanwAttachBlockToTreeNode.
+11/4/2017 Added $TREE_NODE_TEXT and related code.
 10/29/2017 Use $DefaultMutableTreeNodeConstructor defined in chanw-initialization.
 10/27/2017 Rewritten chanwTraverseTreeBreadthFirst and chanwTraverseTreePreorder,
 using Java Enumeration.
@@ -68,6 +68,21 @@ doc*###
     
     #foreach( $node in $nodes )
         #chanwImportScriptByFullPath( $map_chanwAssembleTree[ $node ] )
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwAttachBlockToTreeNode( $blockPath $siteName )《/code》
+《p》Attaches a located block to the tree node and processes the block.《/p》
+《/documentation》
+《macro id=“chanwAttachBlockToTreeNode”》
+doc*###
+#macro( chanwAttachBlockToTreeNode $blockPath_chanwAttachBlockToTreeNode $siteName_chanwAttachBlockToTreeNode )
+    #set( $chanwLocatedBlock = "" )
+    #set( $chanwLocatedBlock = $_.locateBlock( $blockPath_chanwAttachBlockToTreeNode, $siteName_chanwAttachBlockToTreeNode ) )
+    #if( $chanwLocatedBlock.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
+        #chanwProcessBlockChooser( $chanwLocatedBlock )
     #end
 #end
 #*doc
