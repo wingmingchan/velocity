@@ -74,3 +74,11 @@ $chanwGetConstructor.newInstance( $file ).write( $image.Data )
 #set( $bi = $chanwGetMethod.invoke( null, $file ) )
 $bi.Height
 $bi.Width
+
+## ex. 5
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+$chanwImportDatabase
+#set( $id = "ec1c64d38b7f0856002a5e11ce2319fa" )
+#set( $sql = "SELECT name FROM cxml_site WHERE id='${id}'" )
+#chanwGetSingleValue( $sql )
+$chanwGetSingleValue
