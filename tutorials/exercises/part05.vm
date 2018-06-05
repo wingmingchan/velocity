@@ -1,0 +1,76 @@
+## ex. 1
+// the WS program in PHP: retrieve-tb-name.php
+<?php 
+require_once('cascade_ws_ns/auth_web_services.php');
+
+use cascade_ws_AOHS      as aohs;
+use cascade_ws_constants as c;
+use cascade_ws_asset     as a;
+use cascade_ws_property  as p;
+use cascade_ws_utility   as u;
+use cascade_ws_exception as e;
+
+try
+{
+	$id = $_GET[ 'id' ];
+	$block = $cascade->getAsset( a\TextBlock::TYPE, $id );
+	echo $block->getName();
+}
+catch( \Exception $e ) 
+{
+    echo S_PRE . $e . E_PRE; 
+}
+?>
+
+## the format
+#set( $urlClassName = "java.net.URL" )
+#set( $urlObject = $_.Class.forName( $urlClassName ).getConstructor( $urlClassName.Class ).newInstance(
+    "http://web.upstate.edu/chanw/retrieve-tb-name.php?id=85ebedf98b7f08ee6c49236e733d058d" ) )
+#set( $isObject = $urlObject.openStream() )
+#foreach( $constructor in $_.Class.forName( "java.util.Scanner" ).getConstructors() )
+    #if( $constructor.getParameterCount() == 1 && $constructor.getParameterTypes()[ 0 ].Name == "java.io.InputStream" )
+        #set( $scanner = $constructor.newInstance( $isObject ) )
+    #end
+#end
+$scanner.useDelimiter( "\\A" ).next()
+
+## ex. 2
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-ws-utilities" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-xslt-utilities" )
+
+## read the XSLT code from Cascade
+#chanwGetUrlContents( "http://web.upstate.edu/chanw/retrieve-xslt.php?id=fd27e38a8b7f08560159f3f043856a18" true )
+#set( $xslt = $chanwGetUrlContents )
+
+## read the RSS feed
+#chanwGetUrlContents( "http://www.upstate.edu/feed/index.php?title=news" true )
+#set( $xml = $chanwGetUrlContents )
+
+## transform
+#chanwGetTransformedString( $xslt $xml )
+$chanwGetTransformedString
+
+## ex. 3
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+
+$chanwImportWS
+#chanwGetUrl( "http://www.upstate.edu/_extra/images/slideshow/upstate-academics-homepage.jpg" )
+
+#chanwGetMethod( "javax.imageio.ImageIO", "read" [ $chanwGetUrl.Class ] )
+#set( $bi = $chanwGetMethod.invoke( null, $chanwGetUrl ) )
+$bi.Height
+$bi.Width
+
+## ex. 4
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+
+#set( $image = $_.locateFile( "assets/images/beigegradient.jpg", "Upstate-Globals" ) )
+#chanwGetMethod( "java.io.File" "createTempFile" [ $JAVA_LANG_STRING_CLASS_NAME.Class, $JAVA_LANG_STRING_CLASS_NAME.Class ] )
+#set( $file = $chanwGetMethod.invoke( null, "dummy", "dummy" ) )
+#chanwGetConstructor( "java.io.FileOutputStream" [ $file.Class ] )
+$chanwGetConstructor.newInstance( $file ).write( $image.Data )
+#chanwGetMethod( "javax.imageio.ImageIO", "read" [ $file.Class ] )
+#set( $bi = $chanwGetMethod.invoke( null, $file ) )
+$bi.Height
+$bi.Width
