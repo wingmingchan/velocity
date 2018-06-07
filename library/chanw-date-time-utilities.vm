@@ -329,6 +329,29 @@ $chanwNextYearCalObject.add( $chanwCalendarYearField, 1 )
     "chanwNanoLong",
     "chanwTimestampString"
 ] )
+## patterns
+## June 7, 2018
+#set( $chanwLongMonthDayYearPattern           = "MMMMM d, yyyy" )
+## June 07, 2018
+#set( $chanwLongMonth0DayYearPattern          = "MMMMM dd, yyyy" )
+## Jun 7, 2018
+#set( $chanwShortMonthDayYearPattern          = "MMM d, yyyy" )
+## Jun 07, 2018
+#set( $chanwShortMonth0Day4YearPattern        = "MMM dd, yyyy" )
+## Thursday, June 7, 2018
+#set( $chanwLongWeekLongMonthDayYearPattern   = "EEEEE, MMMMM d, yyyy" )
+## Thursday, June 07, 2018
+#set( $chanwLongWeekLongMonth0DayYearPattern  = "EEEEE, MMMMM dd, yyyy" )
+## Thu, Jun 7, 2018
+#set( $chanwShortWeekShortMonthDayYearPattern = "EEE, MMM d, yyyy" )
+## 6/7/2018
+#set( $chanwMonthDayYearWithSlashPattern      = "M/d/yyyy" )
+## 06/07/2018
+#set( $chanw0Month0DayYearWithSlashPattern    = "MM/dd/yyyy" )
+## 6/7/2018
+#set( $chanwMonthDayYearWithDashPattern       = "M-d-yyyy" )
+## 06/07/2018
+#set( $chanw0Month0DayYearWithDashPattern     = "MM-dd-yyyy" )
 #*doc
 《/global-variables》
 《documentation》
@@ -343,6 +366,57 @@ $chanwLocalDateFromCalendar.MonthValue
 《/documentation》
 《macro id=“chanwLocalDateFromCalendar”》
 doc*###
+#macro( chanwGetCurrentDateObject )
+    #set( $chanwGetCurrentDateObject = $_DateTool.Date )
+#end
+##
+#macro( chanwGetCurrentDateString $pattern_chanwGetCurrentDateString )
+    #set( $chanwGetCurrentDateString = "" )
+    #set( $chanwDatePatternString = "" )
+    #set( $chanwDatePatternString = $pattern_chanwGetCurrentDateString.trim() )
+##
+    #if( $chanwDatePatternString.Class.Name == $JAVA_LANG_STRING_CLASS_NAME && $chanwDatePatternString != "" )
+        #set( $chanwGetCurrentDateString = $_DateTool.format( $pattern_chanwGetCurrentDateString, $_DateTool.Date ) )
+    #else ## defaulted to June 7, 2018
+        #set( $chanwGetCurrentDateString = $_DateTool.format( $chanwLongMonthDayYearPattern, $_DateTool.Date ) )
+    #end
+#end
+
+
+#macro( chanwGetDateStringFromObject $pattern_chanwGetDateStringFromObject $obj_chanwGetDateStringFromObject )
+    #set( $chanwGetDateStringFromObject = "" )
+    #set( $chanwDatePatternString = "" )
+    #set( $chanwDatePatternString = $pattern_chanwGetDateStringFromObject.trim() )
+    ## no object supplied
+    #if( !$obj_chanwGetDateStringFromObject.Class.Name )
+        #set( $chanwDateObject = $_DateToo.SystemDate )
+    #elseif( $chanwDatePatternString.Class.Name == $JAVA_LANG_STRING_CLASS_NAME && $chanwDatePatternString != "" )
+        #if( $obj_chanwGetDateStringFromObject.Class.Name == $JAVA_UTIL_DATE_CLASS_NAME ) ## Date object
+            #set( $chanwDateObject = $obj_chanwGetDateStringFromObject )
+        #elseif( $obj_chanwGetDateStringFromObject.Class.Name == $JAVA_LANG_INTEGER_CLASS_NAME || $obj_chanwGetDateStringFromObject.Class.Name == 'java.lang.Long' ) ## number
+            #set( $chanwDateObject = $_DateTool.getDate( "$obj_chanwGetDateStringFromObject" ) )
+        #elseif( $obj_chanwGetDateStringFromObject.Class.Name == $JAVA_LANG_STRING_CLASS_NAME ) ## timestamp string
+            #set( $chanwDateObject = $_DateTool.getDate( $obj_chanwGetDateStringFromObject ) )
+        #elseif( $obj_chanwGetDateStringFromObject.Class.Name == $JAVA_UTIL_GREGORIAN_CALENDAR_CLASS_NAME )
+            #set( $chanwDateObject = $_DateTool.toDate( $obj_chanwGetDateStringFromObject ) )
+        #end
+    #end
+    #set( $chanwGetDateStringFromObject = $_DateTool.format( $chanwDatePatternString, $chanwDateObject ) )
+#end
+
+
+#macro( chanwGetDateStringFromDateObject $pattern_chanwGetDateStringFromDateObject $dateObj_chanwGetDateStringFromDateObject )
+    #chanwGetDateStringFromObject( $pattern_chanwGetDateStringFromDateObject $dateObj_chanwGetDateStringFromDateObject )
+    #set( $chanwGetDateStringFromDateObject = $chanwGetDateStringFromObject )
+#end
+
+#macro( chanwGetDateStringFromTimestamp $pattern_chanwGetDateStringFromTimestamp $timestamp_chanwGetDateStringFromTimestamp )
+    #chanwGetDateStringFromObject( $pattern_chanwGetDateStringFromTimestamp $timestamp_chanwGetDateStringFromTimestamp )
+    #set( $chanwGetDateStringFromTimestamp = $chanwGetDateStringFromObject )
+#end
+
+
+##
 #macro( chanwLocalDateFromCalendar $chanwLocalDateFromCalendarCal )
     #if( $chanwLocalDateFromCalendarCal.Class.Name != $JAVA_UTIL_GREGORIAN_CALENDAR_CLASS_NAME )
 #chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A GregorianCalendar object is required." "43n;4n;rlnkng4" )
