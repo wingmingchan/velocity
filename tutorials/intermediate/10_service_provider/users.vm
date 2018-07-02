@@ -1,0 +1,17 @@
+#set( $serviceProvider =
+    $_.Class.forName( "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" ).getMethod(
+    "getServiceProvider" ).invoke( null ) )
+#set( $userService = $serviceProvider.getUserService() )
+#set( $allUsers = $userService.AllUsers )
+$allUsers.size()
+#foreach( $user in $allUsers )
+##$user.Name
+#end
+#set( $ldapUsers = $userService.LdapUsers )
+$ldapUsers.size()
+#set( $chanw = $userService.get( "chanw" ) )
+$chanw.Class.Name
+$chanw.Name
+$chanw.FullName
+$chanw.Enabled
+$chanw.Email
