@@ -1,0 +1,15 @@
+#set( $serviceProvider =
+    $_.Class.forName( "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" ).getMethod(
+    "getServiceProvider" ).invoke( null ) )
+#set( $chanwPageService = $serviceProvider.getPageService() )
+$chanwPageService.get( $currentPage.Identifier.Id ).ContentType.Name
+
+#set( $siteUtil =
+    $_.Class.forName( "com.hannonhill.cascade.model.util.SiteUtil" ).getConstructor().newInstance() )
+$siteUtil.getSiteId( $chanwPageService.get( $currentPage.Identifier.Id ).ContentType )
+
+#set( $chanwSiteService = $serviceProvider.getSiteService() )
+#set( $site = $chanwSiteService.get( $siteUtil.getSiteId( $chanwPageService.get( $currentPage.Identifier.Id ).ContentType ) ) )
+$site.Name
+
+$siteUtil.getSiteName( $chanwPageService.get( $currentPage.Identifier.Id ).ContentType, $serviceProvider )
