@@ -1,0 +1,32 @@
+#set( $serviceProvider =
+    $_.Class.forName( "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" ).getMethod(
+    "getServiceProvider" ).invoke( null ) )
+#set( $pageService = $serviceProvider.getPageService() )
+#set( $page = $pageService.get( $currentPage.Identifier.Id ) )
+#set( $ct = $page.ContentType )
+$ct.Name
+
+#set( $msService = $serviceProvider.getMetadataSetService() )
+#set( $ms = $msService.get( $ct.MetadataSet.Id ) )
+$ms.Class.Name
+$ms.Name
+
+#set( $ddService = $serviceProvider.getStructuredDataDefinitionService() )
+#set( $dd = $ddService.get( $ct.StructuredDataDefinition.Id ) )
+$dd.Class.Name
+$dd.Name
+$dd.Xml
+
+#set( $pcsService = $serviceProvider.getPageConfigurationSetService() )
+#set( $pcs = $pcsService.get( $ct.PageConfigurationSet.Id ) )
+$pcs.Class.Name
+$pcs.Name
+
+#set( $pcService = $serviceProvider.getPageConfigurationService() )
+#set( $pc = $pcService.get( $pcs.DefaultConfiguration.Id ) )
+$pc.Name
+
+#set( $templateService = $serviceProvider.getTemplateService() )
+#set( $template = $templateService.get( $pc.Template.Id ) )
+$template.Name
+$template.Xml
