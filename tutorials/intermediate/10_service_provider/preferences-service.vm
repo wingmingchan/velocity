@@ -1,0 +1,2 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-service-provider" )
+$chanwPreferencesService.getSMTPEmailAddress()
