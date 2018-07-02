@@ -1,0 +1,4 @@
+#set( $serviceProvider =
+    $_.Class.forName( "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" ).getMethod(
+    "getServiceProvider" ).invoke( null ) )
+$serviceProvider.Class.Name
