@@ -1,0 +1,15 @@
+#set( $serviceProvider =
+    $_.Class.forName( "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" ).getMethod(
+    "getServiceProvider" ).invoke( null ) )
+#set( $siteService = $serviceProvider.getSiteService() )
+
+#foreach( $site in $siteService.All )
+    $site.Name
+#end
+
+#set( $site = $siteService.getByName( "formats" ) )
+$site.isEveryDayPublish()
+$site.getDefaultMetadataSet().Id
+$site.isSpellCheckEnabled()
+$site.Url
+$site.BaseAssetFactoryContainer.Id
