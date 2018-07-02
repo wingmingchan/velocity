@@ -1,0 +1,5 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-service-provider" )
+$chanwUserService.get( "chanw" ).Class.Name
+
+$chanwUserService.AllUsers.size()
+$chanwUserService.LdapUsers.size()
