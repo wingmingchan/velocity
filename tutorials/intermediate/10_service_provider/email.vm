@@ -1,0 +1,15 @@
+#set( $serviceProvider =
+    $_.Class.forName( "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" ).getMethod(
+    "getServiceProvider" ).invoke( null ) )
+#set( $emailService = $serviceProvider.getEmailService() )
+#set( $msg = 
+    "A test email sent from a format in Cascade at example.com. " +
+    "Possible use case: scan through a site, get all information of old/stale pages, " +
+    "and send an email to the manager to ask him/her to update these pages."
+)
+## use commas to separate email addresses
+#set( $email = $_.Class.forName( "com.hannonhill.cascade.email.Email" ).getConstructors()[ 0 ].newInstance(
+    "doej@myexample.com", "Test", 
+    $msg, 
+    null, true ) )
+$emailService.sendEmail( $email )
