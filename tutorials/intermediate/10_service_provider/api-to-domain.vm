@@ -1,0 +1,6 @@
+#set( $pageAPIObj = $_.locatePage( "index", "formats" ) )
+$pageAPIObj.Class.Name ## com.hannonhill.cascade.api.adapters.PageAPIAdapter
+#set( $pageDomObj =
+    $_.Class.forName( "com.hannonhill.cascade.api.adapters.APIAdapterFactory" ).getMethods()[ 1 ].invoke(
+        null, $pageAPIObj ) )
+$pageDomObj.Class.Name ## com.hannonhill.cascade.model.dom.Page
