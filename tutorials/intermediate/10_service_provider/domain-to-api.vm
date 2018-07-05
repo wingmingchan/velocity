@@ -1,0 +1,9 @@
+#set( $serviceProvider =
+    $_.Class.forName( "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" ).getMethod(
+    "getServiceProvider" ).invoke( null ) )
+#set( $pageDomObj = $serviceProvider.getPageService().get( "1d07ad908b7f08ee5a7fb47ed0ab7639" ) )
+$pageDomObj.Class.name ## com.hannonhill.cascade.model.dom.Page
+
+#set( $pageAPIObj = $_.Class.forName( "com.hannonhill.cascade.api.adapters.PageAPIAdapter"
+    ).getConstructors()[ 0 ].newInstance( $pageDomObj ) )
+$pageAPIObj.Class.Name ## com.hannonhill.cascade.api.adapters.PageAPIAdapter
