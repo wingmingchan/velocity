@@ -1,0 +1,9 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+
+#set( $page   = $_.locatePage( "intra/test-pages/table", "cascade-admin" ) )
+#set( $folder = $_.locateFolder( "velocity", "formats" ) )
+#chanwGetObjectByClassName( "com.hannonhill.cascade.api.operation.Copy" )
+$chanwGetObjectByClassName.setToCopy( $page.Identifier )
+$chanwGetObjectByClassName.setDestinationContainer( $folder.Identifier )
+$chanwGetObjectByClassName.setUsername( "admin" )
+#set( $result = $chanwGetObjectByClassName.perform() )
