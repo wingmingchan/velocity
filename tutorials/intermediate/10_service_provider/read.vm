@@ -1,0 +1,8 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+
+#set( $page = $_.locatePage( "velocity/courses/table", "formats" ) )
+#chanwGetObjectByClassName( "com.hannonhill.cascade.api.operation.Read" )
+$chanwGetObjectByClassName.setToRead( $page.Identifier )
+$chanwGetObjectByClassName.setUsername( "admin" )
+#set( $result = $chanwGetObjectByClassName.perform() )
+$result.Asset ## a com.hannonhill.cascade.api.adapters.PageAPIAdapter object
