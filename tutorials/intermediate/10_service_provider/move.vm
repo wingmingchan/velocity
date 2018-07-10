@@ -10,5 +10,5 @@ $chanwGetObjectByClassName.setUsername( "chanw" )
 
 #chanwGetObjectByClassName( "com.hannonhill.cascade.api.operation.Delete" )
 $chanwGetObjectByClassName.setToDelete( $page.Identifier )
-$chanwGetObjectByClassName.setUsername( "chanw" )
+$chanwGetObjectByClassName.setUsername( "admin" )
 #set( $result = $chanwGetObjectByClassName.perform() )
