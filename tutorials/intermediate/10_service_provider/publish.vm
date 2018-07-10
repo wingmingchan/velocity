@@ -1,0 +1,9 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+
+#set( $page   = $_.locateFolder( "intra/test-pages", "cascade-admin" ) )
+#chanwGetObjectByClassName( "com.hannonhill.cascade.api.operation.Publish" )
+$chanwGetObjectByClassName.setToPublish( $page.Identifier )
+$chanwGetObjectByClassName.setUsername( "chanw" )
+$chanwGetObjectByClassName.setMode( "publish" )
+
+#set( $result = $chanwGetObjectByClassName.perform() )
