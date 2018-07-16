@@ -1,0 +1,23 @@
+All formats shown in the presentation can be found: 
+https://github.com/wingmingchan/velocity/tree/master/cuc18
+Reference site: http://www.upstate.edu/standard-model/
+
+Questions for the audience:
+
+1. Can you define the internal structure of the DEFAULT region of a template
+   in the template? And can you move elements out of DEFAULT and
+   insert them into other regions?
+2. Can you attach a block to region A to swap the hierarchical order of region B
+   and region C, to add a new region D, or to remove region E?
+3. Can you configure a template, so that the same template can be used to
+   publish a full page as well as partial page? For example, only the header,
+   only the footer, or only the content of the page WYSIWYG?
+
+The problems with templates and regions:
+
+1. Template: using a linear (textual) order to mimic a hierarchical structure
+2. A template is not represented by Cascade API and cannot be maniplulated programmatically
+3. Regions: lack of internal structures
+4. Mixing data with presentation: XHTML structure is presentational
+5. Lack of communication among page parts
+6. Lack of flexibility, configurability, inheritance, reusability, and partiality
