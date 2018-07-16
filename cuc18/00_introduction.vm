@@ -7,11 +7,13 @@ Questions for the audience:
 1. Can you define the internal structure of the DEFAULT region of a template
    in the template? And can you move elements out of DEFAULT and
    insert them into other regions?
-2. Can you attach a block to region A to swap the hierarchical order of region B
-   and region C, to add a new region D, or to remove region E?
+2. Can you attach a block to region A to swap region B and region C,
+   to add a new region D, or to remove region E?
 3. Can you configure a template, so that the same template can be used to
    publish a full page as well as partial page? For example, only the header,
    only the footer, or only the content of the page WYSIWYG?
+4. Can you add a new region to a page at the page level without
+   affecting all other pages associated with the same content type? 
 
 The problems with templates and regions:
 
