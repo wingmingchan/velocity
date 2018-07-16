@@ -15,9 +15,9 @@ Questions for the audience:
 
 The problems with templates and regions:
 
-1. Template: using a linear (textual) order to mimic a hierarchical structure
+1. Templates: using a linear (textual) order to mimic a hierarchical structure
 2. A template is not represented by Cascade API and cannot be maniplulated programmatically
 3. Regions: lack of internal structures
 4. Mixing data with presentation: XHTML structure is presentational
-5. Lack of communication among page parts
-6. Lack of flexibility, configurability, inheritance, reusability, and partiality
+5. Lack of flexibility, configurability, inheritance, reusability, and partiality
+6. Lack of communication among page parts
