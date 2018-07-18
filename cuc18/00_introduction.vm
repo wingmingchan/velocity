@@ -3,7 +3,7 @@ https://github.com/wingmingchan/velocity/tree/master/cuc18
 Reference site: http://www.upstate.edu/standard-model/
 
 Questions for the audience:
-
+================================================================================
 1. Can you define the internal structure of the DEFAULT region of a template
    in the template? And can you move elements out of DEFAULT and
    insert them into other regions?
@@ -16,7 +16,7 @@ Questions for the audience:
    without affecting all other pages associated with the same content type? 
 
 The problems with templates and regions:
-
+================================================================================
 1. Templates: text files, are not represented by Cascade API,
    and cannot be maniplulated programmatically
 2. Regions: lack of internal structures
@@ -26,6 +26,7 @@ The problems with templates and regions:
 6. Proliferation of configuration sets and content types
 
 Demo:
+================================================================================
 1. standard-model: the UCO design
 2. formats:        the Hannon Hill design
 3. java:           folder nav on the right
