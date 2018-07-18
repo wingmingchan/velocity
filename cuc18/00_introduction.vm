@@ -25,7 +25,7 @@ The problems with templates and regions:
 5. Lack of communication among page parts
 6. Proliferation of configuration sets and content types
 
-Demo:
+Demo (site configurations):
 ================================================================================
 1. standard-model: the UCO design
 2. formats:        the Hannon Hill design
