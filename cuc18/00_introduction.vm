@@ -24,3 +24,10 @@ The problems with templates and regions:
 4. Lack of flexibility, configurability, inheritance, reusability, and partiality
 5. Lack of communication among page parts
 6. Proliferation of configuration sets and content types
+
+Demo:
+1. standard-model: the UCO design
+2. formats:        the Hannon Hill design
+3. java:           folder nav on the right
+4. web-services:   adding prefooter
+5. cascade-admin:  swapping the header and the footer
