@@ -1,0 +1,35 @@
+The tree approach:
+================================================================================
+1.  A specific output of a tree is basically a template without regions
+2.  A single tree can produce indefinitely many XHTML structures,
+    rooted at various elements
+3.  Trees are truly hierarchical and can be manipulated programmatically
+4.  A node can contain any presentational logic
+5.  Blocks can be attached to nodes
+6.  Nodes can be moved around freely, including nodes defined for DEFAULT
+7.  Trees and tree parts are reusable
+8.  Both fully rendered pages and partial pages can be produced
+9.  Inheritance and configurability
+10. Because any XHTML structures can be created in a tree,
+    only one configuration set is needed per file extension,
+    only one content type is needed for all publishable pages per file extension,
+    and there is no more switching of content types
+11. Implementing a new design is to create a new presentational layer
+    to be associated with sites, and NO new content type is needed
+12. Sites, pages and blocks are data containers; you only update the data within,
+    and never rebuild the containers simply because you need a new look
+13. Implementing a new design ≠ (NOT EQUAL TO) rebuilding sites
+14. There is no smart way of rebuilding sites; rebuilding sites is just dumb
+
+Who can do better than this?
+
+Q & A
+================================================================================
+
+Additional information
+================================================================================
+Team:      Wing Ming Chan, German Drulyk, Peter Thomas
+Site:      http://www.upstate.edu/standard-model/
+Tutorials: http://www.upstate.edu/formats/velocity/courses/advanced-course/index.php
+Code:      https://github.com/wingmingchan/multiple-design/tree/master/scaffolds/tree_components
+Contact:   chanw@upstate.edu
