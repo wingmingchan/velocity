@@ -12,8 +12,8 @@ Modification history:
 《div id=“hide-code1”》
 《h2》Test Code and Results《/h2》
 《pre》
-#import( 'site://_brisk/core/library/velocity/chanw/chanw-library-import' )
-#import( 'site://_brisk/core/library/velocity/chanw/chanw-global-deque' )##
+#import( 'core/library/velocity/chanw/chanw-library-import' )
+#import( 'core/library/velocity/chanw/chanw-global-deque' )##
 ${SINGLE_HASH}set( ${DOLLAR}deque = ${DOLLAR}chanwGlobalDeque )
 #set( $deque = $chanwGlobalDeque )
 ${SINGLE_HASH}chanwAddLastGlobalDeque( ${DOLLAR}deque "1" )

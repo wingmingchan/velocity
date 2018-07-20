@@ -12,8 +12,8 @@ Modification history:
 《div id=“hide-code1”》
 《h2》Test Code and Results《/h2》
 《pre》
-#import( 'site://_brisk/core/library/velocity/chanw/chanw-library-import' )
-#import( 'site://_brisk/core/library/velocity/chanw/chanw-global-queue' )##
+#import( 'core/library/velocity/chanw/chanw-library-import' )
+#import( 'core/library/velocity/chanw/chanw-global-queue' )##
 #set( $queue = $chanwGlobalQueue )
 #chanwEnqueueGlobalQueue( $queue $_ )
 #chanwEnqueueGlobalQueue( $queue $_PropertyTool )

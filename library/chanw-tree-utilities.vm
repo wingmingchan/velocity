@@ -78,9 +78,17 @@ doc*###
 《/documentation》
 《macro id=“chanwAttachBlockToTreeNode”》
 doc*###
-#macro( chanwAttachBlockToTreeNode $blockPath_chanwAttachBlockToTreeNode $siteName_chanwAttachBlockToTreeNode )
+#macro( chanwAttachBlockToTreeNode $blockPath_chanwAttachBlockToTreeNode $siteName_chanwAttachBlockToTreeNode $block_chanwAttachBlockToTreeNode )
     #set( $chanwLocatedBlock = "" )
-    #set( $chanwLocatedBlock = $_.locateBlock( $blockPath_chanwAttachBlockToTreeNode, $siteName_chanwAttachBlockToTreeNode ) )
+    #if( $block_chanwAttachBlockToTreeNode.Class.Name )
+        #chanwIsInstanceOf( $block_chanwAttachBlockToTreeNode 'com.hannonhill.cascade.api.adapters.BlockAPIAdapter' )
+        #if( $chanwIsInstanceOf )
+            #set( $chanwLocatedBlock = $block_chanwAttachBlockToTreeNode )
+        #end
+    #else
+        #set( $chanwLocatedBlock = $_.locateBlock( $blockPath_chanwAttachBlockToTreeNode, $siteName_chanwAttachBlockToTreeNode ) )
+    #end
+##
     #if( $chanwLocatedBlock.Class.Name != $JAVA_LANG_STRING_CLASS_NAME )
         #chanwProcessBlockChooser( $chanwLocatedBlock )
     #end
@@ -146,7 +154,9 @@ doc*###
 #set( $chanwDisplayTreeCounter = $chanwDisplayTreeCounter + 1 )
 #end
 #set( $chanwSpace = "   " )
-$node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]
+#if( $node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ].Class.Name )$node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]
+#else$node_chanwDisplayTree.UserObject
+#end
 #if( $node_chanwDisplayTree.children() )
 #foreach( $child in $node_chanwDisplayTree.children() )
 #foreach( $num in [ 0 .. $chanwDisplayTreeCounter ] )$chanwSpace#end#chanwDisplayTree( $child )#end

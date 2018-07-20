@@ -41,6 +41,8 @@ doc*###
 #set( $chanwAbilityService                           = $chanwServiceProvider.getAbilityService() )
 #set( $chanwAssetFactoryContainerService             = $chanwServiceProvider.getAssetFactoryContainerService() )
 #set( $chanwAssetFactoryService                      = $chanwServiceProvider.getAssetFactoryService() )
+#set( $chanwAssetFactoryPluginService                = $chanwServiceProvider.getAssetFactoryPluginService() )
+
 #set( $chanwAuditService                             = $chanwServiceProvider.getAuditService() )
 #set( $chanwConnectorContainerService                = $chanwServiceProvider.getConnectorContainerService() )
 #set( $chanwConnectorService                         = $chanwServiceProvider.getConnectorService() )
@@ -49,20 +51,29 @@ doc*###
 #set( $chanwSiteDestinationContainerService          = $chanwServiceProvider.getDestinationContainerService() )
 #set( $chanwDestinationService                       = $chanwServiceProvider.getDestinationService() )
 #set( $chanwDynamicMetadataFieldDefinitionService    = $chanwServiceProvider.getDynamicMetadataFieldDefinitionService() )
+#set( $chanwEmailService                             = $chanwServiceProvider.getEmailService() )
+#set( $chanwEntityRelationService                    = $chanwServiceProvider.getEntityRelationService() )
+#set( $chanwFileService                              = $chanwServiceProvider.getFileService() )
 #set( $chanwFolderService                            = $chanwServiceProvider.getFolderService() )
+#set( $chanwFormatService                            = $chanwServiceProvider.getFormatService() )
 #set( $chanwGroupService                             = $chanwServiceProvider.getGroupService() )
 #set( $chanwLocatorService                           = $chanwServiceProvider.getLocatorService() )
 #set( $chanwMetadataSetContainerService              = $chanwServiceProvider.getMetadataSetContainerService() )
 #set( $chanwMetadataSetService                       = $chanwServiceProvider.getMetadataSetService() )
+#set( $chanwPageService                              = $chanwServiceProvider.getPageService() )
 #set( $chanwPageConfigurationSetContainerService     = $chanwServiceProvider.getPageConfigurationSetContainerService() )
 #set( $chanwPageConfigurationSetService              = $chanwServiceProvider.getPageConfigurationSetService() )
 #set( $chanwPermissionsService                       = $chanwServiceProvider.getPermissionsService() )
+#set( $chanwPreferencesService                       = $chanwServiceProvider.getPreferencesService() )
 #set( $chanwPublishSetContainerService               = $chanwServiceProvider.getPublishSetContainerService() )
 #set( $chanwPublishSetService                        = $chanwServiceProvider.getPublishSetService() )
 #set( $chanwRoleService                              = $chanwServiceProvider.getRoleService() )
 #set( $chanwSiteService                              = $chanwServiceProvider.getSiteService() )
 #set( $chanwStructuredDataDefinitionService          = $chanwServiceProvider.getStructuredDataDefinitionService() )
 #set( $chanwStructuredDataDefinitionContainerService = $chanwServiceProvider.getStructuredDataDefinitionContainerService() )
+
+#set( $chanwTagService                               = $chanwServiceProvider.getTagService() )
+
 #set( $chanwTemplateService                          = $chanwServiceProvider.getTemplateService() )
 #set( $chanwTransportContainerService                = $chanwServiceProvider.getTransportContainerService() )
 #set( $chanwTransportService                         = $chanwServiceProvider.getTransportService() )
@@ -105,6 +116,17 @@ doc*###
 #set( $CASCADE_PERMISSIONS_LEVEL_WRITE = $chanwGetConstantValueByClassNameConstantName )
 #chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.PermissionsLevel" "NONE" )
 #set( $CASCADE_PERMISSIONS_LEVEL_NONE = $chanwGetConstantValueByClassNameConstantName )
+## useful methods
+#chanwGetMethodByClassNameMethodNameParamSize( "com.hannonhill.cascade.api.adapters.APIAdapterFactory" "extractDomainObject" 1 )
+#set( $chanwExtractDomainObjectStaticMethod = $chanwGetMethodByClassNameMethodNameParamSize )
+#chanwGetMethodByClassNameMethodNameParamSize( "com.hannonhill.cascade.api.adapters.APIAdapterFactory" "createAPIAdapter" 3 )
+#set( $chanwCreateAPIAdapterStaticMethod = $chanwGetMethodByClassNameMethodNameParamSize )
+##
+#macro( chanwCreateEmail $addresses_chanwCreateEmail $subject_chanwCreateEmail $msg_chanwCreateEmail )
+    #set( $chanwCreateEmail = "" )
+    #set( $chanwCreateEmail = $_.Class.forName( "com.hannonhill.cascade.email.Email" ).getConstructors()[ 0 ].newInstance(
+    $addresses_chanwCreateEmail, $subject_chanwCreateEmail, $msg_chanwCreateEmail, null, true ) )
+#end
 #*doc
 《/global-variables》
 《documentation id=“bottom”》

@@ -1061,6 +1061,47 @@ doc*###
     #chanwConvertArrayListToArray( $chanwGetMethodParamTypeList )
     #set( $chanwGetMethod = $_.Class.forName( $chanwGetMethodClassName ).getMethod( $chanwGetMethodMethodName, $chanwConvertArrayListToArray ) )
 #end
+
+
+
+
+
+#macro( chanwGetMethodByClassNameMethodNameParamSize $className_chanwGetMethodByClassNameMethodNameParamSize $methodName_chanwGetMethodByClassNameMethodNameParamSize $paramSize_chanwGetMethodByClassNameMethodNameParamSize )
+    ## check the class name string
+    #if( !$className_chanwGetMethodByClassNameMethodNameParamSize || $className_chanwGetMethodByClassNameMethodNameParamSize.Class.Name != "java.lang.String" || $className_chanwGetMethodByClassNameMethodNameParamSize == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." "'moby5m[opg5mklm" )
+        #stop
+    #end
+##
+    ## check the method name string
+    #if( !$methodName_chanwGetMethodByClassNameMethodNameParamSize || $methodName_chanwGetMethodByClassNameMethodNameParamSize.Class.Name != "java.lang.String" || $methodName_chanwGetMethodByClassNameMethodNameParamSize == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid method name is required." "tibgtrtoibksi9[34" )
+        #stop
+    #end
+##
+    #set( $chanwGetMethodByClassNameMethodNameParamSize = "" )
+    #set( $chanwClassObj  = $_.Class.forName( $className_chanwGetMethodByClassNameMethodNameParamSize ) )
+    #set( $chanwMethods = $chanwClassObj.getMethods() )
+    #if( $chanwMethods.size() > 0 )
+    	#foreach( $m in $chanwMethods )
+    		#if( $m.Name == $methodName_chanwGetMethodByClassNameMethodNameParamSize &&
+    			$m.ParameterCount == $paramSize_chanwGetMethodByClassNameMethodNameParamSize
+    		)
+    			#set( $chanwGetMethodByClassNameMethodNameParamSize = $m )
+    			#break
+    		#end
+    	#end
+    #end
+##
+    ## not found, issue a warning
+    #if( $chanwGetMethodByClassNameMethodNameParamSize == "" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "Method not found." "jko;iwpinogpio;kl klm;bwilm;LJKGKK4" )
+    #end
+#end
+
+
+
+
 #*doc
 《/macro》
 《documentation》

@@ -19,7 +19,7 @@ Modification history:
 《h2》Introduction《/h2》
 《p》This format defines a global stack. Example:《/p》
 《pre》
-#import( 'site://_common_assets/core/libraries/chanw-global-stack' )
+#import( 'site://_brisk/core/library/velcity/chanw/chanw-global-stack' )
 
 #foreach( $num in [ 1..10 ] )
     #chanwPushGlobalStack( $chanwGlobalStack $num )
