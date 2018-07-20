@@ -1940,6 +1940,10 @@ doc*###
         ## added the third parameter 5/23/2018
         #chanwGetFQINodeMap( $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData [] $chanwProcessDataDefinitionBlockSystemDataStructure )
         #set( $chanwTypeInfo = $chanwGetFQINodeMap[ "block-type" ][ $KEY_DATA ] )
+        ## block killer, added 7/18/2018
+        #if( $chanwGetFQINodeMap[ "display" ][ $KEY_DATA ].toLowerCase() != "yes" )
+            #break
+        #end
         ## multi-functional
         #if( $chanwGetFQINodeMap[ "choose-type" ][ $KEY_DATA ].Class.Name )
             #set( $chanwGroupName = $chanwGetFQINodeMap[ "choose-type" ][ $KEY_DATA ] + "-group" )

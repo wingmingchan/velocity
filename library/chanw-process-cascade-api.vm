@@ -1059,8 +1059,10 @@ doc*###
             #chanwGetTextNodeSubType( $node )
             #set( $void = $chanwNodeAttributes.put( $KEY_SUBTYPE, $chanwGetTextNodeSubType ) )
 ##
+            ## added two more 7/19/2018
             #if( $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_PLAIN_TEXT || $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_DROPDOWN ||
-                $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_RADIO )
+                 $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_RADIO      || $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_CALENDAR ||
+                 $chanwNodeAttributes[ $KEY_SUBTYPE ] == $TYPE_DATE_TIME )
                 #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $_EscapeTool.xml( $node.TextValue ) ) )
             #elseif( $node.TextNodeOptions.isWysiwyg() )
                 #set( $void = $chanwNodeAttributes.put( $KEY_DATA, $node.TextValue ) )
