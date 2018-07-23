@@ -30,4 +30,4 @@ Demo (site configurations):
 1. standard-model: partial pages
 2. java:           folder nav on the right
 3. web-services:   adding prefooter
-4. cascade-admin:  swapping the header and the footer
+4. formats:        swapping the header and the footer
