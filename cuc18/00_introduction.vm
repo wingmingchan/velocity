@@ -27,8 +27,7 @@ The problems with templates and regions:
 
 Demo (site configurations):
 ================================================================================
-1. standard-model: the UCO design
-2. formats:        the Hannon Hill design
-3. java:           folder nav on the right
-4. web-services:   adding prefooter
-5. cascade-admin:  swapping the header and the footer
+1. formats:        the Hannon Hill design
+2. java:           folder nav on the right
+3. web-services:   adding prefooter
+4. cascade-admin:  swapping the header and the footer
