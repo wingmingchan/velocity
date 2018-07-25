@@ -17,13 +17,15 @@ Questions for the audience:
 
 The problems with templates and regions:
 ================================================================================
-1. Templates: text files, cannot be modified or maniplulated programmatically
-   though represented by a Cascade API class (no methods defined in the class)
+1. Templates: text files, cannot be modified or maniplulated programmatically;
+   though represented by a Cascade API class, no methods defined
 2. Regions: lack of internal structures, and the order of regions is fixed
-3. Mixing data with presentation: XHTML structure is presentational
-4. Lack of flexibility, configurability, inheritance, reusability, and partiality
-5. Lack of communication among page parts
-6. Proliferation of configuration sets and content types
+3. Requirement of pairing blocks and processing formats
+4. Mixing data with presentation: XHTML structure is presentational
+5. Lack of flexibility, configurability, inheritance, reusability, and partiality
+6. Lack of communication among page parts
+7. Proliferation of configuration sets and content types
+8. Loss of data when switching content types
 
 Demo (site configurations):
 ================================================================================
