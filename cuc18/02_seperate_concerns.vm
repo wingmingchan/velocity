@@ -1,0 +1,31 @@
+Definitions:
+================================================================================
+1. Data: Page XML and blocks XML; values in StructuredDataNode objects
+2. Presentation: the process of transforming data into presentable XHTML markups
+
+Three types of Velocity code:
+================================================================================
+1. Model: macros processing blocks/pages without introducing presentational logic
+   Examples:
+   #chanwProcessStructuredDataNodes in 
+   https://github.com/wingmingchan/velocity/blob/master/library/chanw-process-cascade-api.vm
+   #chanwProcessBlockChooser in 
+   https://github.com/wingmingchan/velocity/blob/master/library/chanw-initialization.vm
+   Why:
+   A single macro can be written to deal with both an org.jdom.Element object and 
+   a Cascade API object without worrying about presentational logic; just to make
+   the data ready for consumption
+
+2. View: macros crafted for specific designs, 
+   producing page elements (XHTML markups), possibly with Javascript and style
+   Examples:
+   #initialize in https://github.com/wingmingchan/multiple-design/blob/master/page-element-macros.vm
+   #processAccordionGroup in https://github.com/wingmingchan/multiple-design/blob/master/accordion.vm
+   Why:
+   The same set of data can be marked up in many different ways, depending on requirements
+   of different designs
+
+3. Controller: formats for designs, trees to control output, etc.
+   Examples:
+   https://github.com/wingmingchan/multiple-design/blob/master/design-entry.vm
+   https://github.com/wingmingchan/multiple-design/tree/master/scaffolds
