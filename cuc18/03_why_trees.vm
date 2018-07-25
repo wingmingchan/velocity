@@ -1,0 +1,33 @@
+Four major components of Brisk, the implementation of the Standard Model:
+================================================================================
+1. Design namespaces: deal with designs and changes
+2. Page element macros: macros invoked to generate page elements
+3. Trees: generate XHTML structures and invoke page element macros
+4. Configurations
+
+Why trees?
+================================================================================
+A. Functional:
+1. A tree can replace a template
+2. A tree node is weakly equivalent to a region
+
+B. Structural:
+1. Truly hierarchical and preorder traversal
+2. A tree can contain any hierarchical structure
+3. A tree node can be used to store anything, including Velocity code
+4. A tree node can be the root of a subtree, containing other tree nodes;
+   it can have its own hierarchical structure
+   Can a region contain other regions?
+5. Whatever defined within DEFAULT is just part of the tree, 
+   and can have a hierarchical structure of its own
+
+C. Programming:
+1. Trees are programmable constructs
+2. Trees can be assembled and maniupulated programmatically
+3. Trees and tree parts are reusable
+4. Tree nodes can be added, removed, or moved
+5. Tree nodes can store any Velocity code
+6. A block can be attached to a tree node
+7. Trees are extremely configurable
+8. Communication among tree nodes is facilitated
+9. The concept of inheritance
