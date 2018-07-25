@@ -20,7 +20,7 @@ The tree approach:
     to be associated with sites, and NO new content type is needed
 13. Sites, pages and blocks are data containers; you only update the data within,
     and never rebuild the containers simply because you need a new look
-14. Implementing a new design ≠ (NOT EQUAL TO) rebuilding sites
+14. Implementing a new design ≠ (NOT EQUAL TO!) rebuilding sites
 15. There is no smart way of rebuilding sites;
     rebuilding sites for a new look is just dumb
 
