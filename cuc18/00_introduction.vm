@@ -17,9 +17,9 @@ Questions for the audience:
 
 The problems with templates and regions:
 ================================================================================
-1. Templates: text files, are not represented by Cascade API,
-   and cannot be maniplulated programmatically
-2. Regions: lack of internal structures
+1. Templates: text files, cannot be modified or maniplulated programmatically
+   though represented by a Cascade API class (no methods defined in the class)
+2. Regions: lack of internal structures, and the order of regions is fixed
 3. Mixing data with presentation: XHTML structure is presentational
 4. Lack of flexibility, configurability, inheritance, reusability, and partiality
 5. Lack of communication among page parts
@@ -27,7 +27,8 @@ The problems with templates and regions:
 
 Demo (site configurations):
 ================================================================================
-1. standard-model: partial pages (architecture folder only)
-2. java:           folder nav on the right
-3. web-services:   adding prefooter
-4. formats:        swapping the header and the footer
+1. standard-model: the UCO design
+2. formats:        the Hannon Hill design
+3. java:           folder nav on the right
+4. web-services:   adding prefooter
+5. cascade-admin:  swapping the header and the footer
