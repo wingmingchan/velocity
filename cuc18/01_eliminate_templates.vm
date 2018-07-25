@@ -1,0 +1,25 @@
+Eliminating tempates and regions from Brisk:
+================================================================================
+1. We need only one template to fulfil the system requirement
+2. The template only defines a single region required by Cascade:
+   <system-region name="DEFAULT"/>
+3. What is actually needed is a simple way to associate a Velocity format
+   with a configuration/output
+4. This deprecates the use of templates and regions
+
+Implications:
+================================================================================
+1. Only one format can be attached to DEFAULT: the concept of entry point
+2. Blocks can only be attached to block choosers defined by data definitions
+   Later: blocks can be attached to trees
+3. There is no pairing of blocks with processing formats
+4. Indexing is not used (no index blocks) due to lack of regions
+   
+Necessary conditions:
+================================================================================
+1. Automatic macro invocation and availability of page element macros
+2. The Locator Tool & Cascade API
+3. Separation of three processes:
+   - Processing block and page data (in structured data nodes)
+   - Creating XHTML markups
+   - Outputting XHTML markups
