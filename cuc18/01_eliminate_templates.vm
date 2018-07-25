@@ -13,7 +13,8 @@ Implications:
 2. Blocks can only be attached to block choosers defined by data definitions
    Later: blocks can be attached to trees
 3. There is no pairing of blocks with processing formats
-4. Indexing is not used (no index blocks) due to lack of regions
+4. Indexing is not used (no index blocks) due to lack of regions;
+   still possible in block choosers
    
 Necessary conditions:
 ================================================================================
