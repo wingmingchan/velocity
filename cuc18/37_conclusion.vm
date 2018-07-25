@@ -7,19 +7,22 @@ The tree approach:
 4.  A node can contain any presentational logic
 5.  Blocks can be attached to nodes
 6.  Nodes can be moved around freely, including nodes defined for DEFAULT
-7.  Trees and tree parts are reusable
-8.  Both fully rendered pages and partial pages can be produced
-9.  Inheritance and configurability
-10. Because any XHTML structures can be created in a tree,
+7.  Communication among nodes is facilitated, and one node can change
+    the bahaviar of another node
+8.  Trees and tree parts are reusable
+9.  Both fully rendered pages and partial pages can be produced
+10. Inheritance and configurability
+11. Because any XHTML structures can be created in a tree,
     only one configuration set is needed per file extension,
     only one content type is needed for all publishable pages per file extension,
     and there is no more switching of content types
-11. Implementing a new design is to create a new presentational layer
+12. Implementing a new design is to create a new presentational layer
     to be associated with sites, and NO new content type is needed
-12. Sites, pages and blocks are data containers; you only update the data within,
+13. Sites, pages and blocks are data containers; you only update the data within,
     and never rebuild the containers simply because you need a new look
-13. Implementing a new design ≠ (NOT EQUAL TO) rebuilding sites
-14. There is no smart way of rebuilding sites; rebuilding sites is just dumb
+14. Implementing a new design ≠ (NOT EQUAL TO) rebuilding sites
+15. There is no smart way of rebuilding sites;
+    rebuilding sites for a new look is just dumb
 
 Who can do better than this?
 
