@@ -284,9 +284,9 @@ $chanwNextYearCalObject.add( $chanwCalendarYearField, 1 )
     "America"   : [ "Bogota", "Buenos_Aires", "Chicago", "Denver", "Lima", "Los_Angeles",
                     "New_York", "Santiago", "Sao_Paulo" ],
     "Asia"      : [ "Baghdad", "Beirut", "Calcutta", "Chongqing", "Dacca", "Damascus", "Dhaka", "Dubai",
-                    "Hong_Kong", "Istanbul", "Jakarta", "Jerusalem",
+                    "Harbin", "Ho_Chi_Minh", "Hong_Kong", "Istanbul", "Jakarta", "Jerusalem",
                     "Seoul", "Shanghai", "Taipei", "Tokyo" ],
-    "Australia" : [ "Sydney"  ],
+    "Australia" : [ "Darwin", "Perth", "Sydney" ],
     "Europe"    : [ "Amsterdam", "Brussels", "Dublin", "Lisbon", "London", "Madrid", "Moscow", 
                     "Paris", "Prague", "Rome", "Vienna", "Zurich" ],
     "Pacific"   : [ "Fiji", "Honolulu" ]
