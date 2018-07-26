@@ -38,12 +38,15 @@ doc*###
 #set( $chanwParamList = [] )
 #chanwGetMethodByClassNameMethodNameParamTypes( "com.hannonhill.cascade.model.service.ServiceProviderHolderBean" "getServiceProvider" $chanwParamList )
 #set( $chanwServiceProvider                          = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null ) )
+#chanwGetMethodByClassNameMethodNameParamSize( "com.hannonhill.cascade.api.adapters.APIAdapterFactory" "createAPIAdapter" 3 )
+#set( $chanwCreateAPIAdapterMethod                   = $chanwGetMethodByClassNameMethodNameParamSize )
 #set( $chanwAbilityService                           = $chanwServiceProvider.getAbilityService() )
 #set( $chanwAssetFactoryContainerService             = $chanwServiceProvider.getAssetFactoryContainerService() )
 #set( $chanwAssetFactoryService                      = $chanwServiceProvider.getAssetFactoryService() )
 #set( $chanwAssetFactoryPluginService                = $chanwServiceProvider.getAssetFactoryPluginService() )
 
 #set( $chanwAuditService                             = $chanwServiceProvider.getAuditService() )
+#set( $chanwBlockService                             = $chanwServiceProvider.getBlockService() )
 #set( $chanwConnectorContainerService                = $chanwServiceProvider.getConnectorContainerService() )
 #set( $chanwConnectorService                         = $chanwServiceProvider.getConnectorService() )
 #set( $chanwContentTypeContainerService              = $chanwServiceProvider.getContentTypeContainerService() )
@@ -126,6 +129,80 @@ doc*###
     #set( $chanwCreateEmail = "" )
     #set( $chanwCreateEmail = $_.Class.forName( "com.hannonhill.cascade.email.Email" ).getConstructors()[ 0 ].newInstance(
     $addresses_chanwCreateEmail, $subject_chanwCreateEmail, $msg_chanwCreateEmail, null, true ) )
+#end
+##
+#macro( chanwGetRelatedBlockDataDefinition $ddBlock_chanwGetRelatedBlockDataDefinition )
+    #if( !$ddBlock_chanwGetRelatedBlockDataDefinition.Class.Name || 
+         $ddBlock_chanwGetRelatedBlockDataDefinition.Class.Name != $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
+A data definition block is needed to retrieve the corresponding data definition.
+#break
+    #end
+    #set( $chanwGetRelatedBlockDataDefinition = "" )
+    #set( $chanwDdBlockDom = $chanwBlockService.get( $ddBlock_chanwGetRelatedBlockDataDefinition.Identifier.Id ) )
+    #set( $chanwGetRelatedBlockDataDefinition = 
+        $chanwStructuredDataDefinitionService.get( $chanwDdBlockDom.StructuredDataDefinition.Id ) )
+#end
+##
+#macro( chanwGetDataDefinitionAttributeMap $jdom_chanwGetDataDefinitionAttributeMap $id_chanwGetDataDefinitionAttributeMap )
+    ## the data definition has already been processed
+    #if( $jdom_chanwGetDataDefinitionAttributeMap.isRootElement() && $chanwGetDataDefinitionAttributeMap[ $id_chanwGetDataDefinitionAttributeMap ].Class.Name )
+        $id_chanwGetDataDefinitionAttributeMap
+        #break
+    #end
+    
+    #if( !$chanwGetDataDefinitionAttributeMap.Class.Name )
+        #set( $chanwGetDataDefinitionAttributeMap = {} )
+    #end
+    
+    #if( !$chanwGetDataDefinitionAttributeMap[ $id_chanwGetDataDefinitionAttributeMap ].Class.Name )
+        #set( $chanwGetDataDefinitionAttributeMap[ $id_chanwGetDataDefinitionAttributeMap ] = {} )
+        #chanwGetDataDefinitionAttributeMapHelper( $jdom_chanwGetDataDefinitionAttributeMap $id_chanwGetDataDefinitionAttributeMap )
+    #end
+#end
+
+#macro( chanwGetDataDefinitionAttributeMapHelper $jdom_chanwGetDataDefinitionAttributeMap $id_chanwGetDataDefinitionAttributeMap )
+    #chanwGetFQIPathForJDOMElement( $jdom_chanwGetDataDefinitionAttributeMap )
+    #set( $chanwCurrentFQI = "" )
+    #set( $chanwCurrentFQI = $chanwGetFQIPathForJDOMElement )
+    
+    #if( $chanwCurrentFQI != "" )
+        #if( !$chanwGetDataDefinitionAttributeMap[ $id_chanwGetDataDefinitionAttributeMap ][ $chanwCurrentFQI ].Class.Name )
+            #set( $chanwGetDataDefinitionAttributeMap[ $id_chanwGetDataDefinitionAttributeMap ][ $chanwCurrentFQI ] = {} )
+        #end
+    #end
+    
+    #if( $jdom_chanwGetDataDefinitionAttributeMap.getAttributes().Class.Name )
+        #foreach( $attr in $jdom_chanwGetDataDefinitionAttributeMap.getAttributes() )
+            #set( $chanwGetDataDefinitionAttributeMap[ $id_chanwGetDataDefinitionAttributeMap ][ $chanwCurrentFQI ][ $attr.Name ] = $attr.Value )
+##
+            #if( $attr.Name == "type" && ( $attr.Value == "checkbox" || $attr.Value == "dropdown" || $attr.Value == "radiobutton" || $attr.Value == "multi-selector" ) )
+                #set( $chanwGetDataDefinitionAttributeMap[ $id_chanwGetDataDefinitionAttributeMap ][ $chanwCurrentFQI ][ "item" ] = [] )
+                #foreach( $child in $jdom_chanwGetDataDefinitionAttributeMap.Children )
+                    #set( $void = $chanwGetDataDefinitionAttributeMap[ $id_chanwGetDataDefinitionAttributeMap ][ $chanwCurrentFQI ][ "item" ].add( $child.getAttribute( "value" ).Value ) )
+                #end
+            #end
+        #end
+    #end
+    
+    #if( $jdom_chanwGetDataDefinitionAttributeMap.isRootElement() || $jdom_chanwGetDataDefinitionAttributeMap.Name == "group" )
+        #foreach( $child in $jdom_chanwGetDataDefinitionAttributeMap.Children )
+            #chanwGetDataDefinitionAttributeMapHelper( $child $id_chanwGetDataDefinitionAttributeMap )
+        #end
+    #end
+#end
+
+#macro( chanwGetFQIPathForJDOMElement $ele_chanwGetFQIPathForJDOMElement )
+    #set( $chanwGetFQIPathForJDOMElement = "" )
+    #if( $ele_chanwGetFQIPathForJDOMElement.isRootElement() )
+        #break
+    #else
+        #chanwGetFQIPathForJDOMElement( $ele_chanwGetFQIPathForJDOMElement.getParentElement() )
+        #if( $chanwGetFQIPathForJDOMElement == "" )
+            #set( $chanwGetFQIPathForJDOMElement = $ele_chanwGetFQIPathForJDOMElement.getAttribute( "identifier" ).Value )
+        #else
+            #set( $chanwGetFQIPathForJDOMElement = $chanwGetFQIPathForJDOMElement + ";" + $ele_chanwGetFQIPathForJDOMElement.getAttribute( "identifier" ).Value )
+        #end
+    #end
 #end
 #*doc
 《/global-variables》

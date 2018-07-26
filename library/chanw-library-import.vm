@@ -12,6 +12,7 @@ Import this single format to access all library resources created by Wing.
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw-global-queue" ) ## used by chanw-process-cascade-api
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw-process-xml" )
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw-process-cascade-api" )
+#import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw-service-provider" )
 ##
 #define( $chanwImportAdvanced )
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw-global-deque" )
@@ -32,9 +33,6 @@ Import this single format to access all library resources created by Wing.
 #end
 #define( $chanwImportReflect )
 #import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw-reflect-utilities" )
-#end
-#define( $chanwImportServiceProvider )
-#import( "site://${chanw_framework_site_name}/${chanw_library_folder_path}/chanw-service-provider" )
 #end
 #define( $chanwImportVarDump )
 #import( "site://${chanw_framework_site_name}/core/macros/drulykgVarDump" )

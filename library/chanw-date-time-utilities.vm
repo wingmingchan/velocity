@@ -274,17 +274,32 @@ $chanwNextYearCalObject.add( $chanwCalendarYearField, 1 )
 #set( $chanwNextYearDateObject = $_DateTool.toDate( $chanwNextYearCalObject ) )
 #set( $chanwNextYearInt = $chanwCurrentYearInt + 1 )
 ##
-## timezone
+## timezone: $chanwNewYorkTimeZone, $chanwLondonTimeZone, $chanwHongKongTimeZone, etc.
 #set( $chanwTimeZone         = $_DateTool.TimeZone )
 #set( $chanwStr              = "" )
 #set( $chanwParamList        = [ '$chanwStr.Class' ] )
 #chanwGetMethodByClassNameMethodNameParamTypes( 'java.util.TimeZone' 'getTimeZone' $chanwParamList )
-#set( $chanwLondonTimeZone   = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "Europe/London" ) )
-#set( $chanwNYTimeZone       = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/New_York" ) )
-#set( $chanwChicagoTimeZone  = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/Chicago" ) )
-#set( $chanwDenverTimeZone   = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/Denver" ) )
-#set( $chanwLATimeZone       = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "America/Los_Angeles" ) )
-#set( $chanwHonoluluTimeZone = $chanwGetMethodByClassNameMethodNameParamTypes.invoke( null, "Pacific/Honolulu" ) )
+#set( $continentCityMap = {
+    "Africa"    : [ "Algiers", "Cairo", "Johannesburg", "Lome", "Nairobi", "Tripoli" ],
+    "America"   : [ "Bogota", "Buenos_Aires", "Chicago", "Denver", "Lima", "Los_Angeles",
+                    "New_York", "Santiago", "Sao_Paulo" ],
+    "Asia"      : [ "Baghdad", "Beirut", "Calcutta", "Chongqing", "Dacca", "Damascus", "Dhaka", "Dubai",
+                    "Hong_Kong", "Istanbul", "Jakarta", "Jerusalem",
+                    "Seoul", "Shanghai", "Taipei", "Tokyo" ],
+    "Australia" : [ "Sydney"  ],
+    "Europe"    : [ "Amsterdam", "Brussels", "Dublin", "Lisbon", "London", "Madrid", "Moscow", 
+                    "Paris", "Prague", "Rome", "Vienna", "Zurich" ],
+    "Pacific"   : [ "Fiji", "Honolulu" ]
+} )
+#set( $chanwTimeZoneTemplate = '#set($chanw-cityNU-TimeZone=$chanwGetMethodByClassNameMethodNameParamTypes.invoke(null,"-continent-/-city-"))' )
+#set( $chanwContinents = $continentCityMap.keySet() )
+#foreach( $continent in $chanwContinents )
+    #set( $chanwCities = $continentCityMap[ $continent ] )
+    #foreach( $city in $chanwCities )
+        #set( $chanwCode = $chanwTimeZoneTemplate.replace( '-continent-', $continent ).replace( '-city-', $city ).replace( '-cityNU-', $city.replace( "_", "" ) ) )
+        #evaluate( $chanwCode )
+    #end
+#end
 ##
 ## locale
 #chanwGetConstructorByClassNameParamSize( "java.util.Locale" 1 )
