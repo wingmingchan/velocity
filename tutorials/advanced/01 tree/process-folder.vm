@@ -1,4 +1,4 @@
-#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
 $chanwStartMeasurement
 #set( $folder = $_.locateFolder("formats", "_chan_core") )
 #chanwCreateNode( $folder )
