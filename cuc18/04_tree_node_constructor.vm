@@ -2,6 +2,6 @@
 This format creates a constructor of the class javax.swing.tree.DefaultMutableTreeNode.
 The constructor can be called to create tree node objects.
 *#
-#set( $DefaultMutableTreeNodeConstructor = $_.class.forName(
+#set( $DefaultMutableTreeNodeConstructor = $_.Class.forName(
     "javax.swing.tree.DefaultMutableTreeNode" ).getConstructor(
-    $_.class.forName( "java.lang.Object" ) ) )
+    $_.Class.forName( "java.lang.Object" ) ) )
