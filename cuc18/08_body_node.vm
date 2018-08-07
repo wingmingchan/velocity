@@ -1,0 +1,13 @@
+#*
+This format defines a reusable body node with three children.
+*#
+#if( !$body.Class.Name )
+    #set( $body  = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "body" } ) )
+#end
+##
+#set( $header    = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "header" } ) )
+#set( $main      = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "main" }   ) ) ## no childre for main
+#set( $footer    = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "footer" } ) )
+#set( $void      = $body.add( $header ) )
+#set( $void      = $body.add( $main ) )
+#set( $void      = $body.add( $footer ) )
