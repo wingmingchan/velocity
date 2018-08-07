@@ -1,0 +1,8 @@
+#*
+This format creates an html tree by importing tree parts in a specific order.
+*#
+#import( "site://cascade-admin/_cascade/cuc18/06_html_node" )
+#import( "site://cascade-admin/_cascade/cuc18/07_head_node" )
+#import( "site://cascade-admin/_cascade/cuc18/08_body_node" )
+#import( "site://cascade-admin/_cascade/cuc18/09_main_node" )
+#import( "site://cascade-admin/_cascade/cuc18/11_display_tree_macro" )
