@@ -1,0 +1,16 @@
+#*
+This format defines a reusable html node with two children.
+*#
+#import( "site://cascade-admin/_cascade/cuc18/04_tree_node_constructor" )
+##
+## html
+#set( $html   = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "html" } ) )
+##
+## head
+#set( $head   = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "head" }  ) )
+##
+## body
+#set( $body   = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "body" }   ) )
+##
+#set( $void = $html.add( $head ) )
+#set( $void = $html.add( $body ) )
