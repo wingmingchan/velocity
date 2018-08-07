@@ -5,7 +5,7 @@ Eliminating tempates and regions from Brisk:
    <system-region name="DEFAULT"/>
 3. What is actually needed is a simple way to associate a Velocity format
    with a configuration/output
-4. This deprecates the use of templates and regions
+4. This deprecates the use of templates and regions, possibly content types
 
 Implications:
 ================================================================================
