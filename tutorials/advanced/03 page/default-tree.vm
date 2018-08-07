@@ -1,4 +1,4 @@
-#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
 #import( "formats/tutorial/advanced/3/header-tree" )
 #import( "formats/tutorial/advanced/3/page-element-macros" )
 
