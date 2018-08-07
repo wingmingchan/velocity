@@ -1,0 +1,39 @@
+#* Execute this *#
+#*
+This format shows how to create a simple tree:
+
+1
+   2
+      4
+      5
+   3
+      6
+      7
+      8
+*#
+#import( "site://cascade-admin/_cascade/cuc18/04_tree_node_constructor" )
+
+#set( $root  = $DefaultMutableTreeNodeConstructor.newInstance( 1 ) )
+#set( $left  = $DefaultMutableTreeNodeConstructor.newInstance( 2 ) )
+#set( $right = $DefaultMutableTreeNodeConstructor.newInstance( 3 ) )
+
+#set( $void = $root.add( $left ) )
+#set( $void = $root.add( $right ) )
+
+#set( $void = $left.add( $DefaultMutableTreeNodeConstructor.newInstance( 4 ) ) )
+#set( $void = $left.add( $DefaultMutableTreeNodeConstructor.newInstance( 5 ) ) )
+
+#set( $void = $right.add( $DefaultMutableTreeNodeConstructor.newInstance( 6 ) ) )
+#set( $void = $right.add( $DefaultMutableTreeNodeConstructor.newInstance( 7 ) ) )
+#set( $void = $right.add( $DefaultMutableTreeNodeConstructor.newInstance( 8 ) ) )
+
+
+## 5 leaves, 4, 5, 6, 7, 8
+$root.getLeafCount() leaves in the tree
+## 1, the String representation of the user object of the root
+$left.getParent() is the parent of $left
+## java.lang.Integer
+$left.UserObject.Class.Name
+
+#import( "site://cascade-admin/_cascade/cuc18/11_display_tree_macro" )
+#displayTree( $root )
