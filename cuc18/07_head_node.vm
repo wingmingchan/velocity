@@ -1,0 +1,13 @@
+#*
+This format defines a reusable head node with three children.
+*#
+#if( !$head.Class.Name )
+    #set( $head   = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "head" }  ) )
+#end
+##
+#set( $title = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "title" } ) )
+#set( $meta  = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "meta" }  ) )
+#set( $link  = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "link" }  ) )
+#set( $void  = $head.add( $title ) )
+#set( $void  = $head.add( $meta ) )
+#set( $void  = $head.add( $link ) )
