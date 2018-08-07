@@ -1,0 +1,14 @@
+#*
+This format defines a reusable main node with three children.
+*#
+#if( !$main.Class.Name )
+    #set( $main = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "main" } ) )
+#end
+## parts for main
+#set( $h1       = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "h1" } ) )
+#set( $wysiwyg  = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "wysiwyg" } ) )
+#set( $chooser  = $DefaultMutableTreeNodeConstructor.newInstance( { "name" : "chooser" } ) )
+##
+#set( $void     = $main.add( $h1 ) )
+#set( $void     = $main.add( $wysiwyg ) )
+#set( $void     = $main.add( $chooser ) )
