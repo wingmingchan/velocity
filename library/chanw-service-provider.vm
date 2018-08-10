@@ -146,7 +146,6 @@ A data definition block is needed to retrieve the corresponding data definition.
 #macro( chanwGetDataDefinitionAttributeMap $jdom_chanwGetDataDefinitionAttributeMap $id_chanwGetDataDefinitionAttributeMap )
     ## the data definition has already been processed
     #if( $jdom_chanwGetDataDefinitionAttributeMap.isRootElement() && $chanwGetDataDefinitionAttributeMap[ $id_chanwGetDataDefinitionAttributeMap ].Class.Name )
-        $id_chanwGetDataDefinitionAttributeMap
         #break
     #end
     

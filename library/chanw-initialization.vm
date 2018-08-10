@@ -1937,6 +1937,9 @@ doc*###
         #else ## no code
         #end
     #elseif( $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
+#if( $currentPageSiteName == "cascade-admin" )
+Block received: $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name
+#end
         ## added the third parameter 5/23/2018
         #chanwGetFQINodeMap( $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData [] $chanwProcessDataDefinitionBlockSystemDataStructure )
         #set( $chanwTypeInfo = $chanwGetFQINodeMap[ "block-type" ][ $KEY_DATA ] )
