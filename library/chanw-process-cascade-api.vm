@@ -683,20 +683,12 @@ $chanwGetFQINodeMap[ "outer;middle" ][ $KEY_SIZE ]
 doc*###
 #macro( chanwGetFQINodeMap $chanwGetFQINodeMapSd $chanwGetFQINodeMapSds $chanwGetFQINodeMapAsset )
     #set( $chanwGetFQINodeMap = {} )
-#if( $currentPageSiteName == "cascade-admin" )
-<br /><br />
-$chanwGetFQINodeMapAsset.Class.Name
-#end
     #if( $chanwGetFQINodeMapAsset.Class.Name )
         #set( $chanwGetFQINodeMap[ $KEY_ASSET ] = $chanwGetFQINodeMapAsset )
     #end
 ##
     #set( $chanwNodeAttributeMap = "" )
     #chanwProcessStructuredDataNodes( $chanwGetFQINodeMapSd $chanwGetFQINodeMapSds )
-#if( $currentPageSiteName == "cascade-admin" )
-<br /><br />
-$chanwNodeAttributeMap
-#end
 ##
 #foreach( $key in $chanwChildParentMap.keySet() )
 #set( $chanwGetFQINodeMap[ $chanwNodeAttributeMap[ $key ][ $KEY_FQI ] ] =
@@ -1041,9 +1033,7 @@ can be recognized when creating FQIs without consulting the data definition.《/
 《macro id=“chanwProcessStructuredDataNodes”》
 doc*###
 #macro( chanwProcessStructuredDataNodes $chanwProcessStructuredDataNodesSd $chanwProcessStructuredDataNodesSds )
-#if( $currentPageSiteName == "cascade-admin" )
-    $chanwGetFQINodeMap[ $KEY_ASSET ].Class.Name<br /><br /><br /><br />
-#end    ## added 8/2/2018, to examine the data definition to determine if a node is multiple
+    ## added 8/2/2018, to examine the data definition to determine if a node is multiple
     #if( $chanwGetFQINodeMap[ $KEY_ASSET ].Class.Name )
         #chanwGetRelatedBlockDataDefinition( $chanwGetFQINodeMap[ $KEY_ASSET ] )
         #chanwBuildXMLContentRoot( $chanwGetRelatedBlockDataDefinition.Xml )
@@ -1123,11 +1113,6 @@ doc*###
                 ## multiple nodes, added 8/2/2018
                 #set( $chanwDDFieldPath = "$chanwNodeAttributeMap[ $chanwChildParentMap[ $child ] ][ $KEY_FQI ];$child.Identifier" )
                 #set( $chanwDDFieldPath = $chanwDDFieldPath.replaceAll( ";\d+;", ";" ) )
-#if( $currentPageSiteName == "cascade-admin" )
-    #if( $child.Identifier == "pagesWithoutH1" )
-        $chanwGetDataDefinitionAttributeMap[ $chanwGetRelatedBlockDataDefinition.Id ]
-    #end
-#end                
 ##
                 #if( $child.Identifier.startsWith( 'mul-' ) || $chanwGetDataDefinitionAttributeMap[ $chanwGetRelatedBlockDataDefinition.Id ][ $chanwDDFieldPath ][ "multiple" ].Class.Name )
                     ## first instance
@@ -1205,9 +1190,6 @@ doc*###
             #break
         #end
     #end
-#if( $currentPageSiteName == "cascade-admin" )
-$chanwNodeAttributeMap
-#end
 #end
 #*doc
 《/macro》

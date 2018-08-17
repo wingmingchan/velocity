@@ -1933,13 +1933,10 @@ doc*###
 #*        *##set( $chanwSite = $chanwProcessDataDefinitionBlockSystemDataStructure.Parent.Parent.getChild( "site" ).Value )
 #*        *##set( $chanwDDBlock   = $_.locateBlock( $chanwPath, $chanwSite ) )
 #*        *##set( $chanwGroupNode = $chanwDDBlock.getStructuredDataNodes( $chanwGroupName )[ 0 ] )
-            #chanwGetFQINodeMap( $chanwGroupNode $chanwProcessDataDefinitionBlockSystemDataStructure $chanwDDBlock )
+#*        *##chanwGetFQINodeMap( $chanwGroupNode $chanwProcessDataDefinitionBlockSystemDataStructure $chanwDDBlock )
         #else ## no code
         #end
     #elseif( $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name == $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME )
-#if( $currentPageSiteName == "cascade-admin" )
-Block received: $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name
-#end
         ## added the third parameter 5/23/2018
         #chanwGetFQINodeMap( $chanwProcessDataDefinitionBlockSystemDataStructure.StructuredData [] $chanwProcessDataDefinitionBlockSystemDataStructure )
         #set( $chanwTypeInfo = $chanwGetFQINodeMap[ "block-type" ][ $KEY_DATA ] )
@@ -1965,7 +1962,7 @@ Block received: $chanwProcessDataDefinitionBlockSystemDataStructure.Class.Name
 #**##set( $chanwMacroName = $MACRO_PREFIX + $chanwConvertToPascalCase )
 ##
 #**### invoke macro
-#**##chanwInvokeMacro( $chanwMacroName [ "chanwGetFQINodeMap" ] )
+#**##chanwInvokeMacro( $chanwMacroName [ "chanwGetFQINodeMap", "chanwProcessDataDefinitionBlockSystemDataStructure" ] )
 #**###else
 #*    *### do nothing if no
 #**###end
