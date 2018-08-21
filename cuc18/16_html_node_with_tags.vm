@@ -1,0 +1,28 @@
+#*
+This format defines a reusable html node.
+It also shows how to add custom attributes to tags.
+*#
+## https://github.com/wingmingchan/velocity/blob/master/library/chanw-initialization.vm
+#import( "site://_brisk/core/library/velocity/chanw/chanw-initialization" )
+## https://github.com/wingmingchan/velocity/blob/master/library/chanw-tree-utilities.vm
+#import( "site://_brisk/core/library/velocity/chanw/chanw-tree-utilities" )
+
+#set( $html     = "html" )
+#set( $head     = "head" )
+#set( $body     = "body" )
+#set( $bodyAttr =  " class=""bodyClass"" data-offset=""100"" data-spy=""scroll"" data-target="".navbar-collapse""" )
+
+#chanwCreateNode( {
+    "name"        : $html,
+    "startString" : "<$html$!htmlAttributes>",
+    "endString"   : "</$html>"
+} )
+
+#chanwAddChildren( $chanwObjectNodeMap[ $html ] [ 
+    { "name" : $head, "startString" : "<$head$!headAttributes>",  "endString" : "</$head>" },
+    { "name" : $body }
+] )
+
+#set( $chanwObjectNodeMap[ $body ].UserObject[ "startString" ] =
+    "<$body$!bodyAttr>" )
+#set( $chanwObjectNodeMap[ $body ].UserObject[ "endString" ] = "</$body>" )
