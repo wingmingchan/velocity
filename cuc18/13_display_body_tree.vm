@@ -1,0 +1,16 @@
+#* Execute this *#
+#*
+This format displays the tree structure rooted at body.
+
+body
+   header
+   main
+      h1
+      wysiwyg
+      chooser
+   footer
+*#
+#import( "site://cascade-admin/_cascade/cuc18/10_html_tree" )
+
+## display just the body node of the html tree
+#displayTree( $body )
