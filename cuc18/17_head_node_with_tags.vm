@@ -5,6 +5,6 @@
 
 #chanwAddChildren( $chanwObjectNodeMap[ "head" ] [ 
     { "name" : "title", "startString" : "<title>",  "endString" : "</title>", "text" : "Put the title here" },
-    { "name" : "meta", "startString" : "<meta>",  "endString" : "</meta>" },
-    { "name" : "link", "startString" : "<link>",  "endString" : "</link>" }
+    { "name" : "meta",  "startString" : "<meta>",   "endString" : "</meta>" },
+    { "name" : "link",  "startString" : "<link>",   "endString" : "</link>" }
 ] )
