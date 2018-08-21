@@ -1,0 +1,21 @@
+#*
+This format defines a macro to display tree structure.
+*#
+#macro( displayTree $node )
+#if( !$counter )
+#set( $counter = 0 )
+#else
+#set( $counter = $counter + 1 )
+#end
+#set( $space = "   " )
+#if( $node.UserObject[ "name" ].Class.Name )$node.UserObject[ "name" ]
+#else$node.UserObject
+#end
+#if( $node.children() )
+#foreach( $child in $node.children() )
+#foreach( $num in [ 0 .. $counter ] )$space#end#displayTree( $child )#end
+#end
+#if( $counter > 0 )
+#set( $counter = $counter - 1 )
+#end
+#end
