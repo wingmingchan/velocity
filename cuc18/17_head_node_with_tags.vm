@@ -1,0 +1,10 @@
+## https://github.com/wingmingchan/velocity/blob/master/library/chanw-initialization.vm
+#import( "site://_brisk/core/library/velocity/chanw/chanw-initialization" )
+## https://github.com/wingmingchan/velocity/blob/master/library/chanw-tree-utilities.vm
+#import( "site://_brisk/core/library/velocity/chanw/chanw-tree-utilities" )
+
+#chanwAddChildren( $chanwObjectNodeMap[ "head" ] [ 
+    { "name" : "title", "startString" : "<title>",  "endString" : "</title>", "text" : "Put the title here" },
+    { "name" : "meta", "startString" : "<meta>",  "endString" : "</meta>" },
+    { "name" : "link", "startString" : "<link>",  "endString" : "</link>" }
+] )
