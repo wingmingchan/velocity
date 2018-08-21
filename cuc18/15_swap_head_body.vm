@@ -1,0 +1,21 @@
+#* Execute this *#
+#*
+This format shows how to swap two nodes.
+
+html
+   body
+      header
+      main
+         h1
+         wysiwyg
+         chooser
+      footer
+   head
+      title
+      meta
+      link
+*#
+#import( "site://cascade-admin/_cascade/cuc18/10_html_tree" )
+
+#set( $void = $html.insert( $body, 0 ) )
+#displayTree( $html )
