@@ -1,0 +1,22 @@
+#* Execute this *#
+#*
+This format displays the html tree with tags.
+
+<html>
+	<head>
+		<title>Put the title here</title>
+		<meta />
+		<link />
+	</head>
+	<body class="bodyClass" data-offset="100" data-spy="scroll" data-target=".navbar-collapse">
+		<header />
+		<main>
+			<h1 />
+			<div />
+		</main>
+		<footer />
+	</body>
+</html>
+*#
+#import( "site://cascade-admin/_cascade/cuc18/20_html_tree_with_tags" )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "html" ] )
