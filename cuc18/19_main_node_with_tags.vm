@@ -1,0 +1,10 @@
+## https://github.com/wingmingchan/velocity/blob/master/library/chanw-initialization.vm
+#import( "site://_brisk/core/library/velocity/chanw/chanw-initialization" )
+## https://github.com/wingmingchan/velocity/blob/master/library/chanw-tree-utilities.vm
+#import( "site://_brisk/core/library/velocity/chanw/chanw-tree-utilities" )
+
+#chanwAddChildren( $chanwObjectNodeMap[ "main" ] [ 
+    { "name" : "h1",      "startString" : "<h1>",  "endString" : "</h1>" },
+    { "name" : "wysiwyg", "startString" : "<div>", "endString" : "</div>" },
+    { "name" : "chooser" }
+] )
