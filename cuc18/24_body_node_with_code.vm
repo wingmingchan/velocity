@@ -1,0 +1,16 @@
+#*
+This format defines a tree rooted at body.
+*#
+#if( !$chanwObjectNodeMap[ "body" ].Class.Name )
+    #chanwCreateNode( {
+        "name"        : "body",
+        "startString" : "<body$!bodyAttributes>",
+        "endString"   : "</body>"
+    } )
+#end
+#chanwAddChildren( $chanwObjectNodeMap[ "body" ] [
+    { "name" : "body-placeholder" },
+    { "name" : "header", "code" : '#outputPageElement(''header'')' },
+    { "name" : "main", "startString" : "<main>",  "endString" : "</main>" },
+    { "name" : "footer", "code" : '#outputPageElement(''footer'')' }
+] )
