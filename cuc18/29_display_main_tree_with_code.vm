@@ -1,0 +1,13 @@
+#* Execute this *#
+#*
+This format displays a partial page, whose root node is main.
+
+<main>
+	<h1>My Beautiful H1</h1>
+	<p>Hello, World! (((secret)))</p>
+	<div>Content from a chooser</div>
+</main>
+*#
+#import( "site://cascade-admin/_cascade/cuc18/27_html_tree_with_code" )
+#import( "site://cascade-admin/_cascade/cuc18/26_page_element_macros" )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "main" ] )
