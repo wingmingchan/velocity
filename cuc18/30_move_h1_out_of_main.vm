@@ -1,0 +1,31 @@
+#* Execute this *#
+#*
+This formats shows how to move the h1 element around. Possible output:
+
+<html>
+	<head>
+		<title>Put the page title here</title>
+		<meta />
+		<link href="http://www.upstate.edu/assets/style.css" />
+	</head>
+	<body>
+		<header>Put the header here</header>
+		<main>
+			<p>Hello, World! (((secret)))</p>
+			<div>Content from a chooser</div>
+		</main>
+		<footer>Put the footer here</footer>
+		<h1>My Beautiful H1</h1>
+	</body>
+</html>
+*#
+#import( "site://cascade-admin/_cascade/cuc18/27_html_tree_with_code" )
+#import( "site://cascade-admin/_cascade/cuc18/26_page_element_macros" )
+
+## position 0 is body-placeholder
+##$chanwObjectNodeMap[ "body" ].insert( $chanwObjectNodeMap[ "h1" ], 1 ) ## h1 before header
+##$chanwObjectNodeMap[ "body" ].insert( $chanwObjectNodeMap[ "h1" ], 2 ) ## h1 before main
+##$chanwObjectNodeMap[ "body" ].insert( $chanwObjectNodeMap[ "h1" ], 3 ) ## h1 before footer
+$chanwObjectNodeMap[ "body" ].insert( $chanwObjectNodeMap[ "h1" ], 4 ) ## h1 after footer
+
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "html" ] )
