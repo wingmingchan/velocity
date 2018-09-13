@@ -1,0 +1,31 @@
+#* Execute this *#
+#*
+This format shows how to attach a block to a node.
+
+<html>
+	<head>
+		<title>Put the page title here</title>
+		<meta />
+		<link href="http://www.upstate.edu/assets/style.css" />
+	</head>
+	<body>
+		<system-xml>
+			<!--#passthrough<?php
+includeFileWithoutRoot( "/webfs/www/formats/_extra/blank-page.php" );
+?>#passthrough-->
+		</system-xml>
+		<header>Put the header here</header>
+		<main>
+			<h1>My Beautiful H1</h1>
+			<p>Hello, World! (((secret)))</p>
+			<div>Content from a chooser</div>
+		</main>
+		<footer>Put the footer here</footer>
+	</body>
+</html>
+*#
+#import( "site://cascade-admin/_cascade/cuc18/27_html_tree_with_code" )
+#import( "site://cascade-admin/_cascade/cuc18/26_page_element_macros" )
+#set( $chanwObjectNodeMap[ "body-placeholder" ].UserObject[ $TREE_NODE_CODE ] =
+    '#chanwAttachBlockToTreeNode(''_cascade/cuc18/34_insert-php-code-text'' ''cascade-admin'')' )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "html" ] )
