@@ -1,0 +1,54 @@
+#* Execute this *#
+#*
+This format shows how to create more structures on the fly.
+
+<div class="container">
+	<div class="row">
+		<main class="col-md-9">
+			<h1>My Beautiful H1</h1>
+			<p>Hello, World! (((secret)))</p>
+			<div>Content from a chooser</div>
+		</main>
+		<aside class="col-md-3">
+			<div id="aside-top" />
+			<div id="aside-middle" />
+			<div id="aside-bottom" />
+		</aside>
+	</div>
+</div>
+*#
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+#import( "site://_brisk/app/components/block_macros/velocity" )
+#import( "site://cascade-admin/_cascade/cuc18/26_page_element_macros" )
+#import( "site://cascade-admin/_cascade/cuc18/27_html_tree_with_code" )
+
+## add a container main-aside
+#chanwAddChildren( $chanwObjectNodeMap[ "body" ] [
+    { "name" : "main-aside", 
+      "startString" : "<div class=""container""><div class=""row"">",
+      "endString" : "</div></div>" } ] )
+    
+## add a class to main
+#set( $chanwObjectNodeMap[ "main" ].UserObject[ "startString" ] = "<main class=""col-md-9"">" )
+
+## move main into main-aside
+#set( $void = $chanwObjectNodeMap[ "main-aside" ].add( $chanwObjectNodeMap[ "main" ] ) )
+
+## add aside to main-aside
+#chanwAddChildren( $chanwObjectNodeMap[ "main-aside" ]
+[ { "name" : "aside", "startString" : "<aside class=""col-md-3"">", "endString" : "</aside>" } ] )
+
+## add more structure to aside
+#chanwAddChildren( $chanwObjectNodeMap[ "aside" ] [
+    { "name" : "aside-top", "startString" : "<div id=""aside-top"">", "endString" : "</div>" },
+    { "name" : "aside-mid", "startString" : "<div id=""aside-middle"">", "endString" : "</div>" },
+    { "name" : "aside-bot", "startString" : "<div id=""aside-bottom"">", "endString" : "</div>" }
+] )
+
+## swap main-aside and footer
+#chanwSwapNodes( $chanwObjectNodeMap[ "footer" ] $chanwObjectNodeMap[ "main-aside" ] )
+
+## display the tree
+##chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "html" ] )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "main-aside" ] )
+##chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "main-aside" ] true )
