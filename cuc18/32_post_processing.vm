@@ -1,0 +1,27 @@
+#* Execute this *#
+#*
+This format shows how to use post-processing to deal with bricks.
+The brick is defined in createWysiwyg, 26_page_element_macros.
+
+<html>
+	<head>
+		<title>Put the page title here</title>
+		<meta />
+		<link href="http://www.upstate.edu/assets/style.css" />
+	</head>
+	<body>
+		<header>Put the header here</header>
+		<main>
+			<h1>My Beautiful H1</h1>
+			<p>Hello, World! My Secret</p>
+			<div>Content from a chooser</div>
+		</main>
+		<footer>Put the footer here</footer>
+	</body>
+</html>
+*#
+#import( "site://cascade-admin/_cascade/cuc18/27_html_tree_with_code" )
+#import( "site://cascade-admin/_cascade/cuc18/26_page_element_macros" )
+## separate markup production from displaying
+#set( $markups = "#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ ""html"" ] )" )
+$markups.replaceAll( "\({3}secret\){3}", "My Secret" )
