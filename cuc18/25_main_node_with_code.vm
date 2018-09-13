@@ -1,0 +1,16 @@
+#*
+This format defines a tree rooted at main.
+*#
+#if( !$chanwObjectNodeMap[ "main" ].Class.Name )
+    #chanwCreateNode( {
+        "name"        : "main",
+        "startString" : "<main$!mainAttributes>",
+        "endString"   : "</main>"
+    } )
+#end
+
+#chanwAddChildren( $chanwObjectNodeMap[ "main" ] [ 
+    { "name" : "h1",      "code" : '#outputPageElement(''h1'')' },
+    { "name" : "wysiwyg", "code" : '#outputPageElement(''wysiwyg'')' },
+    { "name" : "chooser", "code" : '#outputPageElement(''chooserContent'')' }
+] )
