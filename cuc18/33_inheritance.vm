@@ -1,0 +1,8 @@
+Inheritance and configurations:
+
+1. When a site is associated with a design, the site inherits the default tree from the design
+2. At the site level, a setup block can be used to define a local site tree to override the default site tree
+3. All pages in the site inherit the site tree (the default design tree or the local site tree)
+4. At the folder level, a local setup block can override the site tree
+5. At the page level, a page can override the site tree/folder tree and have its own locally defined tree
+6. A block can be attached to a tree and change the tree structure
