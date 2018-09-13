@@ -8,8 +8,7 @@ When a node is processed, its associated Velocity code will be executed.
     "endString"   : "</html>",
     "code"        : '#initialize'
 } )
-
 #chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ 
-    { "name" : "head" },
-    { "name" : "body" }
+    { "name" : "head", "startString" : "<head$!headAttributes>",  "endString" : "</head>" },
+    { "name" : "body", "startString" : "<body$!bodyAttributes>",  "endString" : "</body>" }
 ] )
