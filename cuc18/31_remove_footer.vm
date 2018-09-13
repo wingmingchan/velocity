@@ -1,0 +1,24 @@
+#* Execute this *#
+#*
+This format shows how to remove a child node from its parent.
+
+<html>
+	<head>
+		<title>Put the page title here</title>
+		<meta />
+		<link href="http://www.upstate.edu/assets/style.css" />
+	</head>
+	<body>
+		<header>Put the header here</header>
+		<main>
+			<h1>My Beautiful H1</h1>
+			<p>Hello, World! (((secret)))</p>
+			<div>Content from a chooser</div>
+		</main>
+	</body>
+</html>
+*#
+#import( "site://cascade-admin/_cascade/cuc18/27_html_tree_with_code" )
+#import( "site://cascade-admin/_cascade/cuc18/26_page_element_macros" )
+$chanwObjectNodeMap[ "body" ].remove( $chanwObjectNodeMap[ "footer" ] )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "html" ] )
