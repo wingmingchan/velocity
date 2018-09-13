@@ -1,0 +1,28 @@
+#* Execute this *#
+#*
+This format shows how to attach a block to a node to configure the tree.
+
+<html>
+	<head>
+		<title>Put the page title here</title>
+		<meta />
+		<link href="http://www.upstate.edu/assets/style.css" />
+	</head>
+	<body>
+		<main>
+			<h1>My Beautiful H1</h1>
+			<p>Hello, World! (((secret)))</p>
+			<div>Content from a chooser</div>
+		</main>
+		<footer>Put the footer here</footer>
+		<header>Put the header here</header>
+	</body>
+</html>
+*#
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+#import( "site://_brisk/app/components/block_macros/velocity" )
+#import( "site://cascade-admin/_cascade/cuc18/26_page_element_macros" )
+#import( "site://cascade-admin/_cascade/cuc18/27_html_tree_with_code" )
+#set( $chanwObjectNodeMap[ "html" ].UserObject[ $TREE_NODE_CODE ] =
+    '#chanwAttachBlockToTreeNode(''_cascade/cuc18/35_change-tree'' ''cascade-admin'')' )
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ "html" ] )
