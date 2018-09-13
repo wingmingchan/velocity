@@ -1,0 +1,49 @@
+#*
+This format defines macro to generate and display page elements.
+*#
+#macro( createChooserContent )
+    #set( $page_elements = { "chooserContent" : "<div>Content from a chooser</div>" } )
+    #set( $link_to_pass_on = "http://www.upstate.edu/assets/style.css" )
+#end
+
+#macro( createFooter )
+    #set( $page_elements = { "footer" : "<footer>Put the footer here</footer>" } )
+#end
+
+#macro( createHeader )
+    #set( $page_elements = { "header" : "<header>Put the header here</header>" } )
+#end
+
+#macro( createLink )
+    #set( $page_elements = { "link" : "<link href=""${link_to_pass_on}""/>" } )
+#end
+
+#macro( createTitle )
+    #set( $page_elements = { "title" : "<title>Put the page title here</title>" } )
+#end
+
+#macro( createH1 )
+    #set( $page_elements = { "h1" : "<h1>My Beautiful H1</h1>" } )
+#end
+
+#macro( createWysiwyg )
+    #set( $page_elements = { "wysiwyg" : "<p>Hello, World! (((secret)))</p>" } )
+#end
+
+#*
+By separating the creation of markups and outputting them,
+the chooser in the body can be processed before the link element in the head.
+*#
+#macro( initialize )
+    #set( $page_elements = {} )
+    #createChooserContent
+    #createLink
+#end
+
+#macro( outputPageElement $element_name )
+    #if( !$page_elements[ $element_name ].Class.Name )
+        #set( $element_macro_name = "create$globalApacheStringUtils.capitalize( $element_name )" )
+        #chanwInvokeMacro( $element_macro_name )
+    #end
+    $page_elements[ $element_name ]
+#end
