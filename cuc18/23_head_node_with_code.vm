@@ -1,0 +1,15 @@
+#*
+This format defines a tree rooted at head.
+*#
+#if( !$chanwObjectNodeMap[ "head" ].Class.Name )
+    #chanwCreateNode( {
+        "name"        : "head",
+        "startString" : "<head$!headAttributes>",
+        "endString"   : "</head>"
+    } )
+#end
+#chanwAddChildren( $chanwObjectNodeMap[ "head" ] [ 
+    { "name" : "title", "code" : '#outputPageElement(''title'')' },
+    { "name" : "meta", "startString" : "<meta>",  "endString" : "</meta>" },
+    { "name" : "link", "code" : '#outputPageElement(''link'')' }
+] )
