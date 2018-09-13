@@ -1,0 +1,15 @@
+#*
+This format defines a reusable html node.
+When a node is processed, its associated Velocity code will be executed.
+*#
+#chanwCreateNode( {
+    "name"        : "html",
+    "startString" : "<html$!htmlAttributes>",
+    "endString"   : "</html>",
+    "code"        : '#initialize'
+} )
+
+#chanwAddChildren( $chanwObjectNodeMap[ "html" ] [ 
+    { "name" : "head" },
+    { "name" : "body" }
+] )
