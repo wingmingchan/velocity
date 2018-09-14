@@ -194,7 +194,7 @@ A data definition block is needed to retrieve the corresponding data definition.
     #set( $chanwGetFQIPathForJDOMElement = "" )
     #if( $ele_chanwGetFQIPathForJDOMElement.isRootElement() )
         #break
-    #else
+    #elseif( $ele_chanwGetFQIPathForJDOMElement.getParentElement().Class.Name )
         #chanwGetFQIPathForJDOMElement( $ele_chanwGetFQIPathForJDOMElement.getParentElement() )
         #if( $chanwGetFQIPathForJDOMElement == "" )
             #set( $chanwGetFQIPathForJDOMElement = $ele_chanwGetFQIPathForJDOMElement.getAttribute( "identifier" ).Value )

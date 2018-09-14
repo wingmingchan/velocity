@@ -1234,25 +1234,6 @@ doc*###
     #foreach( $child in $chanwRecurseNodesNodes )
         #if( $child.isGroup() )#chanwRecurseGroup( $child )
         #else#chanwDisplayStructuredDataNode( $child $chanwRecurseGroupWithBr )#end
-#*
-        #if( $child.isText() )
-            Text identifier: $child.Identifier$BR 
-##
-            #if( $child.TextValues )
-                Text values size: $child.TextValues.size()$BR 
-                #foreach( $string in $child.TextValues )
-                    #if( $string != '' )Text value: $string$BR #end
-                #end
-            #end
-        #elseif( $child.isGroup() )
-            #chanwRecurseGroup( $child )
-        #elseif( $child.isAsset() )
-            Asset identifier: $child.Identifier$BR 
-            #set( $asset = $child.Asset )
-            Asset path: $asset.Identifier.Path.PathAsString, asset type: $asset.Identifer.Type$BR 
-        #end
-        $BR
-*#
     #end
 #end
 #*doc
