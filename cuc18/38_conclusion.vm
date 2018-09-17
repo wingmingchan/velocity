@@ -18,11 +18,11 @@ The tree approach:
     and there is no more switching of content types
 12. Implementing a new design is to create a new presentational layer
     to be associated with sites and pages, and NO new content type is needed
-13. Sites, pages and blocks are data containers; you only update the data within,
-    and never rebuild the containers simply because you need a new look
-14. Implementing a new design ≠ (NOT EQUAL TO!) rebuilding sites
-15. There is no smart way of rebuilding sites;
-    rebuilding sites for a new look is just dumb
+13. Sites, pages and blocks are data containers; data within can be updated,
+    but containers are never rebuilt simply because a new look is needed
+14. Implementing a new design ≠ (NOT EQUAL TO!) rebuilding sites and pages
+15. There is no smart way of rebuilding sites and pages;
+    rebuilding them for a new look is just dumb
 
 Who can do better than this?
 
