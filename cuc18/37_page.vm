@@ -1,7 +1,7 @@
 The concept of 'Page':
 ================================================================================
-1. A fully rendered page vs. a page data container
-2. An oxymoron: partial page
+1. A fully rendered page vs. a page data container with no presentational logic
+2. An oxymoron: partial page, or partially rendered page (external-nav)
 3. When a page is detached from all presentational logic,
    it can be associated with any presentational logic.
 4. Prerequisites: no regions
