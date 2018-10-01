@@ -5,4 +5,4 @@ The concept of 'Page':
 3. When a page is detached from all presentational logic,
    it can be associated with any presentational logic.
 4. Prerequisites: no regions
-5. Reusable pages
+5. Reusable pages, and derivatively, sites
