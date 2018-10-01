@@ -1,3 +1,7 @@
+================================================================================
+A Tree-Driven Approach
+================================================================================
+
 All formats shown in the presentation can be found: 
 https://github.com/wingmingchan/velocity/tree/master/cuc18
 Reference site: http://www.upstate.edu/standard-model/
@@ -30,6 +34,9 @@ The problems with templates and regions:
 
 Demo (site configurations):
 ================================================================================
-1. standard-model: the hh design
+1. standard-model: the hh design (except architecture )
 2. java:           folder nav on the right
 3. web-services:   adding prefooter
+
+folder configurations:
+standard-model/architecture/setup (partial pages)
