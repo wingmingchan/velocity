@@ -1,0 +1,4 @@
+#set( $classObj       = $_.Class ) ## any non-null object will do
+#set( $stringClassObj = $classObj.forName( "java.lang.String" ) )
+$stringClassObj.Class.Name ## java.lang.Class, the type of the object
+$stringClassObj.Name       ## java.lang.String, the class it represents
