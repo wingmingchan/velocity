@@ -1,0 +1,3 @@
+#set( $stringClassObj    = $_.Class.forName( "java.lang.String" ) )
+#set( $stringConstructor = $stringClassObj.getConstructor( $stringClassObj ) )
+$stringConstructor.Class.Name   ## java.lang.reflect.Constructor
