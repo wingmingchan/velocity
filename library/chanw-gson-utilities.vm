@@ -1,0 +1,30 @@
+#import( "core/library/velocity/chanw/chanw-initialization" )
+#set( $GOOGLE_GSON_GSON_CLASS_NAME            = "com.google.gson.Gson" )
+#set( $GOOGLE_GSON_JSON_ARRAY_CLASS_NAME      = "com.google.gson.JsonElement" )
+#set( $GOOGLE_GSON_JSON_ELEMENT_CLASS_NAME    = "com.google.gson.JsonArray" )
+#set( $GOOGLE_GSON_JSON_OBJECT_CLASS_NAME     = "com.google.gson.JsonObject" )
+#set( $GOOGLE_GSON_JSON_PRIMITIVE_CLASS_NAME  = "com.google.gson.JsonPrimitive" )
+#set( $GOOGLE_GSON_JSON_PARSER_CLASS_NAME     = "com.google.gson.JsonParser" )
+#set( $chanwGson = $_.Class.forName(
+    $GOOGLE_GSON_GSON_CLASS_NAME ).getConstructor().newInstance() )
+#set( $chanwJsonParser = $_.Class.forName(
+    $GOOGLE_GSON_JSON_PARSER_CLASS_NAME ).getConstructor().newInstance() )
+
+#macro( chanwGetJsonObjectFromJsonString $str_chanwGetJsonObjectFromJsonString )
+    #set( $chanwGetJsonObjectFromJsonString = "" )
+    #if( !$str_chanwGetJsonObjectFromJsonString.Class.Name ||
+        $str_chanwGetJsonObjectFromJsonString.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
+        $str_chanwGetJsonObjectFromJsonString.trim() == "" )
+The Json String cannot be empty.
+    #end
+    #set( $chanwGetJsonObjectFromJsonString = $chanwJsonParser.parse(
+        $str_chanwGetJsonObjectFromJsonString ).getAsJsonObject() )
+#end
+#macro( drulykgConvertLinkedHashMapToJson $map_drulykgConvertLinkedHashMapToJson )
+    #set( $chanwJsonString = $chanwGson.toJson( $map_drulykgConvertLinkedHashMapToJson ) )
+    #chanwGetJsonObjectFromJsonString( $chanwJsonString )
+    #set( $drulykgConvertLinkedHashMapToJson = $chanwGetJsonObjectFromJsonString )
+#end
+#macro( drulykgConvertJsonToLinkedHashMap $json_drulykgConvertJsonToLinkedHashMap )
+    #set( $drulykgConvertJsonToLinkedHashMap = $chanwGson.fromJson( $json_drulykgConvertJsonToLinkedHashMap, $_.Class.forName( $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME ) ) )
+#end
