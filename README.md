@@ -6,7 +6,7 @@ A reusable library in Velocity for Cascade with examples. This is the code base 
 
 The other part of the Upstate library: https://github.com/drulykg/Cascade-CMS/tree/master/_brisk
 
-A note about filenames. All files whose filenames with a "chanw_" prefix contain code reusable by anyone. Those with the "upstate_" prefix contain business logic specific to Upstate.
+A note about filenames. All files whose filenames with a "chanw-" prefix contain code reusable by anyone. Those with the "upstate-" prefix contain business logic specific to Upstate.
 
 <ul>
 <li>
