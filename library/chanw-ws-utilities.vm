@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+10/22/2018 Added chanwSendRest.
 3/8/2018 Format created.
 《/copyright》
 《evaluate execute=“true”》
@@ -22,6 +23,7 @@ Modification history:
 《import》
 doc*###
 #import( 'core/library/velocity/chanw/chanw-initialization' )
+#import( 'core/library/velocity/chanw/chanw-gson-utilities' )
 #*doc
 《/import》
 《global-variables》
@@ -152,6 +154,42 @@ doc*###
     #chanwGetUrlContents( $url_chanwGetWSAssetRootElement )
     #chanwBuildXMLContentRoot( $chanwGetUrlContents )
     #set( $chanwGetWSAssetRootElement = $chanwBuildXMLContentRoot )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwSendRest( $url $json $u $p )《/code》
+《p》Sends an HTTP request to Cascade for a web service. 《/p》
+《/documentation》
+《macro id=“chanwSendRest”》
+doc*###
+#macro( chanwSendRest $url_chanwSendRest $jsonObj_chanwSendRest $u_chanwSendRest $p_chanwSendRest )
+    ## add authentication
+    #set( $chanwAuthString = "{'username':'${u_chanwSendRest}','password':'${p_chanwSendRest}'}" )
+    #chanwGetJsonObjectFromJsonString( $chanwAuthString )
+    #set( $chanwAuthObj  = $chanwGetJsonObjectFromJsonString )
+##
+    #if( $jsonObj_chanwSendRest.Class.Name && $jsonObj_chanwSendRest.Class.Name == $GOOGLE_GSON_JSON_OBJECT_CLASS_NAME )
+        #set( $void = $jsonObj_chanwSendRest.add( "authentication", $chanwAuthObj ) )
+    #else
+        #set( $jsonObj_chanwSendRest = $chanwAuthObj )
+    #end
+##
+    #set( $chanwSendRestJsonString = $jsonObj_chanwSendRest.toString() )
+    #chanwGetUrlContents( $url_chanwSendRest )
+    #set( $chanwConnectonObj  = $chanwGetUrl.openConnection() )
+    #set( $void               = $chanwConnectonObj.setRequestMethod( "POST" ) )
+    #set( $void               = $chanwConnectonObj.setRequestProperty( "Content-Type", "application/json; charset=UTF-8" ) )
+    #set( $chanwByteArray     = $chanwSendRestJsonString.getBytes() )
+    #set( $chanwByteArraySize = $chanwByteArray.size() )
+    #set( $void = $chanwConnectonObj.setFixedLengthStreamingMode( $chanwByteArraySize ) )
+    #set( $void = $chanwConnectonObj.setDoOutput( true ) )
+    #set( $void = $chanwConnectonObj.setDoInput( true ) )
+    #set( $chanwOutputStream     = $chanwConnectonObj.getOutputStream() )
+    #set( $chanwDataOutputStream = $_.Class.forName( "java.io.DataOutputStream" ).getConstructors()[ 0 ].newInstance( $chanwOutputStream ) )
+    #set( $void = $chanwDataOutputStream.write( $chanwByteArray ) )
+    #set( $void = $chanwDataOutputStream.flush() )
+    #set( $void = $chanwDataOutputStream.close() )
 #end
 #*doc
 《/macro》

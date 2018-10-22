@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+10/2/2018 Added authentication service & web services.
 7/14/2017 Added documentation.
 5/17/2017 Added $chanwLocatorService.
 4/28/2017 Added more global variables.
@@ -44,8 +45,8 @@ doc*###
 #set( $chanwAssetFactoryContainerService             = $chanwServiceProvider.getAssetFactoryContainerService() )
 #set( $chanwAssetFactoryService                      = $chanwServiceProvider.getAssetFactoryService() )
 #set( $chanwAssetFactoryPluginService                = $chanwServiceProvider.getAssetFactoryPluginService() )
-
 #set( $chanwAuditService                             = $chanwServiceProvider.getAuditService() )
+#set( $chanwAuthenticationService                    = $chanwServiceProvider.getAuthenticationService() )
 #set( $chanwBlockService                             = $chanwServiceProvider.getBlockService() )
 #set( $chanwConnectorContainerService                = $chanwServiceProvider.getConnectorContainerService() )
 #set( $chanwConnectorService                         = $chanwServiceProvider.getConnectorService() )
@@ -57,6 +58,7 @@ doc*###
 #set( $chanwEmailService                             = $chanwServiceProvider.getEmailService() )
 #set( $chanwEntityRelationService                    = $chanwServiceProvider.getEntityRelationService() )
 #set( $chanwFileService                              = $chanwServiceProvider.getFileService() )
+#set( $chanwFolderContentsService                    = $chanwServiceProvider.getFolderContentsService() )
 #set( $chanwFolderService                            = $chanwServiceProvider.getFolderService() )
 #set( $chanwFormatService                            = $chanwServiceProvider.getFormatService() )
 #set( $chanwGroupService                             = $chanwServiceProvider.getGroupService() )
@@ -81,6 +83,7 @@ doc*###
 #set( $chanwTransportContainerService                = $chanwServiceProvider.getTransportContainerService() )
 #set( $chanwTransportService                         = $chanwServiceProvider.getTransportService() )
 #set( $chanwUserService                              = $chanwServiceProvider.getUserService() )
+#set( $chanwWebServicesService                       = $chanwServiceProvider.getWebServicesService() )
 #set( $chanwWorkflowDefinitionContainerService       = $chanwServiceProvider.getWorkflowDefinitionContainerService() )
 #set( $chanwWorkflowDefinitionService                = $chanwServiceProvider.getWorkflowDefinitionService() )
 #set( $chanwAllSites           = $chanwSiteService.getAll() )

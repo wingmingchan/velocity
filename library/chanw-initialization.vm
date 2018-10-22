@@ -360,6 +360,8 @@ doc*###
 #set( $E_PHP_PASSTHROUGH      = " ?>#" + "passthrough-->" )
 #set( $S_PROTECT              = "<!--#" + "protect" )
 #set( $E_PROTECT              = "#" + "protect-->" )
+#set( $GREATER_THAN           = ">" )
+#set( $GT                     = $GREATER_THAN )
 ## Cascade API Asset
 #set( $DataBlockPropertyMap = {
     "DataBlockCreatedBy":             "CreatedBy",

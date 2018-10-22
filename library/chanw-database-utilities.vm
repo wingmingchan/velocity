@@ -315,8 +315,8 @@ doc*###
     #if( $chanwOracleDB )
         #set( $chanwGetAllTableNames = [] )
         #set( $chanwSql = "SELECT tablespace_name, table_name FROM all_tables " +
-             "WHERE tablespace_name LIKE 'C%' " +
-             "AND table_name like 'CXML_%' " +
+             "WHERE (tablespace_name LIKE 'C%' " +
+             "AND table_name like 'CXML_%') OR table_name LIKE 'QRTZ_%' " +
              "ORDER BY table_name" )
 ##
         #chanwGetResultSet( $chanwSql )
