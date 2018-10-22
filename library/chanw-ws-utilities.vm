@@ -159,7 +159,7 @@ doc*###
 《/macro》
 《documentation》
 《code》#chanwSendRest( $url $json $u $p )《/code》
-《p》Sends an HTTP request to Cascade for a web service. 《/p》
+《p》Sends an HTTP request to Cascade for a web service.《/p》
 《/documentation》
 《macro id=“chanwSendRest”》
 doc*###
@@ -190,6 +190,25 @@ doc*###
     #set( $void = $chanwDataOutputStream.write( $chanwByteArray ) )
     #set( $void = $chanwDataOutputStream.flush() )
     #set( $void = $chanwDataOutputStream.close() )
+    #if( 200 <= $chanwConnectonObj.getResponseCode() && $chanwConnectonObj.getResponseCode() <= 299 )
+        #set( $chanwInputStream = $chanwConnectonObj.getInputStream() )
+    #elseif( $chanwConnectonObj.getResponseCode() >= 400 )
+        #set( $chanwInputStream = $chanwConnectonObj.getErrorStream() )
+    #end
+    #set( $chanwInputStreamReader = $_.Class.forName( "java.io.InputStreamReader" ).getConstructor(
+        $_.Class.forName( "java.io.InputStream" ) ).newInstance( $chanwInputStream ) )
+    #set( $chanwBufferedReader    = $_.Class.forName( "java.io.BufferedReader" ).getConstructor(
+        $_.Class.forName( "java.io.Reader" ) ).newInstance( $chanwInputStreamReader ) )
+    #set( $chanwSendRest = "" )
+    #foreach( $num in [ 1..50 ] )
+        #set( $chanwPre = $chanwCur )
+        #set( $chanwCur = $chanwBufferedReader.readLine() )
+        #if( $chanwPre == $chanwCur )
+            #break
+        #else
+            #set( $chanwSendRest = $chanwSendRest + $chanwCur )
+        #end
+    #end
 #end
 #*doc
 《/macro》
