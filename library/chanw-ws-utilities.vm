@@ -163,18 +163,21 @@ doc*###
 《/documentation》
 《macro id=“chanwSendRest”》
 doc*###
-#macro( chanwSendRest $url_chanwSendRest $jsonObj_chanwSendRest $u_chanwSendRest $p_chanwSendRest )
+#macro( chanwSendEdit $url_chanwSendEdit $jsonObj_chanwSendEdit $u_chanwSendEdit $p_chanwSendEdit )
     ## add authentication
     #set( $chanwAuthString = "{'username':'${u_chanwSendRest}','password':'${p_chanwSendRest}'}" )
     #chanwGetJsonObjectFromJsonString( $chanwAuthString )
     #set( $chanwAuthObj  = $chanwGetJsonObjectFromJsonString )
 ##
-    #if( $jsonObj_chanwSendRest.Class.Name && $jsonObj_chanwSendRest.Class.Name == $GOOGLE_GSON_JSON_OBJECT_CLASS_NAME )
-        #set( $void = $jsonObj_chanwSendRest.add( "authentication", $chanwAuthObj ) )
+    #if( $jsonObj_chanwSendEdit.Class.Name && $jsonObj_chanwSendEdit.Class.Name == $GOOGLE_GSON_JSON_OBJECT_CLASS_NAME )
+        #set( $void = $jsonObj_chanwSendEdit.add( "authentication", $chanwAuthObj ) )
     #else
-        #set( $jsonObj_chanwSendRest = $chanwAuthObj )
+        #set( $jsonObj_chanwSendEdit = $chanwAuthObj )
     #end
+    #chanwSendEdit( $url_chanwSendEdit $jsonObj_chanwSendEdit )
+#end
 ##
+#macro( chanwSendRest $url_chanwSendRest $jsonObj_chanwSendRest )
     #set( $chanwSendRestJsonString = $jsonObj_chanwSendRest.toString() )
     #chanwGetUrlContents( $url_chanwSendRest )
     #set( $chanwConnectonObj  = $chanwGetUrl.openConnection() )
