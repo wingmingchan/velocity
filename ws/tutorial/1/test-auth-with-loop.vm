@@ -1,0 +1,13 @@
+#import( "_cascade/formats/tutorial/auth" )
+#set( $op  = "read" )
+#set( $ids = {
+    "page" :   [ "a5dffc3d8b7f08ee761bea553a9e0f49", "a5dffc3d8b7f08ee761bea553a9e0f40" ],
+    "folder" : [ "a5dffc3d8b7f08ee761bea553a9e0f41", "a5dffc3d8b7f08ee761bea553a9e0f42", "a5dffc3d8b7f08ee761bea553a9e0f43" ]
+} )
+##
+#foreach( $type in $ids.keySet() )
+#foreach( $id in $ids[ $type ] )
+#set( $operationUrlWithId = "${url}${op}/${type}/${id}?u=${u}&p=${p}" )
+$_EscapeTool.xml( $operationUrlWithId )
+#end
+#end
