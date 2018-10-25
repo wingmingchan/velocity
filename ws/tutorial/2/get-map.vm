@@ -1,0 +1,11 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#import( "_cascade/formats/tutorial/auth" )
+##
+#set( $operationUrlWithId = "${url}read/page/a5dffc3d8b7f08ee761bea553a9e0f49?u=${u}&p=${p}" )
+#chanwGetJsonMap( $operationUrlWithId )
+
+$chanwGetJsonMap.asset.page.reviewEvery
+#set( $chanwGetJsonMap.asset.page.reviewEvery = 0 )
+$chanwGetJsonMap.asset.page.reviewEvery
+#set( $jsonObj = $chanwGson.toJson( $chanwGetJsonMap ) )
+$jsonObj
