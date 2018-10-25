@@ -1,0 +1,11 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#set( $jsonStr = '[{"authentication":{"username":"u1"}},{"authentication":{"username":"u2"}}]' )
+#set( $jsonObj = $chanwJsonParser.parse( $jsonStr ) )
+$jsonObj.size()
+$jsonObj[ 1 ]
+#foreach( $element in $jsonObj )
+    $element.Class.Name
+#end
+#set( $ele  = $jsonObj[ 1 ].authentication.remove( "username" ) )
+#set( $void = $jsonObj[ 1 ].authentication.addProperty( "username", "u3" ) )
+$jsonObj
