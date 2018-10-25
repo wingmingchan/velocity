@@ -66,18 +66,23 @@
 #set( $chanwJsonParser = $_.Class.forName(
     $GOOGLE_GSON_JSON_PARSER_CLASS_NAME ).getConstructor().newInstance() )
 ##
+#macro( chanwGetScanner $url_chanwGetScanner )
+    #set( $chanwGetScanner = "" )
+    #chanwGetUrl( $url_chanwGetScanner )
+    #chanwGetScannerFromInputStream( $chanwGetUrl.openStream() )
+    #set( $chanwGetScanner = $chanwGetScannerFromInputStream )
+#end
+##
+#macro( chanwGetScannerFromInputStream $inputStream_chanwGetScannerFromInputStream )
+    #set( $chanwGetScannerFromInputStream = "" )
+    #set( $chanwGetScannerFromInputStream = $_.Class.forName( "java.util.Scanner" ).getConstructor(
+        $_.Class.forName( "java.io.InputStream" ) ).newInstance( $inputStream_chanwGetScannerFromInputStream ) )
+#end
+##
 #macro( chanwGetUrl $url_chanwGetUrl )
     #set( $chanwGetUrl = "" )
     #set( $chanwGetUrl = $_.Class.forName(
         "java.net.URL" ).getConstructor( $JAVA_LANG_STRING_CLASS_NAME.Class ).newInstance( $url_chanwGetUrl ) )
-#end
-##
-#macro( chanwGetScanner $url_chanwGetScanner )
-    #set( $chanwGetScanner = "" )
-    #chanwGetUrl( $url_chanwGetScanner )
-    ##set( $chanwInputStream = $chanwGetUrl.openStream() )
-    #set( $chanwGetScanner = $_.Class.forName(
-        "java.util.Scanner" ).getConstructor( $_.Class.forName( "java.io.InputStream" ) ).newInstance( $chanwGetUrl.openStream() ) )
 #end
 ##
 #macro( chanwGetUrlContents $url_chanwGetUrlContents )
@@ -85,4 +90,3 @@
     #chanwGetScanner( $url_chanwGetUrlContents )
     #set( $chanwGetUrlContents = $chanwGetScanner.useDelimiter( "\\A" ).next() )
 #end
-##
