@@ -1,6 +1,5 @@
 #import( "_cascade/formats/tutorial/ws-utilities" )
 #import( "_cascade/formats/tutorial/auth" )
-#import( "site://_brisk/core/macros/drulykgShowSortedMethodsList" )
 ##
 #set( $operationUrlWithId = "${url}read/page/a5dffc3d8b7f08ee761bea553a9e0f49?u=${u}&p=${p}" )
 #chanwGetUrlContents( $operationUrlWithId )
