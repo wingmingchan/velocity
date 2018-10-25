@@ -1,0 +1,4 @@
+## change the three values
+#set( $url = "http://www.upstate.edu:1234/api/v1/" )
+#set( $u   = 'username' )
+#set( $p   = 'password' )
