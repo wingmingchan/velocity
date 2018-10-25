@@ -1,0 +1,4 @@
+#import( "_cascade/formats/tutorial/auth" )
+##
+#set( $operationUrlWithId = "${url}read/page/a5dffc3d8b7f08ee761bea553a9e0f49?u=${u}&p=${p}" )
+$_EscapeTool.xml( $operationUrlWithId )
