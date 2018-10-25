@@ -66,6 +66,29 @@
 #set( $chanwJsonParser = $_.Class.forName(
     $GOOGLE_GSON_JSON_PARSER_CLASS_NAME ).getConstructor().newInstance() )
 ##
+#macro( chanwGetJsonMap $url_chanwGetJsonMap )
+    #chanwGetUrlContents( $url_chanwGetJsonMap )
+    #set( $drulykJsonStringForEval = $chanwGetUrlContents.replace( '$', '${_EscapeTool.d}'
+                                              ).replace( '#', '${_EscapeTool.h}'
+                                              ).replace( '\\', '::::::::::backslash::::::::::'
+                                              ).replace( '\"', '${_EscapeTool.q}'
+                                              ).replace( '\/', '/'
+                                              ).replace( '\r\n', '
+'
+                                              ).replace( '\r', '${_EscapeTool.n}'
+                                              ).replace( '\n', '${_EscapeTool.n}'
+                                              ).replace( '\t', '    '
+                                              ).replace( '\b', '\b'
+                                              ).replace( '\f', '\f'
+                                              ).replace( '::::::::::backslash::::::::::', '\' )
+    )
+    #set( $drulykgGsonHash = $_.Class.forName( "com.google.gson.Gson" ).newInstance().fromJson(
+        $chanwGetUrlContents, $_.Class.forName( 'java.util.LinkedHashMap' ) ) )
+    #evaluate( "${_EscapeTool.h}set( ${_EscapeTool.d}drulykgCleanEvaluateHash = $drulykJsonStringForEval )" )
+    #drulykgCleanUpJsonMaps( $drulykgCleanEvaluateHash $drulykgGsonHash )
+    #set( $chanwGetJsonMap = $drulykgCleanEvaluateHash )
+#end
+##
 #macro( chanwGetScanner $url_chanwGetScanner )
     #set( $chanwGetScanner = "" )
     #chanwGetUrl( $url_chanwGetScanner )
@@ -89,4 +112,104 @@
     #set( $chanwGetUrlContents = "" )
     #chanwGetScanner( $url_chanwGetUrlContents )
     #set( $chanwGetUrlContents = $chanwGetScanner.useDelimiter( "\\A" ).next() )
+#end
+##
+#macro( chanwSendRest $url_chanwSendRest $jsonObj_chanwSendRest )
+    ## turn JSON object to String
+    #set( $chanwSendRestJsonString = $jsonObj_chanwSendRest.toString() )
+    ## connection
+    #chanwGetUrlContents( $url_chanwSendRest )
+    #set( $chanwConnectonObj  = $chanwGetUrl.openConnection() )
+    #set( $void               = $chanwConnectonObj.setRequestMethod( "POST" ) )
+    #set( $void               = $chanwConnectonObj.setRequestProperty( "Content-Type", "application/json; charset=UTF-8" ) )
+    ## prepare data
+    #set( $chanwByteArray     = $chanwSendRestJsonString.getBytes() )
+    #set( $chanwByteArraySize = $chanwByteArray.size() )
+    #set( $void = $chanwConnectonObj.setFixedLengthStreamingMode( $chanwByteArraySize ) )
+    ## prepare output
+    #set( $void = $chanwConnectonObj.setDoOutput( true ) )
+    #set( $void = $chanwConnectonObj.setDoInput( true ) )
+    #set( $chanwOutputStream     = $chanwConnectonObj.getOutputStream() )
+    #set( $chanwDataOutputStream = $_.Class.forName( "java.io.DataOutputStream" ).getConstructors()[ 0 ].newInstance( $chanwOutputStream ) )
+    ## send data
+    #set( $void = $chanwDataOutputStream.write( $chanwByteArray ) )
+    #set( $void = $chanwDataOutputStream.flush() )
+    #set( $void = $chanwDataOutputStream.close() )
+    ## read response
+    #set( $chanwInputStream = "" )
+    #set( $chanwInputStream = $chanwConnectonObj.getInputStream() )
+    #if( $chanwInputStream == "" )
+        #set( $chanwInputStream = $chanwConnectonObj.getErrorStream() )
+    #end
+    #chanwGetScannerFromInputStream( $chanwInputStream )
+    #set( $chanwResponseMessage = "" )
+    #set( $chanwResponseMessage = $chanwConnectonObj.getResponseMessage() )
+    #set( $chanwSendRest = $chanwGetScannerFromInputStream.useDelimiter( "\\A" ).next() + " " + $chanwResponseMessage )
+#end
+##
+#macro( drulykgCleanUpJsonMaps $evalMap_drulykgCleanUpJsonMaps $gsonMap_drulykgCleanUpJsonMaps )
+##
+    ## We only care about LinkedHashMaps and ArrayLists because those are iterable
+    #if(
+        ( $evalMap_drulykgCleanUpJsonMaps.Class.Name == 'java.util.LinkedHashMap' || $evalMap_drulykgCleanUpJsonMaps.Class.Name == 'java.util.ArrayList' ) &&
+        ( $gsonMap_drulykgCleanUpJsonMaps.Class.Name == 'java.util.LinkedHashMap' || $gsonMap_drulykgCleanUpJsonMaps.Class.Name == 'java.util.ArrayList' )
+    )
+##
+        ## Set up a few class vars
+        #if( $drulykgCleanUpJsonMapsVars.Class.Name != 'java.util.LinkedHashMap' )
+##
+            ## Keep track of recursion level
+            #set( $drulykgCleanUpJsonMapsVars = {
+                'i': -1
+            } )
+        #end
+##
+        ## Increment recursion level
+        #set( $drulykgCleanUpJsonMapsVars[ 'i' ] = $drulykgCleanUpJsonMapsVars[ 'i' ] + 1 )
+##
+        ## We need to cache the parameters for this recursion level
+        #set( $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ] = {
+            'eval': $evalMap_drulykgCleanUpJsonMaps,
+            'gson': $gsonMap_drulykgCleanUpJsonMaps,
+            'evalKeys': $evalMap_drulykgCleanUpJsonMaps.keySet()
+        } )
+##
+        ## If no keySet() was available then fetch the index keys if the .size() is greater than zero
+        #if(
+            !$drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'evalKeys' ].Class.Name &&
+            $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'eval' ].size() > 0
+        )
+            #set( $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'evalKeys' ] = [ 0..$_MathTool.sub( $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'eval' ].size(), 1 ) ] )
+        #end
+##
+        ## Loop the listing of keys
+        #foreach( $key in $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'evalKeys' ] )
+##
+            ## For strings we want to apply the $gsonMap_drulykgCleanUpJsonMaps value to the $evalMap_drulykgCleanUpJsonMaps
+            #if( $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'eval' ][ $key ].Class.Name == 'java.lang.String' )
+                #set( $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'eval' ][ $key ] = $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'gson' ][ $key ] )
+##
+            ## If the class names are not the same then take the $evalMap_drulykgCleanUpJsonMaps value and apply it to $gsonMap_drulykgCleanUpJsonMaps
+            ## This is primarily for the issue with ints being converted to doubles
+            #elseif( $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'eval' ][ $key ].Class.Name != $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'gson' ][ $key ].Class.Name )
+                #set( $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'gson' ][ $key ] = $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'eval' ][ $key ] )
+##
+            ## If we are dealing with a LinkedHashMap or ArrayList then we need to send it back through this macro
+            #elseif(
+                $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'eval' ][ $key ].Class.Name == 'java.util.LinkedHashMap' ||
+                $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'eval' ][ $key ].Class.Name == 'java.util.ArrayList'
+            )
+##
+                ## Due to Velocity object scope and other mysteries we need to cache these before sending them through the macro again
+                #set( $drulykgCleanUpJsonMapsVarsEvalToPass = $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'eval' ][ $key ] )
+                #set( $drulykgCleanUpJsonMapsVarsGsonToPass = $drulykgCleanUpJsonMapsVars[ $drulykgCleanUpJsonMapsVars[ 'i' ] ][ 'gson' ][ $key ] )
+##
+                #drulykgCleanUpJsonMaps( $drulykgCleanUpJsonMapsVarsEvalToPass $drulykgCleanUpJsonMapsVarsGsonToPass )
+            #end
+##
+        #end
+##
+        ## Decrement recursion level
+        #set( $drulykgCleanUpJsonMapsVars[ 'i' ] = $drulykgCleanUpJsonMapsVars[ 'i' ] - 1 )
+    #end
 #end
