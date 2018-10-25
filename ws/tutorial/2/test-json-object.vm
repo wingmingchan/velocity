@@ -1,0 +1,15 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+##
+#set( $authString  = '{"authentication":{"username":"username"}}' )
+#set( $authObject  = $chanwJsonParser.parse( $authString ) )
+#set( $void        = $authObject.authentication.addProperty( "password", "secret" ) )
+$authObject        ## {"authentication":{"username":"username","password":"secret"}}
+#if( $authObject.authentication.has( "password" ) )
+    #set( $password = $authObject.authentication.remove( "password" ) )
+    $password       ## "secret"
+#end
+$authObject        ## {"authentication":{"username":"username"}}
+#set( $newPassword = $chanwJsonParser.parse( 'newPassword' ) )
+$newPassword.Class.Name  ## com.google.gson.JsonPrimitive
+#set( $void        = $authObject.authentication.add( "password", $newPassword ) )
+$authObject        ## {"authentication":{"username":"username","password":"newPassword"}}
