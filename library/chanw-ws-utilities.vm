@@ -90,9 +90,22 @@ doc*###
 #macro( chanwGetScanner $url_chanwGetScanner )
     #set( $chanwGetScanner = "" )
     #chanwGetUrl( $url_chanwGetScanner )
-    #set( $chanwInputStream = $chanwGetUrl.openStream() )
-    #chanwGetConstructor( "java.util.Scanner" [ $_.Class.forName( "java.io.InputStream" ) ] )
-    #set( $chanwGetScanner = $chanwGetConstructor.newInstance( $chanwInputStream ) )
+    #chanwGetScannerFromInputStream( $chanwGetUrl.openStream() )
+    #set( $chanwGetScanner = $chanwGetScannerFromInputStream )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetScannerFromInputStream( $inputStream )《/code》
+《p》Returns a 《code》java.util.Scanner《/code》 object,
+wrapping up a 《code》java.io.InputStream《/code》 object.《/p》
+《/documentation》
+《macro id=“chanwGetScannerFromInputStream”》
+doc*###
+#macro( chanwGetScannerFromInputStream $inputStream_chanwGetScannerFromInputStream )
+    #set( $chanwGetScannerFromInputStream = "" )
+    #set( $chanwGetScannerFromInputStream = $_.Class.forName( "java.util.Scanner" ).getConstructor(
+        $_.Class.forName( "java.io.InputStream" ) ).newInstance( $inputStream_chanwGetScannerFromInputStream ) )
 #end
 #*doc
 《/macro》
@@ -165,40 +178,34 @@ doc*###
 doc*###
 ##
 #macro( chanwSendRest $url_chanwSendRest $jsonObj_chanwSendRest )
+    ## turn JSON object to String
     #set( $chanwSendRestJsonString = $jsonObj_chanwSendRest.toString() )
+    ## connection
     #chanwGetUrlContents( $url_chanwSendRest )
     #set( $chanwConnectonObj  = $chanwGetUrl.openConnection() )
     #set( $void               = $chanwConnectonObj.setRequestMethod( "POST" ) )
     #set( $void               = $chanwConnectonObj.setRequestProperty( "Content-Type", "application/json; charset=UTF-8" ) )
+    ## prepare data
     #set( $chanwByteArray     = $chanwSendRestJsonString.getBytes() )
     #set( $chanwByteArraySize = $chanwByteArray.size() )
     #set( $void = $chanwConnectonObj.setFixedLengthStreamingMode( $chanwByteArraySize ) )
+    ## prepare output
     #set( $void = $chanwConnectonObj.setDoOutput( true ) )
     #set( $void = $chanwConnectonObj.setDoInput( true ) )
     #set( $chanwOutputStream     = $chanwConnectonObj.getOutputStream() )
     #set( $chanwDataOutputStream = $_.Class.forName( "java.io.DataOutputStream" ).getConstructors()[ 0 ].newInstance( $chanwOutputStream ) )
+    ## send data
     #set( $void = $chanwDataOutputStream.write( $chanwByteArray ) )
     #set( $void = $chanwDataOutputStream.flush() )
     #set( $void = $chanwDataOutputStream.close() )
+    ## read response
     #if( 200 <= $chanwConnectonObj.getResponseCode() && $chanwConnectonObj.getResponseCode() <= 299 )
         #set( $chanwInputStream = $chanwConnectonObj.getInputStream() )
     #elseif( $chanwConnectonObj.getResponseCode() >= 400 )
         #set( $chanwInputStream = $chanwConnectonObj.getErrorStream() )
     #end
-    #set( $chanwInputStreamReader = $_.Class.forName( "java.io.InputStreamReader" ).getConstructor(
-        $_.Class.forName( "java.io.InputStream" ) ).newInstance( $chanwInputStream ) )
-    #set( $chanwBufferedReader    = $_.Class.forName( "java.io.BufferedReader" ).getConstructor(
-        $_.Class.forName( "java.io.Reader" ) ).newInstance( $chanwInputStreamReader ) )
-    #set( $chanwSendRest = "" )
-    #foreach( $num in [ 1..50 ] )
-        #set( $chanwPre = $chanwCur )
-        #set( $chanwCur = $chanwBufferedReader.readLine() )
-        #if( $chanwPre == $chanwCur )
-            #break
-        #else
-            #set( $chanwSendRest = $chanwSendRest + $chanwCur )
-        #end
-    #end
+    #chanwGetScannerFromInputStream( $chanwInputStream )
+    #set( $chanwSendRest = $chanwGetScannerFromInputStream.useDelimiter( "\\A" ).next() )
 #end
 #*doc
 《/macro》
