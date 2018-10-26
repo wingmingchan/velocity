@@ -1,0 +1,23 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#import( "_cascade/formats/tutorial/auth" )
+
+## test existence of the page
+#set( $readUrl = "${url}read/page/web-services/test?u=${u}&p=${p}" )
+#chanwGetUrlContents( $readUrl )
+
+## if non-existent, create it
+#if( !$chanwGetUrlContents.success )
+    #set( $createUrl = "${url}create?u=${u}&p=${p}" )
+    #set( $createMap = { "asset" : { "page" : {} } } )
+    #set( $createMap.asset.page.name             = "test" )
+    #set( $createMap.asset.page.parentFolderPath = "/" )
+    #set( $createMap.asset.page.siteName         = "web-services" )
+    #set( $createMap.asset.page.contentTypeId    = "4224297e8b7f08ee0ed2ecda7b51db59" )
+    #set( $createMap.asset.page.structuredData   = {} )
+
+    ## send request
+    #chanwSendRest( $createUrl $chanwGson.toJson( $createMap ) )
+
+    ## output response
+    $chanwSendRest
+#end
