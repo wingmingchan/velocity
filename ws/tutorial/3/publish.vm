@@ -1,0 +1,23 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#import( "_cascade/formats/tutorial/auth" )
+
+#set( $publishUrl = "${url}publish/" )
+#set( $publishMap = {} )
+
+## add identifier
+#set( $publishMap[ "identifier" ] = { "type" : $PAGE_TYPE, "id" : '5ab0e5078b7f08ee33efc034b711c85f' } )
+
+## add authentication
+#set( $publishMap[ "authentication" ] = { "username" : $u, "password" : $p } )
+
+## add publishInformation
+#set( $publishMap[ "publishInformation" ] = {
+    "destinations" : [ { "id":"8d42238e8b7f08ee37c14fb226c50afe","type":"destination" } ],
+    "unpublish" : false
+} )
+
+## send request
+#chanwSendRest( $publishUrl $chanwGson.toJson( $publishMap ) )
+
+## output response
+$chanwSendRest
