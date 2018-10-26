@@ -1,0 +1,17 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#import( "_cascade/formats/tutorial/auth" )
+
+#set( $readUrl = "${url}read/page/5ab0e5078b7f08ee33efc034b711c85f?u=${u}&p=${p}" )
+#set( $editUrl = "${url}edit?u=${u}&p=${p}" )
+
+## get map
+#chanwGetJsonMap( $readUrl )
+
+## change h1, or whatever
+#set( $chanwGetJsonMap.asset.page.structuredData.structuredDataNodes[ 1 ].structuredDataNodes[ 1 ].text = "New H1 Version 2" )
+
+## send request
+#chanwSendRest( $editUrl $chanwGson.toJson( $chanwGetJsonMap ) )
+
+## output response
+$chanwSendRest
