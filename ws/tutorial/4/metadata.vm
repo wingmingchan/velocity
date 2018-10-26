@@ -1,0 +1,24 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#import( "_cascade/formats/tutorial/auth" )
+##
+#set( $readUrl = "${url}read/block/16d255728b7f08ee51c1c1cb8a10c619?u=${u}&p=${p}" )
+#set( $editUrl = "${url}edit?u=${u}&p=${p}" )
+
+#chanwGetJsonMap( $readUrl )
+
+## checkbox
+#set( $void = $chanwGetJsonMap.asset.xhtmlDataDefinitionBlock.metadata.dynamicFields[ 0 ].fieldValues.add( { 'value' : 'Reading' } ) )
+## dropdown
+#set( $chanwGetJsonMap.asset.xhtmlDataDefinitionBlock.metadata.dynamicFields[ 1 ].fieldValues = [ { 'value' : '21-50' } ] )
+## radio
+#set( $chanwGetJsonMap.asset.xhtmlDataDefinitionBlock.metadata.dynamicFields[ 2 ].fieldValues = [ { 'value' : 'Male' } ] )
+## text
+#set( $chanwGetJsonMap.asset.xhtmlDataDefinitionBlock.metadata.dynamicFields[ 3 ].fieldValues = [ { 'value' : 'John Doe' } ] )
+## multiselect
+#set( $chanwGetJsonMap.asset.xhtmlDataDefinitionBlock.metadata.dynamicFields[ 4 ].fieldValues = [ { 'value' : 'Biology' }, { 'value' : 'Mathematics' } ] )
+
+## send request
+#chanwSendRest( $editUrl $chanwGson.toJson( $chanwGetJsonMap ) )
+
+## output response
+$chanwSendRest
