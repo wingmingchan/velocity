@@ -1,0 +1,20 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#import( "_cascade/formats/tutorial/auth" )
+
+#set( $readUrl = "${url}read/" )
+#set( $readMap = {} )
+
+## add identifier
+#set( $readMap[ "identifier" ] = { "type" : $PAGE_TYPE, "id" : '505ed9e88b7f08ee0c71f5c0fe42c12d' } )
+
+## add authentication
+#set( $readMap[ "authentication" ] = { "username" : $u, "password" : $p } )
+
+## send request
+#chanwSendRest( $readUrl $chanwGson.toJson( $readMap ) )
+
+$chanwSendRest
+## output response
+#if( !$chanwSendRest.success )
+    $chanwSendRest.message
+#end
