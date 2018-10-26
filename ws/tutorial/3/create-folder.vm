@@ -1,0 +1,21 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#import( "_cascade/formats/tutorial/auth" )
+
+## test existence of the page
+#set( $readUrl = "${url}read/folder/web-services/test?u=${u}&p=${p}" )
+#chanwGetUrlContents( $readUrl )
+
+## if non-existent, create it
+#if( !$chanwGetUrlContents.success )
+    #set( $createUrl = "${url}create?u=${u}&p=${p}" )
+    #set( $createMap = { "asset" : { "folder" : {} } } )
+    #set( $createMap.asset.folder.name             = "test" )
+    #set( $createMap.asset.folder.parentFolderPath = "/" )
+    #set( $createMap.asset.folder.siteName         = "web-services" )
+
+    ## send request
+    #chanwSendRest( $createUrl $chanwGson.toJson( $createMap ) )
+
+    ## output response
+    $chanwSendRest
+#end
