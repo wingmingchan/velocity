@@ -1,0 +1,9 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#import( "_cascade/formats/tutorial/auth" )
+##
+#set( $readUrl = "${url}read/metadataset/16d03fa98b7f08ee51c1c1cbeb67f056?u=${u}&p=${p}" )
+#set( $editUrl = "${url}edit?u=${u}&p=${p}" )
+
+#chanwGetJsonMap( $readUrl )
+
+$chanwGetJsonMap.asset.metadataSet.dynamicMetadataFieldDefinitions[ 0 ].possibleValues
