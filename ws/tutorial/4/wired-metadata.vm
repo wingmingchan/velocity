@@ -1,0 +1,19 @@
+#import( "_cascade/formats/tutorial/ws-utilities" )
+#import( "_cascade/formats/tutorial/auth" )
+##
+#set( $readUrl = "${url}read/block/16d255728b7f08ee51c1c1cb8a10c619?u=${u}&p=${p}" )
+#set( $editUrl = "${url}edit?u=${u}&p=${p}" )
+#chanwGetJsonMap( $readUrl )
+
+#set( $metadata = $chanwGetJsonMap.asset.xhtmlDataDefinitionBlock.metadata )
+#set( $metadata.displayName = "New Display Name" )
+#set( $metadata.startDate = "Nov 1, 2018 12:00:00 AM" )
+
+## note that the entire metadata can be replaced
+#set( $chanwGetJsonMap.asset.xhtmlDataDefinitionBlock.metadata = $metadata )
+
+## send request
+#chanwSendRest( $editUrl $chanwGson.toJson( $chanwGetJsonMap ) )
+
+## output response
+$chanwSendRest
