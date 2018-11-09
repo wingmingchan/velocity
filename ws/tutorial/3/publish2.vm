@@ -1,0 +1,34 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-ws-utilities" )
+
+#set( $url = "http://web.upstate.edu:8080/api/v1/" )
+#set( $u   = 'admin' )
+#set( $p   = 'secret' )
+
+## mapping destinations to assets
+#set( $destPageFolderMap = {
+    'c34b58ca8b7f08ee4fe76bb83ba1613b' : {
+        'page' : [ '9a13a9f18b7f08ee5d439b31216eab7e', '9a13a9f18b7f08ee5d439b31216eab71', '9a13a9f18b7f08ee5d439b31216eab72' ],
+        'folder' : [ '9a13a9f18b7f08ee5d439b31216eab73', '9a13a9f18b7f08ee5d439b31216eab74' ]
+    },
+    'c34b58ca8b7f08ee4fe76bb83ba1613c' : {
+        'page' : [ '9a13a9f18b7f08ee5d439b31216eab75', '9a13a9f18b7f08ee5d439b31216eab76', '9a13a9f18b7f08ee5d439b31216eab77' ],
+        'folder' : [ '9a13a9f18b7f08ee5d439b31216eab78', '9a13a9f18b7f08ee5d439b31216eab79' ]
+    }
+} )
+#set( $authString = "'authentication':{'username':'${u}','password':'${p}'}" )
+#foreach( $dest in $destPageFolderMap.keySet() )
+    #foreach( $asset in $destPageFolderMap[ $dest ].keySet() )
+        #foreach( $id in $destPageFolderMap[ $dest ][ $asset ] )
+            #set( $publishUrl = "${url}publish/${asset}/${id}" )
+            #set( $publishInfoString =
+                "{'publishInformation':{'destinations':[{'id':'${dest}','type':'destination'}],'unpublish':false},${authString}}" )
+            ##$publishUrl
+            ##$publishInfoString
+            #chanwGetJsonObjectFromJsonString( $publishInfoString )
+
+            ## send request
+            #chanwSendRest( $publishUrl $chanwGetJsonObjectFromJsonString )
+            $chanwSendRest
+        #end
+    #end
+#end
