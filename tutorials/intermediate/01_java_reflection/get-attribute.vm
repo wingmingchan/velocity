@@ -16,12 +16,13 @@ and retrieve data from a org.jdom.Element object.
 #chanwBuildXMLContentRoot( $xml )
 ##=> s62
 $chanwBuildXMLContentRoot.getAttribute( "StyleID", $ns ).Value
+$chanwBuildXMLContentRoot.getAttributeValue( "StyleID", $ns )
 
 ##=> 2018-08-14T00:00:00.000
 $chanwBuildXMLContentRoot.getChild( "Data" ).Value
 
 ##=> DateTime
-$chanwBuildXMLContentRoot.getChild( "Data" ).getAttribute( "Type", $ns ).Value
+$chanwBuildXMLContentRoot.getChild( "Data" ).getAttributeValue( "Type", $ns )
 
 ##=> Type
 $_XPathTool.selectSingleNode( $chanwBuildXMLContentRoot, "Data/@*[local-name()='Type']" ).Name
