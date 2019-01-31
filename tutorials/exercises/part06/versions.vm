@@ -1,0 +1,33 @@
+#import( "site://formats/velocity/courses/exercises/part06/asset-info" )
+## Exercise 2
+##<span id="db_content">$asset_id${_EscapeTool.H}${_EscapeTool.H}end of db_content</span>
+
+## Exercise 3
+#set( $php_code = $_EscapeTool.D + "records = array(" )
+
+#if( !$chanwConnection || $chanwConnection.isClosed() )
+    #chanwGetDatabaseStatement
+#end
+
+#foreach( $num in [ 1..50 ] )
+    #set( $chanwSql = "select prevversionid, workflowcomment from cxml_foldercontent where id='$asset_id'"  )
+    #chanwGetResultSet( $chanwSql )
+    #chanwGetRecordListFromResultSet( $chanwGetResultSet )
+    #if( $chanwGetRecordListFromResultSet.size() != 0 )
+        #if( $chanwGetRecordListFromResultSet[ 0 ][ 1 ].Class.Name )
+            #set( $comment = $chanwGetRecordListFromResultSet[ 0 ][ 1 ] )
+        #else
+            #set( $comment = "" )
+        #end
+        #set( $php_code = $php_code + '"' + $chanwGetRecordListFromResultSet[ 0 ][ 0 ] +
+            '"=&gt;"' + $comment + '", ' )
+        #set( $asset_id = $chanwGetRecordListFromResultSet[ 0 ][ 0 ] )
+    #else
+        #break
+    #end
+#end
+
+#set( $php_code = $php_code + ");" )
+<span id="db_content">$php_code${_EscapeTool.H}${_EscapeTool.H}end of db_content</span>
+
+#chanwCleanUp
