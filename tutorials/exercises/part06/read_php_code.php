@@ -42,23 +42,24 @@ try
     {
         // locate the PHP code
         $start_tag = "<span id=\"db_content\">";
-        $start_pos = strpos( $page_content, $start_tag ) + strlen( $start_tag );
+        $start_pos = strpos( $page_content, $start_tag );
         
         if( $start_pos !== false )
         {
-            $end_pos = strpos( $page_content, "##end of db_content" );
-        }
+            $start_pos = $start_pos + strlen( $start_tag );
+            $end_pos   = strpos( $page_content, "##end of db_content" );
         
-        $db_content = substr( $page_content, $start_pos, $end_pos - $start_pos );
-        $db_content = str_replace( "&gt;", ">", $db_content );
+            $db_content = substr( $page_content, $start_pos, $end_pos - $start_pos );
+            $db_content = str_replace( "&gt;", ">", $db_content );
         
-        // evaluate the code
-        eval( $db_content );
+            // evaluate the code
+            eval( $db_content );
         
-        // output the records
-        foreach( $records as $id => $comment )
-        {
-            echo $id . "=>" . $comment . BR;
+            // output the records
+            foreach( $records as $id => $comment )
+            {
+                echo $id . "=>" . $comment . BR;
+            }
         }
     }
 }
