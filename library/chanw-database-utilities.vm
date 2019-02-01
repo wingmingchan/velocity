@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+2/1/2019 Added chanwGetTableContentAsElementFromResultSet.
 11/16/2017 Added #chanwGetRecordListFromSql.
 10/2/2017 Added #chanwGetColumnLabelsFromRS and fixed a bug in #chanwGetHTMLTableFromResultSet.
 8/7/2017 Started using macro names as namespace prefixes for local parameters.
@@ -1033,6 +1034,84 @@ doc*###
             #end
         #end
     #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetTableContentAsElementFromResultSet( $rs )《/code》
+《p》Returns a 《code》org.jdom.Element《/code》 object, wrapping up all data from the result set.《/p》
+《pre》
+#chanwGetTableContentAsElementFromResultSet( $chanwGetResultSet )
+$_SerializerTool.serialize( $chanwGetTableContentAsElementFromResultSet, false )
+《/pre》
+《/documentation》
+《macro id=“chanwGetTableContentAsElementFromResultSet”》
+doc*###
+#macro( chanwGetTableContentAsElementFromResultSet $rs_chanwGetTableContentAsElementFromResultSet )
+    #chanwCheckResultSet( $rs_chanwGetTableContentAsElementFromResultSet )
+##
+    ## create the root element
+    #chanwGetConstructorByClassNameParamSize( "org.jdom.Element", 1 )
+    #set( $chanwGetTableContentAsElementFromResultSet = "" )
+    #set( $chanwGetTableContentAsElementFromResultSet = $chanwGetConstructorByClassNameParamSize.newInstance( "records" ) )
+##
+    ## get column names
+    #set( $chanwResultSetMetadata    = $rs_chanwGetTableContentAsElementFromResultSet.MetaData )
+    #set( $chanwResultSetColumnCount = $chanwResultSetMetadata.ColumnCount )
+##
+    ## store column names
+    #set( $chanwColumnNameList = [] )
+    #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+        #set( $void = $chanwColumnNameList.add(
+            $chanwResultSetMetadata.getColumnName( $col ) ) )
+    #end
+##
+    ## process result set
+    #set( $chanwNumberOfRecords = 0 )
+    $rs_chanwGetTableContentAsElementFromResultSet.beforeFirst()
+##
+    #foreach( $counter in [ 1..$INTEGER_MAX_VALUE ] )
+        #if( $rs_chanwGetTableContentAsElementFromResultSet.next() )
+            #set( $chanwRowRecord = $chanwGetConstructorByClassNameParamSize.newInstance( "row" ) )
+            #set( $chanwNumberOfRecords = $chanwNumberOfRecords + 1 )
+                
+            #foreach( $col in [ 1..$chanwResultSetColumnCount ] )
+                #set( $chanwColNameIndex = $col - 1 )
+                #set( $chanwItem = $chanwGetConstructorByClassNameParamSize.newInstance( $chanwColumnNameList[ $chanwColNameIndex ] ) )
+                #set( $dummy = $chanwRowRecord.addContent( $chanwItem.setText( $rs_chanwGetTableContentAsElementFromResultSet.getString( $col ) ) ) )
+            #end
+            #set( $dummy = $chanwGetTableContentAsElementFromResultSet.addContent( $chanwRowRecord ) )
+        #else
+            #break
+        #end
+    #end
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetTableContentAsElementFromTableName( $tname )《/code》
+《p》Returns a 《code》org.jdom.Element《/code》 object, wrapping up all data from the result set.《/p》
+《pre》
+#chanwGetTableContentAsElementFromTableName( "cxml_group" )
+$_SerializerTool.serialize( $chanwGetTableContentAsElementFromTableName, false )
+《/pre》
+《/documentation》
+《macro id=“chanwGetTableContentAsElementFromTableName”》
+doc*###
+#macro( chanwGetTableContentAsElementFromTableName $name_chanwGetTableContentAsElementFromTableName )
+    #if( $name_chanwGetTableContentAsElementFromTableName.Class.Name != $JAVA_LANG_STRING_CLASS_NAME ||
+        $name_chanwGetTableContentAsElementFromTableName.trim().length() == 0 )
+        ## cannot proceed with the table name
+        No table name is supplied.
+        #stop
+    #end
+##
+    #set( $chanwTableName = $name_chanwGetTableContentAsElementFromTableName.trim() )
+    ## retrieve records
+    #set( $chanwSql = "select * from $chanwTableName"  )
+    #chanwGetResultSet( $chanwSql )
+    #chanwGetTableContentAsElementFromResultSet( $chanwGetResultSet )
+    #set( $chanwGetTableContentAsElementFromTableName = $chanwGetTableContentAsElementFromResultSet )
 #end
 #*doc
 《/macro》
