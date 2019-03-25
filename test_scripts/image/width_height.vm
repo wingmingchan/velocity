@@ -1,0 +1,18 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+$chanwImportWS
+#chanwGetUrl( "http://www.upstate.edu/_extra/images/slideshow/upstate-academics-homepage.jpg" )
+
+#chanwGetMethod( "javax.imageio.ImageIO", "read" [ $chanwGetUrl.Class ] )
+#set( $bi = $chanwGetMethod.invoke( null, $chanwGetUrl ) )
+$bi.Height
+$bi.Width
+
+#set( $image = $_.locateFile( "assets/images/beigegradient.jpg", "Upstate-Globals" ) )
+#chanwGetMethod( "java.io.File" "createTempFile" [ $JAVA_LANG_STRING_CLASS_NAME.Class, $JAVA_LANG_STRING_CLASS_NAME.Class ] )
+#set( $file = $chanwGetMethod.invoke( null, "dummy", "dummy" ) )
+#chanwGetConstructor( "java.io.FileOutputStream" [ $file.Class ] )
+$chanwGetConstructor.newInstance( $file ).write( $image.Data )
+#chanwGetMethod( "javax.imageio.ImageIO", "read" [ $file.Class ] )
+#set( $bi = $chanwGetMethod.invoke( null, $file ) )
+$bi.Height
+$bi.Width
