@@ -1,0 +1,13 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+$chanwStartMeasurement
+#set( $sites = $chanwSiteService.getAll() )
+#set( $nonUpstateSites = {} )
+
+#foreach( $site in $sites )
+    #if( !$site.Url.contains( ".upstate.edu" ) )
+        #set( $nonUpstateSites[ $site.Name ] = $site.Url )
+    #end
+#end
+
+$nonUpstateSites
+$chanwEndMeasurement
