@@ -1,0 +1,11 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+
+#set( $hsq = $_.Class.forName( "com.hannonhill.cascade.model.dao.hibernate.HibernateSearchQuery"
+    ).getConstructors()[ 0 ].newInstance( "4135873a8b7f08ee0ed2ecdaca6a2fa2", null, null ) )
+
+##set( $void = $hsq.setSiteName( "formats" ) )
+#set( $void = $hsq.setMaxResults( 3000 ) )
+#set( $void = $hsq.setTypes( [ $CASCADE_API_PAGE_TYPE ] ) )
+$hsq.buildHQL()
+#set( $result = $chanwFolderContentsService.executeQuery( $hsq ) )
+$result.size()
