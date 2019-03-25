@@ -1,0 +1,20 @@
+#set( $map =  {
+    'unique1': {
+        'children': {
+            'content' : 'b'
+        }
+    },
+    'unique2': {
+        'children': {
+            'content' : 'a'
+        }
+    },
+    'unique3': {
+        'children': {
+            'content' : 'c'
+        }
+    }
+} )
+
+#set( $mapValues = $_SortTool.sort( $map, "children.content" ) )
+$mapValues
