@@ -1,0 +1,15 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-service-provider" )
+
+#set( $pageDomObj = $chanwPageService.get( "275f515a8b7f08ee5668fbfd3fe3e766" ) )
+$pageDomObj.isShouldMaintainAbsoluteLinks()
+$pageDomObj.getStructuredDataDefinition().getId()
+
+#set( $pageAPIObj = $_.Class.forName( "com.hannonhill.cascade.api.adapters.PageAPIAdapter"
+    ).getConstructors()[ 0 ].newInstance( $pageDomObj ) )
+$pageAPIObj.Site.Url
+$pageAPIObj.Name
+$pageAPIObj.Site.Name
+
+#set( $pageAPIObj = $_.locatePage( $pageAPIObj.Name, $pageAPIObj.Site.Name ) )
+
+$pageAPIObj.StructuredData.Class.Name  ## not before $_.locatePage is called
