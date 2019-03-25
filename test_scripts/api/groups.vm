@@ -1,0 +1,32 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+
+#set( $groups = $chanwGroupService.getAllGroups() )
+
+#foreach( $group in $groups )
+    $group.getName()
+#end
+
+$_EscapeTool.xml( $chanwGroupService.getAllGroups() )
+$_EscapeTool.xml( $chanwGroupService.getGroupsForUser( "chanw" ) )
+
+#set( $groupDAO = $_.Class.forName( "com.hannonhill.cascade.model.dao.DAOProviderHolderBean" ).getMethod(
+    "getDAOProvider" ).invoke( null ).getGroupDAO() )
+
+#set( $hashSet = $_.Class.forName( "java.util.HashSet" ).getConstructor().newInstance() )
+#chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.Group" 'PROPERTY_USERS' )
+#set( $void = $hashSet.add( $_.Class.forName( "com.hannonhill.cascade.model.dom.property.Join" ).getConstructors()[ 0 ].newInstance(
+    $chanwGetConstantValueByClassNameConstantName ) ) )
+#chanwGetConstantValueByClassNameConstantName( "com.hannonhill.cascade.model.dom.Group" 'PROPERTY_ROLES' )
+#set( $void = $hashSet.add( $_.Class.forName( "com.hannonhill.cascade.model.dom.property.Join" ).getConstructors()[ 0 ].newInstance(
+    $chanwGetConstantValueByClassNameConstantName ) ) )
+    
+#set( $groupDOMObj = $groupDAO.get( "cancer", $hashSet ) )
+#set( $users = $groupDOMObj.getUsers() )
+#foreach( $user in $users )
+    $user.getName()
+#end
+
+#set( $roles = $groupDOMObj.getRoles() )
+#foreach( $role in $roles )
+    $role.getName()
+#end
