@@ -1,0 +1,41 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-ws-utilities" )
+
+## set up the cookie manager
+#set( $cookieManager = $_.Class.forName( "java.net.CookieManager" ).getConstructor().newInstance() )
+#set( $void = 
+    $_.Class.forName( "java.net.CookieHandler" ).getMethod( "setDefault", $_.Class.forName( "java.net.CookieHandler" ) ).invoke(
+    null, $cookieManager ) )
+
+## read the cookie
+#chanwGetUrl( "http://web.upstate.edu:8080/login.act" )
+
+#set( $conn = $chanwGetUrl.openConnection() )
+#set( $void = $conn.setRequestMethod( "GET" ) )
+
+#set( $fields = $conn.getHeaderFields() )
+#set( $sessionId =
+    $cookieManager.getCookieStore().get( $_.Class.forName( "java.net.URI" ).getConstructor(
+        $_.Class.forName( "java.lang.String" )
+    ).newInstance( "http://web.upstate.edu" ) )[ 0 ] )
+
+## send login info with cookie
+#chanwGetUrl( "http://web.upstate.edu:8080/loginsubmit.act" )
+#set( $postParams = "username=webservices&password=7nzU3cpyEdaFC" )
+#set( $conn = $chanwGetUrl.openConnection() )
+#set( $void = $conn.setRequestMethod( "POST" ) )
+#set( $void = $conn.setRequestProperty( "Content-Length", $postParams.length() ) )
+#set( $void = $conn.setRequestProperty( "Cookie", $sessionId ) )
+#set( $void = $conn.setDoOutput( true ) )
+#set( $void = $conn.setDoInput( true ) )
+#set( $outputStream = $conn.getOutputStream() )
+#set( $dataOutputStream = $_.Class.forName( "java.io.DataOutputStream" ).getConstructors()[ 0 ].newInstance( $outputStream ) )
+#set( $void = $dataOutputStream.writeBytes( $postParams ) )
+#set( $void = $dataOutputStream.flush() )
+#set( $void = $dataOutputStream.close() )
+
+## read cookie again
+#set( $fields = $conn.getHeaderFields() )
+
+## read a Cascade page
+#chanwGetUrlContents( "http://web.upstate.edu:8080/entity/open.act?id=8917a6428b7f08ee271f8e4214719fb1&type=format" )
+$_EscapeTool.html( $chanwGetUrlContents )
