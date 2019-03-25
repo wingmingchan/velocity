@@ -1,0 +1,8 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+
+$chanwYearMonthNow
+$_.Class.forName( "java.time.temporal.ChronoUnit" ).getMethod( "getDuration" ).invoke( 
+    $_FieldTool.in( "java.time.temporal.ChronoUnit" ).MONTHS
+)
+
+$chanwZeroPeriod.plusYears( 3 ).plusMonths( 8 ).toTotalMonths()
