@@ -1,0 +1,18 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+$chanwImportDatabase
+
+#set( $siteName = '_brisk' )
+#set( $sql = "SELECT distinct ct.name FROM cxml_contenttype ct " +
+    "WHERE ct.siteid=(SELECT s.id FROM cxml_site s WHERE s.name='${siteName}')"
+)
+
+#chanwGetRecordListFromSql( $sql )
+$chanwGetRecordListFromSql
+
+## ct of current page
+#set( $sql = "SELECT contenttypeid FROM cxml_foldercontent WHERE id='${currentPage.Identifier.Id}'" )
+#chanwGetSingleValue( $sql )
+$chanwGetSingleValue
+
+
+#chanwCleanUp
