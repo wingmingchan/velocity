@@ -1,0 +1,13 @@
+#set( $folder = $_.locateFolder( "velocity/courses/intermediate-course", "formats" ) )
+#set( $asc = $_SortTool.sort( $folder.Children, "lastModified.time:asc" ) )
+$asc
+#set( $desc = $_SortTool.sort( $folder.Children, "lastModified.time:desc" ) )
+$desc
+
+#foreach( $page in $asc )
+$page.Name
+#end
+
+#foreach( $page in $desc )
+$page.Name
+#end
