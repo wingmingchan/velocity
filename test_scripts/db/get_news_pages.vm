@@ -1,0 +1,32 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+$chanwImportDatabase
+
+#set( $siteName   = "standard-model" )
+#set( $folderPath = "brisk/app/" )
+#set( $daysAgo    = -1000 )
+
+$chanwStartMeasurement
+#set( $thousandDaysAgoCalObject = $chanwCalendarObject.clone() )
+$thousandDaysAgoCalObject.add( $chanwCalendarDayField, $daysAgo )
+#set( $thousandDaysAgoDateObject = $_DateTool.toDate( $thousandDaysAgoCalObject ) )
+#set( $thousandDaysAgoTimestamp = $thousandDaysAgoDateObject.Time )
+
+#set( $sql = "SELECT fc.id FROM CXML_FOLDERCONTENT fc, CXML_ENTITYMETADATA em " +
+    "WHERE fc.assettype='PAG' AND fc.iscurrentversion=1 AND fc.cachepath like '${folderPath}%' " +
+    "AND fc.siteid=( SELECT s.id FROM CXML_SITE s WHERE s.name='${siteName}' ) " +
+    "AND fc.metadataid=em.id AND em.creationdate>$thousandDaysAgoTimestamp"
+)
+
+## retrieve all page id's
+#chanwGetRecordListFromSql( $sql )
+## loop through all pages
+#foreach( $id in $chanwGetRecordListFromSql )
+    $id[ 0 ]
+    #set( $pageDom = $chanwPageService.get( $id[ 0 ] ) )
+    #set( $pageAPI = $chanwCreateAPIAdapterMethod.invoke( null, $pageDom, true, $chanwServiceProvider ) )
+    ## output the h1 value
+    $_EscapeTool.xml( $pageAPI.getStructuredDataNode( "main-group/h1" ).TextValue )
+#end
+
+$chanwEndMeasurement
+#chanwCleanUp
