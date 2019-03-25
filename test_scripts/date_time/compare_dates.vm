@@ -1,0 +1,10 @@
+## start with a string like '1446326700952'
+#set( $eventTimestamp = '1446326700952' )
+## convert to a GregorianCalendar
+#set( $eventDateCal = $_DateTool.toCalendar( $_DateTool.getDate( $eventTimestamp ) ) )
+## add one day to the date
+#set( $void = $eventDateCal.add( $_FieldTool.in( "java.util.Calendar" ).DATE, 1 ) )
+
+#if( $_DateTool.getSystemTime() > $eventDateCal.Time.Time )
+In the past
+#end
