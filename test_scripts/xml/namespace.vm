@@ -1,0 +1,32 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-initialization" )
+
+#set( $ns = $_.Class.forName( "org.jdom.Namespace" ).getMethod(
+    "getNamespace", $JAVA_LANG_STRING_CLASS_NAME.Class,
+    $JAVA_LANG_STRING_CLASS_NAME.Class ).invoke(
+        null, "ss", "http://www.upstate.edu/ss/" ) )
+
+#set( $xml = '<Cell xmlns:ss="http://www.upstate.edu/ss/" ' + 
+    'ss:StyleID="s62"><Data ss:Type="DateTime">2018-08-14T00:00:00.000</Data>' +
+    '</Cell>' )
+#chanwBuildXMLContentRoot( $xml )
+##=> s62
+$chanwBuildXMLContentRoot.getAttribute( "StyleID", $ns ).Value
+$chanwBuildXMLContentRoot.getAttributeValue( "StyleID", $ns )
+
+##=> 2018-08-14T00:00:00.000
+$chanwBuildXMLContentRoot.getChild( "Data" ).Value
+
+##=> DateTime
+$chanwBuildXMLContentRoot.getChild( "Data" ).getAttributeValue( "Type", $ns )
+
+##=> Type
+$_XPathTool.selectSingleNode( $chanwBuildXMLContentRoot, "Data/@*[local-name()='Type']" ).Name
+
+##=> DateTime
+$_XPathTool.selectSingleNode( $chanwBuildXMLContentRoot, "Data/@*[local-name()='Type']" ).Value
+
+##=> 2018-08-14T00:00:00.000
+$_XPathTool.selectSingleNode( $chanwBuildXMLContentRoot, "Data[@*[local-name()='Type']]" ).Value
+
+##=> 2018-08-14T00:00:00.000
+$_XPathTool.selectSingleNode( $chanwBuildXMLContentRoot, "Data[@ss:Type='DateTime']" ).Value
