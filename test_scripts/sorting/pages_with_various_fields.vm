@@ -1,0 +1,20 @@
+#set( $folder = $_.locateFolder( "velocity/courses/intermediate-course", "formats" ) )
+#set( $pages  = $folder.Children )
+
+#set( $folderOrder = $_SortTool.sort( $pages, "folderOrder" ) )
+$folderOrder
+
+#set( $createdOn = $_SortTool.sort( $pages, "createdOn" ) )
+$createdOn
+
+#set( $desc = $_SortTool.sort( $pages, "structuredDataNode(main-group/h1).textValue:desc" ) )
+$desc
+
+#set( $asc = $_SortTool.sort( $pages, "structuredDataNode(main-group/h1).textValue:asc" ) )
+$asc
+
+#set( $displayName = $_SortTool.sort( $pages, "metadata.displayName" ) )
+$displayName
+
+#set( $dynamicField = $_SortTool.sort( $pages, "metadata.dynamicField(exclude-from-mobile-menu).value" ) )
+$dynamicField
