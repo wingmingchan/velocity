@@ -1,0 +1,6 @@
+#set( $eDateArray = [] )
+#set( $void = $eDateArray.add( $_DateTool.getDate( '1446326700952' ) ) )
+#set( $void = $eDateArray.add( $_DateTool.getDate( '1546326700952' ) ) )
+#set( $void = $eDateArray.add( $_DateTool.getDate( '1346326700952' ) ) )
+
+$_SortTool.sort( $eDateArray, "time:desc" )
