@@ -7,7 +7,7 @@
     null, $cookieManager ) )
 
 ## read the cookie
-#chanwGetUrl( "http://web.upstate.edu:8080/login.act" )
+#chanwGetUrl( "http://mydomain.edu:1234/login.act" )
 
 #set( $conn = $chanwGetUrl.openConnection() )
 #set( $void = $conn.setRequestMethod( "GET" ) )
@@ -16,10 +16,10 @@
 #set( $sessionId =
     $cookieManager.getCookieStore().get( $_.Class.forName( "java.net.URI" ).getConstructor(
         $_.Class.forName( "java.lang.String" )
-    ).newInstance( "http://web.upstate.edu" ) )[ 0 ] )
+    ).newInstance( "http://mydomain.edu" ) )[ 0 ] )
 
 ## send login info with cookie
-#chanwGetUrl( "http://web.upstate.edu:8080/loginsubmit.act" )
+#chanwGetUrl( "http://mydomain.edu:1234/loginsubmit.act" )
 #set( $postParams = "username=webservices&password=7nzU3cpyEdaFC" )
 #set( $conn = $chanwGetUrl.openConnection() )
 #set( $void = $conn.setRequestMethod( "POST" ) )
@@ -37,5 +37,5 @@
 #set( $fields = $conn.getHeaderFields() )
 
 ## read a Cascade page
-#chanwGetUrlContents( "http://web.upstate.edu:8080/entity/open.act?id=8917a6428b7f08ee271f8e4214719fb1&type=format" )
+#chanwGetUrlContents( "http://mydomain.edu:1234/entity/open.act?id=8917a6428b7f08ee271f8e4214719fb1&type=format" )
 $_EscapeTool.html( $chanwGetUrlContents )
