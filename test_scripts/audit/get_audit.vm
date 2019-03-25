@@ -1,0 +1,16 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+
+#set( $auditParam = $_.Class.forName(
+    "com.hannonhill.cascade.model.audit.AuditQueryParameters" ).getConstructor().newInstance() )
+#set( $void = $auditParam.setAction( "unpublish" ) )
+#set( $void = $auditParam.setAuditedEntityType( $CASCADE_API_PAGE_TYPE ) )
+## replace the following with a valid page id
+#set( $void = $auditParam.setEntityId( "275f515a8b7f08ee5668fbfd3fe3e766" ) )
+
+#set( $auditBuilder = $_.Class.forName(
+    "com.hannonhill.cascade.model.audit.AuditQueryBuilder"
+    ).getConstructors()[ 0 ].newInstance( $auditParam ) )
+$auditBuilder.buildQuery()
+#set( $result = $_.Class.forName( "com.hannonhill.cascade.model.dao.DAOProviderHolderBean" ).getMethod(
+    "getDAOProvider" ).invoke( null ).getAuditDAO().getAuditsByQuery( $auditBuilder.getQuery() ) )
+$_EscapeTool.xml( $result.get( 0 ) )
