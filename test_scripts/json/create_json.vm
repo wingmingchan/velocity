@@ -1,0 +1,18 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+#set( $xml = '<cascadeForcedRoot>
+<link href="/assets/print-rwd4.css" media="print" rel="stylesheet" type="text/css"/>
+<link href="/assets/plug-ins/jquery-ui/1.11.4/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css"/>
+<link href="/assets/css/vlightbox1.css" media="all" rel="stylesheet" type="text/css"/>
+<link href="/assets/css/visuallightbox.css" media="screen" rel="stylesheet" type="text/css"/>
+</cascadeForcedRoot>' )
+## turn string into a jdom.Element
+#chanwBuildXMLContentRoot( $xml )
+## select link element and add pseudo-tags to href value
+#set( $links = $_XPathTool.selectNodes( $chanwBuildXMLContentRoot , "link" ) )
+
+#foreach( $link in $links )
+    #set( $href = $link.getAttribute( "href" ) )
+    #set( $hrefValue = '[system-asset]' + $href.Value + '[/system-asset]' )
+    #set( $void = $href.setValue( $hrefValue ) )
+#end
+<!--#protect-top $_SerializerTool.toJson( $chanwBuildXMLContentRoot, true ) #protect-top-->
