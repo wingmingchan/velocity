@@ -1,0 +1,10 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-ws-utilities" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-gson-utilities" )
+#import( "site://_brisk/core/macros/drulykgVarDump" )
+
+#chanwGetUrlContents( "http://web.upstate.edu:8080/api/v1/read/folder/c1cc589c8b7f08ee4fe76bb86a4db49a?u=webservices&p=7nzU3cpyEdaFC" )
+#chanwGetJsonObjectFromJsonString( $chanwGetUrlContents )
+
+$chanwGetJsonObjectFromJsonString.asset.folder.children[ 0 ].id.getAsString()
+#drulykgVarDump( $chanwGetJsonObjectFromJsonString.asset.folder.children )
