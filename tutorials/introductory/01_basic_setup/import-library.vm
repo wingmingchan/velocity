@@ -1,2 +1,2 @@
-#import( "site://_brisk/core/library/velocity/chanw/chanw_library_import" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-library-import" )
 $chanwLocalTimeNow
