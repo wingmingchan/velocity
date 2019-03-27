@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+2/8/2019 Added chanwRemoveNodeFromTree.
 5/31/2018 Added chanwAttachBlockToTreeNode.
 11/4/2017 Added $TREE_NODE_TEXT and related code.
 10/29/2017 Use $DefaultMutableTreeNodeConstructor defined in chanw-initialization.
@@ -208,6 +209,44 @@ doc*###
 #macro( chanwImportScriptByFullPath $path_chanwImportScriptByFullPath )
     #set( $import_code = '#import("$path_chanwImportScriptByFullPath")' )
     #evaluate( $import_code )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwRemoveNodeFromTree( $map )《/code》
+《p》Removes the nodes from $chanwObjectNodeMap. Example:《/p》
+《pre》#set( $nodesToBeRemoved = {
+    "html" : [ "head" ],
+    "body" : [
+        "body-placeholder1",
+        "bright-edge-seo",
+        "google-noscript",
+        "header",
+        "siteNav",
+        "breadcrumbs",
+        "footer",
+        "script",
+        "cd-top",
+        "bright-edge-close"
+    ],
+    "main" : [ "topElement", "bottomElement" ]
+} )
+#chanwRemoveNodeFromTree( $nodesToBeRemoved )《/pre》
+《/documentation》
+《macro id=“chanwRemoveNodeFromTree”》
+doc*###
+#macro( chanwRemoveNodeFromTree $toBeRemovedMap_chanwRemoveNodeFromTree )
+    #if( $toBeRemovedMap_chanwRemoveNodeFromTree.Class.Name != $JAVA_UTIL_LINKEDHASHMAP_CLASS_NAME )
+        #break
+    #end
+    #foreach( $parent in $toBeRemovedMap_chanwRemoveNodeFromTree.keySet() )
+        #foreach( $nodeName in $toBeRemovedMap_chanwRemoveNodeFromTree[ $parent ] )
+            ## if the named child exist in the parent, then remove it
+            #if( $chanwObjectNodeMap[ $nodeName ].Class.Name )
+                $chanwObjectNodeMap[ $parent ].remove( $chanwObjectNodeMap[ $nodeName ] )
+            #end
+        #end
+    #end
 #end
 #*doc
 《/macro》
