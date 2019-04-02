@@ -5,6 +5,7 @@ Author: Wing Ming Chan
 Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
+4/2/2019 Changed chanwDisplayTreeNodeRecursively so that tags are now evaluated.
 2/8/2019 Added chanwRemoveNodeFromTree.
 5/31/2018 Added chanwAttachBlockToTreeNode.
 11/4/2017 Added $TREE_NODE_TEXT and related code.
@@ -155,7 +156,9 @@ doc*###
 #set( $chanwDisplayTreeCounter = $chanwDisplayTreeCounter + 1 )
 #end
 #set( $chanwSpace = "   " )
-#if( $node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ].Class.Name )$node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]
+#if( $node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ].Class.Name )
+$node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]#if($node_chanwDisplayTree.UserObject[ $TREE_NODE_CODE ].Class.Name): $node_chanwDisplayTree.UserObject[ $TREE_NODE_CODE ]#end
+
 #else$node_chanwDisplayTree.UserObject
 #end
 #if( $node_chanwDisplayTree.children() )
