@@ -2,7 +2,7 @@
 《code》
 《copyright》
 Author: Wing Ming Chan
-Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>
+Copyright (c) 2019 Wing Ming Chan <chanw@upstate.edu>
 MIT Licensed
 Modification history:
 10/22/2018 Added chanwSendRest.
@@ -171,7 +171,7 @@ doc*###
 #*doc
 《/macro》
 《documentation》
-《code》#chanwSendRest( $url $json $u $p )《/code》
+《code》#chanwSendRest( $url $json )《/code》
 《p》Sends an HTTP request to Cascade for a web service.《/p》
 《/documentation》
 《macro id=“chanwSendRest”》
@@ -199,13 +199,15 @@ doc*###
     #set( $void = $chanwDataOutputStream.flush() )
     #set( $void = $chanwDataOutputStream.close() )
     ## read response
-    #if( 200 <= $chanwConnectonObj.getResponseCode() && $chanwConnectonObj.getResponseCode() <= 299 )
-        #set( $chanwInputStream = $chanwConnectonObj.getInputStream() )
-    #elseif( $chanwConnectonObj.getResponseCode() >= 400 )
+    #set( $chanwInputStream = "" )
+    #set( $chanwInputStream = $chanwConnectonObj.getInputStream() )
+    #if( $chanwInputStream == "" )
         #set( $chanwInputStream = $chanwConnectonObj.getErrorStream() )
     #end
     #chanwGetScannerFromInputStream( $chanwInputStream )
-    #set( $chanwSendRest = $chanwGetScannerFromInputStream.useDelimiter( "\\A" ).next() )
+    #set( $chanwResponseMessage = "" )
+    #set( $chanwResponseMessage = $chanwConnectonObj.getResponseMessage() )
+    #set( $chanwSendRest = $chanwGetScannerFromInputStream.useDelimiter( "\\A" ).next() + " " + $chanwResponseMessage )
 #end
 #*doc
 《/macro》

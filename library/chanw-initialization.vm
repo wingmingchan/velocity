@@ -2,7 +2,7 @@
 《code》
 《copyright》
 Authors: Wing Ming Chan
-Copyright (c) 2018 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>, German Drulyk <drulykg@upstate.edu>
+Copyright (c) 2019 Wing Ming Chan <chanw@upstate.edu>, Peter Thomas <thomaspe@upstate.edu>, German Drulyk <drulykg@upstate.edu>
 MIT Licensed
 Modification history:
 5/7/2018 Added code to automatically process blocks as Cascade API objects.

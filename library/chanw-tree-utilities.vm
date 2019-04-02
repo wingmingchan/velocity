@@ -1,8 +1,8 @@
 #*doc
 《code》
 《copyright》
-Author: Wing Ming Chan
-Copyright (c) 2017 Wing Ming Chan <chanw@upstate.edu>
+Author: Wing Ming Chan, German Drulyk
+Copyright (c) 2019 Wing Ming Chan <chanw@upstate.edu>, German Drulyk <drulykg@upstate.edu>
 MIT Licensed
 Modification history:
 4/2/2019 Changed chanwDisplayTreeNodeRecursively so that tags are now evaluated.
