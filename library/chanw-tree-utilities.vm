@@ -187,7 +187,7 @@ doc*###
 #set( $chanwDisplayTreeNodeRecursivelyCounter = $chanwDisplayTreeNodeRecursivelyCounter + 1 )
 #end
 #if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_START_TAG ] )
-$node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_START_TAG ]#end
+#evaluate( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_START_TAG ] )#end
 #if( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_CODE ] )
 #evaluate( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_CODE ] )#end
 #if( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_TEXT ] )
@@ -198,7 +198,7 @@ $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_TEXT ]#end
 #end
 #end
 #if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_END_TAG ] )
-$node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_END_TAG ]#end
+#evaluate( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_END_TAG ] )#end
 #set( $chanwDisplayTreeNodeRecursivelyCounter = $chanwDisplayTreeNodeRecursivelyCounter - 1 )
 #end
 #*doc
