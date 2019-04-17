@@ -1,0 +1,16 @@
+#import( "site://_chan_core/formats/tree/html_tree" )
+
+#set( $void = $chanwObjectNodeMap[ 'html' ].removeAllChildren() )
+#set( $void = $chanwObjectNodeMap[ 'html' ].UserObject.remove( $TREE_NODE_CODE, $chanwObjectNodeMap[ 'html' ].UserObject[ $TREE_NODE_CODE ] ) )
+#set( $chanwObjectNodeMap[ 'html' ].UserObject[ $TREE_NODE_START_TAG ] = $S_ROOT_TAG )
+#set( $chanwObjectNodeMap[ 'html' ].UserObject[ $TREE_NODE_END_TAG ]   = $E_ROOT_TAG )
+
+#set( $void = $chanwObjectNodeMap[ 'html' ].add( $chanwObjectNodeMap[ 'preMain' ] ) )
+#set( $void = $chanwObjectNodeMap[ 'html' ].add( $chanwObjectNodeMap[ 'main' ] ) )
+#set( $void = $chanwObjectNodeMap[ 'html' ].add( $chanwObjectNodeMap[ 'postMain' ] ) )
+
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ 'html' ] )
+
+#*
+<cascadeForcedRoot>#outputPageElement('preMain')#outputPageElement('topElement')#outputPageElement('preH1')#outputPageElement('h1')#outputPageElement('postH1')#outputPageElement('wysiwyg')#outputPageElement('postWysiwyg')#outputPageElement('bottomElement')#outputPageElement('postMain')</cascadeForcedRoot>
+*#
