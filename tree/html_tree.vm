@@ -1,0 +1,200 @@
+#import( 'site://_brisk/core/library/velocity/chanw/chanw-library-import' )
+
+#chanwCreateNode( {
+    $TREE_NODE_NAME :      'html',
+    $TREE_NODE_START_TAG : '<html $!siteConfigMap[''htmlAttributes'']>$!siteConfigMap[''passThroughTopCode'']',
+    $TREE_NODE_END_TAG :   '</html>',
+    $TREE_NODE_CODE :      '#chanwAttachBlockToTreeNode('''' '''' $!siteConfigMap[''treeConfigBlock''])#initialize'
+} )
+## children of html
+#chanwAddChildren( $chanwObjectNodeMap[ 'html' ] [ 
+{ 
+    $TREE_NODE_NAME :      'head',
+    $TREE_NODE_START_TAG : '<head $!siteConfigMap[ ''headAttributes'' ]>', 
+    $TREE_NODE_END_TAG :   '</head>'
+},
+{ 
+    $TREE_NODE_NAME :      'body', 
+    $TREE_NODE_START_TAG : '<body $!siteConfigMap[ ''bodyAttributes'' ]>',  
+    $TREE_NODE_END_TAG :   '</body>'
+}
+] )
+## children of head
+#chanwAddChildren( $chanwObjectNodeMap[ 'head' ] [ 
+{ 
+    $TREE_NODE_NAME : 'meta',
+    $TREE_NODE_CODE : '#outputPageElement(''meta'')'
+},
+{ 
+    $TREE_NODE_NAME : 'title',
+    $TREE_NODE_CODE : '#outputPageElement(''title'')'
+},
+{ 
+    $TREE_NODE_NAME : 'google',
+    $TREE_NODE_CODE : '#outputPageElement(''googleTagManager'')'
+},
+{ 
+    $TREE_NODE_NAME : 'link',
+    $TREE_NODE_CODE : '#outputPageElement(''link'')'
+},
+{ 
+    $TREE_NODE_NAME : 'head-script'
+},
+{ 
+    $TREE_NODE_NAME : 'head-code'
+},
+{ 
+    $TREE_NODE_NAME : 'head-placeholder'
+}
+] )
+## children of body
+#chanwAddChildren( $chanwObjectNodeMap[ 'body' ] [ 
+{ 
+    $TREE_NODE_NAME : 'body-placeholder1'
+},
+{ 
+    $TREE_NODE_NAME : 'bright-edge-seo',
+    $TREE_NODE_CODE : '#outputPageElement(''brightEdgeSEOTags'')'
+},
+{ 
+    $TREE_NODE_NAME : 'google-noscript',
+    $TREE_NODE_CODE : '#outputPageElement(''googleTagManagerNoscript'')'
+},
+{ 
+    $TREE_NODE_NAME : 'header'
+},
+{ 
+    $TREE_NODE_NAME : 'siteNav',
+    $TREE_NODE_CODE : '#outputPageElement(''siteNavForPageRender'')'
+},
+{ 
+    $TREE_NODE_NAME : 'siteNav',
+    $TREE_NODE_CODE : '#outputPageElement(''siteNavForPageRender'')'
+},
+{ 
+    $TREE_NODE_NAME : 'breadcrumbs',
+    $TREE_NODE_CODE : '#outputPageElement(''breadcrumbs'')'
+},
+{ 
+    $TREE_NODE_NAME : 'preMain',
+    $TREE_NODE_CODE : '#outputPageElement(''preMain'')'
+},
+{ 
+    $TREE_NODE_NAME : 'main'
+},
+{ 
+    $TREE_NODE_NAME : 'postMain',
+    $TREE_NODE_CODE : '#outputPageElement(''postMain'')'
+},
+{ 
+    $TREE_NODE_NAME : 'footer'
+},
+{ 
+    $TREE_NODE_NAME : 'script',
+    $TREE_NODE_CODE : '#outputPageElement(''script'')'
+},
+{ 
+    $TREE_NODE_NAME :  'cd-top'
+},
+{ 
+    $TREE_NODE_NAME : 'bright-edge-close',
+    $TREE_NODE_CODE : '#outputPageElement(''brightEdgeCloseConnection'')'
+},
+{ 
+    $TREE_NODE_NAME : 'body-placeholder2'
+}
+] )
+## children of header
+#chanwAddChildren( $chanwObjectNodeMap[ 'header' ] [ 
+{ 
+    $TREE_NODE_NAME : 'header-row'
+},
+{ 
+    $TREE_NODE_NAME : 'global-nav-sidebar',
+    $TREE_NODE_CODE : '#outputPageElement(''globalNavSidebar'')'
+},
+{ 
+    $TREE_NODE_NAME : 'header-placehoder'
+}
+] )
+## children of header-row
+#chanwAddChildren( $chanwObjectNodeMap[ 'header-row' ] [ 
+{ 
+    $TREE_NODE_NAME : 'logo',
+    $TREE_NODE_CODE : '#outputPageElement(''logo'')'
+},
+{ 
+    $TREE_NODE_NAME : 'site-title',
+    $TREE_NODE_CODE : '#outputPageElement(''siteTitle'')'
+},
+{ 
+    $TREE_NODE_NAME : 'global-nav-button',
+    $TREE_NODE_CODE : '#outputPageElement(''globalNavButton'')'
+},
+{ 
+    $TREE_NODE_NAME : 'header-row-placeholder'
+}
+] )
+## children of main
+#chanwAddChildren( $chanwObjectNodeMap[ 'main' ] [ 
+{ 
+    $TREE_NODE_NAME : 'top-element',
+    $TREE_NODE_CODE : '#outputPageElement(''topElement'')'
+},
+{ 
+    $TREE_NODE_NAME : 'middle-element'
+},
+{ 
+    $TREE_NODE_NAME : 'bottom-element',
+    $TREE_NODE_CODE : '#outputPageElement(''bottomElement'')'
+}
+] )
+## children of middle-element
+#chanwAddChildren( $chanwObjectNodeMap[ 'middle-element' ] [ 
+{ 
+    $TREE_NODE_NAME : 'pre-h1-choosers',
+    $TREE_NODE_CODE : '#outputPageElement(''preH1'')'
+},
+{ 
+    $TREE_NODE_NAME : 'h1',
+    $TREE_NODE_CODE : '#outputPageElement(''h1'')'
+},
+{ 
+    $TREE_NODE_NAME : 'post-h1-choosers',
+    $TREE_NODE_CODE : '#outputPageElement(''postH1'')'
+},
+{ 
+    $TREE_NODE_NAME : 'wysiwyg',
+    $TREE_NODE_CODE : '#outputPageElement(''wysiwyg'')'
+},
+{ 
+    $TREE_NODE_NAME : 'post-wysiwyg-choosers',
+    $TREE_NODE_CODE : '#outputPageElement(''postWysiwyg'')'
+},
+{ 
+    $TREE_NODE_NAME : 'middle-element-placeholder'
+}
+] )
+## children of footer
+#chanwAddChildren( $chanwObjectNodeMap[ 'footer' ] [ 
+{ 
+    $TREE_NODE_NAME : 'footer-row'
+},
+{ 
+    $TREE_NODE_NAME : 'footer-placehoder'
+}
+] )
+## children of footer-row
+#chanwAddChildren( $chanwObjectNodeMap[ 'footer-row' ] [ 
+{ 
+    $TREE_NODE_NAME : 'footer-content',
+    $TREE_NODE_CODE : '#outputPageElement(''footerContent'')'
+},
+{ 
+    $TREE_NODE_NAME : 'last-modified',
+    $TREE_NODE_CODE : '#outputPageElement(''lastModified'')'
+},
+{ 
+    $TREE_NODE_NAME : 'footer-row-placeholder'
+}
+] )
