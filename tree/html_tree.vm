@@ -4,7 +4,7 @@
     $TREE_NODE_NAME :      'html',
     $TREE_NODE_START_TAG : '<html $!siteConfigMap[''htmlAttributes'']>$!siteConfigMap[''passThroughTopCode'']',
     $TREE_NODE_END_TAG :   '</html>',
-    $TREE_NODE_CODE :      '#chanwAttachBlockToTreeNode('''' '''' $!siteConfigMap[''treeConfigBlock''])#initialize'
+    $TREE_NODE_CODE :      '#initialize'
 } )
 ## children of html
 #chanwAddChildren( $chanwObjectNodeMap[ 'html' ] [ 
