@@ -1,0 +1,53 @@
+#import( "site://_chan_core/formats/tree/html_tree" )
+
+#set( $void = $chanwObjectNodeMap[ 'bottom-element' ].removeFromParent() )
+
+#chanwDisplayTree( $chanwObjectNodeMap[ 'html' ] )
+
+#*
+html: #chanwAttachBlockToTreeNode('' '' $!siteConfigMap['treeConfigBlock'])#initialize
+   head
+      meta: #outputPageElement('meta')
+      title: #outputPageElement('title')
+      google: #outputPageElement('googleTagManager')
+      link: #outputPageElement('link')
+      head-script
+      head-code
+      head-placeholder
+   body
+      body-placeholder1
+      bright-edge-seo: #outputPageElement('brightEdgeSEOTags')
+      google-noscript: #outputPageElement('googleTagManagerNoscript')
+      header
+         header-row
+            logo: #outputPageElement('logo')
+            site-title: #outputPageElement('siteTitle')
+            global-nav-button: #outputPageElement('globalNavButton')
+            header-row-placeholder
+         global-nav-sidebar: #outputPageElement('globalNavSidebar')
+         header-placehoder
+      siteNav: #outputPageElement('siteNavForPageRender')
+      siteNav: #outputPageElement('siteNavForPageRender')
+      breadcrumbs: #outputPageElement('breadcrumbs')
+      preMain: #outputPageElement('preMain')
+      main
+         top-element: #outputPageElement('topElement')
+         middle-element
+            pre-h1-choosers: #outputPageElement('preH1')
+            h1: #outputPageElement('h1')
+            post-h1-choosers: #outputPageElement('postH1')
+            wysiwyg: #outputPageElement('wysiwyg')
+            post-wysiwyg-choosers: #outputPageElement('postWysiwyg')
+            middle-element-placeholder
+      postMain: #outputPageElement('postMain')
+      footer
+         footer-row
+            footer-content: #outputPageElement('footerContent')
+            last-modified: #outputPageElement('lastModified')
+            footer-row-placeholder
+         footer-placehoder
+      script: #outputPageElement('script')
+      cd-top
+      bright-edge-close: #outputPageElement('brightEdgeCloseConnection')
+      body-placeholder2
+*#
