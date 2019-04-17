@@ -1,0 +1,10 @@
+#import( "site://_chan_core/formats/tree/html_tree" )
+
+#set( $void = $chanwObjectNodeMap[ 'html' ].removeAllChildren() )
+#set( $void = $chanwObjectNodeMap[ 'html' ].UserObject.remove( $TREE_NODE_CODE, $chanwObjectNodeMap[ 'html' ].UserObject[ $TREE_NODE_CODE ] ) )
+
+#chanwDisplayTree( $chanwObjectNodeMap[ 'html' ] )
+
+#*
+html
+*#
