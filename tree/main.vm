@@ -1,4 +1,5 @@
-#import( "site://_chan_core/formats/tree/html_tree" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-tree-utilities" )
+#import( "site://_brisk/app/scaffolds/rwd5/html-tree" )
 
 #set( $void = $chanwObjectNodeMap[ 'html' ].removeAllChildren() )
 #set( $void = $chanwObjectNodeMap[ 'html' ].UserObject.remove( $TREE_NODE_CODE, $chanwObjectNodeMap[ 'html' ].UserObject[ $TREE_NODE_CODE ] ) )
@@ -14,7 +15,8 @@ html
          pre-h1-choosers: #outputPageElement('preH1')
          h1: #outputPageElement('h1')
          post-h1-choosers: #outputPageElement('postH1')
-         wysiwyg: #outputPageElement('wysiwyg')
+         wysiwyg-container
+            wysiwyg: #outputPageElement('wysiwyg')
          post-wysiwyg-choosers: #outputPageElement('postWysiwyg')
          middle-element-placeholder
       bottom-element: #outputPageElement('bottomElement')
