@@ -2,3 +2,30 @@
 #import( "site://_brisk/app/scaffolds/rwd5/html-tree" )
 #chanwDisplayTreeNodeIteratively( $chanwObjectNodeMap[ 'html' ] )
 #chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ 'html' ] )
+
+#*
+<html>#initialize
+	<head>#outputPageElement('meta')#outputPageElement('title')#outputPageElement('googleTagManager')#outputPageElement('link')</head>
+	<body>#outputPageElement('brightEdgeSEOTags')#outputPageElement('googleTagManagerNoscript')
+		<header>#outputPageElement('logo')#outputPageElement('siteTitle')#outputPageElement('globalNavButton')#outputPageElement('globalNavSidebar')</header>#outputPageElement('siteNavForPageRender')#outputPageElement('siteNavForPageRender')#outputPageElement('breadcrumbs')#outputPageElement('preMain')
+		<main>#outputPageElement('topElement')#outputPageElement('preH1')#outputPageElement('h1')#outputPageElement('postH1')
+			<div class="row">
+				<div class="col-xs-12 ">#outputPageElement('wysiwyg')</div>
+			</div>#outputPageElement('postWysiwyg')#outputPageElement('bottomElement')
+		</main>#outputPageElement('postMain')
+		<footer>#outputPageElement('footerContent')#outputPageElement('lastModified')</footer>#outputPageElement('brightEdgeCloseConnection') 
+	</body>
+</html>
+<html>#initialize
+	<head>#outputPageElement('meta')#outputPageElement('title')#outputPageElement('googleTagManager')#outputPageElement('link')</head>
+	<body>#outputPageElement('brightEdgeSEOTags')#outputPageElement('googleTagManagerNoscript')
+		<header>#outputPageElement('logo')#outputPageElement('siteTitle')#outputPageElement('globalNavButton')#outputPageElement('globalNavSidebar')</header>#outputPageElement('siteNavForPageRender')#outputPageElement('siteNavForPageRender')#outputPageElement('breadcrumbs')#outputPageElement('preMain')
+		<main>#outputPageElement('topElement')#outputPageElement('preH1')#outputPageElement('h1')#outputPageElement('postH1')
+			<div class="row">
+				<div class="col-xs-12 ">#outputPageElement('wysiwyg')</div>
+			</div>#outputPageElement('postWysiwyg')#outputPageElement('bottomElement')
+		</main>#outputPageElement('postMain')
+		<footer>#outputPageElement('footerContent')#outputPageElement('lastModified')</footer>#outputPageElement('brightEdgeCloseConnection')
+	</body>
+</html>
+*#
