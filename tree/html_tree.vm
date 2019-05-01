@@ -1,23 +1,14 @@
-#import( 'site://_brisk/core/library/velocity/chanw/chanw-library-import' )
-
+#* Use this format to create a tree rooted at html *#
 #chanwCreateNode( {
     $TREE_NODE_NAME :      'html',
-    $TREE_NODE_START_TAG : '<html $!siteConfigMap[''htmlAttributes'']>$!siteConfigMap[''passThroughTopCode'']',
-    $TREE_NODE_END_TAG :   '</html>',
-    $TREE_NODE_CODE :      '#initialize'
-} )
+    $TREE_NODE_START_TAG : "<html $!siteConfigMap['htmlAttributes']>$!siteConfigMap['passThroughTopCode']",
+    $TREE_NODE_TEXT :      $!siteConfigMap['passThroughTopCode'],
+    $TREE_NODE_CODE :      '#initialize',
+    $TREE_NODE_END_TAG :   '</html>' } )
 ## children of html
 #chanwAddChildren( $chanwObjectNodeMap[ 'html' ] [ 
-{ 
-    $TREE_NODE_NAME :      'head',
-    $TREE_NODE_START_TAG : '<head $!siteConfigMap[ ''headAttributes'' ]>', 
-    $TREE_NODE_END_TAG :   '</head>'
-},
-{ 
-    $TREE_NODE_NAME :      'body', 
-    $TREE_NODE_START_TAG : '<body $!siteConfigMap[ ''bodyAttributes'' ]>',  
-    $TREE_NODE_END_TAG :   '</body>'
-}
+    { $TREE_NODE_NAME : 'head', $TREE_NODE_START_TAG : "<head $!siteConfigMap[ 'headAttributes' ]>",  $TREE_NODE_END_TAG : '</head>' },
+    { $TREE_NODE_NAME : 'body', $TREE_NODE_START_TAG : "<body $!siteConfigMap[ 'bodyAttributes' ]>",  $TREE_NODE_END_TAG : '</body>' }
 ] )
 ## children of head
 #chanwAddChildren( $chanwObjectNodeMap[ 'head' ] [ 
@@ -61,7 +52,9 @@
     $TREE_NODE_CODE : '#outputPageElement(''googleTagManagerNoscript'')'
 },
 { 
-    $TREE_NODE_NAME : 'header'
+    $TREE_NODE_NAME : 'header',
+    $TREE_NODE_START_TAG : "<header>", 
+    $TREE_NODE_END_TAG :   '</header>'
 },
 { 
     $TREE_NODE_NAME : 'siteNav',
@@ -80,18 +73,18 @@
     $TREE_NODE_CODE : '#outputPageElement(''preMain'')'
 },
 { 
-    $TREE_NODE_NAME : 'main'
+    $TREE_NODE_NAME : 'main',
+    $TREE_NODE_START_TAG : "<main>", 
+    $TREE_NODE_END_TAG :   '</main>'
 },
 { 
     $TREE_NODE_NAME : 'postMain',
     $TREE_NODE_CODE : '#outputPageElement(''postMain'')'
 },
 { 
-    $TREE_NODE_NAME : 'footer'
-},
-{ 
-    $TREE_NODE_NAME : 'script',
-    $TREE_NODE_CODE : '#outputPageElement(''script'')'
+    $TREE_NODE_NAME : 'footer',
+    $TREE_NODE_START_TAG : "<footer>", 
+    $TREE_NODE_END_TAG :   '</footer>'
 },
 { 
     $TREE_NODE_NAME :  'cd-top'
@@ -164,8 +157,9 @@
     $TREE_NODE_CODE : '#outputPageElement(''postH1'')'
 },
 { 
-    $TREE_NODE_NAME : 'wysiwyg',
-    $TREE_NODE_CODE : '#outputPageElement(''wysiwyg'')'
+    $TREE_NODE_NAME      : 'wysiwyg-container',
+    $TREE_NODE_START_TAG : '<div class="row"><div class=''col-xs-12 $!siteConfigMap["floatBlockClass"]''>',
+    $TREE_NODE_END_TAG   : '</div></div>'
 },
 { 
     $TREE_NODE_NAME : 'post-wysiwyg-choosers',
@@ -173,6 +167,12 @@
 },
 { 
     $TREE_NODE_NAME : 'middle-element-placeholder'
+}
+] )
+#chanwAddChildren( $chanwObjectNodeMap[ 'wysiwyg-container' ] [ 
+{ 
+    $TREE_NODE_NAME : 'wysiwyg',
+    $TREE_NODE_CODE : '#outputPageElement(''wysiwyg'')'
 }
 ] )
 ## children of footer
