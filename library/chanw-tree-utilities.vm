@@ -5,6 +5,7 @@ Author: Wing Ming Chan, German Drulyk
 Copyright (c) 2019 Wing Ming Chan <chanw@upstate.edu>, German Drulyk <drulykg@upstate.edu>
 MIT Licensed
 Modification history:
+4/30/2019 Added chanwDisplayTreeNodeIteratively and related macros.
 4/2/2019 Changed chanwDisplayTreeNodeRecursively so that tags are now evaluated.
 2/8/2019 Added chanwRemoveNodeFromTree.
 5/31/2018 Added chanwAttachBlockToTreeNode.
@@ -168,6 +169,63 @@ $node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]#if($node_chanwDisplayTree.U
 #if( $chanwDisplayTreeCounter > 0 )
 #set( $chanwDisplayTreeCounter = $chanwDisplayTreeCounter - 1 )
 #end
+#end
+#macro( chanwDisplayTreeNodeIteratively $node_chanwDisplayTreeNodeIteratively )
+#set( $chanwPreorderNodes = $node_chanwDisplayTreeNodeIteratively.preorderEnumeration() )
+#foreach( $node in $chanwPreorderNodes )#chanwDisplayNode( $node )#end
+#end
+
+#macro( chanwDisplayNode $node )
+#**### if there is a start tag, output the start tag
+#**##if( $node.UserObject[ $TREE_NODE_START_TAG ].Class.Name )
+#*    *##set( $chanwStartTag = "#evaluate( $node.UserObject[ $TREE_NODE_START_TAG ] )" )
+#*    *##if( !$node.UserObject[ $TREE_NODE_END_TAG ].Class.Name )
+#*    *##chanwGetMatchedStrings( '(\W+)\w+' $chanwStartTag )
+#*    *##set( $chanwEleName = $chanwGetMatchedStrings.matchedStringsWithoutGroups[ 0 ].replace( '<', '' ).replace( '>', '' ) )
+#*    *##set( $node.UserObject[ $TREE_NODE_END_TAG ] = "</${chanwEleName.trim()}>" )
+#*    *##end
+#*    *#$chanwStartTag#end
+#**### if there is code, evaluate code
+#**##if( $node.UserObject[ $TREE_NODE_CODE ].Class.Name )#evaluate( $node.UserObject[ $TREE_NODE_CODE ] )#end
+#**### if there is text, output text
+#**##if( $node.UserObject[ $TREE_NODE_TEXT ].Class.Name )
+#*    *#$node.UserObject[ $TREE_NODE_TEXT ]
+#**##end
+#**### if there is an end tag, output the end of a leaf
+#**##if( $node.isLeaf() )
+#*    *### not the tree's last leaf
+#*    *##if( $node.Root.LastLeaf != $node )
+#*        *##if( $node.UserObject[ $TREE_NODE_END_TAG ].Class.Name )
+#*            *##evaluate( $node.UserObject[ $TREE_NODE_END_TAG ] )
+#*        *##end
+#*        *##set( $chanwNodePath = $node.Path )
+#*        *### skip the node itself
+#*        *##foreach( $num in [ 2..$chanwNodePath.size() ] )
+#*            *##set( $current_index = $chanwNodePath.size() - $num )
+#*            *### if the node is the last leaf of the ancestor
+#*            *##if( $chanwNodePath[ $current_index ].LastLeaf == $node )
+#*                *### output end tag of ancestor
+#*                *##if( $chanwNodePath[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )
+#*                    *##evaluate( $chanwNodePath[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )
+#*                *##end
+#*                *##break
+#*            *##end
+#*        *##end
+#*    *### tree's last leaf
+#*    *##else
+#*        *##set( $path = $node.Path )
+#*        *##foreach( $num in [ 2..$path.size() ] ) ## skip $node and its parent
+#*            *##set( $current_index = $path.size() - $num )
+#*            *##if( $path[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )
+#*                *##evaluate( $path[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )
+#*            *##end
+#*        *##end
+#*    *##end
+#**##end
+#end
+
+#macro( chanwEvaluateString $st_chanwEvaluateString )
+#evaluate( $st_chanwEvaluateString )
 #end
 #*doc
 《/macro》
