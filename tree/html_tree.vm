@@ -1,7 +1,7 @@
 #* Use this format to create a tree rooted at html *#
 #chanwCreateNode( {
     $TREE_NODE_NAME :      'html',
-    $TREE_NODE_START_TAG : "<html $!siteConfigMap['htmlAttributes']>$!siteConfigMap['passThroughTopCode']",
+    $TREE_NODE_START_TAG : "<html $!siteConfigMap['htmlAttributes']>",
     $TREE_NODE_TEXT :      $!siteConfigMap['passThroughTopCode'],
     $TREE_NODE_CODE :      '#initialize' } )
 ## children of html
