@@ -1,4 +1,5 @@
-#import( "site://_chan_core/formats/tree/html_tree" )
+#import( "site://_brisk/core/library/velocity/chanw/chanw-tree-utilities" )
+#import( "site://_brisk/app/scaffolds/rwd5/html-tree" )
 
 #set( $void =  $chanwObjectNodeMap[ 'top-element' ].removeFromParent() )
 #set( $void =  $chanwObjectNodeMap[ 'bottom-element' ].removeFromParent() )
@@ -6,7 +7,7 @@
 #chanwDisplayTree( $chanwObjectNodeMap[ 'html' ] )
 
 #*
-html: #chanwAttachBlockToTreeNode('' '' $!siteConfigMap['treeConfigBlock'])#initialize
+html: #initialize
    head
       meta: #outputPageElement('meta')
       title: #outputPageElement('title')
@@ -36,7 +37,8 @@ html: #chanwAttachBlockToTreeNode('' '' $!siteConfigMap['treeConfigBlock'])#init
             pre-h1-choosers: #outputPageElement('preH1')
             h1: #outputPageElement('h1')
             post-h1-choosers: #outputPageElement('postH1')
-            wysiwyg: #outputPageElement('wysiwyg')
+            wysiwyg-container
+               wysiwyg: #outputPageElement('wysiwyg')
             post-wysiwyg-choosers: #outputPageElement('postWysiwyg')
             middle-element-placeholder
       postMain: #outputPageElement('postMain')
@@ -46,7 +48,6 @@ html: #chanwAttachBlockToTreeNode('' '' $!siteConfigMap['treeConfigBlock'])#init
             last-modified: #outputPageElement('lastModified')
             footer-row-placeholder
          footer-placehoder
-      script: #outputPageElement('script')
       cd-top
       bright-edge-close: #outputPageElement('brightEdgeCloseConnection')
       body-placeholder2
