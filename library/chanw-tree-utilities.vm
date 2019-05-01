@@ -6,6 +6,7 @@ Copyright (c) 2019 Wing Ming Chan <chanw@upstate.edu>, German Drulyk <drulykg@up
 MIT Licensed
 Modification history:
 4/30/2019 Added chanwDisplayTreeNodeIteratively and related macros.
+Added code to chanwDisplayTreeNodeRecursively to compute the end tag when missing.
 4/2/2019 Changed chanwDisplayTreeNodeRecursively so that tags are now evaluated.
 2/8/2019 Added chanwRemoveNodeFromTree.
 5/31/2018 Added chanwAttachBlockToTreeNode.
@@ -30,6 +31,7 @@ of nodes using String keys like 《code》$chanwObjectNodeMap[ "html" ]《/code�
 《import》
 doc*###
 #import( 'core/library/velocity/chanw/chanw-initialization' )
+#import( 'core/library/velocity/chanw/chanw-regex-utilities' )
 #*doc
 《/import》
 《global-variables》
@@ -174,7 +176,6 @@ $node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]#if($node_chanwDisplayTree.U
 #set( $chanwPreorderNodes = $node_chanwDisplayTreeNodeIteratively.preorderEnumeration() )
 #foreach( $node in $chanwPreorderNodes )#chanwDisplayNode( $node )#end
 #end
-
 #macro( chanwDisplayNode $node )
 #**### if there is a start tag, output the start tag
 #**##if( $node.UserObject[ $TREE_NODE_START_TAG ].Class.Name )
@@ -183,8 +184,7 @@ $node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]#if($node_chanwDisplayTree.U
 #*    *##chanwGetMatchedStrings( '(\W+)\w+' $chanwStartTag )
 #*    *##set( $chanwEleName = $chanwGetMatchedStrings.matchedStringsWithoutGroups[ 0 ].replace( '<', '' ).replace( '>', '' ) )
 #*    *##set( $node.UserObject[ $TREE_NODE_END_TAG ] = "</${chanwEleName.trim()}>" )
-#*    *##end
-#*    *#$chanwStartTag#end
+#*    *##end$chanwStartTag#end
 #**### if there is code, evaluate code
 #**##if( $node.UserObject[ $TREE_NODE_CODE ].Class.Name )#evaluate( $node.UserObject[ $TREE_NODE_CODE ] )#end
 #**### if there is text, output text
@@ -196,7 +196,7 @@ $node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]#if($node_chanwDisplayTree.U
 #*    *### not the tree's last leaf
 #*    *##if( $node.Root.LastLeaf != $node )
 #*        *##if( $node.UserObject[ $TREE_NODE_END_TAG ].Class.Name )
-#*            *##evaluate( $node.UserObject[ $TREE_NODE_END_TAG ] )
+#*            *##evaluate( $node.UserObject[ $TREE_NODE_END_TAG ] )##
 #*        *##end
 #*        *##set( $chanwNodePath = $node.Path )
 #*        *### skip the node itself
@@ -206,7 +206,7 @@ $node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]#if($node_chanwDisplayTree.U
 #*            *##if( $chanwNodePath[ $current_index ].LastLeaf == $node )
 #*                *### output end tag of ancestor
 #*                *##if( $chanwNodePath[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )
-#*                    *##evaluate( $chanwNodePath[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )
+#*                    *##evaluate( $chanwNodePath[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )##
 #*                *##end
 #*                *##break
 #*            *##end
@@ -217,13 +217,12 @@ $node_chanwDisplayTree.UserObject[ $TREE_NODE_NAME ]#if($node_chanwDisplayTree.U
 #*        *##foreach( $num in [ 2..$path.size() ] ) ## skip $node and its parent
 #*            *##set( $current_index = $path.size() - $num )
 #*            *##if( $path[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )
-#*                *##evaluate( $path[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )
+#*                *##evaluate( $path[ $current_index ].UserObject[ $TREE_NODE_END_TAG ] )##
 #*            *##end
 #*        *##end
 #*    *##end
 #**##end
 #end
-
 #macro( chanwEvaluateString $st_chanwEvaluateString )
 #evaluate( $st_chanwEvaluateString )
 #end
@@ -245,7 +244,13 @@ doc*###
 #set( $chanwDisplayTreeNodeRecursivelyCounter = $chanwDisplayTreeNodeRecursivelyCounter + 1 )
 #end
 #if( ( $chanwDisplayTreeNodeRecursivelyCounter != 0 || $stripRoot_chanwDisplayTreeNodeRecursively != true ) && $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_START_TAG ] )
-#evaluate( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_START_TAG ] )#end
+#*    *##set( $chanwStartTag = "#evaluate( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_START_TAG ] )" )
+#*    *##if( !$node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_END_TAG ].Class.Name )
+#*    *##chanwGetMatchedStrings( '(\W+)\w+' $chanwStartTag )
+#*    *##set( $chanwEleName = $chanwGetMatchedStrings.matchedStringsWithoutGroups[ 0 ].replace( '<', '' ).replace( '>', '' ) )
+#*    *##set( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_END_TAG ] = "</${chanwEleName.trim()}>" )
+#*    *##end
+#*    *#$chanwStartTag#end
 #if( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_CODE ] )
 #evaluate( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_CODE ] )#end
 #if( $node_chanwDisplayTreeNodeRecursively.UserObject[ $TREE_NODE_TEXT ] )
