@@ -2,8 +2,7 @@
 #chanwCreateNode( {
     $TREE_NODE_NAME :      'html',
     $TREE_NODE_START_TAG : "<html $!siteConfigMap['htmlAttributes']>",
-    $TREE_NODE_TEXT :      $!siteConfigMap['passThroughTopCode'],
-    $TREE_NODE_CODE :      '#initialize' } )
+    $TREE_NODE_TEXT :      $!siteConfigMap['passThroughTopCode'] } )
 ## children of html
 #chanwAddChildren( $chanwObjectNodeMap[ 'html' ] [ 
     { $TREE_NODE_NAME : 'head', $TREE_NODE_START_TAG : "<head $!siteConfigMap[ 'headAttributes' ]>" },
@@ -32,16 +31,25 @@
 },
 { 
     $TREE_NODE_NAME : 'head-code'
-},
-{ 
-    $TREE_NODE_NAME : 'head-placeholder'
 }
 ] )
 ## children of body
-#chanwAddChildren( $chanwObjectNodeMap[ 'body' ] [ 
+#chanwAddChildren( $chanwObjectNodeMap[ 'body' ] [
 { 
-    $TREE_NODE_NAME : 'body-placeholder1'
+    $TREE_NODE_NAME : 'header',
+    $TREE_NODE_START_TAG : "<div id=""header"">"
 },
+{ 
+    $TREE_NODE_NAME : 'main',
+    $TREE_NODE_START_TAG : "<main id=""main"">"
+},
+{ 
+    $TREE_NODE_NAME : 'footer',
+    $TREE_NODE_START_TAG : "<div id=""footer"">"
+}
+] )
+## children of header
+#chanwAddChildren( $chanwObjectNodeMap[ 'header' ] [
 { 
     $TREE_NODE_NAME : 'bright-edge-seo',
     $TREE_NODE_CODE : '#outputPageElement(''brightEdgeSEOTags'')'
@@ -51,8 +59,7 @@
     $TREE_NODE_CODE : '#outputPageElement(''googleTagManagerNoscript'')'
 },
 { 
-    $TREE_NODE_NAME : 'header',
-    $TREE_NODE_START_TAG : "<header>"
+    $TREE_NODE_NAME : 'header-row'
 },
 { 
     $TREE_NODE_NAME : 'siteNav',
@@ -67,43 +74,8 @@
     $TREE_NODE_CODE : '#outputPageElement(''breadcrumbs'')'
 },
 { 
-    $TREE_NODE_NAME : 'preMain',
-    $TREE_NODE_CODE : '#outputPageElement(''preMain'')'
-},
-{ 
-    $TREE_NODE_NAME : 'main',
-    $TREE_NODE_START_TAG : "<main>"
-},
-{ 
-    $TREE_NODE_NAME : 'postMain',
-    $TREE_NODE_CODE : '#outputPageElement(''postMain'')'
-},
-{ 
-    $TREE_NODE_NAME : 'footer',
-    $TREE_NODE_START_TAG : "<footer>"
-},
-{ 
-    $TREE_NODE_NAME :  'cd-top'
-},
-{ 
-    $TREE_NODE_NAME : 'bright-edge-close',
-    $TREE_NODE_CODE : '#outputPageElement(''brightEdgeCloseConnection'')'
-},
-{ 
-    $TREE_NODE_NAME : 'body-placeholder2'
-}
-] )
-## children of header
-#chanwAddChildren( $chanwObjectNodeMap[ 'header' ] [ 
-{ 
-    $TREE_NODE_NAME : 'header-row'
-},
-{ 
     $TREE_NODE_NAME : 'global-nav-sidebar',
     $TREE_NODE_CODE : '#outputPageElement(''globalNavSidebar'')'
-},
-{ 
-    $TREE_NODE_NAME : 'header-placehoder'
 }
 ] )
 ## children of header-row
@@ -119,23 +91,29 @@
 { 
     $TREE_NODE_NAME : 'global-nav-button',
     $TREE_NODE_CODE : '#outputPageElement(''globalNavButton'')'
-},
-{ 
-    $TREE_NODE_NAME : 'header-row-placeholder'
 }
 ] )
 ## children of main
-#chanwAddChildren( $chanwObjectNodeMap[ 'main' ] [ 
+#chanwAddChildren( $chanwObjectNodeMap[ 'main' ] [
+{ 
+    $TREE_NODE_NAME : 'pre-main-element',
+    $TREE_NODE_CODE : '#outputPageElement(''preMainElement'')'
+},
 { 
     $TREE_NODE_NAME : 'top-element',
     $TREE_NODE_CODE : '#outputPageElement(''topElement'')'
 },
 { 
-    $TREE_NODE_NAME : 'middle-element'
+    $TREE_NODE_NAME : 'middle-element',
+    $TREE_NODE_START_TAG : "<div class=""container"">"
 },
 { 
     $TREE_NODE_NAME : 'bottom-element',
     $TREE_NODE_CODE : '#outputPageElement(''bottomElement'')'
+},
+{ 
+    $TREE_NODE_NAME : 'post-main-element',
+    $TREE_NODE_CODE : '#outputPageElement(''postMainElement'')'
 }
 ] )
 ## children of middle-element
@@ -153,19 +131,15 @@
     $TREE_NODE_CODE : '#outputPageElement(''postH1'')'
 },
 { 
-    $TREE_NODE_NAME      : 'wysiwyg-container',
-    $TREE_NODE_START_TAG : '<div class="row"><div class=''col-xs-12 $!siteConfigMap["floatBlockClass"]''>',
-    $TREE_NODE_END_TAG   : '</div></div>'
+    $TREE_NODE_NAME      : 'wysiwyg-element',
+    $TREE_NODE_START_TAG : "<div class=""row"">"
 },
 { 
     $TREE_NODE_NAME : 'post-wysiwyg-choosers',
     $TREE_NODE_CODE : '#outputPageElement(''postWysiwyg'')'
-},
-{ 
-    $TREE_NODE_NAME : 'middle-element-placeholder'
 }
 ] )
-#chanwAddChildren( $chanwObjectNodeMap[ 'wysiwyg-container' ] [ 
+#chanwAddChildren( $chanwObjectNodeMap[ 'wysiwyg-element' ] [ 
 { 
     $TREE_NODE_NAME : 'wysiwyg',
     $TREE_NODE_CODE : '#outputPageElement(''wysiwyg'')'
@@ -177,7 +151,11 @@
     $TREE_NODE_NAME : 'footer-row'
 },
 { 
-    $TREE_NODE_NAME : 'footer-placehoder'
+    $TREE_NODE_NAME :  'cd-top'
+},
+{ 
+    $TREE_NODE_NAME : 'bright-edge-close',
+    $TREE_NODE_CODE : '#outputPageElement(''brightEdgeCloseConnection'')'
 }
 ] )
 ## children of footer-row
@@ -189,8 +167,5 @@
 { 
     $TREE_NODE_NAME : 'last-modified',
     $TREE_NODE_CODE : '#outputPageElement(''lastModified'')'
-},
-{ 
-    $TREE_NODE_NAME : 'footer-row-placeholder'
 }
 ] )
