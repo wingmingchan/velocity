@@ -1,0 +1,16 @@
+#import( "site://_brisk/core/library/velocity/chanw/chanw-tree-utilities" )
+#import( "site://_brisk/app/content_types/Page/scaffolds/rwd5/html-tree" )
+
+#set( $void = $chanwObjectNodeMap[ 'html' ].removeAllChildren() )
+#set( $void = $chanwObjectNodeMap[ 'html' ].UserObject.remove( $TREE_NODE_CODE, $chanwObjectNodeMap[ 'html' ].UserObject[ $TREE_NODE_CODE ] ) )
+#set( $chanwObjectNodeMap[ 'html' ].UserObject[ $TREE_NODE_START_TAG ] = $S_ROOT_TAG )
+#set( $chanwObjectNodeMap[ 'html' ].UserObject[ $TREE_NODE_END_TAG ]   = $E_ROOT_TAG )
+
+#set( $void = $chanwObjectNodeMap[ 'html' ].add( $chanwObjectNodeMap[ 'pre-main-element' ] ) )
+#set( $void = $chanwObjectNodeMap[ 'html' ].add( $chanwObjectNodeMap[ 'post-main-element' ] ) )
+
+#chanwDisplayTreeNodeRecursively( $chanwObjectNodeMap[ 'html' ] )
+
+#*
+<cascadeForcedRoot>#outputPageElement('preMainElement')#outputPageElement('postMainElement')</cascadeForcedRoot>
+*#
