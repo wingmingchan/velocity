@@ -38,43 +38,43 @@ $site_name   = "formats";
 
 try
 {
-	// create the velocity format
-	$format = $admin->getScriptFormat( 
-		"$folder_path/$format_name", $site_name );
-	if( is_null( $format ) )
-	{
-		$format = $admin->createScriptFormat(
-			$admin->getAsset( a\Folder::TYPE, $folder_path, $site_name ),
-			$format_name, $script );
-	}
-	sleep( 2 );
-	// create and publish the page
-	$page = $admin->getPage( $format_name, $site_name );
-	
-	if( is_null( $page ) )
-	{
-		$page = $admin->createXhtmlPage(
-			$admin->getAsset( a\Folder::TYPE, "/", $site_name ),
-			$format_name, "",
-			$admin->getAsset( a\ContentType::TYPE, "XML", "_brisk" ) );
-	}
-	sleep( 2 );
-	$page->setRegionFormat( "XML", "DEFAULT", $format )->edit()->publish();
-	sleep( 10 );
-	// get PHP code
-	$code = file_get_contents( "http://www.upstate.edu/$site_name/$format_name.xml" );
-	$code = str_replace( "&gt;", ">", str_replace( "<php>", "", str_replace( "</php>", "", $code ) ) );
-	eval( $code );
-	// send emails here
-	foreach( $view as $user_id => $user_info )
-	{
-		echo $user_id, ",", $user_info[ 0 ], ",", $user_info[ 1 ], BR;
-	}
-	// clean up
-	$page->unpublish();
-	sleep( 5 );
-	$admin->deleteAsset( $page );
-	$admin->deleteAsset( $format );
+    // create the velocity format
+    $format = $admin->getScriptFormat( 
+        "$folder_path/$format_name", $site_name );
+    if( is_null( $format ) )
+    {
+        $format = $admin->createScriptFormat(
+            $admin->getAsset( a\Folder::TYPE, $folder_path, $site_name ),
+            $format_name, $script );
+    }
+    sleep( 2 );
+    // create and publish the page
+    $page = $admin->getPage( $format_name, $site_name );
+    
+    if( is_null( $page ) )
+    {
+        $page = $admin->createXhtmlPage(
+            $admin->getAsset( a\Folder::TYPE, "/", $site_name ),
+            $format_name, "",
+            $admin->getAsset( a\ContentType::TYPE, "XML", "_brisk" ) );
+    }
+    sleep( 2 );
+    $page->setRegionFormat( "XML", "DEFAULT", $format )->edit()->publish();
+    sleep( 10 );
+    // get PHP code
+    $code = file_get_contents( "http://www.upstate.edu/$site_name/$format_name.xml" );
+    $code = str_replace( "&gt;", ">", str_replace( "<php>", "", str_replace( "</php>", "", $code ) ) );
+    eval( $code );
+    // send emails here
+    foreach( $view as $user_id => $user_info )
+    {
+        echo $user_id, ",", $user_info[ 0 ], ",", $user_info[ 1 ], BR;
+    }
+    // clean up
+    $page->unpublish();
+    sleep( 5 );
+    $admin->deleteAsset( $page );
+    $admin->deleteAsset( $format );
 }
 catch( \Exception $e ) 
 {
@@ -82,6 +82,6 @@ catch( \Exception $e )
 }
 catch( \Error $er )
 {
-	echo S_PRE . $er . E_PRE; 
+    echo S_PRE . $er . E_PRE; 
 }
 ?>
