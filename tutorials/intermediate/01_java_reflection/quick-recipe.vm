@@ -34,7 +34,7 @@ $_.Class.forName( 'java.lang.Math' ).getMethod( 'abs', $_FieldTool.in( "java.lan
 ## get the service provider
 #set( $serviceProvider = $_.Class.forName( 'com.hannonhill.cascade.model.service.ServiceProviderHolderBean' ).getMethod( 'getServiceProvider' ).invoke( null ) )
 $serviceProvider.Class.Name
-## get the page service provider
+## get the page service
 #set( $pageService = $serviceProvider.PageService )
 $pageService.Class.Name
 ## get the page DOM object
