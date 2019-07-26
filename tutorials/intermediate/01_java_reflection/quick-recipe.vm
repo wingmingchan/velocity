@@ -1,0 +1,73 @@
+#*
+Retrieving constructors
+*#
+## get java.lang.StringBuffer()
+$_.Class.forName( 'java.lang.StringBuffer' ).getConstructor().Class.Name
+## get java.lang.StringBuffer( String s )
+$_.Class.forName( 'java.lang.StringBuffer' ).getConstructor( $_.Class.forName( 'java.lang.String' ) ).Class.Name
+## get java.lang.StringBuffer( int i )
+$_.Class.forName( 'java.lang.StringBuffer' ).getConstructor( $_FieldTool.in( "java.lang.Integer" ).TYPE ).Class.Name
+## get javax.swing.tree.DefaultMutableTreeNode( Object o, boolean b )
+$_.Class.forName( 'javax.swing.tree.DefaultMutableTreeNode' ).getConstructor( $_.Class.forName( 'java.lang.Object' ), $_FieldTool.in( "java.lang.Boolean" ).TYPE ).Class.Name
+
+#*
+Retrieving methods
+*#
+## get Math.abs( double d )
+$_.Class.forName( 'java.lang.Math' ).getMethod( 'abs', $_FieldTool.in( "java.lang.Double" ).TYPE ).Class.Name
+
+#*
+Calling newInstance()
+*#
+    $_.Class.forName( 'java.lang.StringBuffer' ).getConstructor().newInstance().Class.Name
+    $_.Class.forName( 'java.lang.StringBuffer' ).getConstructor( $_.Class.forName( 'java.lang.String' ) ).newInstance( 'Hello' ).Class.Name
+    $_.Class.forName( 'java.lang.StringBuffer' ).getConstructor( $_FieldTool.in( "java.lang.Integer" ).TYPE ).newInstance( 1000 ).Class.Name
+    $_.Class.forName( 'javax.swing.tree.DefaultMutableTreeNode' ).getConstructor( $_.Class.forName( 'java.lang.Object' ), $_FieldTool.in( "java.lang.Boolean" ).TYPE ).newInstance( $_, true ).Class.Name
+
+#*
+Calling a static method
+*#
+$_.Class.forName( 'java.lang.Math' ).getMethod( 'abs', $_FieldTool.in( "java.lang.Double" ).TYPE ).invoke( null, -3.57 )
+
+## given an ID String of a page, retrieve the associated information of the page
+#set( $pageId = '0b64ae2b8b7f08ee51e49b0d68368b7d' )
+## get the service provider
+#set( $serviceProvider = $_.Class.forName( 'com.hannonhill.cascade.model.service.ServiceProviderHolderBean' ).getMethod( 'getServiceProvider' ).invoke( null ) )
+$serviceProvider.Class.Name
+## get the page service provider
+#set( $pageService = $serviceProvider.PageService )
+$pageService.Class.Name
+## get the page DOM object
+#set( $pageDOM = $pageService.get( $pageId ) )
+$pageDOM.Class.Name
+## get the APIAdapterFactory.createAPIAdapter( com.hannonhill.cascade.model.dom.BaseDomainObject, boolean, com.hannonhill.cascade.model.service.ServiceProvider ) method
+#set( $createAPIAdapterMethod = $_.Class.forName( 'com.hannonhill.cascade.api.adapters.APIAdapterFactory' ).getMethod(
+    'createAPIAdapter', 
+    $_.Class.forName( 'com.hannonhill.cascade.model.dom.BaseDomainObject' ), 
+    $_FieldTool.in( "java.lang.Boolean" ).TYPE, 
+    $_.Class.forName( 'com.hannonhill.cascade.model.service.ServiceProvider' )
+) )
+## retrieve a PageAdapterAPI object
+#set( $pageAPIAdapter = $createAPIAdapterMethod.invoke( null, $pageDOM, true, $serviceProvider ) )
+$pageAPIAdapter.Class.Name
+## output some information of the page
+$pageAPIAdapter.Name
+$pageAPIAdapter.StructuredData.Class.Name
+## get the content type name
+$pageDOM.ContentType.Name
+## get the DOM object of the content type
+#set( $ctDOM = $serviceProvider.ContentTypeService.get( $pageDOM.ContentType.Id ) )
+$ctDOM.Class.Name
+## get the IDs of data definition, metadata set, configuration set
+$ctDOM.StructuredDataDefinition.Id
+$ctDOM.MetadataSet.Id
+$ctDOM.PageConfigurationSet.Id
+## get the XML of the data definition
+$serviceProvider.StructuredDataDefinitionService.get( $ctDOM.StructuredDataDefinition.Id ).Xml
+## get the name of the metadata set
+$serviceProvider.MetadataSetService.get( $ctDOM.MetadataSet.Id ).Name
+## get the id of default configuration
+#set( $defaultPC = $serviceProvider.PageConfigurationSetService.get( $ctDOM.PageConfigurationSet.Id ).DefaultConfiguration )
+$defaultPC.Id
+## get the name of the default configuration
+$serviceProvider.PageConfigurationService.get( $defaultPC.Id ).Name
