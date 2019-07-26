@@ -19,10 +19,10 @@ $_.Class.forName( 'java.lang.Math' ).getMethod( 'abs', $_FieldTool.in( "java.lan
 #*
 Calling newInstance()
 *#
-    $_.Class.forName( 'java.lang.StringBuffer' ).getConstructor().newInstance().Class.Name
-    $_.Class.forName( 'java.lang.StringBuffer' ).getConstructor( $_.Class.forName( 'java.lang.String' ) ).newInstance( 'Hello' ).Class.Name
-    $_.Class.forName( 'java.lang.StringBuffer' ).getConstructor( $_FieldTool.in( "java.lang.Integer" ).TYPE ).newInstance( 1000 ).Class.Name
-    $_.Class.forName( 'javax.swing.tree.DefaultMutableTreeNode' ).getConstructor( $_.Class.forName( 'java.lang.Object' ), $_FieldTool.in( "java.lang.Boolean" ).TYPE ).newInstance( $_, true ).Class.Name
+$_.Class.forName( 'java.lang.StringBuffer' ).getConstructor().newInstance().Class.Name
+$_.Class.forName( 'java.lang.StringBuffer' ).getConstructor( $_.Class.forName( 'java.lang.String' ) ).newInstance( 'Hello' ).Class.Name
+$_.Class.forName( 'java.lang.StringBuffer' ).getConstructor( $_FieldTool.in( "java.lang.Integer" ).TYPE ).newInstance( 1000 ).Class.Name
+$_.Class.forName( 'javax.swing.tree.DefaultMutableTreeNode' ).getConstructor( $_.Class.forName( 'java.lang.Object' ), $_FieldTool.in( "java.lang.Boolean" ).TYPE ).newInstance( $_, true ).Class.Name
 
 #*
 Calling a static method
