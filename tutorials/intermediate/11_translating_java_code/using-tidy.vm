@@ -1,0 +1,28 @@
+#set( $globalW3CTidy = $_.Class.forName( 'org.w3c.tidy.Tidy' ).getConstructor().newInstance() )
+$globalW3CTidy.setDocType( "omit" )
+$globalW3CTidy.setMakeClean( true )
+$globalW3CTidy.setXmlOut( false )
+$globalW3CTidy.setInputEncoding( "UTF8" )
+$globalW3CTidy.setXmlSpace( true )
+$globalW3CTidy.setIndentContent( true )
+#set( $url = 'http://www.google.com' )
+#chanwGetURL( $url )
+#if( $chanwGetURL.openConnection().getContentType().Class.Name )
+    #set( $tidyDOM      = $globalW3CTidy.parseDOM( $chanwGetURL.Content, $_.Class.forName( 'org.apache.commons.io.output.NullOutputStream' ).getConstructor().newInstance() ) )
+    #set( $jDOMDocument = $_.Class.forName( 'org.jdom.input.DOMBuilder' ).newInstance().build( $tidyDOM ) )
+    #set( $jDOMRoot     = $jDOMDocument.getRootElement() )
+    $_SerializerTool.serialize( $jDOMRoot, false )
+#end
+#macro( chanwGetURI $uri_chanwGetURI )
+    #set( $chanwGetURI = "" )
+    #if( $uri_chanwGetURI.Class.Name && $uri_chanwGetURI.Class.Name == 'java.lang.String' )
+        #set( $chanwGetURI = $_.Class.forName( 'java.net.URI' ).create( $uri_chanwGetURI ) )
+    #end
+#end
+#macro( chanwGetURL $url_chanwGetURL )
+    #set( $chanwGetURL = "" )
+    #chanwGetURI( $url_chanwGetURL )
+    #if( $chanwGetURI != "" && $chanwGetURI.Scheme.Class.Name && ( $chanwGetURI.Scheme == 'http' || $chanwGetURI.Scheme == 'https' ) )
+        #set( $chanwGetURL = $chanwGetURI.toURL() )
+    #end
+#end
