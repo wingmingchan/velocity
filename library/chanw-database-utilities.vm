@@ -82,6 +82,9 @@ doc*###
     "system-page":   $CASCADE_API_PAGE_TYPE,
     "system-symlink":$CASCADE_API_SYMLINK_TYPE
 } )
+## XML element names
+#set( $chanwXmlRootElementName = 'data' )
+#set( $chanwXmlRecordName      = 'record' )
 #set( $chanwDatabaseUtilitiesGlobalVariables = [ 
     "chanwAssetCachePath",
     "chanwAssetSiteName",
@@ -206,14 +209,16 @@ invoke 《code》#chanwGetDatabaseStatement《/code》 like this:《/p》
 《macro id=“chanwCleanUp”》
 doc*###
 #macro( chanwCleanUp )
-    #if( $chanwConnection )
+#*
+    #if( $chanwConnection.Class.Name && !$chanwConnection.isClosed() )
         ##still open
         $chanwConnection.close()
     #end
 ##
-    #if( $chanwGetDatabaseStatement )
+    #if( $chanwGetDatabaseStatement.Class.Name && !$chanwGetDatabaseStatement.isClosed() )
         $chanwGetDatabaseStatement.close()
     #end
+*#
 #end
 #*doc
 《/macro》
@@ -1161,6 +1166,42 @@ doc*###
     #chanwGetResultSet( $chanwSql )
     #chanwGetRecordListFromResultSet( $chanwGetResultSet )
     #set( $chanwGetUserCountAuditByActionDays = $chanwGetRecordListFromResultSet )
+#end
+#*doc
+《/macro》
+《documentation》
+《code》#chanwGetXmlFromSql( $sql )《/code》
+《p》Returns an XML string, containing data returned from the SQL statement.《/p》
+《/documentation》
+《macro id=“chanwGetXmlFromSql”》
+doc*###
+#macro( chanwGetXmlFromSql $sql_chanwGetXmlFromSql )
+#chanwGetRecordListFromSql( $sql_chanwGetXmlFromSql )
+#chanwGetColumnLabelsFromRS( $chanwGetRecordListFromSql )
+#set( $chanwRSColLastIndex = $chanwGetColumnLabelsFromRS.size() - 1 )
+$globalStringBuffer.setLength( 0 )
+#set( $void = $globalStringBuffer.append( "<${chanwXmlRootElementName}>" ) )
+##set( $chanwGetXmlFromSql = "<${chanwXmlRootElementName}>" )
+#foreach( $record in $chanwGetRecordListFromSql )
+#set( $void = $globalStringBuffer.append( "<${chanwXmlRecordName}>" ) )
+##set( $chanwGetXmlFromSql = $chanwGetXmlFromSql + "<${chanwXmlRecordName}>" )
+#foreach( $colName in $chanwGetColumnLabelsFromRS )
+#if( !$record[ $foreach.index ].Class.Name )
+#set( $chanwRecordColValue = "null" )
+#else
+#set( $chanwRecordColValue = $record[ $foreach.index ] )
+#end
+#set( $void = $globalStringBuffer.append( "<${colName.toLowerCase()}>" ) )
+#set( $void = $globalStringBuffer.append( $chanwRecordColValue ) )
+#set( $void = $globalStringBuffer.append( "</${colName.toLowerCase()}>" ) )
+##set( $chanwGetXmlFromSql = $chanwGetXmlFromSql + "<${colName.toLowerCase()}>" + $chanwRecordColValue + "</${colName.toLowerCase()}>" )
+#end
+#set( $void = $globalStringBuffer.append( "</${chanwXmlRecordName}>" ) )
+##set( $chanwGetXmlFromSql = $chanwGetXmlFromSql + "</${chanwXmlRecordName}>" )
+#end
+#set( $void = $globalStringBuffer.append( "</${chanwXmlRootElementName}>" ) )
+##set( $chanwGetXmlFromSql = $chanwGetXmlFromSql + "</${chanwXmlRootElementName}>" )
+#set( $chanwGetXmlFromSql = $globalStringBuffer.toString().trim() )
 #end
 #*doc
 《/macro》

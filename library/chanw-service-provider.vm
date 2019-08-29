@@ -73,6 +73,7 @@ doc*###
 #set( $chanwPublishSetContainerService               = $chanwServiceProvider.getPublishSetContainerService() )
 #set( $chanwPublishSetService                        = $chanwServiceProvider.getPublishSetService() )
 #set( $chanwRoleService                              = $chanwServiceProvider.getRoleService() )
+#set( $chanwSharedFieldService                       = $chanwServiceProvider.getSharedFieldService() )
 #set( $chanwSiteService                              = $chanwServiceProvider.getSiteService() )
 #set( $chanwStructuredDataDefinitionService          = $chanwServiceProvider.getStructuredDataDefinitionService() )
 #set( $chanwStructuredDataDefinitionContainerService = $chanwServiceProvider.getStructuredDataDefinitionContainerService() )
@@ -86,6 +87,16 @@ doc*###
 #set( $chanwWebServicesService                       = $chanwServiceProvider.getWebServicesService() )
 #set( $chanwWorkflowDefinitionContainerService       = $chanwServiceProvider.getWorkflowDefinitionContainerService() )
 #set( $chanwWorkflowDefinitionService                = $chanwServiceProvider.getWorkflowDefinitionService() )
+#set( $chanwDBTypeServiceTypeMap = {
+    'BLO' : 'block',
+    'FIL' : 'file',
+    'PAG' : 'page',
+    'REF' : 'reference',
+    'SYM' : 'symlink',
+    'TEM' : 'template',
+    'VEL' : 'format',
+    'XSL' : 'format'
+} )
 #set( $chanwAllSites           = $chanwSiteService.getAll() )
 #set( $chanwAllSiteNames       = [] )
 #foreach( $site in $chanwAllSites )

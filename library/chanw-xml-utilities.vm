@@ -1,0 +1,80 @@
+#*doc
+《code》
+《copyright》
+Author: Wing Ming Chan
+Copyright (c) 2019 Wing Ming Chan <chanw@upstate.edu>
+MIT Licensed
+Modification history:
+8/29/2019 Format created.
+《/copyright》
+《evaluate execute=“true”》
+《div id=“hide-code1”》
+《h2》Test Code and Results《/h2》
+《pre》
+《/pre》
+《/div》
+《/evaluate》
+《documentation id=“top”》
+《h2》Introduction《/h2》
+《p》This format defines macros to work with xml.《/p》
+《/documentation》
+《import》
+doc*###
+#import( 'core/library/velocity/chanw/chanw-initialization' )
+#*doc
+《/import》
+《global-variables》
+doc*###
+#set( $chanwXmltUtilitiesGlobalVariables = [] )
+#*doc
+《/global-variables》
+《documentation》
+《code》#chanwConvertIcsToXml( $ics )《/code》
+《p》Accepts a string of ICS contents and returns a 《code》org.jdom.Element《/code》 object. 
+Use 《code》$globalStringBuffer.toString()《/code》 to access the xml string after the call.《/p》
+《/documentation》
+《macro id=“chanwConvertIcsToXml”》
+doc*###
+#macro( chanwConvertIcsToXml $ics_chanwConvertIcsToXml )
+    ## https://evertpot.com/248/
+    #set( $chanwPattern = '^([^:^;]*)(?:;([^:]*))?:(.*)$' )
+    #set( $chanwLines = $ics_chanwConvertIcsToXml.split( '\n' ) )
+    #foreach( $line in $chanwLines )
+        #chanwGetMatcherObject( $chanwPattern $line )
+        #set( $chanwMatchResult = $chanwGetMatcherObject.find() )
+        #if( $chanwMatchResult )
+            #set( $chanwKey  = "" )
+            #set( $chanwKey  = $chanwGetMatcherObject.group( 1 ) )
+            #set( $chanwAttr = "" )
+            #set( $chanwAttr = $chanwGetMatcherObject.group( 2 ) )
+            #set( $chanwVal  = "" )
+            #set( $chanwVal  = $chanwGetMatcherObject.group( 3 ) )
+            #if( $chanwKey == 'BEGIN' )
+                #set( $void = $globalStringBuffer.append( "<${chanwVal}>" ) )
+            #elseif( $chanwKey == 'END' )
+                #set( $void = $globalStringBuffer.append( "</${chanwVal}>" ) )
+            #else
+                #set( $void = $globalStringBuffer.append( "<${chanwKey}" ) )
+                #if( $chanwAttr != "" )
+                    #set( $chanwAttr_key_vals = $chanwAttr.split( ';' ) )
+                    #foreach( $attr_key_val in $chanwAttr_key_vals )
+                        #set( $chanwAttr_key_val_array = $attr_key_val.split( '=' ) )
+                        #set( $chanwAttr_key = $chanwAttr_key_val_array[ 0 ] )
+                        #set( $chanwAttr_val = $chanwAttr_key_val_array[ 1 ] )
+                        #set( $void = $globalStringBuffer.append( " $chanwAttr_key=""$chanwAttr_val""" ) )
+                    #end
+                #end
+                #set( $void = $globalStringBuffer.append( ">$chanwVal</${chanwKey}>" ) )
+            #end
+        #end
+    #end
+    #chanwBuildXMLContentRoot( $globalStringBuffer.toString() )
+    #set( $chanwConvertIcsToXml = $chanwBuildXMLContentRoot )
+#end
+
+#*doc
+《/macro》
+《documentation id=“bottom”》
+《/documentation》
+《/code》
+doc*###

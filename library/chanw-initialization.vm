@@ -249,8 +249,9 @@ doc*###
 #define( $E_PRE )</pre>#end
 #define( $S_UL )<ul>#end
 #define( $E_UL )</ul>#end
-#define( $S_ROOT_TAG )<cascadeForcedRoot>#end
-#define( $E_ROOT_TAG )</cascadeForcedRoot>#end
+#set( $S_ROOT_TAG_NAME = 'cascadeForcedRoot' )
+#define( $S_ROOT_TAG )<${S_ROOT_TAG_NAME}>#end
+#define( $E_ROOT_TAG )</${S_ROOT_TAG_NAME}>#end
 ## java class names used for comparison
 #set( $COM_CASCADE_DATA_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.XHTMLDataDefinitionBlockAPIAdapter" )
 #set( $COM_CASCADE_TEXT_BLOCK_API_CLASS_NAME         = "com.hannonhill.cascade.api.adapters.TextBlockAPIAdapter" )
@@ -306,21 +307,21 @@ doc*###
 } )
 ## global utility objects
 #set( $chanwTools = {
-    'globalApacheBooleanUtils' :     'org.apache.commons.lang.BooleanUtils',
-    'globalApacheClassUtils':        'org.apache.commons.lang.ClassUtils',
-    'globalApacheClassTool' :        'org.apache.velocity.tools.generic.ClassTool',
-    'globalApacheComparisonDateTool':'org.apache.velocity.tools.generic.ComparisonDateTool',
-    'globalApacheConversionTool':    'org.apache.velocity.tools.generic.ConversionTool',
-    'globalApacheLinkTool':          'org.apache.velocity.tools.generic.LinkTool',
-    'globalApacheLoopTool':          'org.apache.velocity.tools.generic.LoopTool',
-    'globalApacheMathTool':          'org.apache.velocity.tools.generic.MathTool',
-    'globalApacheNumberTool':        'org.apache.velocity.tools.generic.NumberTool',
-    'globalApacheNumberUtils':       'org.apache.commons.lang.math.NumberUtils',
-    'globalApacheSortTool':          'org.apache.velocity.tools.generic.SortTool',
-    'globalApacheStringUtils':       'org.apache.commons.lang.StringUtils',
-    'globalApacheStringEscapeUtils': 'org.apache.commons.lang.StringEscapeUtils',
-    'globalApacheWordUtils':         'org.apache.commons.lang.WordUtils',
-    'globalSAXBuilder':              'org.jdom.input.SAXBuilder'
+    'globalApacheBooleanUtils' :          'org.apache.commons.lang.BooleanUtils',
+    'globalApacheClassUtils' :            'org.apache.commons.lang.ClassUtils',
+    'globalApacheClassTool' :             'org.apache.velocity.tools.generic.ClassTool',
+    'globalApacheComparisonDateTool' :    'org.apache.velocity.tools.generic.ComparisonDateTool',
+    'globalApacheConversionTool' :        'org.apache.velocity.tools.generic.ConversionTool',
+    'globalApacheLinkTool' :              'org.apache.velocity.tools.generic.LinkTool',
+    'globalApacheLoopTool' :              'org.apache.velocity.tools.generic.LoopTool',
+    'globalApacheMathTool' :              'org.apache.velocity.tools.generic.MathTool',
+    'globalApacheNumberTool' :            'org.apache.velocity.tools.generic.NumberTool',
+    'globalApacheNumberUtils' :           'org.apache.commons.lang.math.NumberUtils',
+    'globalApacheSortTool' :              'org.apache.velocity.tools.generic.SortTool',
+    'globalApacheStringUtils' :           'org.apache.commons.lang.StringUtils',
+    'globalApacheStringEscapeUtils' :     'org.apache.commons.lang.StringEscapeUtils',
+    'globalApacheWordUtils' :             'org.apache.commons.lang.WordUtils',
+    'globalSAXBuilder' :                  'org.jdom.input.SAXBuilder'
 } )
 ##
 #set( $chanwToolKeys = $chanwTools.keySet() )
@@ -352,14 +353,55 @@ doc*###
 #set( $E_SYSTEM_ASSET         = "[" + "/system-asset]" )
 #set( $S_SYSTEM_ASSET_LOCAL   = "[" + "system-asset:local]" )
 #set( $E_SYSTEM_ASSET_LOCAL   = "[" + "/system-asset:local]" )
-#set( $S_SYSTEM_VIEW_INTERNAL = "[" + "system-view:internal]" )
-#set( $E_SYSTEM_VIEW_INTERNAL = "[" + "/system-view:internal]" )
-#set( $S_SYSTEM_VIEW_EXTERNAL = "[" + "system-view:external]" )
-#set( $E_SYSTEM_VIEW_EXTERNAL = "[" + "/system-view:external]" )
-#set( $S_PHP_PASSTHROUGH      = "<!--#" + "passthrough<?php " )
-#set( $E_PHP_PASSTHROUGH      = " ?>#" + "passthrough-->" )
-#set( $S_PROTECT              = "<!--#" + "protect" )
-#set( $E_PROTECT              = "#" + "protect-->" )
+##
+## System View Internal
+#define( $S_SYSTEM_VIEW_INTERNAL )#set( $void = "#drulykgPseudoTag( 'open' '[system-view:internal]' '[/system-view:internal]' )" )$void.trim()#end
+#define( $E_SYSTEM_VIEW_INTERNAL )#set( $void = "#drulykgPseudoTag( 'close' '[system-view:internal]' '[/system-view:internal]' )" )$void.trim()#end
+##
+## System View External
+#define( $S_SYSTEM_VIEW_EXTERNAL )#set( $void = "#drulykgPseudoTag( 'open' '[system-view:external]' '[/system-view:external]' )" )$void.trim()#end
+#define( $E_SYSTEM_VIEW_EXTERNAL )#set( $void = "#drulykgPseudoTag( 'close' '[system-view:external]' '[/system-view:external]' )" )$void.trim()#end
+##
+## Cascade Skip
+#define( $S_CASCADE_SKIP )#set( $void = "#drulykgPseudoTag( 'open' '<!--#cascade-skip-->' '<!--#cascade-skip-->' )" )$void.trim()#end
+#define( $E_CASCADE_SKIP )#set( $void = "#drulykgPseudoTag( 'close' '<!--#cascade-skip-->' '<!--#cascade-skip-->' )" )$void.trim()#end
+##
+## CDATA
+#define( $S_CDATA )#set( $void = "#drulykgPseudoTag( 'open' '<![CDATA[' ']]>' )" )$void.trim()#end
+#define( $E_CDATA )#set( $void = "#drulykgPseudoTag( 'close' '<![CDATA[' ']]>' )" )$void.trim()#end
+##
+## Cascade CDATA
+#define( $S_CASCADE_CDATA )#set( $void = "#drulykgPseudoTag( 'open' '[cascade:cdata]' '[/cascade:cdata]' )" )$void.trim()#end
+#define( $E_CASCADE_CDATA )#set( $void = "#drulykgPseudoTag( 'close' '[cascade:cdata]' '[/cascade:cdata]' )" )$void.trim()#end
+##
+## Cascade CDATA Protect
+#define( $S_CASCADE_CDATA_PROTECT )#set( $void = "#drulykgPseudoTag( 'open' '[cascade:cdata]#protect' '#protect[/cascade:cdata]' )" )$void.trim()#end
+#define( $E_CASCADE_CDATA_PROTECT )#set( $void = "#drulykgPseudoTag( 'close' '[cascade:cdata]#protect' '#protect[/cascade:cdata]' )" )$void.trim()#end
+##
+## Cascade CDATA Protect Top
+#define( $S_CASCADE_CDATA_PROTECT_TOP )#set( $void = "#drulykgPseudoTag( 'open' '[cascade:cdata]#protect-top' '#protect-top[/cascade:cdata]' )" )$void.trim()#end
+#define( $E_CASCADE_CDATA_PROTECT_TOP )#set( $void = "#drulykgPseudoTag( 'close' '[cascade:cdata]#protect-top' '#protect-top[/cascade:cdata]' )" )$void.trim()#end
+##
+## Protect
+#define( $S_PROTECT )#set( $void = "#drulykgPseudoTag( 'open' '<!--#protect' '#protect-->' )" )$void.trim()#end
+#define( $E_PROTECT )#set( $void = "#drulykgPseudoTag( 'close' '<!--#protect' '#protect-->' )" )$void.trim()#end
+##
+## Protect
+#define( $S_PROTECT_TOP )#set( $void = "#drulykgPseudoTag( 'open' '<!--#protect-top' '#protect-top-->' )" )$void.trim()#end
+#define( $E_PROTECT_TOP )#set( $void = "#drulykgPseudoTag( 'close' '<!--#protect-top' '#protect-top-->' )" )$void.trim()#end
+##
+## Passthrough
+#define( $S_PASSTHROUGH )#set( $void = "#drulykgPseudoTag( 'open' '<!--#passthrough' '#passthrough-->' )" )$void.trim()#end
+#define( $E_PASSTHROUGH )#set( $void = "#drulykgPseudoTag( 'close' '<!--#passthrough' '#passthrough-->' )" )$void.trim()#end
+##
+## Passthrough Top
+#define( $S_PASSTHROUGH_TOP )#set( $void = "#drulykgPseudoTag( 'open' '<!--#passthrough-top' '#passthrough-top-->' )" )$void.trim()#end
+#define( $E_PASSTHROUGH_TOP )#set( $void = "#drulykgPseudoTag( 'close' '<!--#passthrough-top' '#passthrough-top-->' )" )$void.trim()#end
+##
+## PHP Passthrough
+#define( $S_PHP_PASSTHROUGH )#set( $void = "#drulykgPseudoTag( 'open' '<!--#passthrough<?php' '?>#passthrough-->' )" )$void.trim() #end
+#define( $E_PHP_PASSTHROUGH )#set( $void = "#drulykgPseudoTag( 'close' '<!--#passthrough<?php' '?>#passthrough-->' )" ) $void.trim()#end
+##
 #set( $GREATER_THAN           = ">" )
 #set( $GT                     = $GREATER_THAN )
 ## Cascade API Asset
@@ -1071,7 +1113,7 @@ doc*###
 #macro( chanwGetMethodByClassNameMethodNameParamSize $className_chanwGetMethodByClassNameMethodNameParamSize $methodName_chanwGetMethodByClassNameMethodNameParamSize $paramSize_chanwGetMethodByClassNameMethodNameParamSize )
     ## check the class name string
     #if( !$className_chanwGetMethodByClassNameMethodNameParamSize || $className_chanwGetMethodByClassNameMethodNameParamSize.Class.Name != "java.lang.String" || $className_chanwGetMethodByClassNameMethodNameParamSize == "" )
-#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." "'moby5m[opg5mklm" )
+#chanwOutputErrorMsg( $CHANW_LIBRARY_FOLDER_PATH $chanw_framework_site_name $CHANW_INITIALIZATION_FORMAT_NAME "A valid class name is required." "moby5m[opg5mklm" )
         #stop
     #end
 ##
@@ -1778,6 +1820,22 @@ doc*###
     #set( $chanwContentChildren = $chanwProcessBlockChooserContent.getChildren() )
     ##end
 ##
+    ## Provide a link to open the block
+    $S_SYSTEM_VIEW_INTERNAL
+    <div onMouseenter="$(this).css('border', 'solid 1px #ffb925').find('> a.view-block-link').css('display', 'block');" onMouseleave="$(this).css('border', '').find('> a.view-block-link').css('display', 'none');">
+    #drulykgHtmlTag( 'a' {
+        'attrs': {
+            'class': 'view-block-link',
+            'href': "/entity/open.act?id=${chanwProcessBlockChooserContent.Identifier.Id}&amp;type=${chanwProcessBlockChooserContent.AssetType}",
+            'target': '_blank',
+            'title': "site://${chanwProcessBlockChooserContent.Site.Name}/${chanwProcessBlockChooserContent.Path}",
+            'style': [ 'display:none;', 'padding:5px;', 'background-color:#f3f3f3;', 'border-bottom:solid 1px #ffb925;', 'z-index:1000;' ]
+        },
+        'closeTag': true,
+        'content': 'View block'
+    } )
+    $E_SYSTEM_VIEW_INTERNAL
+##
     ## plain text or code
     #set( $chanwBlockName  = "" )
     #if( $chanwContentChildren.size() == 0 ) ## no root element, must be a text block
@@ -1854,6 +1912,11 @@ doc*###
             #chanwInvokeMacro( $chanwMacroName [ "chanwProcessBlockChooserContent" ] )
         #end
     #end
+##
+    ## Close the <div> tag which provides the link to open the block
+    $S_SYSTEM_VIEW_INTERNAL
+    </div>
+    $E_SYSTEM_VIEW_INTERNAL
 #end
 #*doc
 《/macro》
@@ -2283,18 +2346,64 @@ doc*###
 #*doc
 《/macro》
 《documentation》
-《code》#drulykgImportPassThrough ( $path )《/code》
-《p》Cascade CMS does not allow the submission of a format if the #import directive points to an invalid path.
-This macro circumvents this feature. It either imports the specified format or crashes to show a detailed
-message.《/p》
+《code》#drulykgPseudoTag( $action_drulykgPseudoTag $open_drulykgPseudoTag $close_drulykgPseudoTag )《/code》
+《p》Provide a generic macro for use with Cascade pseudo tags to ensure that we automatically 
+avoid nested tags.《/p》
 《/documentation》
-《macro id=“drulykgImportPassThrough”》
+《macro id=“drulykgPseudoTag”》
 doc*###
-#*
-#macro( drulykgImportPassThrough $drulykgImportPassThroughPath )
-    #import( $drulykgImportPassThroughPath )
+#macro( drulykgPseudoTag $action_drulykgPseudoTag $open_drulykgPseudoTag $close_drulykgPseudoTag )
+##
+    ## Set up the map vars for this macro to use internally
+    #if( $drulykgPseudoTagVars.Class.Name != 'java.util.LinkedHashMap' )
+        #set( $drulykgPseudoTagVars = {} )
+    #end
+##
+    ## We only accept two actions: open and close
+    ## We require both the open tag and the close tag string otherwise the depth cache won't work
+    #if(
+        ( $action_drulykgPseudoTag.trim().toLowerCase() == 'open' || $action_drulykgPseudoTag.trim().toLowerCase() == 'close' ) &&
+        $open_drulykgPseudoTag.Class.Name == 'java.lang.String' && $open_drulykgPseudoTag.trim() != '' &&
+        $close_drulykgPseudoTag.Class.Name == 'java.lang.String' && $close_drulykgPseudoTag.trim() != ''
+    )
+##
+        ## Has this tag been cached yet?
+        #if( !$drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ].Class.Name )
+            #set( $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ] = {
+                'open': $open_drulykgPseudoTag.trim(),
+                'close': $close_drulykgPseudoTag.trim(),
+                'depth': 0
+            } )
+        #end
+##
+        ## Open tag requested
+        #if( $action_drulykgPseudoTag.trim().toLowerCase() == 'open' )
+##
+            ## If we are opening then make sure we are only at a depth of 0
+            #if( $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ][ 'depth' ] == 0 )
+                $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ][ 'open' ]
+            #end
+##
+            ## Always increment the depth to account for nested open tags so
+            ## that we can close the tag at the correct nesting level or else
+            ## a nested close tag will improperly close the parent
+            #set( $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ][ 'depth' ] = $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ][ 'depth' ] + 1 )
+##
+        ## Close tag requested
+        #else
+##
+            ## Make sure we are back at a depth of 1 in order to close the most parent tag at the right time
+            #if( $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ][ 'depth' ] == 1 )
+                $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ][ 'close' ]
+            #end
+##
+            ## Do not allow the depth to go into negatives
+            #if( $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ][ 'depth' ] > 0 )
+                #set( $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ][ 'depth' ] = $drulykgPseudoTagVars[ $open_drulykgPseudoTag.trim() ][ 'depth' ] - 1 )
+            #end
+        #end
+    #end
 #end
-*#
 #*doc
 《/macro》
 《documentation》

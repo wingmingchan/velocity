@@ -1,0 +1,84 @@
+#if( !$JAVA_LANG_STRING_CLASS_NAME.Class.Name )
+    #set( $JAVA_LANG_STRING_CLASS_NAME = 'java.lang.String' )
+#end
+#*
+#if( !$globalW3CTidy.Class.Name )
+    #chanwGetTidy
+#end
+
+#if( !$globalApacheIOUtilsClass.Name )
+    #chanwGetIOUtilsClass
+#end
+
+#if( !$globalApacheNullOutputStream.Class.Name )
+    #chanwGetNullOutputStream
+#end
+
+#macro( chanwGetByteArrayOutputStream )
+    #set( $globalApacheByteArrayOutputStream = $_.Class.forName( 'org.apache.commons.io.output.ByteArrayOutputStream' ).getConstructor().newInstance() )
+#end
+
+#macro( chanwGetEntityUtilsClass )
+    #set( $globalApacheEntityUtilsClass = $_.Class.forName( 'org.apache.http.util.EntityUtils' ) )
+#end
+#macro( chanwGetHttpClient )
+    #set( $chanwGetHttpClient = $_.Class.forName( 'org.apache.http.impl.client.HttpClients' ).createDefault() )
+#end
+#macro( chanwGetHttpClientsClass )
+    #set( $globalApacheHttpClientsClass = $_.Class.forName( 'org.apache.http.impl.client.HttpClients' ) )
+#end
+
+#macro( chanwGetHttpGet $uri_chanwGetHttpGet )
+    #set( $chanwGetHttpGet = $_.Class.forName( 'org.apache.http.client.methods.HttpGet' ).getConstructor( $_.Class.forName( 'java.lang.String' ) ).newInstance( $uri_chanwGetHttpGet ) )
+#end
+#macro( chanwGetHttpPost $uri_chanwGetHttpPost )
+    #set( $chanwGetHttpPost = $_.Class.forName( 'org.apache.http.client.methods.HttpPost' ).getConstructor( $_.Class.forName( 'java.lang.String' ) ).newInstance( $uri_chanwGetHttpPost ) )
+#end
+#macro( chanwGetIOUtilsClass )
+    #set( $globalApacheIOUtilsClass = $_.Class.forName( 'org.apache.commons.io.IOUtils' ) )
+#end
+
+#macro( chanwGetNullOutputStream )
+    #set( $globalApacheNullOutputStream = $_.Class.forName( 'org.apache.commons.io.output.NullOutputStream' ).getConstructor().newInstance() )
+#end
+
+#macro( chanwGetTidy )
+    #set( $globalW3CTidy = $_.Class.forName( 'org.w3c.tidy.Tidy' ).getConstructor().newInstance() )
+#end
+
+#macro( chanwGetURI $uri_chanwGetURI )
+    #set( $chanwGetURI = $_.Class.forName( 'org.apache.http.client.utils.URIBuilder' ).getConstructor( $_.Class.forName( 'java.lang.String' ) ).newInstance( $uri_chanwGetURI ).build() )
+#end
+*#
+#macro( chanwGetURI $uri_chanwGetURI )
+    #set( $chanwGetURI = "" )
+    #if( $uri_chanwGetURI.Class.Name && $uri_chanwGetURI.Class.Name == $JAVA_LANG_STRING_CLASS_NAME )
+        #set( $chanwGetURI = $_.Class.forName( 'java.net.URI' ).create( $uri_chanwGetURI ) )
+    #end
+#end
+
+#macro( chanwGetURL $url_chanwGetURL )
+    #set( $chanwGetURL = "" )
+    #chanwGetURI( $url_chanwGetURL )
+    #if( $chanwGetURI != "" && $chanwGetURI.Scheme.Class.Name && ( $chanwGetURI.Scheme == 'http' || $chanwGetURI.Scheme == 'https' ) )
+        #set( $chanwGetURL = $chanwGetURI.toURL() )
+    #end
+#end
+#*
+#macro( chanwGetURIContentString $uri_chanwGetURIContentString )
+    #if( !$globalApacheIOUtilsClass.Name )
+        #chanwGetIOUtilsClass
+    #end
+    #if( !$globalApacheByteArrayOutputStream.Class.Name )
+        #chanwGetByteArrayOutputStream
+    #end
+    #chanwGetURIEntity( $uri_chanwGetURIContentString )
+    $globalApacheIOUtilsClass.write( $_.Class.forName( 'org.apache.http.util.EntityUtils' ).toByteArray( $chanwGetURIEntity ), $globalApacheByteArrayOutputStream )
+    #set( $chanwGetURIContentString = "" )
+    #set( $chanwGetURIContentString = $globalApacheByteArrayOutputStream.toString() )
+#end
+#macro( chanwGetURIEntity $uri_chanwGetURIEntity )
+    #chanwGetHttpGet( $uri_chanwGetURIEntity )
+    #set( $chanwGetURIEntity = $_.Class.forName( 'org.apache.http.impl.client.HttpClients' ).createDefault().execute( $chanwGetHttpGet ).getEntity() )
+#end
+*#
